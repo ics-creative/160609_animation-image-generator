@@ -22,7 +22,7 @@ gulp.task('serve', function () {
 var webpackConfig = require('./webpack.config.js');
 var webpack = require('gulp-webpack');
 gulp.task('webpack', function () {
-  gulp.src(['./src/index.js'])
+  return gulp.src(['./src/index.js'])
     .pipe(webpack(webpackConfig))
     .pipe(gulp.dest('./'));
 });

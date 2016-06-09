@@ -30,7 +30,7 @@ function createWindow() {
 	if (client) {
 		client.create(win);
 	}
-	
+
 	const ipc = require('electron').ipcMain
 	const dialog = require('electron').dialog
 

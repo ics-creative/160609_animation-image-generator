@@ -1,17 +1,17 @@
-window.addEventListener("load", loaded);
+import 'core-js';
+import 'rxjs/Rx';
+import 'zone.js/dist/zone';
 
-function loaded() {
-	console.log( "piyo" );
-	console.log( "piyo" );
-	console.log( "piyo" );
-	const ipc = require('electron').ipcRenderer;
+import {bootstrap} from '@angular/platform-browser-dynamic';
+import {Component} from '@angular/core';
 
-	const selectDirBtn = document.getElementById('select-directory')
-	selectDirBtn.addEventListener('click', function (event) {
-		ipc.send('open-file-dialog')
-	})
-
-	ipc.on('selected-directory', function (event, path) {
-		document.getElementById('selected-file').innerHTML = `You selected: ${path}`
-	});
+@Component({
+	selector: 'my-app',
+	template: `
+    <h1>Hello Worldですね</h1>
+  `
+})
+class MyAppComponent {
 }
+
+bootstrap(MyAppComponent);

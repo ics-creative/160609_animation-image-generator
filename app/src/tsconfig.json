@@ -1,10 +1,19 @@
 {
   "compilerOptions": {
-    "module": "commonjs",
-    "target": "es6",
-    "sourceMap": true
+    "target": "es5",
+    "noImplicitAny": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "moduleResolution": "node"
   },
-  "exclude": [
-    "node_modules"
+  "filesGlob": [
+    "./**/*.ts",
+    "!./**/*.d.ts",
+    "!./node_modules/**/*",
+    "../node_modules/typescript/lib/lib.es6.d.ts"
+  ],
+  "files": [
+    "./index.ts",
+    "../node_modules/typescript/lib/lib.es6.d.ts"
   ]
 }
