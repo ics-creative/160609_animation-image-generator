@@ -5,6 +5,7 @@ import {Component, ViewChild, Input} from '@angular/core';
 	template: `
     <h1>連番画像からのアニメーション制作ツール</h1>
     <button (click)="openDirectories()">open</button>
+    <button (click)="generateAPNG()">generate apng</button>
     <div>
 			<li *ngFor="#item of items">
 				<div class="view">
@@ -21,6 +22,15 @@ export class AppComponent {
 	ngOnInit() {
 		this._cancelDragAndDrop();
 		this.items = ["piyo", "hiyo"];
+
+	}
+
+	generateAPNG() {
+		const exec = require('child_process').exec;
+		exec('./bin/apngasm', function(err:any, stdout:any, stderr:any){
+			/* some process */
+			console.log(err,stdout,stderr);
+		});
 
 	}
 

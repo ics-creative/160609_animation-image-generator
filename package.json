@@ -5,9 +5,10 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build:app" : "cd app && npm run build",
-    "copy:app" : "copyfiles  -u 1 ./app/bundle.js ./app/index.html ./app/main.js ./libs/package.json tmp-release",
-    "release": "npm run build:app && npm run copy:app"
+    "build:app": "cd app && npm run build",
+    "copy:release:app-mac": "copyfiles  -u 1 ./app/bundle.js ./app/index.html ./app/main.js ./libs/package.json tmp-release-mac",
+    "copy:release:bin-mac": "copyfiles -u 2 ./resources/apngasm-2.9-bin-macosx/apngasm tmp-release-mac/bin",
+    "release-mac": "npm run build:app && npm run copy:release:app-mac && copy:release:bin-mac"
   },
   "repository": {
     "type": "git",
