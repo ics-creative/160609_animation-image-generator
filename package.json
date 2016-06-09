@@ -8,7 +8,8 @@
     "build:app": "cd app && npm run build",
     "copy:release:app-mac": "copyfiles  -u 1 ./app/bundle.js ./app/index.html ./app/main.js ./libs/package.json tmp-release-mac",
     "copy:release:bin-mac": "copyfiles -u 2 ./resources/apngasm-2.9-bin-macosx/apngasm tmp-release-mac/bin",
-    "release-mac": "npm run build:app && npm run copy:release:app-mac && copy:release:bin-mac"
+    "package-mac" : "electron-packager ./tmp-release-mac --platform=darwin --arch=x64 --overwrite --asar",
+    "release-mac": "npm run build:app && npm run copy:release:app-mac && npm run copy:release:bin-mac && npm run package-mac"
   },
   "repository": {
     "type": "git",
@@ -21,6 +22,7 @@
   },
   "homepage": "https://github.com/ics-creative/160609_animation-image-generator#readme",
   "devDependencies": {
-    "copyfiles": "^0.2.1"
+    "copyfiles": "^0.2.1",
+    "electron-packager": "^7.0.3"
   }
 }

@@ -1,5 +1,7 @@
 import {Component, ViewChild, Input} from '@angular/core';
 
+declare function require(value:String): any;
+
 @Component({
 	selector: 'my-app',
 	template: `
@@ -13,24 +15,54 @@ import {Component, ViewChild, Input} from '@angular/core';
 				</div>
 			</li>
     </div>
+    
+    <form>
+      <div>
+        <label for="name">APNG</label>
+        <input type="text" #apngPath>
+      </div>
+      <div>
+        <label for="name">PNG</label>
+        <input type="text" #pngPath>
+      </div>
+   </form>
   `
 })
 export class AppComponent {
 
 	@Input() items:string[];
+	@ViewChild("apngPath") apngPath;
+	@ViewChild("pngPath") pngPath;
 
 	ngOnInit() {
 		this._cancelDragAndDrop();
 		this.items = ["piyo", "hiyo"];
 
+		const ipc = require('electron').ipcRenderer;
 	}
 
 	generateAPNG() {
-		const exec = require('child_process').exec;
-		exec('./bin/apngasm', function(err:any, stdout:any, stderr:any){
+
+		const remote = require('electron').remote;
+		const app = remote.app;
+		const path:string = app.getAppPath();
+
+		console.log(path);
+
+		const exec = require('child_process').execFile;
+		console.log( `${path}/bin/apngasm`);
+		const apngPath = this.apngPath.nativeElement.value;
+		const pngPath = this.pngPath.nativeElement.value;
+
+		exec(`${path}/bin/apngasm`, [apngPath,pngPath], function(err:any, stdout:any, stderr:any){
 			/* some process */
+			console.log("apngasm");
 			console.log(err,stdout,stderr);
 		});
+
+		//const ipc = require('electron').ipcRenderer;
+		//ipc.send('generate-apng');
+
 
 	}
 
@@ -42,7 +74,7 @@ export class AppComponent {
 	ngAfterViewInit() {
 
 		const ipc = require('electron').ipcRenderer;
-		ipc.on('selected-directory', (event:Event, path:String) => {
+		ipc.on('selected-directory', (event:any, path:string) => {
 			this.items.push(path);
 		});
 	}

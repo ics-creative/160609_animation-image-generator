@@ -31,8 +31,8 @@ function createWindow() {
 		client.create(win);
 	}
 
-	const ipc = require('electron').ipcMain
-	const dialog = require('electron').dialog
+	const ipc = require('electron').ipcMain;
+	const dialog = require('electron').dialog;
 
 	ipc.on('open-file-dialog', function (event) {
 		dialog.showOpenDialog({
@@ -40,7 +40,7 @@ function createWindow() {
 		}, function (files) {
 			if (files) event.sender.send('selected-directory', files)
 		})
-	})
+	});
 }
 
 //  初期化が完了した時の処理
