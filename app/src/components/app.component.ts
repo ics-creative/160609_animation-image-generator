@@ -1,17 +1,42 @@
-import {Component} from '@angular/core';
+import {Component, ViewChild, Input} from '@angular/core';
 
 @Component({
 	selector: 'my-app',
 	template: `
     <h1>連番画像からのアニメーション制作ツール</h1>
-    <button id="select-directory">open</button>
-    <div id="selected-file"></div>
+    <button (click)="openDirectories()">open</button>
+    <div>
+			<li *ngFor="#item of items">
+				<div class="view">
+					<label>{{ item }} </label>
+				</div>
+			</li>
+    </div>
   `
 })
-export class AppComponent implements ngOnInit{
+export class AppComponent {
+
+	@Input() items:string[];
+
 	ngOnInit() {
 		this._cancelDragAndDrop();
+		this.items = ["piyo", "hiyo"];
+
 	}
+
+	openDirectories() {
+		const ipc = require('electron').ipcRenderer;
+		ipc.send('open-file-dialog')
+	}
+
+	ngAfterViewInit() {
+
+		const ipc = require('electron').ipcRenderer;
+		ipc.on('selected-directory', (event:Event, path:String) => {
+			this.items.push(path);
+		});
+	}
+
 	constructor() {
 	}
 
@@ -35,26 +60,4 @@ export class AppComponent implements ngOnInit{
 	private _handleDrop(event:DragEvent) {
 		event.preventDefault();
 	}
-
-	/**
-	 * -  const ipc = require('electron').ipcRenderer;
-	 +import {bootstrap} from '@angular/platform-browser-dynamic';
-	 +import {Component} from '@angular/core';
-
-	 -  const selectDirBtn = document.getElementById('select-directory')
-	 -  selectDirBtn.addEventListener('click', function (event) {
--		ipc.send('open-file-dialog')
-+@Component({
-+	selector: 'my-app',
-+	template: `
-+    <h1>Hello Worldですね</h1>
-+  `
- })
--
--	ipc.on('selected-directory', function (event, path) {
--		document.getElementById('selected-file').innerHTML = `You selected: ${path}`
--	});
-
-	 */
-
 }
