@@ -5,13 +5,17 @@
   "main": "main.js",
   "scripts": {
     "start": "NODE_ENV=production gulp serve",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "webpack": "gulp webpack"
   },
   "author": "Nozomi Nohara <nozomi.nohara@ics-web.jp>",
   "license": "MIT",
   "devDependencies": {
     "electron-connect": "^0.4.2",
     "electron-prebuilt": "^1.2.1",
-    "gulp": "^3.9.1"
+    "gulp": "^3.9.1",
+    "gulp-webpack": "^1.5.0",
+    "run-sequence": "^1.2.1",
+    "webpack": "^1.13.1"
   }
 }
