@@ -7,7 +7,7 @@
     "start": "NODE_ENV=production gulp serve",
     "test": "echo \"Error: no test specified\" && exit 1",
     "build:typescript": "tsc -p src/",
-    "webpack": "gulp webpack"
+    "build" : "npm run build:typescript && gulp webpack"
   },
   "author": "Nozomi Nohara <nozomi.nohara@ics-web.jp>",
   "license": "MIT",

@@ -1,0 +1,19 @@
+{
+  "name": "animation-image-generator",
+  "version": "0.1.0",
+  "description": "",
+  "main": "main.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ics-creative/160609_animation-image-generator.git"
+  },
+  "author": "Nozomi Nohara <nozomi.nohara@ics-web.jp>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ics-creative/160609_animation-image-generator/issues"
+  },
+  "homepage": "https://github.com/ics-creative/160609_animation-image-generator#readme",
+  "devDependencies": {
+    "copyfiles": "^0.2.1"
+  }
+}
