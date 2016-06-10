@@ -18,3 +18,18 @@ img, canvas {
 h1, h2, h3, h4, h5, h6, p {
   cursor: default;
 }
+
+/* dialogの見た目 */
+dialog {
+  width: 100px;
+  height: 100px;
+  background-color: #fff;
+  border: 0;
+  top: calc(50% - 50px);
+  margin: 0 auto;
+  text-align: center;
+  display: flex;
+  justify-content: center; /* 3 */
+  align-items: center; /* 4 */
+  border-radius: 8px;
+}

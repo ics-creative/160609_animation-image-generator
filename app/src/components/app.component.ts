@@ -24,6 +24,10 @@ declare function require(value:String):any;
 			<image-list #imageList  (imageUpdateEvent)="imageUpdateEvent()"></image-list>
 		</div>
 	</div>
+	
+	<dialog style="display: none;">
+		<img src="imgs/loading.gif" />
+	</dialog>
   `,
 	directives: [AnimPreviewComponent, PropertiesComponent, ImageListComponent],
 	styleUrls: ['./styles/app.css']
@@ -38,12 +42,10 @@ export class AppComponent {
 
 	private temporaryPath:string;
 	private apngPath:string;
-	private elementRef:ElementRef;
-	private currentElement:HTMLElement;
 
 	ngOnInit() {
 		this.animationOptionData = new AnimationImageOptions();
-		this.animationOptionData.compression = CompressionType.zip7;
+		this.animationOptionData.compression = CompressionType.zlib;
 		this.animationOptionData.iterations = 15;
 		this.animationOptionData.loop = 1;
 		this.animationOptionData.fps = 30;
@@ -62,7 +64,6 @@ export class AppComponent {
 		const path = require('path');
 
 		this.temporaryPath = path.join(app.getPath('temp'), "a-img-generator");
-
 	}
 
 	ngAfterViewInit() {
@@ -181,12 +182,22 @@ export class AppComponent {
 		const options = [this.apngPath, pngPath, "1", this.animationOptionData.fps, complessOption, loopOption];
 		console.log(options);
 
+
+
+		let dialog = document.querySelector('dialog');
+		dialog.showModal();
+		dialog.style["display"] = "flex"; // こんな書き方をする必要があるのか…
+		createjs.Ticker.paused = true; // 効かない…
+
 		exec(`${appPath}/bin/apngasm`, options, function (err:any, stdout:any, stderr:any) {
 			/* some process */
-			console.log("apngasm");
+			dialog.close();
+			dialog.style["display"] = "none"; // こんな書き方をする必要があるのか…
+			createjs.Ticker.paused = false; // 効かない…
+
 			console.log(err, stdout, stderr);
 			if (!err) {
-				alert("書き出し成功!");
+				// 書きだしたフォルダーを Explorer で開く
 			} else {
 				alert("書き出し失敗");
 			}
