@@ -3,7 +3,7 @@ import {AnimationImageOptions} from "../data/animation-image-options";
 import {ImageData} from "../data/image-data";
 
 @Component({
-	selector: 'anime-preview',
+	selector: 'anim-preview',
 	template: `
 	<p>アニメーションプレビュー</p>
 	<figcaption class="figure-caption">フレームサイズ <span class="label label-default">W {{imageW}} × H {{imageH}} px</span> / 総フレーム数 <span class="label label-default">{{items.length}}</span></figcaption>
@@ -29,7 +29,7 @@ import {ImageData} from "../data/image-data";
 	styleUrls: ['./styles/anim-preview.css'],
 })
 
-export class AnimePreviewComponent {
+export class AnimPreviewComponent {
 	@Input() imagePath:string;
 	@Input() animationOptionData:AnimationImageOptions;
 

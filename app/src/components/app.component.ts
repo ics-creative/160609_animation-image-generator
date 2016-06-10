@@ -1,5 +1,5 @@
 import {Component, ViewChild, Input, ElementRef} from '@angular/core';
-import {AnimePreviewComponent} from "./anime-preview.component";
+import {AnimPreviewComponent} from "./anim-preview.component";
 import {PropertiesComponent} from "./property.component";
 import {ImageListComponent} from "./image-list.component";
 import {CompressionType} from "../type/compression-type";
@@ -18,14 +18,14 @@ declare function require(value:String):any;
 		</div>
 		
 		<div class="mod-preview bg-inverse p-a-1">
-			<anime-preview [animationOptionData]="animationOptionData" #animePreview></anime-preview>
+			<anim-preview [animationOptionData]="animationOptionData" #animePreview></anim-preview>
 			
 			<!-- <button (click)="openDirectories()">open</button> -->
 			<image-list #imageList  (imageUpdateEvent)="imageUpdateEvent()"></image-list>
 		</div>
 	</div>
   `,
-	directives: [AnimePreviewComponent, PropertiesComponent, ImageListComponent],
+	directives: [AnimPreviewComponent, PropertiesComponent, ImageListComponent],
 	styleUrls: ['./styles/app.css']
 })
 export class AppComponent {
@@ -33,7 +33,7 @@ export class AppComponent {
 	@Input() animationOptionData:AnimationImageOptions;
 	@ViewChild("properties") propertiesComponent:PropertiesComponent;
 	@ViewChild("imageList") imageListComponent:ImageListComponent;
-	@ViewChild("animePreview") animePreviewComponent:AnimePreviewComponent;
+	@ViewChild("animePreview") animePreviewComponent:AnimPreviewComponent;
 	@ViewChild("myComponent") myComponent:ElementRef;
 
 	private temporaryPath:string;
