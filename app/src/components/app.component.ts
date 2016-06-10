@@ -20,7 +20,7 @@ declare function require(value:String):any;
 			<image-preview></image-preview>
 			<anime-preview [animationOptionData]="animationOptionData"></anime-preview>
 			<properties [animationOptionData]="animationOptionData" #properties></properties>
-			<button (click)="generateAPNG()">generate apng</button>
+			<button (click)="generateAPNG()" class="btn btn-primary">変換する</button>
 		</div>
 	</div>
   `,
