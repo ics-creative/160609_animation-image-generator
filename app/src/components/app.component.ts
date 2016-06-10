@@ -1,82 +1,48 @@
 import {Component, ViewChild, Input} from '@angular/core';
+import {AnimePreviewComponent} from "./anime-preview.component";
+import {PropertiesComponent} from "./property.component";
+import {ImageListComponent} from "./image-list.component";
+import {ImagePreviewComponent} from "./image-preview.component";
 
-declare function require(value:String): any;
+declare function require(value:String):any;
 
 @Component({
 	selector: 'my-app',
 	template: `
-    <h1>連番画像からのアニメーション制作ツール</h1>
-    <button (click)="openDirectories()">open</button>
-    <button (click)="generateAPNG()">generate apng</button>
-    <div>
-			<li *ngFor="#item of items">
-				<div class="view">
-					<label>{{ item }} </label>
-				</div>
-			</li>
-    </div>
     
-    <form>
-      <div>
-        <label for="name">APNG</label>
-        <input type="text" #apngPath>
-      </div>
-      <div>
-        <label for="name">PNG</label>
-        <input type="text" #pngPath>
-      </div>
-   </form>
-  `
+    <div class="app-component">
+    	<div>
+				<button (click)="openDirectories()">open</button>
+				<image-list #imageList></image-list>
+			</div>
+			<div>
+				<image-preview></image-preview>
+				<anime-preview></anime-preview>
+				<properties #properties></properties>
+				<button (click)="generateAPNG()">generate apng</button>
+			</div>
+		</div>
+    
+  `,
+	directives: [ImagePreviewComponent,AnimePreviewComponent, PropertiesComponent, ImageListComponent],
+	styleUrls: ['./styles/app.css']
 })
 export class AppComponent {
 
-	@Input() items:string[];
-	@ViewChild("apngPath") apngPath;
-	@ViewChild("pngPath") pngPath;
+	@ViewChild("properties") propertiesComponent:PropertiesComponent;
+	@ViewChild("imageList") imageListComponent:ImageListComponent;
 
 	ngOnInit() {
 		this._cancelDragAndDrop();
-		this.items = ["piyo", "hiyo"];
-
 		const ipc = require('electron').ipcRenderer;
 	}
 
 	generateAPNG() {
-
-		const remote = require('electron').remote;
-		const app = remote.app;
-		const path:string = app.getAppPath();
-
-		console.log(path);
-
-		const exec = require('child_process').execFile;
-		console.log( `${path}/bin/apngasm`);
-		const apngPath = this.apngPath.nativeElement.value;
-		const pngPath = this.pngPath.nativeElement.value;
-
-		exec(`${path}/bin/apngasm`, [apngPath,pngPath], function(err:any, stdout:any, stderr:any){
-			/* some process */
-			console.log("apngasm");
-			console.log(err,stdout,stderr);
-		});
-
-		//const ipc = require('electron').ipcRenderer;
-		//ipc.send('generate-apng');
-
-
+		this.propertiesComponent.generateAPNG();
 	}
 
 	openDirectories() {
-		const ipc = require('electron').ipcRenderer;
-		ipc.send('open-file-dialog')
-	}
-
-	ngAfterViewInit() {
-
-		const ipc = require('electron').ipcRenderer;
-		ipc.on('selected-directory', (event:any, path:string) => {
-			this.items.push(path);
-		});
+		this.imageListComponent.openDirectories();
 	}
 
 	constructor() {
