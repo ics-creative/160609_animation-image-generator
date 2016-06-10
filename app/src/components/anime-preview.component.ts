@@ -5,6 +5,7 @@ import {ImageData} from "../data/image-data";
 @Component({
 	selector: 'anime-preview',
 	template: `
+	<p>アニメーションプレビュー</p>
     <div class="anim-preview">
     	<div *ngIf="items.length <= 0" class="empty-image">
 			   No Image

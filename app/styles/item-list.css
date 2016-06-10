@@ -11,6 +11,13 @@
 .drop-empty {
 }
 
+.frame-image-container {
+  display: inline-block;
+  margin-left: 3px;
+  margin-bottom: 3px;
+}
+
 .frame-image {
   background: url(../app/imgs/opacity.png) repeat;
 }
+
