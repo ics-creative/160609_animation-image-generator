@@ -18,28 +18,25 @@ declare function require(value:String):any;
 		
 		<div id="myTabContent" class="tab-content p-x-2">
 			<div class="tab-pane active" id="tab1">
-			
-			
 				<div class="form-group row">
-					<label class="col-sm-2 form-control-label">フレームレート</label>
-					<div class="col-sm-10">
+					<label class="col-sm-6 form-control-label">フレームレート</label>
+					<div class="col-sm-6">
 						<p class="form-control-static">email@example.com</p>
 					</div>
 				</div>
 				<div class="form-group row">
-					<label for="inputPassword" class="col-sm-2 form-control-label">ループ</label>
-					<div class="col-sm-10">
+					<label for="inputPassword" class="col-sm-6 form-control-label">ループ</label>
+					<div class="col-sm-6">
 						<input type="number" class="form-control" id="inputPassword" placeholder="Password">
 					</div>
 				</div>
 				
 				<div class="form-group row">
-					<label for="inputPassword" class="col-sm-2 form-control-label">ループ回数</label>
-					<div class="col-sm-10">
+					<label for="inputPassword" class="col-sm-6 form-control-label">ループ回数</label>
+					<div class="col-sm-6">
 						<input type="number" class="form-control" id="inputPassword" placeholder="Password">
 					</div>
 				</div>
-				
 			
 				<p><label><input type="number" value="30"></label></p>
 				
