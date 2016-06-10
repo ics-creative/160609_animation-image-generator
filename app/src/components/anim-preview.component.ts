@@ -8,11 +8,12 @@ import {ImageData} from "../data/image-data";
 	<p>アニメーションプレビュー</p>
 	<figcaption class="figure-caption">フレームサイズ <span class="label label-default">W {{imageW}} × H {{imageH}} px</span> / 総フレーム数 <span class="label label-default">{{items.length}}</span></figcaption>
     <div class="anim-preview m-t-1">
-    	<div *ngIf="items.length <= 0" class="empty-image">
-			   No Image
-		</div>
     	<div *ngIf="items.length > 0">
     		<img data-src="{{imagePath}}">
+    	</div>
+    
+    	<div class="m-t-1" *ngIf="animationOptionData.noLoop == false">
+			<button class="btn btn-primary btn-sm" [ngClass]="{disabled: playing == true}" (click)="resume();">再生</button>
     	</div>
 	</div>
 	
@@ -36,6 +37,7 @@ export class AnimPreviewComponent {
 	private items:ImageData[];
 	private playing:boolean;
 	private currentFrame:number;
+	private currentLoopCount:number;
 	private imageW:number;
 	private imageH:number;
 
@@ -52,15 +54,10 @@ export class AnimPreviewComponent {
 		if (items.length >= 1) {
 			this.imagePath = this.items[0].imagePath;
 			this.currentFrame = 0;
-			this.animeBasetime = Date.now();
+			this.currentLoopCount = 0;
 			this.playing = true;
 
-			let image = new Image();
-			image.onload = ()=>{
-				this.imageW = image.width;
-				this.imageH = image.height;
-			};
-			image.src = this.imagePath;
+			this.checkImageSize(this.imagePath);
 		}
 	}
 
@@ -68,21 +65,48 @@ export class AnimPreviewComponent {
 
 		this.currentFrame++;
 		if (this.items.length <= this.currentFrame) {
-			this.currentFrame = 0;
+
+			this.currentLoopCount += 1;
+
+			// 再生ループ回数を超えたら
+			if(this.currentLoopCount >= this.animationOptionData.loop){
+				this.playing = false;
+				this.currentFrame = this.items.length - 1;
+			}else{
+				this.currentFrame = 0;
+			}
 		}
 		this.imagePath = this.items[this.currentFrame].imagePath;
-
 	}
 
 	private loop() {
 		createjs.Ticker.framerate = this.animationOptionData.fps;
 
 		if (!this.items || !this.playing) {
-			console.log("endloop");
 			this.playing = false;
-			return;
 		}
 
-		this.anime();
+		if (this.playing == true) {
+			this.anime();
+		}
 	}
+
+	private checkImageSize(path:string):void {
+		let image = new Image();
+		image.onload = ()=> {
+			this.imageW = image.width;
+			this.imageH = image.height;
+		};
+		image.src = path;
+	}
+
+	private resume(){
+		if (this.items) {
+			this.playing = true;
+
+			this.currentFrame = 0;
+			this.currentLoopCount = 0;
+		}
+	}
+
 }

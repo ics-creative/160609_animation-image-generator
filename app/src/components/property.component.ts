@@ -36,10 +36,10 @@ declare function require(value:String):any;
 					</div>
 				</div>
 				
-				<div class="form-group row">
+				<div class="form-group row" *ngIf="animationOptionData.noLoop == false">
 					<label for="inputPassword" class="col-sm-6 form-control-label">ループ回数</label>
 					<div class="col-sm-6">
-						<input type="number" class="form-control" [(ngModel)]="animationOptionData.loop" min="0">
+						<input type="number" class="form-control" [(ngModel)]="animationOptionData.loop" min="1">
 					</div>
 				</div>
 			
