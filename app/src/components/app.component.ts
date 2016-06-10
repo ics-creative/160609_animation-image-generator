@@ -34,7 +34,6 @@ export class AppComponent {
 	@ViewChild("imageList") imageListComponent:ImageListComponent;
 
 	ngOnInit() {
-		this._cancelDragAndDrop();
 		this.animationOptionData = new AnimationImageOptions();
 		this.animationOptionData.compression = CompressionType.zip7;
 		this.animationOptionData.iterations = 15;
@@ -50,26 +49,5 @@ export class AppComponent {
 	}
 
 	constructor() {
-	}
-
-	/**
-	 * ドラッグ&ドロップの動作を阻止する
-	 */
-	private _cancelDragAndDrop() {
-		document.addEventListener("dragover", (event:DragEvent)=> {
-			this._handleDragOver(event);
-		});
-
-		document.addEventListener("drop", (event:DragEvent)=> {
-			this._handleDrop(event);
-		});
-	}
-
-	private _handleDragOver(event:DragEvent) {
-		event.preventDefault();
-	}
-
-	private _handleDrop(event:DragEvent) {
-		event.preventDefault();
 	}
 }

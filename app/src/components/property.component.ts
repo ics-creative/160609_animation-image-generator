@@ -9,10 +9,6 @@ import {AnimationImageOptions} from "../data/animation-image-options";
 				
 			<form>
 				<div>
-					<label for="name">APNG</label>
-					<input type="text" #apngPath>
-				</div>
-				<div>
 					<label for="name">PNG</label>
 					<input type="text" #pngPath>
 				</div>
@@ -23,10 +19,24 @@ import {AnimationImageOptions} from "../data/animation-image-options";
 export class PropertiesComponent {
 	@Input() animationOptionData:AnimationImageOptions;
 
-	@ViewChild("apngPath") apngPath;
 	@ViewChild("pngPath") pngPath;
 
+	ngOnInit(){
+
+		const ipc = require('electron').ipcRenderer;
+		ipc.on('selected-save-image', (event:any, path:string) => {
+			this._generateAPNG(path);
+		});
+	}
+
 	generateAPNG() {
+
+		const ipc = require('electron').ipcRenderer;
+		ipc.send('open-save-dialog')
+
+
+	}
+	_generateAPNG(apngPath){
 
 		const remote = require('electron').remote;
 		const app = remote.app;
@@ -36,7 +46,6 @@ export class PropertiesComponent {
 
 		const exec = require('child_process').execFile;
 		console.log(`${path}/bin/apngasm`);
-		const apngPath = this.apngPath.nativeElement.value;
 		const pngPath = this.pngPath.nativeElement.value;
 
 		exec(`${path}/bin/apngasm`, [apngPath, pngPath], function (err:any, stdout:any, stderr:any) {
