@@ -1,6 +1,8 @@
 import {Component, ViewChild, Input} from '@angular/core';
 import {AnimationImageOptions} from "../data/animation-image-options";
 
+declare function require(value:String):any;
+
 @Component({
 	selector: 'properties',
 	template: `

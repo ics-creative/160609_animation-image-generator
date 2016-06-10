@@ -1,6 +1,8 @@
 import {Component, ViewChild, Input} from '@angular/core';
 import {ImageData} from '../data/image-data';
 
+declare function require(value:String):any;
+
 @Component({
 	selector: 'image-list',
 	template: `
