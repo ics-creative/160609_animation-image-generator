@@ -10,14 +10,14 @@ declare function require(value:String):any;
     <div>
 		<ul class="nav nav-tabs">
 		  <li class="nav-item">
-			<a class="nav-link active" href="#tab1" data-toggle="tab">アニメーション設定</a>
+			<a class="nav-link active" href="#tab1" data-toggle="tab">アニメ設定</a>
 		  </li>
 		  <li class="nav-item">
 			<a class="nav-link" href="#tab2" data-toggle="tab">画質設定</a>
 		  </li>
 		</ul>
 		
-		<div id="myTabContent" class="tab-content p-x-2">
+		<div id="myTabContent" class="tab-content p-x-1 m-t-1">
 			<div class="tab-pane active" id="tab1">
 				<div class="form-group row">
 					<label class="col-sm-6 form-control-label">フレームレート</label>

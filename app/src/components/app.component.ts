@@ -13,7 +13,8 @@ declare function require(value:String):any;
     <div class="app-component"  #myComponent>		
 		<div class="mod-setting p-a-1">			
 			<properties [animationOptionData]="animationOptionData" #properties></properties>
-			<button (click)="generateAPNG()" class="btn btn-primary center-block">保存する</button>
+			<hr />
+			<button (click)="generateAPNG()" class="btn btn-primary center-block">アニメ画像を保存する</button>
 		</div>
 		
 		<div class="mod-preview bg-inverse p-a-1">

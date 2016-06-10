@@ -7,7 +7,7 @@ import {ImageData} from "../data/image-data";
 	template: `
 	<p>アニメーションプレビュー</p>
 	<figcaption class="figure-caption">フレームサイズ <span class="label label-default">300×300px</span> / 総フレーム数 <span class="label label-default">30</span></figcaption>
-    <div class="anim-preview">
+    <div class="anim-preview m-t-1">
     	<div *ngIf="items.length <= 0" class="empty-image">
 			   No Image
 		</div>
@@ -15,6 +15,16 @@ import {ImageData} from "../data/image-data";
     		<img data-src="{{imagePath}}">
     	</div>
 	</div>
+	
+	<p class="m-t-1">コマ画像プレビュー</p>
+	<div>			
+		<div *ngIf="items.length >= 1" >
+			<div *ngFor="let item of items" class="frame-image-container">
+				<img data-src="{{item.imagePath}}" width="64" height="64" class="frame-image" />
+			</div>
+		</div>
+	</div>
+	
   `,
 	styleUrls: ['./styles/anim-preview.css'],
 })
