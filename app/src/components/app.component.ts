@@ -177,9 +177,9 @@ export class AppComponent {
 		console.log(`${appPath}/bin/apngasm`);
 		const pngPath = path.join(this.temporaryPath, "frame*.png");
 
-		const complessOption = this.getCompressOption(this.animationOptionData.compression);
+		const compressOptions = this.getCompressOption(this.animationOptionData.compression);
 		const loopOption = "-l"+( this.animationOptionData.noLoop ? 0 : this.animationOptionData.loop );
-		const options = [this.apngPath, pngPath, "1", this.animationOptionData.fps, complessOption, loopOption];
+		const options = [this.apngPath, pngPath, "1", this.animationOptionData.fps, compressOptions, loopOption];
 		console.log(options);
 
 
@@ -189,7 +189,7 @@ export class AppComponent {
 		dialog.style["display"] = "flex"; // こんな書き方をする必要があるのか…
 		createjs.Ticker.paused = true; // 効かない…
 
-		exec(`${appPath}/bin/apngasm`, options, function (err:any, stdout:any, stderr:any) {
+		exec(`${appPath}/bin/apngasm`, options, (err:any, stdout:any, stderr:any) => {
 			/* some process */
 			dialog.close();
 			dialog.style["display"] = "none"; // こんな書き方をする必要があるのか…
@@ -197,7 +197,12 @@ export class AppComponent {
 
 			console.log(err, stdout, stderr);
 			if (!err) {
-				// 書きだしたフォルダーを Explorer で開く
+				// TODO 書きだしたフォルダーを対応ブラウザーで開く (OSで分岐)
+				//exec(`/Applications/Safari.app`, [this.apngPath]);
+
+				// エクスプローラーで開くでも、まだいいかも
+				const {shell} = require('electron');
+				shell.showItemInFolder(this.apngPath);
 			} else {
 				alert("書き出し失敗");
 			}
