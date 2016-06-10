@@ -11,18 +11,20 @@ declare function require(value:String):any;
 @Component({
 	selector: 'my-app',
 	template: `
-    <div class="app-component">
-    	<div>
+    <div class="app-component">		
+		<div class="mod-setting">			
+			<properties [animationOptionData]="animationOptionData" #properties></properties>
+			<button (click)="generateAPNG()" class="btn btn-primary">変換する</button>
+		</div>
+		
+		<div class="mod-preview">
+    		<image-preview></image-preview>
+			<anime-preview [animationOptionData]="animationOptionData"></anime-preview>
+			
 			<!-- <button (click)="openDirectories()">open</button> -->
 			<image-list #imageList></image-list>
 		</div>
 		
-		<div>
-			<image-preview></image-preview>
-			<anime-preview [animationOptionData]="animationOptionData"></anime-preview>
-			<properties [animationOptionData]="animationOptionData" #properties></properties>
-			<button (click)="generateAPNG()" class="btn btn-primary">変換する</button>
-		</div>
 	</div>
   `,
 	directives: [ImagePreviewComponent, AnimePreviewComponent, PropertiesComponent, ImageListComponent],

@@ -24,10 +24,16 @@ declare function require(value:String):any;
 		
 		<div id="myTabContent" class="tab-content">
 			<div class="tab-pane active" id="tab1">
-				<p>コンテンツ1</p>
+				<label for="name">PNG</label>
+				<input type="text" #pngPath>
+				
+				<p><label>フレームレート<input type="number" value="30"></label></p>
+				
+				<p><label>ループ<input type="checkbox" name="riyu" value="3"></label></p>
+				<p><label>ループ回数<input type="number" value="1"></label></p>
 			</div>
 			<div class="tab-pane" id="tab2">
-				<p>コンテンツ2</p>
+				
 			</div>
 			<div class="tab-pane" id="tab3">
 				<p>コンテンツ3</p>
@@ -35,11 +41,6 @@ declare function require(value:String):any;
 			<div class="tab-pane" id="tab4">
 				<p>コンテンツ4</p>
 			</div>
-		</div>
-		
-		<div>
-			<label for="name">PNG</label>
-			<input type="text" #pngPath>
 		</div>
 	</div>
   `
@@ -49,7 +50,7 @@ export class PropertiesComponent {
 
 	@ViewChild("pngPath") pngPath;
 
-	ngOnInit(){
+	ngOnInit() {
 
 		const ipc = require('electron').ipcRenderer;
 		ipc.on('selected-save-image', (event:any, path:string) => {
@@ -64,7 +65,8 @@ export class PropertiesComponent {
 
 
 	}
-	private _generateAPNG(apngPath:string){
+
+	private _generateAPNG(apngPath:string) {
 
 		const remote = require('electron').remote;
 		const app = remote.app;
