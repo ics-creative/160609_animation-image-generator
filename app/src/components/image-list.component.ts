@@ -1,4 +1,4 @@
-import {Component, ViewChild, Input} from '@angular/core';
+import {Component, ViewChild, Input, EventEmitter} from '@angular/core';
 import {ImageData} from '../data/image-data';
 
 declare function require(value:String):any;
@@ -26,11 +26,16 @@ declare function require(value:String):any;
 		</div>
   `,
 	styleUrls: ['./styles/item-list.css'],
+	events: [
+		"imageUpdateEvent"
+	]
 })
 export class ImageListComponent {
 
 	@Input() items:ImageData[];
 	@ViewChild("dropArea") dropArea;
+
+	private imageUpdateEvent = new EventEmitter();
 
 	ngOnInit() {
 		this.items = [];
@@ -83,6 +88,7 @@ export class ImageListComponent {
 				this.items.push(item);
 			}
 		}
+		this.imageUpdateEvent.emit(null);
 
 		event.preventDefault();
 	}
