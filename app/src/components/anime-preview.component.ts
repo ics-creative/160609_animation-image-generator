@@ -1,46 +1,77 @@
-///<reference path="../../libs/createjs/createjs.d.ts" />
-
 import {Component, ViewChild, Input} from '@angular/core';
 import {AnimationImageOptions} from "../data/animation-image-options";
-import {AfterViewInit} from '@angular/core';
-import {DoCheck} from '@angular/core';
+import {ImageData} from "../data/image-data";
 
 @Component({
 	selector: 'anime-preview',
 	template: `
+    <div>
+    	<div *ngIf="items.length <= 0 " class="empty-image">
+			   No Image
+			</div>
+    	<div *ngIf="items.length > 0 " class="exits-image">
+    		<img data-src="{{imagePath}}" alt="Generic placeholder image">
+    	</div>
     <div class="anim-preview">
-    	<canvas #myCanvas width="320" height="320"></canvas>
-	</div>
+    	<canvas width="320" height="320"></canvas>
+		</div>
   `,
 	styleUrls: ['./styles/anim-preview.css'],
 })
 
-export class AnimePreviewComponentt implements AfterViewInit, DoCheck {
+export class AnimePreviewComponent {
+	@Input() imagePath:string;
 	@Input() animationOptionData:AnimationImageOptions;
 
-	@ViewChild("myCanvas") myCanvas:any;
+	private items:ImageData[];
+	private playing:boolean;
+	private currentFrame:number;
+	private animeBasetime:number;
+	private animeFPS:number;
 
-	private stage:createjs.Stage;
+	ngOnInit() {
+		this.items = [];
 
-	/** 表示生成後に発生するライフサイクルイベント */
-	ngAfterViewInit() {
-		// 参照をとれる
-		let canvas = this.myCanvas.nativeElement;
-		this.stage = new createjs.Stage(canvas);
-
-		let shape = new createjs.Shape();
-		shape.graphics.beginFill("red").drawRect(0, 0, 100, 100);
-		stage.addChild(shape);
-
-		createjs.Ticker.on("tick", this.tick, this);
 	}
 
-	/** 値の変更時を監視するライフサイクルイベント */
-	ngDoCheck() {
-		createjs.Ticker.framerate = 30;
+	public  setItems(items:ImageData[]) {
+		this.items = items;
+		if (items.length >= 1) {
+			this.imagePath = this.items[0].imagePath;
+			this.currentFrame = 0;
+			this.animeBasetime = Date.now();
+			this.animeFPS = 1000 / this.animationOptionData.fps;
+			this.playing = true;
+
+			this.loop();
+		}
 	}
 
-	private tick() {
-		this.stage.update();
+	private anime() {
+
+		this.currentFrame++;
+		if (this.items.length <= this.currentFrame) {
+			this.currentFrame = 0;
+		}
+		this.imagePath = this.items[this.currentFrame].imagePath;
+
+	}
+
+	private loop() {
+		if (!this.items || !this.playing) {
+			console.log("endloop");
+			this.playing = false;
+			return;
+		}
+		const now = Date.now();
+		const check = now - this.animeBasetime;
+		if (check / this.animeFPS >= 1) {
+			this.animeBasetime = now;
+			this.anime();
+		}
+
+		requestAnimationFrame(()=> {
+			this.loop();
+		});
 	}
 }

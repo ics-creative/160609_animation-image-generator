@@ -19,10 +19,10 @@ declare function require(value:String):any;
 		
 		<div class="mod-preview">
     		<image-preview></image-preview>
-			<anime-preview [animationOptionData]="animationOptionData"></anime-preview>
+			<anime-preview [animationOptionData]="animationOptionData" #animePreview></anime-preview>
 			
 			<!-- <button (click)="openDirectories()">open</button> -->
-			<image-list #imageList></image-list>
+			<image-list #imageList  (imageUpdateEvent)="imageUpdateEvent()"></image-list>
 		</div>
 	</div>
   `,
@@ -34,6 +34,7 @@ export class AppComponent {
 	@Input() animationOptionData:AnimationImageOptions;
 	@ViewChild("properties") propertiesComponent:PropertiesComponent;
 	@ViewChild("imageList") imageListComponent:ImageListComponent;
+	@ViewChild("animePreview") animePreviewComponent:AnimePreviewComponent;
 
 	temporaryPath:string;
 	apngPath:string;
@@ -43,6 +44,7 @@ export class AppComponent {
 		this.animationOptionData.compression = CompressionType.zip7;
 		this.animationOptionData.iterations = 15;
 		this.animationOptionData.loop = 0;
+		this.animationOptionData.fps = 30;
 
 		//	保存先の指定返却
 		const ipc = require('electron').ipcRenderer;
@@ -58,6 +60,10 @@ export class AppComponent {
 
 		this.temporaryPath = path.join(app.getPath('temp'), "a-img-generator");
 
+	}
+
+	imageUpdateEvent() {
+		this.animePreviewComponent.setItems(this.imageListComponent.items);
 	}
 
 	generateAPNG() {
