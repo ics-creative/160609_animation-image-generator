@@ -20,7 +20,7 @@ import {ImageData} from "../data/image-data";
 	<div>			
 		<div *ngIf="items.length >= 1" >
 			<div *ngFor="let item of items" class="frame-image-container">
-				<img data-src="{{item.imagePath}}" width="64" height="64" class="frame-image" />
+				<img data-src="{{item.imagePath}}" class="frame-image img-fluid" />
 			</div>
 		</div>
 	</div>
