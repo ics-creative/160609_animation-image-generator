@@ -9,7 +9,6 @@ declare function require(value:String):any;
 		<p class="m-t-1">コマ画像プレビュー</p>
 		<div #dropArea>
 			<div *ngIf="items.length <= 0 " class="drop-empty drop-area image-drop-area bg-inverse">
-			    Drag to Image (*.png)
 			</div>
 			
 			<div *ngIf="items.length >= 1" >
@@ -27,7 +26,6 @@ declare function require(value:String):any;
 export class ImageListComponent {
 
 	@Input() items:ImageData[];
-	@ViewChild("dropArea") dropArea:any;
 
 	private imageUpdateEvent = new EventEmitter();
 
@@ -46,31 +44,17 @@ export class ImageListComponent {
 			//this.items.push(path);
 		});
 
-		const dropAreaDivElement:HTMLDivElement = this.dropArea.nativeElement;
-
-		dropAreaDivElement.addEventListener("dragover", (event:DragEvent)=> {
-			this._handleDragOver(event);
-		});
-
-		dropAreaDivElement.addEventListener("drop", (event:DragEvent)=> {
-			this._handleDrop(event);
-		});
-
 	}
 
-	private _handleDragOver(event:DragEvent) {
-
-		event.preventDefault();
-	}
-
-	private _handleDrop(event:DragEvent) {
+	public handleDrop(event:DragEvent) {
 		var path = require('path');
 
 		const length = event.dataTransfer.files ? event.dataTransfer.files.length : 0;
 
 		for (let i = 0; i < length; i++) {
-			const file = event.dataTransfer.files[i];
+			const file:any = event.dataTransfer.files[i];
 			const filePath = file.path;
+
 			if (path.extname(filePath) == ".png") {
 				path.dirname(filePath);
 

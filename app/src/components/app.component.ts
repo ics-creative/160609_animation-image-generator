@@ -1,4 +1,4 @@
-import {Component, ViewChild, Input} from '@angular/core';
+import {Component, ViewChild, Input, ElementRef} from '@angular/core';
 import {AnimePreviewComponent} from "./anime-preview.component";
 import {PropertiesComponent} from "./property.component";
 import {ImageListComponent} from "./image-list.component";
@@ -11,7 +11,7 @@ declare function require(value:String):any;
 @Component({
 	selector: 'my-app',
 	template: `
-    <div class="app-component">		
+    <div class="app-component"  #myComponent>		
 		<div class="mod-setting p-a-1">			
 			<properties [animationOptionData]="animationOptionData" #properties></properties>
 			<button (click)="generateAPNG()" class="btn btn-primary center-block">保存する</button>
@@ -35,9 +35,12 @@ export class AppComponent {
 	@ViewChild("properties") propertiesComponent:PropertiesComponent;
 	@ViewChild("imageList") imageListComponent:ImageListComponent;
 	@ViewChild("animePreview") animePreviewComponent:AnimePreviewComponent;
+	@ViewChild("myComponent") myComponent:ElementRef;
 
-	temporaryPath:string;
-	apngPath:string;
+	private temporaryPath:string;
+	private apngPath:string;
+	private elementRef:ElementRef;
+	private currentElement:HTMLElement;
 
 	ngOnInit() {
 		this.animationOptionData = new AnimationImageOptions();
@@ -60,6 +63,22 @@ export class AppComponent {
 
 		this.temporaryPath = path.join(app.getPath('temp'), "a-img-generator");
 
+	}
+
+	ngAfterViewInit() {
+
+		const component = this.myComponent.nativeElement;
+		component.addEventListener("dragover", (event:DragEvent)=> {
+			this._handleDragOver(event);
+		});
+
+		component.addEventListener("drop", (event:DragEvent)=> {
+			this.imageListComponent.handleDrop(event);
+		});
+	}
+
+	private _handleDragOver(event:DragEvent) {
+		event.preventDefault();
 	}
 
 	imageUpdateEvent() {
@@ -163,7 +182,6 @@ export class AppComponent {
 		});
 	}
 
-
 	private getCompressOption(type:CompressionType) {
 		switch (type) {
 			case CompressionType.zlib:
@@ -179,6 +197,4 @@ export class AppComponent {
 		this.imageListComponent.openDirectories();
 	}
 
-	constructor() {
-	}
 }
