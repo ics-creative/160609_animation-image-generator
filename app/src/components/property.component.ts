@@ -44,9 +44,34 @@ declare function require(value:String):any;
 			
 			</div>
 			<div class="tab-pane" id="tab2">
-				<p>zlib</p>
-				<p>7zip <input type="number" value="1"></p>
-				<p>zopfli <input type="number" value="1"></p>
+			
+				<h4>最適化オプション</h4>
+			
+				<div class="checkbox">
+					<label>
+						<input type="checkbox"> PNG事前圧縮を利用
+					</label>
+				</div>
+			
+				<h4>圧縮設定</h4>
+				<div class="c-inputs-stacked">
+					<label class="c-input c-radio">
+						<input id="radioStacked2" name="radio-stacked" type="radio">
+						<span class="c-indicator"></span>
+						zopfli (容量:小)
+					</label>
+					<label class="c-input c-radio">
+						<input id="radioStacked2" name="radio-stacked" type="radio">
+						<span class="c-indicator"></span>
+						7zip (容量:中)
+					</label>
+					<label class="c-input c-radio">
+						<input id="radioStacked1" name="radio-stacked" type="radio">
+						<span class="c-indicator"></span>
+						zlib (容量:大)
+					</label>
+				</div>
+
 			</div>
 		</div>
 	</div>
