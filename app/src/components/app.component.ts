@@ -24,7 +24,6 @@ declare function require(value:String):any;
 			<!-- <button (click)="openDirectories()">open</button> -->
 			<image-list #imageList></image-list>
 		</div>
-		
 	</div>
   `,
 	directives: [ImagePreviewComponent, AnimePreviewComponent, PropertiesComponent, ImageListComponent],

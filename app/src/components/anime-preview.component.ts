@@ -5,7 +5,7 @@ import {AnimationImageOptions} from "../data/animation-image-options";
 	selector: 'anime-preview',
 	template: `
     <div class="anim-preview">
-    	<canvas></canvas>
+    	<canvas width="320" height="320"></canvas>
 	</div>
   `,
 	styleUrls: ['./styles/anim-preview.css'],
