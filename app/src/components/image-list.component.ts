@@ -7,14 +7,22 @@ declare function require(value:String):any;
 	selector: 'image-list',
 	template: `
 		<div #dropArea>
-			<div *ngIf="items.length <= 0 " class="drop-empty drop-area image-drop-area" >
-				Drag to Image (*.png)
+			<div *ngIf="items.length <= 0 " class="drop-empty drop-area image-drop-area bg-inverse">
+			    Drag to Image (*.png)
 			</div>
-			<div  *ngIf="items.length >= 1 "  class="drop-area image-drop-area" >
-				<li *ngFor="let item of items">
-					<p>{{ item.imageBaseName }}</p>
+			
+			<ul *ngIf="items.length >= 1" class="list-group" >
+				<li *ngFor="let item of items" class="list-group-item">
+					<div class="media">
+						<a class="media-left" href="#">
+							<img class="media-object" data-src="..." alt="Generic placeholder image">
+						</a>
+						<div class="media-body">
+							<p class="media-heading">{{ item.imageBaseName }}</p>
+						</div>
+					</div>
 				</li>
-			</div>
+			</ul>
 		</div>
   `,
 	styleUrls: ['./styles/item-list.css'],
@@ -60,7 +68,7 @@ export class ImageListComponent {
 		var path = require('path');
 
 		const length = event.dataTransfer.files ? event.dataTransfer.files.length : 0;
-		
+
 		for (let i = 0; i < length; i++) {
 			const file = event.dataTransfer.files[0];
 			const filePath = file.path;
