@@ -15,7 +15,7 @@ declare function require(value:String):any;
 				<li *ngFor="let item of items" class="list-group-item">
 					<div class="media">
 						<a class="media-left" href="#">
-							<img class="media-object" data-src="..." alt="Generic placeholder image">
+							<img class="media-object" data-src="{{item.imagePath}}" alt="Generic placeholder image" width="32" height="32">
 						</a>
 						<div class="media-body">
 							<p class="media-heading">{{ item.imageBaseName }}</p>
