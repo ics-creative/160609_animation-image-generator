@@ -45,8 +45,9 @@ export class AppComponent {
 		this.animationOptionData = new AnimationImageOptions();
 		this.animationOptionData.compression = CompressionType.zip7;
 		this.animationOptionData.iterations = 15;
-		this.animationOptionData.loop = 0;
+		this.animationOptionData.loop = 1;
 		this.animationOptionData.fps = 30;
+		this.animationOptionData.noLoop = true;
 
 		//	保存先の指定返却
 		const ipc = require('electron').ipcRenderer;

@@ -12,7 +12,7 @@ if (process.env.NODE_ENV === 'production') {
 
 function createWindow() {
 	// メインウィンドウを作成します
-	win = new BrowserWindow({width: 600, height: 400});
+	win = new BrowserWindow({width: 1024, height: 600, minWidth: 800, minHeight: 400});
 
 	// メインウィンドウに表示するURLを指定します
 	// （今回はmain.jsと同じディレクトリのindex.html）

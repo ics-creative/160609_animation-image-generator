@@ -4,11 +4,11 @@
 }
 
 .mod-setting {
-  width: 35%;
+  width: 350px;
   height: 100%;
 }
 
 .mod-preview {
-  width: 65%;
+  width: calc(100% - 350px);
   height: 100%;
 }

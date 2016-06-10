@@ -1,9 +1,13 @@
-.anim-preview img {
+.anim-preview {
+  height: 100%;
+  overflow: scroll;
+}
+
+.preview-area img {
   background: url(../app/imgs/opacity.png) repeat;
 }
 
 .frame-image-container {
-
 
   width: 64px;
   height: 64px;
