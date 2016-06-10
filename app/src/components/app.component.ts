@@ -84,6 +84,14 @@ export class AppComponent {
 	}
 
 	generateAPNG() {
+		const complessOption = this.getCompressOption(this.animationOptionData.compression);
+		console.log("--------------options------------");
+		console.log("noLoop:" + this.animationOptionData.noLoop);
+		console.log("loop:" + this.animationOptionData.loop);
+		console.log("fps:" + this.animationOptionData.fps);
+		console.log("compress:" + complessOption);
+		console.log("---------------------------------");
+
 		const ipc = require('electron').ipcRenderer;
 		ipc.send('open-save-dialog');
 	}
