@@ -14,15 +14,9 @@ declare function require(value:String):any;
 		  <li class="nav-item">
 			<a class="nav-link" href="#tab2" data-toggle="tab">画質設定</a>
 		  </li>
-		  <li class="nav-item">
-			<a class="nav-link" href="#tab3" data-toggle="tab">Another link</a>
-		  </li>
-		  <li class="nav-item">
-			<a class="nav-link" href="#tab4" data-toggle="tab">Disabled</a>
-		  </li>
 		</ul>
 		
-		<div id="myTabContent" class="tab-content">
+		<div id="myTabContent" class="tab-content p-x-2">
 			<div class="tab-pane active" id="tab1">
 				<p><label>フレームレート<input type="number" value="30"></label></p>
 				
@@ -34,12 +28,6 @@ declare function require(value:String):any;
 				<p>zlib</p>
 				<p>7zip <input type="number" value="1"></p>
 				<p>zopfli <input type="number" value="1"></p>
-			</div>
-			<div class="tab-pane" id="tab3">
-				<p>コンテンツ3</p>
-			</div>
-			<div class="tab-pane" id="tab4">
-				<p>コンテンツ4</p>
 			</div>
 		</div>
 	</div>

@@ -14,7 +14,7 @@ declare function require(value:String):any;
     <div class="app-component">		
 		<div class="mod-setting">			
 			<properties [animationOptionData]="animationOptionData" #properties></properties>
-			<button (click)="generateAPNG()" class="btn btn-primary">変換する</button>
+			<button (click)="generateAPNG()" class="btn btn-primary center-block">保存する</button>
 		</div>
 		
 		<div class="mod-preview">
