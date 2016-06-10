@@ -5,16 +5,14 @@ import {ImageData} from "../data/image-data";
 @Component({
 	selector: 'anime-preview',
 	template: `
-    <div>
-    	<div *ngIf="items.length <= 0 " class="empty-image">
-			   No Image
-			</div>
-    	<div *ngIf="items.length > 0 " class="exits-image">
-    		<img data-src="{{imagePath}}" alt="Generic placeholder image">
-    	</div>
     <div class="anim-preview">
-    	<canvas width="320" height="320"></canvas>
+    	<div *ngIf="items.length <= 0" class="empty-image">
+			   No Image
 		</div>
+    	<div *ngIf="items.length > 0">
+    		<img data-src="{{imagePath}}">
+    	</div>
+	</div>
   `,
 	styleUrls: ['./styles/anim-preview.css'],
 })
@@ -34,7 +32,7 @@ export class AnimePreviewComponent {
 
 	}
 
-	public  setItems(items:ImageData[]) {
+	public setItems(items:ImageData[]) {
 		this.items = items;
 		if (items.length >= 1) {
 			this.imagePath = this.items[0].imagePath;
