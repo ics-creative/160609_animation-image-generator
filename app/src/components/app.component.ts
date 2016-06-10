@@ -36,7 +36,6 @@ export class AppComponent {
 	@ViewChild("imageList") imageListComponent:ImageListComponent;
 
 	ngOnInit() {
-		this._cancelDragAndDrop();
 		this.animationOptionData = new AnimationImageOptions();
 		this.animationOptionData.compression = CompressionType.zip7;
 		this.animationOptionData.iterations = 15;
