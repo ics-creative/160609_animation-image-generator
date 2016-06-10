@@ -14,7 +14,7 @@ declare function require(value:String):any;
 			
 			<div *ngIf="items.length >= 1" >
 				<div *ngFor="let item of items" class="frame-image-container">
-					<img data-src="{{item.imagePath}}" width="48" height="48" class="frame-image" />
+					<img data-src="{{item.imagePath}}" width="64" height="64" class="frame-image" />
 				</div>
 			</div>
 		</div>

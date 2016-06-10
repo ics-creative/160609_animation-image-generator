@@ -6,6 +6,7 @@ import {ImageData} from "../data/image-data";
 	selector: 'anime-preview',
 	template: `
 	<p>アニメーションプレビュー</p>
+	<figcaption class="figure-caption">フレームサイズ <span class="label label-default">300×300px</span> / 総フレーム数 <span class="label label-default">30</span></figcaption>
     <div class="anim-preview">
     	<div *ngIf="items.length <= 0" class="empty-image">
 			   No Image
