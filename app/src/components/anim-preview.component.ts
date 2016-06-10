@@ -6,7 +6,13 @@ import {ImageData} from "../data/image-data";
 	selector: 'anim-preview',
 	template: `
 	<p>アニメーションプレビュー</p>
-	<figcaption class="figure-caption">フレームサイズ <span class="label label-default">W {{imageW}} × H {{imageH}} px</span> / 総フレーム数 <span class="label label-default">{{items.length}}</span></figcaption>
+	<figcaption class="figure-caption">
+		フレームサイズ <span class="label label-default">W {{imageW}} × H {{imageH}} px</span> 
+		/ 総フレーム数 <span class="label label-default">{{items.length}}</span>
+		<span *ngIf="animationOptionData.noLoop == false">
+			/ 再生時間 <span class="label label-default">{{items.length * animationOptionData.fps * animationOptionData.loop / 1000}}秒</span>
+		</span>
+	</figcaption>
     <div class="anim-preview m-t-1">
     	<div *ngIf="items.length > 0">
     		<img data-src="{{imagePath}}">
@@ -61,7 +67,7 @@ export class AnimPreviewComponent {
 		}
 	}
 
-	private anime() {
+	private updateAnimation() {
 
 		this.currentFrame++;
 		if (this.items.length <= this.currentFrame) {
@@ -87,7 +93,7 @@ export class AnimPreviewComponent {
 		}
 
 		if (this.playing == true) {
-			this.anime();
+			this.updateAnimation();
 		}
 	}
 
