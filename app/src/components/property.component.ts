@@ -21,27 +21,27 @@ declare function require(value:String):any;
 				<div class="form-group row">
 					<label class="col-sm-6 form-control-label">フレームレート</label>
 					<div class="col-sm-6">
-						<p class="form-control-static">email@example.com</p>
+						<input type="number" class="form-control" value="30" min="1" max="60">
 					</div>
 				</div>
 				<div class="form-group row">
-					<label for="inputPassword" class="col-sm-6 form-control-label">ループ</label>
+					<label for="inputPassword" class="col-sm-6 form-control-label">ループ設定</label>
 					<div class="col-sm-6">
-						<input type="number" class="form-control" id="inputPassword" placeholder="Password">
+						<div class="checkbox">
+							<label>
+								<input type="checkbox"> 無限ループ
+							</label>
+						</div>
 					</div>
 				</div>
 				
 				<div class="form-group row">
 					<label for="inputPassword" class="col-sm-6 form-control-label">ループ回数</label>
 					<div class="col-sm-6">
-						<input type="number" class="form-control" id="inputPassword" placeholder="Password">
+						<input type="number" class="form-control" value="0" min="0">
 					</div>
 				</div>
 			
-				<p><label><input type="number" value="30"></label></p>
-				
-				<p><label>ループ<input type="checkbox" name="riyu" value="3"></label></p>
-				<p><label>ループ回数<input type="number" value="1"></label></p>
 			</div>
 			<div class="tab-pane" id="tab2">
 				<p>zlib</p>
