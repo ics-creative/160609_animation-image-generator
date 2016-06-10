@@ -1,4 +1,5 @@
 import {Component, ViewChild, Input} from '@angular/core';
+import {AnimationImageOptions} from "../data/animation-image-options";
 
 @Component({
 	selector: 'anime-preview',
@@ -9,5 +10,6 @@ import {Component, ViewChild, Input} from '@angular/core';
   `
 })
 export class AnimePreviewComponent {
+	@Input() animationOptionData:AnimationImageOptions;
 
 }
