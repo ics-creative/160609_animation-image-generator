@@ -60,7 +60,7 @@ export class ImageListComponent {
 		const length = event.dataTransfer.files ? event.dataTransfer.files.length : 0;
 		
 		for (let i = 0; i < length; i++) {
-			const file = event.dataTransfer.files[0];
+			const file = event.dataTransfer.files[i];
 			const filePath = file.path;
 			if (path.extname(filePath) == ".png") {
 				path.dirname(filePath);
@@ -68,6 +68,8 @@ export class ImageListComponent {
 				const item:ImageData = new ImageData();
 				item.imageBaseName = path.basename(filePath);
 				item.imagePath = filePath;
+				item.frameNumber = this.items.length;
+
 				this.items.push(item);
 			}
 		}
