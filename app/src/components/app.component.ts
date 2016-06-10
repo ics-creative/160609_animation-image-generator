@@ -12,7 +12,7 @@ declare function require(value:String):any;
     
     <div class="app-component">
     	<div>
-				<button (click)="openDirectories()">open</button>
+				<!-- <button (click)="openDirectories()">open</button> -->
 				<image-list #imageList></image-list>
 			</div>
 			<div>
