@@ -2,3 +2,4 @@ tmp-release*/
 animation-image-generator*
 .idea
 node_modules
+.DS_Store
