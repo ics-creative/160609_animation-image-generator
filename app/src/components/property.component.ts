@@ -1,4 +1,5 @@
 import {Component, ViewChild, Input} from '@angular/core';
+import {AnimationImageOptions} from "../data/animation-image-options";
 
 @Component({
 	selector: 'properties',
@@ -20,6 +21,7 @@ import {Component, ViewChild, Input} from '@angular/core';
   `
 })
 export class PropertiesComponent {
+	@Input() animationOptionData:AnimationImageOptions;
 
 	@ViewChild("apngPath") apngPath;
 	@ViewChild("pngPath") pngPath;
