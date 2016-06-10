@@ -12,12 +12,12 @@ declare function require(value:String):any;
 	selector: 'my-app',
 	template: `
     <div class="app-component">		
-		<div class="mod-setting">			
+		<div class="mod-setting p-a-1">			
 			<properties [animationOptionData]="animationOptionData" #properties></properties>
 			<button (click)="generateAPNG()" class="btn btn-primary center-block">保存する</button>
 		</div>
 		
-		<div class="mod-preview">
+		<div class="mod-preview bg-inverse p-a-1">
     		<image-preview></image-preview>
 			<anime-preview [animationOptionData]="animationOptionData" #animePreview></anime-preview>
 			
