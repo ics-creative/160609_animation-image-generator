@@ -149,7 +149,9 @@ export class AppComponent {
 		console.log(`${appPath}/bin/apngasm`);
 		const pngPath = path.join(this.temporaryPath, "frame*.png");
 
-		exec(`${appPath}/bin/apngasm`, [this.apngPath, pngPath], function (err:any, stdout:any, stderr:any) {
+		const complessOption = this.getCompressOption(this.animationOptionData.compression);
+
+		exec(`${appPath}/bin/apngasm`, [this.apngPath, pngPath, "1", this.animationOptionData.fps, complessOption], function (err:any, stdout:any, stderr:any) {
 			/* some process */
 			console.log("apngasm");
 			console.log(err, stdout, stderr);
@@ -159,6 +161,18 @@ export class AppComponent {
 				alert("書き出し失敗");
 			}
 		});
+	}
+
+
+	private getCompressOption(type:CompressionType) {
+		switch (type) {
+			case CompressionType.zlib:
+				return "-z0";
+			case CompressionType.zip7:
+				return "-z1";
+			case CompressionType.Zopfli:
+				return "-z2";
+		}
 	}
 
 	openDirectories() {

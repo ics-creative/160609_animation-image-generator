@@ -1,5 +1,6 @@
 *.js.map
 **/*.js
+!js/**/*.js
 !main.js
 !gulpfile.js
 !webpack.config.js
