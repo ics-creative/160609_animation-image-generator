@@ -6,7 +6,6 @@ import {ImageData} from "../data/image-data";
 	selector: 'anime-preview',
 	template: `
     <div>
-    	<h2>アニメーションプレビュー</h2>
     	<div *ngIf="items.length <= 0 " class="empty-image">
 			   No Image
 			</div>
@@ -15,7 +14,7 @@ import {ImageData} from "../data/image-data";
     	</div>
     <div class="anim-preview">
     	<canvas width="320" height="320"></canvas>
-	</div>
+		</div>
   `,
 	styleUrls: ['./styles/anim-preview.css'],
 })
@@ -23,7 +22,7 @@ import {ImageData} from "../data/image-data";
 export class AnimePreviewComponent {
 	@Input() imagePath:string;
 	@Input() animationOptionData:AnimationImageOptions;
-	
+
 	private items:ImageData[];
 	private playing:boolean;
 	private currentFrame:number;
