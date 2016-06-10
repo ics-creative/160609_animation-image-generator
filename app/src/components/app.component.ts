@@ -167,8 +167,11 @@ export class AppComponent {
 		const pngPath = path.join(this.temporaryPath, "frame*.png");
 
 		const complessOption = this.getCompressOption(this.animationOptionData.compression);
+		const loopOption = "-l"+( this.animationOptionData.noLoop ? 0 : this.animationOptionData.loop );
+		const options = [this.apngPath, pngPath, "1", this.animationOptionData.fps, complessOption, loopOption];
+		console.log(options);
 
-		exec(`${appPath}/bin/apngasm`, [this.apngPath, pngPath, "1", this.animationOptionData.fps, complessOption], function (err:any, stdout:any, stderr:any) {
+		exec(`${appPath}/bin/apngasm`, options, function (err:any, stdout:any, stderr:any) {
 			/* some process */
 			console.log("apngasm");
 			console.log(err, stdout, stderr);
