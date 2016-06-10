@@ -16,6 +16,7 @@ declare function require(value:String):any;
 			<!-- <button (click)="openDirectories()">open</button> -->
 			<image-list #imageList></image-list>
 		</div>
+		
 		<div>
 			<image-preview></image-preview>
 			<anime-preview [animationOptionData]="animationOptionData"></anime-preview>
@@ -69,7 +70,7 @@ export class AppComponent {
 		const pngTemporary = path.join(this.temporaryPath, "*.*");
 		console.log(pngTemporary);
 
-		del([pngTemporary],{force:true}).then(paths => {
+		del([pngTemporary], {force: true}).then(paths => {
 			console.log('Deleted files and folders:\n', paths.join('\n'));
 
 			const fs = require('fs');
@@ -101,7 +102,7 @@ export class AppComponent {
 	_copyAll() {
 
 		const fs = require('fs');
-		
+
 		return Promise.all(this.imageListComponent.items.map((item) => {
 			return new Promise((resolve, reject) => {
 
@@ -145,6 +146,11 @@ export class AppComponent {
 			/* some process */
 			console.log("apngasm");
 			console.log(err, stdout, stderr);
+			if (!err) {
+				alert("書き出し成功!");
+			} else {
+				alert("書き出し失敗");
+			}
 		});
 	}
 

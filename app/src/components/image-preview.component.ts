@@ -5,7 +5,7 @@ import {Component, ViewChild, Input} from '@angular/core';
 	template: `
     <div>
     	<h2>画像プレビュー</h2>
-		</div>
+	</div>
   `
 })
 export class ImagePreviewComponent {

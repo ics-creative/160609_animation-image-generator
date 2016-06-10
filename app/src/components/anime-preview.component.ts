@@ -6,7 +6,7 @@ import {AnimationImageOptions} from "../data/animation-image-options";
 	template: `
     <div>
     	<h2>アニメーションプレビュー</h2>
-		</div>
+	</div>
   `
 })
 export class AnimePreviewComponent {
