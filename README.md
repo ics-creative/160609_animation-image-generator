@@ -2,7 +2,12 @@
 
 # 実行方法
 
-## 1.アプリケーションに必要なファイルをインストール
+## 1.アプリケーションに必要なファイルをダウンロードしてきます。
+
+「`app/bin/`」ディレクトリーに`apngasm`を配置します。
+（※ [APNG Assembler（apngasm-2.9-bin-macosx.zip） - SourceForge](https://sourceforge.net/projects/apngasm/files/2.9/) をダウンロード ）
+
+## 2.アプリケーションに必要なファイルをインストール
 
 アプリの実行先は`app`ディレクトリーです。「`cd`」コマンドで移動します。
 
@@ -27,6 +32,6 @@ npm run build
 npm run start
 ```
 
-# リリースファイルを作成する場合
+# 3. リリースファイルを作成する場合
 
 未定です。
