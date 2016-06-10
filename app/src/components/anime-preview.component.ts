@@ -6,7 +6,7 @@ import {ImageData} from "../data/image-data";
 	selector: 'anime-preview',
 	template: `
 	<p>アニメーションプレビュー</p>
-	<figcaption class="figure-caption">フレームサイズ <span class="label label-default">300×300px</span> / 総フレーム数 <span class="label label-default">30</span></figcaption>
+	<figcaption class="figure-caption">フレームサイズ <span class="label label-default">W {{imageW}} × H {{imageH}} px</span> / 総フレーム数 <span class="label label-default">{{items.length}}</span></figcaption>
     <div class="anim-preview m-t-1">
     	<div *ngIf="items.length <= 0" class="empty-image">
 			   No Image
@@ -19,7 +19,7 @@ import {ImageData} from "../data/image-data";
 	<p class="m-t-1">コマ画像プレビュー</p>
 	<div>			
 		<div *ngIf="items.length >= 1" >
-			<div *ngFor="let item of items" class="frame-image-container">
+			<div *ngFor="let item of items; let i = index" class="frame-image-container" [ngClass]="{active: currentFrame == i}">
 				<img data-src="{{item.imagePath}}" class="frame-image img-fluid" />
 			</div>
 		</div>
@@ -36,12 +36,15 @@ export class AnimePreviewComponent {
 	private items:ImageData[];
 	private playing:boolean;
 	private currentFrame:number;
-	private animeBasetime:number;
-	private animeFPS:number;
+	private imageW:number;
+	private imageH:number;
 
 	ngOnInit() {
 		this.items = [];
 
+
+		createjs.Ticker.framerate = this.animationOptionData.fps;
+		createjs.Ticker.on("tick", this.loop, this);
 	}
 
 	public setItems(items:ImageData[]) {
@@ -52,12 +55,17 @@ export class AnimePreviewComponent {
 			this.animeBasetime = Date.now();
 			this.playing = true;
 
-			this.loop();
+			let image = new Image();
+			image.onload = ()=>{
+				this.imageW = image.width;
+				this.imageH = image.height;
+			};
+			image.src = this.imagePath;
 		}
 	}
 
 	private anime() {
-		
+
 		this.currentFrame++;
 		if (this.items.length <= this.currentFrame) {
 			this.currentFrame = 0;
@@ -67,22 +75,14 @@ export class AnimePreviewComponent {
 	}
 
 	private loop() {
-		this.animeFPS = 1000 / this.animationOptionData.fps;
+		createjs.Ticker.framerate = this.animationOptionData.fps;
 
 		if (!this.items || !this.playing) {
 			console.log("endloop");
 			this.playing = false;
 			return;
 		}
-		const now = Date.now();
-		const check = now - this.animeBasetime;
-		if (check / this.animeFPS >= 1) {
-			this.animeBasetime = now;
-			this.anime();
-		}
 
-		requestAnimationFrame(()=> {
-			this.loop();
-		});
+		this.anime();
 	}
 }
