@@ -44,6 +44,9 @@ function createWindow() {
 
 	ipc.on('open-save-dialog', function (event) {
 		dialog.showSaveDialog({
+			title:"APNGファイルの保存先を選択",
+			defaultPath:"anime.png",
+			filters : [ {name: 'Images', extensions: ['png']}],
 			properties: ['openFile', 'openDirectory']
 		}, function (files) {
 			if (files) event.sender.send('selected-save-image', files)
