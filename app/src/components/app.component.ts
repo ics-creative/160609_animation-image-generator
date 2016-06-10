@@ -53,25 +53,4 @@ export class AppComponent {
 
 	constructor() {
 	}
-
-	/**
-	 * ドラッグ&ドロップの動作を阻止する
-	 */
-	private _cancelDragAndDrop() {
-		document.addEventListener("dragover", (event:DragEvent)=> {
-			this._handleDragOver(event);
-		});
-
-		document.addEventListener("drop", (event:DragEvent)=> {
-			this._handleDrop(event);
-		});
-	}
-
-	private _handleDragOver(event:DragEvent) {
-		event.preventDefault();
-	}
-
-	private _handleDrop(event:DragEvent) {
-		event.preventDefault();
-	}
 }
