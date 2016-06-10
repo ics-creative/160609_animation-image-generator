@@ -11,18 +11,11 @@ declare function require(value:String):any;
 			    Drag to Image (*.png)
 			</div>
 			
-			<ul *ngIf="items.length >= 1" class="list-group" >
-				<li *ngFor="let item of items" class="list-group-item">
-					<div class="media">
-						<a class="media-left" href="#">
-							<img class="media-object" data-src="{{item.imagePath}}" alt="Generic placeholder image" width="32" height="32">
-						</a>
-						<div class="media-body">
-							<p class="media-heading">{{ item.imageBaseName }}</p>
-						</div>
-					</div>
-				</li>
-			</ul>
+			<div *ngIf="items.length >= 1" >
+				<span *ngFor="let item of items">
+					<img data-src="{{item.imagePath}}" width="48" height="48" class="frame-image" />
+				</span>
+			</div>
 		</div>
   `,
 	styleUrls: ['./styles/item-list.css'],

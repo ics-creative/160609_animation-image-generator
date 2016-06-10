@@ -10,3 +10,7 @@
 
 .drop-empty {
 }
+
+.frame-image {
+  background: url(../app/imgs/opacity.png) repeat;
+}
