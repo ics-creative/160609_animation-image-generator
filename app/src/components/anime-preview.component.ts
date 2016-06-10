@@ -13,12 +13,17 @@ import {ImageData} from "../data/image-data";
     	<div *ngIf="items.length > 0 " class="exits-image">
     		<img data-src="{{imagePath}}" alt="Generic placeholder image">
     	</div>
+    <div class="anim-preview">
+    	<canvas width="320" height="320"></canvas>
 	</div>
-  `
+  `,
+	styleUrls: ['./styles/anim-preview.css'],
 })
+
 export class AnimePreviewComponent {
 	@Input() imagePath:string;
 	@Input() animationOptionData:AnimationImageOptions;
+	
 	private items:ImageData[];
 	private playing:boolean;
 	private currentFrame:number;
@@ -40,7 +45,6 @@ export class AnimePreviewComponent {
 			this.playing = true;
 
 			this.loop();
-
 		}
 	}
 

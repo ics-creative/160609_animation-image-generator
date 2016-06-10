@@ -1,3 +1,14 @@
 .app-component {
+  display: flex;
+  height: 100%;
 }
 
+.mod-setting {
+  width: 30%;
+  height: 100%;
+}
+
+.mod-preview {
+  width: 70%;
+  height: 100%;
+}

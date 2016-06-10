@@ -9,34 +9,27 @@ declare function require(value:String):any;
     <div>		
 		<ul class="nav nav-tabs">
 		  <li class="nav-item">
-			<a class="nav-link active" href="#tab1" data-toggle="tab">Active</a>
+			<a class="nav-link active" href="#tab1" data-toggle="tab">アニメーション設定</a>
 		  </li>
 		  <li class="nav-item">
-			<a class="nav-link" href="#tab2" data-toggle="tab">Link</a>
-		  </li>
-		  <li class="nav-item">
-			<a class="nav-link" href="#tab3" data-toggle="tab">Another link</a>
-		  </li>
-		  <li class="nav-item">
-			<a class="nav-link" href="#tab4" data-toggle="tab">Disabled</a>
+			<a class="nav-link" href="#tab2" data-toggle="tab">画質設定</a>
 		  </li>
 		</ul>
 		
-		<div id="myTabContent" class="tab-content">
+		<div id="myTabContent" class="tab-content p-x-2">
 			<div class="tab-pane active" id="tab1">
-				<p>コンテンツ1</p>
+				<p><label>フレームレート<input type="number" value="30"></label></p>
+				
+				<p><label>ループ<input type="checkbox" name="riyu" value="3"></label></p>
+				<p><label>ループ回数<input type="number" value="1"></label></p>
 			</div>
 			<div class="tab-pane" id="tab2">
-				<p>コンテンツ2</p>
-			</div>
-			<div class="tab-pane" id="tab3">
-				<p>コンテンツ3</p>
-			</div>
-			<div class="tab-pane" id="tab4">
-				<p>コンテンツ4</p>
+				<h1>圧縮方式</h1>
+				<p>zlib</p>
+				<p>7zip <input type="number" value="1"></p>
+				<p>zopfli <input type="number" value="1"></p>
 			</div>
 		</div>
-		
 	</div>
   `
 })
