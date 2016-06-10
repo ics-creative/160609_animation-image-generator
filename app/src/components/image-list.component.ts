@@ -88,8 +88,34 @@ export class ImageListComponent {
 				this.items.push(item);
 			}
 		}
+
+		this.numbering();
+
 		this.imageUpdateEvent.emit(null);
 
 		event.preventDefault();
+	}
+
+	/**
+	 * 再ナンバリングする。
+	 */
+	private numbering() {
+
+		this.items.sort(function (a, b) {
+			const aRes = a.imageBaseName.match(/\d+/g);
+			const bRes = b.imageBaseName.match(/\d+/g);
+
+			const aNum = aRes.length >= 1 ? parseInt(aRes.pop()) : 0;
+			const bNum = bRes.length >= 1 ? parseInt(bRes.pop()) : 0;
+
+			if (aNum < bNum) return -1;
+			if (aNum > bNum) return 1;
+			return 0;
+		});
+
+		const length = this.items.length;
+		for (let i = 0; i < length; i++) {
+			this.items[i].frameNumber = i;
+		}
 	}
 }
