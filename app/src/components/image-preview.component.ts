@@ -1,13 +1,8 @@
-import {Component, ViewChild, Input} from '@angular/core';
+import {Component} from '@angular/core';
 
 @Component({
 	selector: 'image-preview',
-	template: `
-    <div>
-    	<h2>画像プレビュー</h2>
-	</div>
-  `
+	template: ``
 })
 export class ImagePreviewComponent {
-
 }
