@@ -6,17 +6,7 @@ declare function require(value:String):any;
 @Component({
 	selector: 'image-list',
 	template: `
-		<p class="m-t-1">コマ画像プレビュー</p>
-		<div #dropArea>
-			<div *ngIf="items.length <= 0 " class="drop-empty drop-area image-drop-area bg-inverse">
-			</div>
-			
-			<div *ngIf="items.length >= 1" >
-				<div *ngFor="let item of items" class="frame-image-container">
-					<img data-src="{{item.imagePath}}" width="64" height="64" class="frame-image" />
-				</div>
-			</div>
-		</div>
+		
   `,
 	styleUrls: ['./styles/item-list.css'],
 	events: [
