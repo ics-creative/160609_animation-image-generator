@@ -72,7 +72,7 @@ export class AppComponent {
 		const pngTemporary = path.join(this.temporaryPath, "*.*");
 		console.log(pngTemporary);
 
-		del([pngTemporary], {force: true}).then(paths => {
+		del([pngTemporary], {force: true}).then((paths:string[]) => {
 			console.log('Deleted files and folders:\n', paths.join('\n'));
 
 			const fs = require('fs');
@@ -117,13 +117,13 @@ export class AppComponent {
 				console.log(dest);
 				var r = fs.createReadStream(src),
 					w = fs.createWriteStream(dest);
-				r.on("error", function (err) {
+				r.on("error", function (err:any) {
 					reject(err);
 				});
-				w.on("error", function (err) {
+				w.on("error", function (err:any) {
 					reject(err);
 				});
-				w.on("close", function (ex) {
+				w.on("close", function (ex:any) {
 					resolve();
 				});
 				r.pipe(w);

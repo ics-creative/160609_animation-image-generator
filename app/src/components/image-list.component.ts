@@ -30,7 +30,7 @@ declare function require(value:String):any;
 export class ImageListComponent {
 
 	@Input() items:ImageData[];
-	@ViewChild("dropArea") dropArea;
+	@ViewChild("dropArea") dropArea:any;
 
 	ngOnInit() {
 		this.items = [];

@@ -9,10 +9,10 @@ declare function require(value:String):any;
     <div>		
 		<ul class="nav nav-tabs">
 		  <li class="nav-item">
-			<a class="nav-link active" href="#tab1" data-toggle="tab">Active</a>
+			<a class="nav-link active" href="#tab1" data-toggle="tab">アニメーション設定</a>
 		  </li>
 		  <li class="nav-item">
-			<a class="nav-link" href="#tab2" data-toggle="tab">Link</a>
+			<a class="nav-link" href="#tab2" data-toggle="tab">画質設定</a>
 		  </li>
 		  <li class="nav-item">
 			<a class="nav-link" href="#tab3" data-toggle="tab">Another link</a>
@@ -24,16 +24,16 @@ declare function require(value:String):any;
 		
 		<div id="myTabContent" class="tab-content">
 			<div class="tab-pane active" id="tab1">
-				<label for="name">PNG</label>
-				<input type="text" #pngPath>
-				
 				<p><label>フレームレート<input type="number" value="30"></label></p>
 				
 				<p><label>ループ<input type="checkbox" name="riyu" value="3"></label></p>
 				<p><label>ループ回数<input type="number" value="1"></label></p>
 			</div>
 			<div class="tab-pane" id="tab2">
-				
+				<h1>圧縮方式</h1>
+				<p>zlib</p>
+				<p>7zip <input type="number" value="1"></p>
+				<p>zopfli <input type="number" value="1"></p>
 			</div>
 			<div class="tab-pane" id="tab3">
 				<p>コンテンツ3</p>
@@ -47,41 +47,4 @@ declare function require(value:String):any;
 })
 export class PropertiesComponent {
 	@Input() animationOptionData:AnimationImageOptions;
-
-	@ViewChild("pngPath") pngPath;
-
-	ngOnInit() {
-
-		const ipc = require('electron').ipcRenderer;
-		ipc.on('selected-save-image', (event:any, path:string) => {
-			this._generateAPNG(path);
-		});
-	}
-
-	public generateAPNG() {
-
-		const ipc = require('electron').ipcRenderer;
-		ipc.send('open-save-dialog')
-
-
-	}
-
-	private _generateAPNG(apngPath:string) {
-
-		const remote = require('electron').remote;
-		const app = remote.app;
-		const path:string = app.getAppPath();
-
-		console.log(path);
-
-		const exec = require('child_process').execFile;
-		console.log(`${path}/bin/apngasm`);
-		const pngPath = this.pngPath.nativeElement.value;
-
-		exec(`${path}/bin/apngasm`, [apngPath, pngPath], function (err:any, stdout:any, stderr:any) {
-			/* some process */
-			console.log("apngasm");
-			console.log(err, stdout, stderr);
-		});
-	}
 }
