@@ -57,14 +57,14 @@ export class PropertiesComponent {
 		});
 	}
 
-	generateAPNG() {
+	public generateAPNG() {
 
 		const ipc = require('electron').ipcRenderer;
 		ipc.send('open-save-dialog')
 
 
 	}
-	_generateAPNG(apngPath){
+	private _generateAPNG(apngPath:string){
 
 		const remote = require('electron').remote;
 		const app = remote.app;
