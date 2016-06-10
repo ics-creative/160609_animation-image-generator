@@ -47,7 +47,7 @@ export class AnimePreviewComponent {
 	}
 
 	private anime() {
-
+		
 		this.currentFrame++;
 		if (this.items.length <= this.currentFrame) {
 			this.currentFrame = 0;
