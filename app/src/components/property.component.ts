@@ -8,14 +8,12 @@ declare function require(value:String):any;
 	template: `
     <div>
     	<h2>プロパティ</h2>
-				
-			<form>
-				<div>
-					<label for="name">PNG</label>
-					<input type="text" #pngPath>
-				</div>
-		 </form>
+		
+		<div>
+			<label for="name">PNG</label>
+			<input type="text" #pngPath>
 		</div>
+	</div>
   `
 })
 export class PropertiesComponent {
