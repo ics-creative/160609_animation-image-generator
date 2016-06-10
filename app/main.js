@@ -41,6 +41,14 @@ function createWindow() {
 			if (files) event.sender.send('selected-directory', files)
 		})
 	});
+
+	ipc.on('open-save-dialog', function (event) {
+		dialog.showSaveDialog({
+			properties: ['openFile', 'openDirectory']
+		}, function (files) {
+			if (files) event.sender.send('selected-save-image', files)
+		})
+	});
 }
 
 //  初期化が完了した時の処理
