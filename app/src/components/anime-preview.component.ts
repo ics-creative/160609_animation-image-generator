@@ -4,12 +4,13 @@ import {AnimationImageOptions} from "../data/animation-image-options";
 @Component({
 	selector: 'anime-preview',
 	template: `
-    <div>
-    	<h2>アニメーションプレビュー</h2>
+    <div class="anim-preview">
+    	<canvas></canvas>
 	</div>
-  `
+  `,
+	styleUrls: ['./styles/anim-preview.css'],
 })
+
 export class AnimePreviewComponent {
 	@Input() animationOptionData:AnimationImageOptions;
-
 }
