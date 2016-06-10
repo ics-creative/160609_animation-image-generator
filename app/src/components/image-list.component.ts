@@ -57,8 +57,8 @@ export class ImageListComponent {
 	private _handleDrop(event:DragEvent) {
 		var path = require('path');
 
-		const length = event.dataTransfer.files ? event.dataTransfer.files.length : 0
-	:
+		const length = event.dataTransfer.files ? event.dataTransfer.files.length : 0;
+		
 		for (let i = 0; i < length; i++) {
 			const file = event.dataTransfer.files[0];
 			const filePath = file.path;
