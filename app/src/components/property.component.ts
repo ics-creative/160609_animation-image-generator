@@ -21,7 +21,7 @@ declare function require(value:String):any;
 				<div class="form-group row">
 					<label class="col-sm-6 form-control-label">フレームレート</label>
 					<div class="col-sm-6">
-						<input type="number" class="form-control" value="30" min="1" max="60">
+						<input type="number" class="form-control" [(ngModel)]="animationOptionData.fps" min="1" max="60">
 					</div>
 				</div>
 				<div class="form-group row">

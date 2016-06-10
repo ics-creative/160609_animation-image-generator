@@ -39,7 +39,6 @@ export class AnimePreviewComponent {
 			this.imagePath = this.items[0].imagePath;
 			this.currentFrame = 0;
 			this.animeBasetime = Date.now();
-			this.animeFPS = 1000 / this.animationOptionData.fps;
 			this.playing = true;
 
 			this.loop();
@@ -57,6 +56,8 @@ export class AnimePreviewComponent {
 	}
 
 	private loop() {
+		this.animeFPS = 1000 / this.animationOptionData.fps;
+
 		if (!this.items || !this.playing) {
 			console.log("endloop");
 			this.playing = false;
