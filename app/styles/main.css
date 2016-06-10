@@ -4,4 +4,17 @@ html, body {
 
 body {
   font-family: "ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic ProN", "メイリオ", Meiryo, sans-serif;
+
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+img, canvas {
+  user-select: none;
+  -webkit-user-select: none;
+  pointer-events: none;
+}
+
+h1, h2, h3, h4, h5, h6, p {
+  cursor: default;
 }

@@ -2,7 +2,6 @@ import {Component, ViewChild, Input, ElementRef} from '@angular/core';
 import {AnimePreviewComponent} from "./anime-preview.component";
 import {PropertiesComponent} from "./property.component";
 import {ImageListComponent} from "./image-list.component";
-import {ImagePreviewComponent} from "./image-preview.component";
 import {CompressionType} from "../type/compression-type";
 import {AnimationImageOptions} from "../data/animation-image-options";
 
@@ -18,7 +17,6 @@ declare function require(value:String):any;
 		</div>
 		
 		<div class="mod-preview bg-inverse p-a-1">
-    		<image-preview></image-preview>
 			<anime-preview [animationOptionData]="animationOptionData" #animePreview></anime-preview>
 			
 			<!-- <button (click)="openDirectories()">open</button> -->
@@ -26,7 +24,7 @@ declare function require(value:String):any;
 		</div>
 	</div>
   `,
-	directives: [ImagePreviewComponent, AnimePreviewComponent, PropertiesComponent, ImageListComponent],
+	directives: [AnimePreviewComponent, PropertiesComponent, ImageListComponent],
 	styleUrls: ['./styles/app.css']
 })
 export class AppComponent {
