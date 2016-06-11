@@ -2,7 +2,7 @@ import {Component, ViewChild, Input} from '@angular/core';
 import {AnimationImageOptions} from "../data/animation-image-options";
 import {ImageData} from "../data/image-data";
 
-///<reference path="../../libs/createjs/createjs.d.ts" />
+////<reference path="../../libs/createjs/createjs.d.ts" />
 
 @Component({
 	selector: 'anim-preview',
@@ -14,7 +14,7 @@ import {ImageData} from "../data/image-data";
 
 	</div>
 
-	<div class="anim-preview" *ngIf="items.length > 0">
+	<div class="anim-preview p-a-1" *ngIf="items.length > 0">
 		<p>アニメーションプレビュー</p>
 		<figcaption class="figure-caption">
 			フレームサイズ <span class="label label-default">W {{imageW}} × H {{imageH}} px</span> 

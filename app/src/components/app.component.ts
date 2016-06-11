@@ -17,7 +17,7 @@ declare function require(value:String):any;
 			<button (click)="generateAPNG()" class="btn btn-primary center-block">アニメ画像を保存する</button>
 		</div>
 		
-		<div class="mod-preview bg-inverse p-a-1">
+		<div class="mod-preview bg-inverse">
 			<anim-preview [animationOptionData]="animationOptionData" #animePreview></anim-preview>
 			
 			<!-- <button (click)="openDirectories()">open</button> -->
