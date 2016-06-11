@@ -143,6 +143,9 @@ export class AppComponent {
 			})
 			.then(() => {
 				this._generateAPNG();
+
+				// if Webアニメ画像書き出しモードであれば
+				this._generateWebp();
 			})
 			.catch(()=> {
 				alert("エラーが発生しました。");
@@ -181,6 +184,7 @@ export class AppComponent {
 	}
 
 	_generateAPNG() {
+		console.log("★_generateAPNG");
 
 		const remote = require('electron').remote;
 		const path = require('path');
@@ -224,6 +228,65 @@ export class AppComponent {
 			}
 		});
 	}
+
+	/**
+	 * WEBP アニメーション画像を作ります。
+	 * @private
+   	*/
+	private _generateWebp(){
+
+		console.log("★_generateWebp");
+
+		const remote = require('electron').remote;
+		const path = require('path');
+		const app = remote.app;
+		const appPath:string = app.getAppPath();
+
+		console.log(appPath);
+
+		const exec = require('child_process').execFile;
+		console.log(`${appPath}/bin/webpmux`);
+		const pngPath = path.join(this.temporaryPath);
+
+		const options = [];
+		const frameMs = Math.round(1000 / this.animationOptionData.fps);
+		for(let i=0; i<10; i++){
+			// なんかおかしい
+			options.push(`-frame ${pngPath}/frame${i}.png +${frameMs}+0+0+0`);
+		}
+		options.push(`-o ${this.apngPath}.webp`);
+		console.log(options);
+
+		/// $ webpmux -frame 1.webp +500+0+0+0 -frame 2.webp +500+0+0+0 -frame 3.webp +500+0+0+0 -frame 4.webp +500+0+0+0 -frame 5.webp +500+0+0+0 -o animation.webp
+
+		exec(`${appPath}/bin/webpmux`, options, (err:any, stdout:any, stderr:any) => {
+			/* some process */
+			dialog.close();
+			dialog.style["display"] = "none"; // こんな書き方をする必要があるのか…
+			createjs.Ticker.paused = false; // 効かない…
+
+			console.log(err, stdout, stderr);
+			if (!err) {
+				// TODO 書きだしたフォルダーを対応ブラウザーで開く (OSで分岐)
+				//exec(`/Applications/Safari.app`, [this.apngPath]);
+
+				// エクスプローラーで開くでも、まだいいかも
+				const {shell} = require('electron');
+				shell.showItemInFolder(this.apngPath);
+			} else {
+				alert("書き出し失敗");
+			}
+		});
+	}
+
+	/**
+	 * HTMLファイルを作成します。
+	 * @private
+ 	  */
+	private _generateHtml(){
+		// TODO
+	}
+
 
 	private getCompressOption(type:CompressionType) {
 		switch (type) {
