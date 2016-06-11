@@ -14,11 +14,15 @@ declare function require(value:String):any;
 		<div class="mod-setting p-a-1">
 
 			<!-- 拡大率 -->
-			<p>プリセット</p>
-			<select class="c-select m-b-1">
-				<option value="line">LINEアニメーションスタンプ</option>
-				<option value="web">Webアニメーション画像</option>
-			</select>
+			<div class="form-group row m-b-1">
+				<label for="inputPassword" class="col-sm-4 form-control-label">プリセット</label>
+				<div class="col-sm-8">
+					<select class="c-select m-b-1" style="width:100%">
+						<option value="line">LINEスタンプ</option>
+						<option value="web">Webアニメ画像</option>
+					</select>
+				</div>
+			</div>
 
 			<properties [animationOptionData]="animationOptionData" #properties></properties>
 			<hr />
@@ -31,6 +35,10 @@ declare function require(value:String):any;
 			<!-- <button (click)="openDirectories()">open</button> -->
 			<image-list #imageList  (imageUpdateEvent)="imageUpdateEvent()"></image-list>
 		</div>
+	</div>
+
+	<div class="mod-statusbar bg-success">
+		<a href="https://ics.media/" target="_blank">ICS</a>
 	</div>
 	
 	<dialog style="display: none;">

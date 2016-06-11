@@ -34,3 +34,8 @@
 .frame-image {
   background: url(../app/imgs/opacity.png) repeat;
 }
+
+
+.mod-zoom-select {
+  zoom: 0.5;
+}

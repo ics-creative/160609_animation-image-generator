@@ -4,6 +4,7 @@ html, body {
 
 body {
   font-family: "ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic ProN", "メイリオ", Meiryo, sans-serif;
+  font-size: 0.8rem;
 
   user-select: none;
   -webkit-user-select: none;

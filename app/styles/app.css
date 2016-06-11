@@ -1,6 +1,6 @@
 .app-component {
   display: flex;
-  height: 100%;
+  height: calc(100% - 24px);
 }
 
 .mod-setting {
@@ -11,4 +11,8 @@
 .mod-preview {
   width: calc(100% - 350px);
   height: 100%;
+}
+
+.mod-statusbar {
+  height: 24px;
 }

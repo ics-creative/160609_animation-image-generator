@@ -22,15 +22,16 @@ import {ImageData} from "../data/image-data";
 			<span *ngIf="animationOptionData.noLoop == false">
 				/ 再生時間 <span class="label label-default">{{items.length * animationOptionData.fps * animationOptionData.loop / 1000}}秒</span>
 			</span>
+
+			<!-- 拡大率 -->
+			<select class="c-select mod-zoom-select">
+				<option value="0.25">25%</option>
+				<option value="0.5">50%</option>
+				<option value="1.0" selected>100%</option>
+				<option value="2.0" selected>200%</option>
+			</select>
 		</figcaption>
 		
-		<!-- 拡大率 -->
-		<select class="c-select">
-			<option value="0.25">25%</option>
-			<option value="0.5">50%</option>
-			<option value="1.0" selected>100%</option>
-			<option value="2.0" selected>200%</option>
-		</select>
 
 		<div class="preview-area m-t-1">
 			<div >

@@ -46,7 +46,7 @@ declare function require(value:String):any;
 			</div>
 			<div class="tab-pane" id="tab2">
 			
-				<h4>最適化オプション</h4>
+				<h6>最適化オプション</h6>
 			
 				<div class="checkbox">
 					<label>
@@ -54,7 +54,7 @@ declare function require(value:String):any;
 					</label>
 				</div>
 			
-				<h4>圧縮設定</h4>
+				<h6>圧縮設定</h6>
 				<div class="c-inputs-stacked">
 					<label class="c-input c-radio">
 						<input id="radioStacked2" name="radio-stacked" type="radio" (click)="animationOptionData.compression=3">
