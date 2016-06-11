@@ -11,7 +11,15 @@ declare function require(value:String):any;
 	selector: 'my-app',
 	template: `
     <div class="app-component"  #myComponent>		
-		<div class="mod-setting p-a-1">			
+		<div class="mod-setting p-a-1">
+
+			<!-- 拡大率 -->
+			<p>プリセット</p>
+			<select class="c-select m-b-1">
+				<option value="line">LINEアニメーションスタンプ</option>
+				<option value="web">Webアニメーション画像</option>
+			</select>
+
 			<properties [animationOptionData]="animationOptionData" #properties></properties>
 			<hr />
 			<button (click)="generateAPNG()" class="btn btn-primary center-block">アニメ画像を保存する</button>

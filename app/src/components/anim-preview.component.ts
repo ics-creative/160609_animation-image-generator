@@ -2,7 +2,7 @@ import {Component, ViewChild, Input} from '@angular/core';
 import {AnimationImageOptions} from "../data/animation-image-options";
 import {ImageData} from "../data/image-data";
 
-////<reference path="../../libs/createjs/createjs.d.ts" />
+///<reference path="../../libs/createjs/createjs.d.ts" />
 
 @Component({
 	selector: 'anim-preview',

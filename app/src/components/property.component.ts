@@ -20,7 +20,7 @@ declare function require(value:String):any;
 		<div id="myTabContent" class="tab-content p-x-1 m-t-1">
 			<div class="tab-pane active" id="tab1">
 				<div class="form-group row">
-					<label class="col-sm-6 form-control-label">フレームレート</label>
+					<label class="col-sm-6 form-control-label">フレームレート<br>(FPS)</label>
 					<div class="col-sm-6">
 						<input type="number" class="form-control" [(ngModel)]="animationOptionData.fps" min="1" max="60">
 					</div>
