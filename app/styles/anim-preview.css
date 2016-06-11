@@ -1,3 +1,11 @@
+.please-drag-here {
+  height: 100%;
+
+  display: flex;
+  justify-content: center; /* 3 */
+  align-items: center; /* 4 */
+}
+
 .anim-preview {
   height: 100%;
   overflow: scroll;

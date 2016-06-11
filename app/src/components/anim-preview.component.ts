@@ -2,10 +2,19 @@ import {Component, ViewChild, Input} from '@angular/core';
 import {AnimationImageOptions} from "../data/animation-image-options";
 import {ImageData} from "../data/image-data";
 
+///<reference path="../../libs/createjs/createjs.d.ts" />
+
 @Component({
 	selector: 'anim-preview',
 	template: `
-	<div class="anim-preview">
+
+	<div class="please-drag-here" *ngIf="items.length == 0">
+
+		<p>ここに連番画像(PNG)をドラッグください</p>
+
+	</div>
+
+	<div class="anim-preview" *ngIf="items.length > 0">
 		<p>アニメーションプレビュー</p>
 		<figcaption class="figure-caption">
 			フレームサイズ <span class="label label-default">W {{imageW}} × H {{imageH}} px</span> 
@@ -24,7 +33,7 @@ import {ImageData} from "../data/image-data";
 		</select>
 
 		<div class="preview-area m-t-1">
-			<div *ngIf="items.length > 0">
+			<div >
 				<img data-src="{{imagePath}}">
 			</div>
 		

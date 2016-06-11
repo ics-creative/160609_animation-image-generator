@@ -5,7 +5,7 @@
   "main": "main.js",
   "scripts": {
     "start": "NODE_ENV=production gulp serve",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "echo \"Hoge Moja Piyo\" && exit 1",
     "build:typescript": "tsc -p src/ -w",
     "build": "npm run build:typescript && gulp webpack",
     "copy:bin-mac": "copyfiles -u 3 ../resources/apngasm-2.9-bin-macosx/apngasm bin"
