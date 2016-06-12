@@ -186,25 +186,17 @@ export class AppComponent {
 	}
 
 	_generateAPNG() {
-		console.log("★_generateAPNG");
-
 		const remote = require('electron').remote;
 		const path = require('path');
 		const app = remote.app;
 		const appPath:string = app.getAppPath();
 
-		console.log(appPath);
-
 		const exec = require('child_process').execFile;
-		console.log(`${appPath}/bin/apngasm`);
 		const pngPath = path.join(this.temporaryPath, "frame*.png");
 
 		const compressOptions = this.getCompressOption(this.animationOptionData.compression);
 		const loopOption = "-l"+( this.animationOptionData.noLoop ? 0 : this.animationOptionData.loop );
 		const options = [this.apngPath, pngPath, "1", this.animationOptionData.fps, compressOptions, loopOption];
-		console.log(options);
-
-
 
 		let dialog = document.querySelector('dialog');
 		dialog.showModal();
@@ -246,7 +238,7 @@ export class AppComponent {
 
 		console.log(appPath);
 
-		const exec = require('child_process').execFile;
+		const exec = require('child_process').exec;
 		console.log(`${appPath}/bin/webpmux`);
 		const pngPath = path.join(this.temporaryPath);
 
@@ -254,12 +246,15 @@ export class AppComponent {
 		const frameMs = Math.round(1000 / this.animationOptionData.fps);
 
 		const pngFiles = [];
-		for(let i=0; i<5; i++){
+		for(let i=0; i<this.imageListComponent.items.length; i++){
 			// なんかおかしい
-			options.push(`-frame ${pngPath}/frame${i}.webp +${frameMs}+0+0+0`);
+			options.push(`-frame "${pngPath}/frame${i}.png.webp" +${frameMs}+0+0`);
 			pngFiles.push(`${pngPath}/frame${i}.png`);
 		}
-		options.push(`-o ${this.apngPath}.webp`);
+		if(this.animationOptionData.noLoop == false){
+			options.push(`-loop ${this.animationOptionData.loop}`);
+		}
+		options.push(`-o "${this.apngPath}.webp"`);
 		//console.log(options);
 
 		/// $ webpmux -frame 1.webp +500+0+0+0 -frame 2.webp +500+0+0+0 -frame 3.webp +500+0+0+0 -frame 4.webp +500+0+0+0 -frame 5.webp +500+0+0+0 -o animation.webp
@@ -267,18 +262,12 @@ export class AppComponent {
 		console.log("★ pngFiles")
 		console.log(pngFiles);
 		this._convertPng2Webps(pngFiles).then(()=>{
-			exec(`${appPath}/bin/webpmux`, options, (err:any, stdout:any, stderr:any) => {
+			exec(`"${appPath}/bin/webpmux" ${options.join(" ")}`, (err:string, stdout:string, stderr:string) => {
 
 				console.log(err, stdout, stderr);
 				if (!err) {
-					// TODO 書きだしたフォルダーを対応ブラウザーで開く (OSで分岐)
-					//exec(`/Applications/Safari.app`, [this.apngPath]);
-
-					// エクスプローラーで開くでも、まだいいかも
-					const {shell} = require('electron');
-					shell.showItemInFolder(this.apngPath);
 				} else {
-					alert("書き出し失敗");
+					console.error(stderr);
 				}
 			});
 		});
