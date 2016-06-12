@@ -254,7 +254,7 @@ export class AppComponent {
 		const frameMs = Math.round(1000 / this.animationOptionData.fps);
 
 		const pngFiles = [];
-		for(let i=0; i<3; i++){
+		for(let i=0; i<5; i++){
 			// なんかおかしい
 			options.push(`-frame ${pngPath}/frame${i}.webp +${frameMs}+0+0+0`);
 			pngFiles.push(`${pngPath}/frame${i}.png`);
@@ -266,63 +266,57 @@ export class AppComponent {
 
 		console.log("★ pngFiles")
 		console.log(pngFiles);
-		this._convertPng2Webps(pngFiles);
+		this._convertPng2Webps(pngFiles).then(()=>{
+			exec(`${appPath}/bin/webpmux`, options, (err:any, stdout:any, stderr:any) => {
 
-		return;
+				console.log(err, stdout, stderr);
+				if (!err) {
+					// TODO 書きだしたフォルダーを対応ブラウザーで開く (OSで分岐)
+					//exec(`/Applications/Safari.app`, [this.apngPath]);
 
-
-		exec(`${appPath}/bin/webpmux`, options, (err:any, stdout:any, stderr:any) => {
-
-			console.log(err, stdout, stderr);
-			if (!err) {
-				// TODO 書きだしたフォルダーを対応ブラウザーで開く (OSで分岐)
-				//exec(`/Applications/Safari.app`, [this.apngPath]);
-
-				// エクスプローラーで開くでも、まだいいかも
-				const {shell} = require('electron');
-				shell.showItemInFolder(this.apngPath);
-			} else {
-				alert("書き出し失敗");
-			}
+					// エクスプローラーで開くでも、まだいいかも
+					const {shell} = require('electron');
+					shell.showItemInFolder(this.apngPath);
+				} else {
+					alert("書き出し失敗");
+				}
+			});
 		});
 	}
 
-	private _convertPng2Webps(pngPaths:string[]){
+	private _convertPng2Webps(pngPaths:string[]):Promise<any>{
+		const promises = [];
 		for(let i=0; i<pngPaths.length; i++){
-			this._convertPng2Webp(pngPaths[i]);
+			promises.push(this._convertPng2Webp(pngPaths[i]));
 		}
+
+		return new Promise(((resolve:Function, reject:Function)=>{
+			Promise.race(promises).then(()=>{
+				resolve();
+			}).catch(()=>{
+				reject();
+			})
+		}));
 	}
 
-	private _convertPng2Webp(filePath:string){
+	private _convertPng2Webp(filePath:string):Promise<any> {
 		const remote = require('electron').remote;
 		const appPath:string = remote.app.getAppPath();
 		const exec = require('child_process').exec;
 
-		const options = [""];
-		options.push(`\-pass 10`);
-		options.push(`${filePath} `);
-		options.push(`\-o ${filePath}.webp`);
-
-		/*
-
-		 Error: Command failed: ./cwebp /var/folders/6z/nzthwv2s0rlfkg5q3m0ct1k40000gn/T/a-img-generator/frame0.png -o /var/folders/6z/nzthwv2s0rlfkg5q3m0ct1k40000gn/T/a-img-generator/frame0.png.webp
-		 Error! Unknown option '-o /var/folders/6z/nzthwv2s0rlfkg5q3m0ct1k40000gn/T/a-img-generator/frame0.png.webp'
-
-		 */
-
-		console.log(options);
-
-		exec(`"${appPath}/bin/cwebp" "${filePath}" -o "${filePath}.webp"`, (err:any, stdout:any, stderr:any) => {
-
-			console.log("cwebp コマンドの結果の出力");
-			console.log(stdout);
-
-			if (!err) {
-				console.log("成功")
-			} else {
-				console.error(stderr);
-			}
-		});
+		return new Promise(((resolve:Function, reject:Function)=>{
+			exec(`"${appPath}/bin/cwebp" "${filePath}" -o "${filePath}.webp"`,
+					(err:any, stdout:any, stderr:any) => {
+						console.log("cwebp コマンドの結果の出力");
+						console.log(stdout);
+						if (!err) {
+							resolve();
+						} else {
+							reject();
+							console.error(stderr);
+						}
+					});
+		}));
 	}
 
 	/**
