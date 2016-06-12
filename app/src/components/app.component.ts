@@ -195,7 +195,7 @@ export class AppComponent {
 		const pngPath = path.join(this.temporaryPath, "frame*.png");
 
 		const compressOptions = this.getCompressOption(this.animationOptionData.compression);
-		const loopOption = "-l"+( this.animationOptionData.noLoop ? 0 : this.animationOptionData.loop );
+		const loopOption = "-l"+( this.animationOptionData.noLoop ? 0 : this.animationOptionData.loop - 1 );
 		const options = [this.apngPath, pngPath, "1", this.animationOptionData.fps, compressOptions, loopOption];
 
 		let dialog = document.querySelector('dialog');
@@ -248,11 +248,11 @@ export class AppComponent {
 		const pngFiles = [];
 		for(let i=0; i<this.imageListComponent.items.length; i++){
 			// なんかおかしい
-			options.push(`-frame "${pngPath}/frame${i}.png.webp" +${frameMs}+0+0`);
+			options.push(`-frame "${pngPath}/frame${i}.png.webp" +${frameMs}+0+0+1`);
 			pngFiles.push(`${pngPath}/frame${i}.png`);
 		}
 		if(this.animationOptionData.noLoop == false){
-			options.push(`-loop ${this.animationOptionData.loop}`);
+			options.push(`-loop ${this.animationOptionData.loop - 1}`);
 		}
 		options.push(`-o "${this.apngPath}.webp"`);
 		//console.log(options);
