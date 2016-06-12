@@ -135,21 +135,23 @@ export class AppComponent {
 	_copyPNG() {
 
 		this._copyAll()
-			.then(function (results) { // 結果は配列にまとまって帰ってくる ['a', 'b', 'c']
-				return results.map(function (result) {
-					console.log(result);
-					return result;
-				});
-			})
-			.then(() => {
-				this._generateAPNG();
+				.then(function (results) { // 結果は配列にまとまって帰ってくる ['a', 'b', 'c']
+					return results.map(function (result) {
+						console.log("★★★★★★★★★★ _copyPNG (1) ★★★★★★★★★");
+						console.log(result);
+						return result;
+					});
+				})
+				.then(() => {
+					console.log("★★★★★★★★★★ _copyPNG (2) ★★★★★★★★★");
+					this._generateAPNG();
 
-				// if Webアニメ画像書き出しモードであれば
-				this._generateWebp();
-			})
-			.catch(()=> {
-				alert("エラーが発生しました。");
-			}); // どれか一つでも失敗すれば呼ばれる
+					// if Webアニメ画像書き出しモードであれば
+					this._generateWebp();
+				})
+				.catch(()=> {
+					alert("エラーが発生しました。");
+				}); // どれか一つでも失敗すれば呼ばれる
 
 	}
 
@@ -250,20 +252,26 @@ export class AppComponent {
 
 		const options = [];
 		const frameMs = Math.round(1000 / this.animationOptionData.fps);
-		for(let i=0; i<10; i++){
+
+		const pngFiles = [];
+		for(let i=0; i<3; i++){
 			// なんかおかしい
-			options.push(`-frame ${pngPath}/frame${i}.png +${frameMs}+0+0+0`);
+			options.push(`-frame ${pngPath}/frame${i}.webp +${frameMs}+0+0+0`);
+			pngFiles.push(`${pngPath}/frame${i}.png`);
 		}
 		options.push(`-o ${this.apngPath}.webp`);
-		console.log(options);
+		//console.log(options);
 
 		/// $ webpmux -frame 1.webp +500+0+0+0 -frame 2.webp +500+0+0+0 -frame 3.webp +500+0+0+0 -frame 4.webp +500+0+0+0 -frame 5.webp +500+0+0+0 -o animation.webp
 
+		console.log("★ pngFiles")
+		console.log(pngFiles);
+		this._convertPng2Webps(pngFiles);
+
+		return;
+
+
 		exec(`${appPath}/bin/webpmux`, options, (err:any, stdout:any, stderr:any) => {
-			/* some process */
-			dialog.close();
-			dialog.style["display"] = "none"; // こんな書き方をする必要があるのか…
-			createjs.Ticker.paused = false; // 効かない…
 
 			console.log(err, stdout, stderr);
 			if (!err) {
@@ -275,6 +283,45 @@ export class AppComponent {
 				shell.showItemInFolder(this.apngPath);
 			} else {
 				alert("書き出し失敗");
+			}
+		});
+	}
+
+	private _convertPng2Webps(pngPaths:string[]){
+		for(let i=0; i<pngPaths.length; i++){
+			this._convertPng2Webp(pngPaths[i]);
+		}
+	}
+
+	private _convertPng2Webp(filePath:string){
+		const remote = require('electron').remote;
+		const appPath:string = remote.app.getAppPath();
+		const exec = require('child_process').execFile;
+
+		const options = [""];
+		options.push(`${filePath}`);
+		options.push(`-o ${filePath}.webp`);
+
+
+		/*
+
+		 Error: Command failed: ./cwebp /var/folders/6z/nzthwv2s0rlfkg5q3m0ct1k40000gn/T/a-img-generator/frame0.png -o /var/folders/6z/nzthwv2s0rlfkg5q3m0ct1k40000gn/T/a-img-generator/frame0.png.webp
+		 Error! Unknown option '-o /var/folders/6z/nzthwv2s0rlfkg5q3m0ct1k40000gn/T/a-img-generator/frame0.png.webp'
+
+		 */
+
+		console.log(options);
+
+		exec(`${appPath}/bin/cwebp`, options, (err:any, stdout:any, stderr:any) => {
+
+			console.log("cwebp コマンドの結果の出力");
+			console.log(stdout);
+
+			if (!err) {
+				console.log("成功")
+			} else {
+				console.error(stderr);
+				alert("書き出しに失敗しました。");
 			}
 		});
 	}
