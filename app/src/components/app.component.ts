@@ -296,12 +296,12 @@ export class AppComponent {
 	private _convertPng2Webp(filePath:string){
 		const remote = require('electron').remote;
 		const appPath:string = remote.app.getAppPath();
-		const exec = require('child_process').execFile;
+		const exec = require('child_process').exec;
 
 		const options = [""];
-		options.push(`${filePath}`);
-		options.push(`-o ${filePath}.webp`);
-
+		options.push(`\-pass 10`);
+		options.push(`${filePath} `);
+		options.push(`\-o ${filePath}.webp`);
 
 		/*
 
@@ -312,7 +312,7 @@ export class AppComponent {
 
 		console.log(options);
 
-		exec(`${appPath}/bin/cwebp`, options, (err:any, stdout:any, stderr:any) => {
+		exec(`"${appPath}/bin/cwebp" "${filePath}" -o "${filePath}.webp"`, (err:any, stdout:any, stderr:any) => {
 
 			console.log("cwebp コマンドの結果の出力");
 			console.log(stdout);
@@ -321,7 +321,6 @@ export class AppComponent {
 				console.log("成功")
 			} else {
 				console.error(stderr);
-				alert("書き出しに失敗しました。");
 			}
 		});
 	}
