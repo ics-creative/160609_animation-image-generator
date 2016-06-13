@@ -139,30 +139,30 @@ export class AppComponent {
 	_copyPNG() {
 
 		this._copyAll()
-				.then(function (results) { // 結果は配列にまとまって帰ってくる ['a', 'b', 'c']
-					return results.map(function (result) {
-						console.log("★★★★★★★★★★ _copyPNG (1) ★★★★★★★★★");
-						console.log(result);
-						return result;
-					});
-				})
-				.then(() => {
-					console.log("★★★★★★★★★★ _copyPNG (2) ★★★★★★★★★");
+			.then(function (results) { // 結果は配列にまとまって帰ってくる ['a', 'b', 'c']
+				return results.map(function (result) {
+					console.log("★★★★★★★★★★ _copyPNG (1) ★★★★★★★★★");
+					console.log(result);
+					return result;
+				});
+			})
+			.then(() => {
+				console.log("★★★★★★★★★★ _copyPNG (2) ★★★★★★★★★");
 
 				switch (this.optionSelecterComponent.nativeElement.value) {
 					case "line" :
-					this._generateAPNG();
+						this._generateAPNG();
 						break;
 					case "web":
 						this._generateWebp();
 						break;
 
 				}
-				})
-				.catch(()=> {
-					this._hideLockDialog();
-					alert("エラーが発生しました。");
-				}); // どれか一つでも失敗すれば呼ばれる
+			})
+			.catch(()=> {
+				this._hideLockDialog();
+				alert("エラーが発生しました。");
+			}); // どれか一つでも失敗すれば呼ばれる
 
 	}
 
@@ -201,6 +201,7 @@ export class AppComponent {
 		dialog.showModal();
 		dialog.style["display"] = "flex"; // こんな書き方をする必要があるのか…
 	}
+
 	_hideLockDialog() {
 		const dialog:any = document.querySelector('dialog');
 		dialog.close();
@@ -217,7 +218,7 @@ export class AppComponent {
 		const pngPath = path.join(this.temporaryPath, "frame*.png");
 
 		const compressOptions = this.getCompressOption(this.animationOptionData.compression);
-		const loopOption = "-l"+( this.animationOptionData.noLoop ? 0 : this.animationOptionData.loop - 1 );
+		const loopOption = "-l" + ( this.animationOptionData.noLoop ? 0 : this.animationOptionData.loop - 1 );
 		const options = [this.apngPath, pngPath, "1", this.animationOptionData.fps, compressOptions, loopOption];
 
 		this._showLockDialog();
@@ -246,8 +247,8 @@ export class AppComponent {
 	/**
 	 * WEBP アニメーション画像を作ります。
 	 * @private
-   	*/
-	private _generateWebp(){
+	 */
+	private _generateWebp() {
 
 		console.log("★_generateWebp");
 
@@ -266,14 +267,14 @@ export class AppComponent {
 		const frameMs = Math.round(1000 / this.animationOptionData.fps);
 
 		const pngFiles:string[] = [];
-		for(let i=0; i<this.imageListComponent.items.length; i++){
+		for (let i = 0; i < this.imageListComponent.items.length; i++) {
 			// なんかおかしい
 			options.push(`-frame`);
 			options.push(`${pngPath}/frame${i}.png.webp`);
 			options.push(`+${frameMs}+0+0+1`);
 			pngFiles.push(`${pngPath}/frame${i}.png`);
 		}
-		if(this.animationOptionData.noLoop == false){
+		if (this.animationOptionData.noLoop == false) {
 			options.push(`-loop`);
 			options.push(`${this.animationOptionData.loop - 1}`);
 		}
@@ -285,7 +286,7 @@ export class AppComponent {
 
 		console.log("★ pngFiles")
 		console.log(pngFiles);
-		this._convertPng2Webps(pngFiles).then(()=>{
+		this._convertPng2Webps(pngFiles).then(()=> {
 			execFile(`${appPath}/bin/webpmux`, options, (err:string, stdout:string, stderr:string) => {
 
 				console.log(err, stdout, stderr);
@@ -297,16 +298,16 @@ export class AppComponent {
 		});
 	}
 
-	private _convertPng2Webps(pngPaths:string[]):Promise<any>{
+	private _convertPng2Webps(pngPaths:string[]):Promise<any> {
 		const promises:Promise<any>[] = [];
-		for(let i=0; i<pngPaths.length; i++){
+		for (let i = 0; i < pngPaths.length; i++) {
 			promises.push(this._convertPng2Webp(pngPaths[i]));
 		}
 
-		return new Promise(((resolve:Function, reject:Function)=>{
-			Promise.race(promises).then(()=>{
+		return new Promise(((resolve:Function, reject:Function)=> {
+			Promise.all(promises).then(()=> {
 				resolve();
-			}).catch(()=>{
+			}).catch(()=> {
 				reject();
 			})
 		}));
@@ -317,29 +318,29 @@ export class AppComponent {
 		const appPath:string = remote.app.getAppPath();
 		const execFile = require('child_process').execFile;
 
-		return new Promise(((resolve:Function, reject:Function)=>{
-			execFile(`${appPath}/bin/cwebp`,[filePath,`-o`,`${filePath}.webp`],
-					(err:any, stdout:any, stderr:any) => {
-						console.log("cwebp コマンドの結果の出力");
-						console.log(stdout);
-						if (!err) {
-							resolve();
-						} else {
-							reject();
-							console.error(stderr);
-						}
-					});
+
+		return new Promise(((resolve:Function, reject:Function)=> {
+			execFile(`${appPath}/bin/cwebp`, [filePath, `-o`, `${filePath}.webp`],
+				(err:any, stdout:any, stderr:any) => {
+					console.log("cwebp コマンドの結果の出力");
+					console.log(stdout);
+					if (!err) {
+						resolve();
+					} else {
+						reject();
+						console.error(stderr);
+					}
+				});
 		}));
 	}
 
 	/**
 	 * HTMLファイルを作成します。
 	 * @private
- 	  */
-	private _generateHtml(){
+	 */
+	private _generateHtml() {
 		// TODO
 	}
-
 
 	private getCompressOption(type:CompressionType) {
 		switch (type) {
