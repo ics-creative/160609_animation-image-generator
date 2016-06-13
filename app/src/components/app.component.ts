@@ -239,6 +239,12 @@ export class AppComponent {
 				// TODO 書きだしたフォルダーを対応ブラウザーで開く (OSで分岐)
 				//exec(`/Applications/Safari.app`, [this.apngPath]);
 
+				const validateArr = LineStampValidator.validate(this.apngPath, this.animationOptionData);
+
+				if (validateArr.length > 0) {
+					alert(validateArr.join("\n"));
+				}
+
 				// エクスプローラーで開くでも、まだいいかも
 				const {shell} = require('electron');
 				shell.showItemInFolder(this.apngPath);
@@ -364,14 +370,16 @@ export class AppComponent {
   </body>
 </html>`;
 
-
-		fs.writeFile(path + ".html", data, (error) => {
-			if (error != null) {
-				reject();
-			} else {
-				resolve();
-			}
+		return new Promise((resolve:Function, reject:Function)=> {
+			fs.writeFile(path + ".html", data, (error) => {
+				if (error != null) {
+					reject();
+				} else {
+					resolve();
+				}
+			});
 		});
+
 	}
 
 	private getCompressOption(type:CompressionType) {
@@ -389,4 +397,33 @@ export class AppComponent {
 		this.imageListComponent.openDirectories();
 	}
 
+}
+
+class LineStampValidator {
+	static validate(output:string, options:AnimationImageOptions):string[] {
+		const validateArr:string[] = [];
+
+		const fs = require('fs');
+		const stat:{size:number} = fs.statSync(output);
+
+		if (stat.size > 300 * 1024) {
+			validateArr.push(`出力した画像の容量が300KBを超えました(現在は${Math.round(stat.size / 1000)}KBです)。`);
+		}
+
+		if (options.imageInfo.length < 5 || 20 < options.imageInfo.length) {
+			validateArr.push(`イラストは最低5~最大20枚で設定ください(現在は${options.imageInfo.length}枚です)。`);
+		}
+
+		if (options.noLoop == true) {
+			validateArr.push(`ループ回数が無限になっています。再生時間に合わせてループの数を指定ください。`);
+		} else {
+			let playTime = options.imageInfo.length * options.loop / options.fps;
+			if ([1, 2, 3, 4].indexOf(playTime) == -1) {
+				validateArr.push(`再生時間は1、2、3、4秒のいずれかで設定ください。現在の${Math.round(playTime * 100) / 100}秒は設定できません。`);
+			}
+		}
+
+
+		return validateArr;
+	}
 }

@@ -22,7 +22,7 @@ import {ImageData} from "../data/image-data";
 			フレームサイズ <span class="label label-default">W {{imageW}} × H {{imageH}} px</span> 
 			/ 総フレーム数 <span class="label label-default">{{items.length}}</span>
 			<span *ngIf="animationOptionData.noLoop == false">
-				/ 再生時間 <span class="label label-default">{{items.length * animationOptionData.fps * animationOptionData.loop / 1000}}秒</span>
+				/ 再生時間 <span class="label label-default">{{items.length * animationOptionData.loop / animationOptionData.fps}}秒</span>
 			</span>
 
 			<!-- 拡大率 -->
@@ -85,6 +85,9 @@ export class AnimPreviewComponent {
 			this.playing = true;
 
 			this.checkImageSize(this.imagePath);
+
+
+			this.animationOptionData.imageInfo.length = items.length;
 		}
 	}
 
@@ -128,6 +131,10 @@ export class AnimPreviewComponent {
 		image.onload = ()=> {
 			this.imageW = image.width;
 			this.imageH = image.height;
+
+			// 情報の更新
+			this.animationOptionData.imageInfo.width = image.width;
+			this.animationOptionData.imageInfo.height = image.height;
 		};
 		image.src = path;
 	}
