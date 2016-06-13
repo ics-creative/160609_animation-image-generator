@@ -200,7 +200,7 @@ export class AppComponent {
 		const loopOption = "-l"+( this.animationOptionData.noLoop ? 0 : this.animationOptionData.loop - 1 );
 		const options = [this.apngPath, pngPath, "1", this.animationOptionData.fps, compressOptions, loopOption];
 
-		let dialog = document.querySelector('dialog');
+		let dialog:any = document.querySelector('dialog');
 		dialog.showModal();
 		dialog.style["display"] = "flex"; // こんな書き方をする必要があるのか…
 		createjs.Ticker.paused = true; // 効かない…
