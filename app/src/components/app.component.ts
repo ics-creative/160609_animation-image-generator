@@ -69,11 +69,11 @@ export class AppComponent {
 
 	ngOnInit() {
 		this.animationOptionData = new AnimationImageOptions();
-		this.animationOptionData.compression = CompressionType.zlib;
-		this.animationOptionData.iterations = 15;
-		this.animationOptionData.loop = 1;
-		this.animationOptionData.fps = 30;
-		this.animationOptionData.noLoop = true;
+
+		// はじめはLINEスタンプのプリセットにする
+		PresetLine.setPreset(this.animationOptionData);
+
+		// TODO 前回起動時のプリセットは覚えておきたい
 
 		//	保存先の指定返却
 		const ipc = require('electron').ipcRenderer;

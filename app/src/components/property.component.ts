@@ -61,7 +61,7 @@ declare function require(value:String):any;
 			
 				<div class="checkbox">
 					<label>
-						<input type="checkbox"> PNG事前圧縮を利用
+						<input type="checkbox" [(ngModel)]="animationOptionData.enabledPngCompress"> PNG事前圧縮を利用
 					</label>
 				</div>
 			
