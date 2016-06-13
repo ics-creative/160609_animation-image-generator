@@ -359,14 +359,21 @@ export class AppComponent {
 
 		if (this.animationOptionData.enabledExportApng && this.animationOptionData.enabledExportWebp) {
 			imageElement = `
+    <!-- Chrome と Firefox と Safari で再生可能 (IE, Edge ではアニメは再生できません) -->	
     <picture>
+	  <!-- Chrome 用 -->
       <source type="image/webp" srcset="${fileName}.webp" />
+      <!-- Firefox, Safari 用 -->
       <img src="${fileName}.png" width="${this.animationOptionData.imageInfo.width}" height="${this.animationOptionData.imageInfo.height}" alt="" />
     </picture>`;
 		} else if (this.animationOptionData.enabledExportApng) {
-			imageElement = `<img src="${fileName}.png" width="${this.animationOptionData.imageInfo.width}" height="${this.animationOptionData.imageInfo.height}" alt="" />`;
+			imageElement = `
+	<!-- Firefox と Safari で再生可能 (Chrome, IE, Edge ではアニメは再生できません) -->
+    <img src="${fileName}.png" width="${this.animationOptionData.imageInfo.width}" height="${this.animationOptionData.imageInfo.height}" alt="" />`;
 		} else if (this.animationOptionData.enabledExportWebp) {
-			imageElement = `<img src="${fileName}.webp" width="${this.animationOptionData.imageInfo.width}" height="${this.animationOptionData.imageInfo.height}" alt="" />`;
+			imageElement = `
+	<!-- Chrome で再生可能 (IE, Edge, Firefox, Safari では表示できません) -->
+    <img src="${fileName}.webp" width="${this.animationOptionData.imageInfo.width}" height="${this.animationOptionData.imageInfo.height}" alt="" />`;
 		} else {
 			return;
 		}
@@ -375,10 +382,10 @@ export class AppComponent {
 <html>
   <head>
     <meta charset="UTF-8" />
-    <title></title>
   </head>
   <body>
   	${imageElement}
+  	
   </body>
 </html>`;
 
