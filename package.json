@@ -6,15 +6,26 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build:app": "cd app && npm run build",
-    "clean:app": "del tmp-release-mac tmp-release animation-image-generator*",
+    "clean:app": "del tmp-release-* animation-image-generator*",
     "copy:release:app": "copyfiles  -u 1 ./app/bundle.js ./app/index.html ./app/main.js ./app/styles/**/*.css ./app/imgs/**/*.* ./resources/package.json ./app/js/**/*.js ./app/styles/**/*.*js ./app/node_modules/bootstrap/dist/js/bootstrap.js ./app/node_modules/bootstrap/dist/css/bootstrap.css tmp-release",
+
     "copy:release:app-mac": "npm run copy:release:app && node-mv tmp-release tmp-release-mac ",
     "copy:release:apngasm-mac": " cp -P ./resources/apngasm-2.9-bin-macosx/apngasm tmp-release-mac/bin/apngasm",
     "copy:release:webp-mac": "cp -P ./resources/libwebp-0.5.0-mac-10.9/bin/cwebp tmp-release-mac/bin/cwebp & cp -P ./resources/libwebp-0.5.0-mac-10.9/bin/webpmux tmp-release-mac/bin/webpmux",
     "copy:release:bin-mac": "mkdir tmp-release-mac/bin/ && npm run copy:release:webp-mac && npm run copy:release:apngasm-mac",
 
     "package-mac": "electron-packager ./tmp-release-mac --platform=darwin --arch=x64 --overwrite --asar",
-    "release-mac": "npm run clean:app && npm run build:app && npm run copy:release:app-mac && npm run copy:release:bin-mac && npm run package-mac"
+    "release-mac": "npm run clean:app && npm run build:app && npm run copy:release:app-mac && npm run copy:release:bin-mac && npm run package-mac",
+
+
+    "copy:release:app-win32": "npm run copy:release:app && node-mv tmp-release tmp-release-win32 ",
+    "copy:release:apngasm-win32": " cp -P ./resources/apngasm-2.9-bin-win32/apngasm.exe tmp-release-win32/bin/apngasm",
+    "copy:release:webp-win32": "cp -P ./resources/libwebp-0.5.0-windows-x86/bin/cwebp.exe tmp-release-win32/bin/cwebp & cp -P ./resources/libwebp-0.5.0-windows-x86/bin/webpmux.exe tmp-release-win32/bin/webpmux",
+    "copy:release:bin-win32": "mkdir tmp-release-win32/bin/ && npm run copy:release:webp-win32 && npm run copy:release:apngasm-win32",
+
+    "package-win32": "electron-packager ./tmp-release-win32 --platform=win32 --arch=x64 --overwrite --asar",
+    "release-win32": "npm run clean:app && npm run build:app && npm run copy:release:app-win32 && npm run copy:release:bin-win32 && npm run package-win32"
+
   },
   "repository": {
     "type": "git",
