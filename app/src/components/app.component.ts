@@ -297,10 +297,10 @@ export class AppComponent {
 	private _convertPng2Webp(filePath:string):Promise<any> {
 		const remote = require('electron').remote;
 		const appPath:string = remote.app.getAppPath();
-		const exec = require('child_process').exec;
-
+		const execFile = require('child_process').execFile;
+		
 		return new Promise(((resolve:Function, reject:Function)=>{
-			exec(`"${appPath}/bin/cwebp" "${filePath}" -o "${filePath}.webp"`,
+			execFile(`${appPath}/bin/cwebp`,[filePath,`-o`,`${filePath}.webp`],
 					(err:any, stdout:any, stderr:any) => {
 						console.log("cwebp コマンドの結果の出力");
 						console.log(stdout);
