@@ -9,7 +9,7 @@ export class PresetLine {
 		data.loop = 4;
 		//data.iterations = 15;
 		data.fps = 20;
-		data.compression = CompressionType.zip7;
+		data.compression = CompressionType.zlib;
 		data.enabledPngCompress = true;
 
 		data.enabledExportApng = true;

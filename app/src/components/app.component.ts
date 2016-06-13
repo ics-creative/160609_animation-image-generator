@@ -65,6 +65,7 @@ export class AppComponent {
 
 	private temporaryPath:string;
 	private selectedPath:string;
+	private selectedDirectory:string;
 	private selectedBaseName:string;
 
 	ngOnInit() {
@@ -80,7 +81,9 @@ export class AppComponent {
 		ipc.on('selected-save-image', (event:any, path:string) => {
 			this._deletePNG();
 			this.selectedPath = path;
-			this.selectedBaseName = path.split("/").pop();
+			const pathArr = path.split("/");
+			this.selectedBaseName = pathArr.pop().split(".").shift();
+			this.selectedDirectory = pathArr.join("/");
 		});
 
 		//	テンポラリパス生成
@@ -151,6 +154,8 @@ export class AppComponent {
 
 	private _copyPNG() {
 
+		this._showLockDialog();
+
 		this._copyAll()
 		  .then(function (results) { // 結果は配列にまとまって帰ってくる ['a', 'b', 'c']
 			  return results.map(function (result) {
@@ -158,27 +163,36 @@ export class AppComponent {
 			  });
 		  })
 		  .then(() => {
-
 			  // APNG書き出しが有効になっている場合
 			  if (this.animationOptionData.enabledExportApng == true) {
-				  this._generateAPNG();
-			  }
-
-			  // APNG書き出しが有効になっている場合
-			  if (this.animationOptionData.enabledExportWebp == true) {
-				  this._generateWebp();
-			  }
-
-
-			  // APNGとWebP画像の両方書き出しが有効になっている場合
-			  if (this.animationOptionData.enabledExportHtml == true) {
-				  this._generateHtml(this.selectedPath);
+				  return this._generateApng();
 			  }
 		  })
+		  .then(() => {
+			  // APNG書き出しが有効になっている場合
+			  if (this.animationOptionData.enabledExportWebp == true) {
+				  return this._generateWebp();
+			  }
+		  })
+		  .then(()=> {
+			  // APNGとWebP画像の両方書き出しが有効になっている場合
+			  if (this.animationOptionData.enabledExportHtml == true) {
+				  this._generateHtml();
+			  }
+		  })
+		  .then(()=> {
+			  /* some process */
+			  this._hideLockDialog();
+
+			  // エクスプローラーで開くでも、まだいいかも
+			  const {shell} = require('electron');
+			  shell.showItemInFolder(this.selectedPath);
+		  })
 		  .catch(()=> {
+			  // どれか一つでも失敗すれば呼ばれる
 			  this._hideLockDialog();
 			  alert("エラーが発生しました。");
-		  }); // どれか一つでも失敗すれば呼ばれる
+		  });
 	}
 
 	private _copyAll() {
@@ -211,6 +225,10 @@ export class AppComponent {
 		}))
 	}
 
+	/**
+	 * モダールダイアログを開きます。
+	 * @private
+	 */
 	private _showLockDialog() {
 		const dialog:any = document.querySelector('dialog');
 		dialog.showModal();
@@ -219,6 +237,10 @@ export class AppComponent {
 		createjs.Ticker.paused = true; // 効かない…
 	}
 
+	/**
+	 * モダールダイアログを閉じます。
+	 * @private
+	 */
 	private _hideLockDialog() {
 		const dialog:any = document.querySelector('dialog');
 		dialog.close();
@@ -227,84 +249,102 @@ export class AppComponent {
 		createjs.Ticker.paused = false; // 効かない…
 	}
 
-	private _generateAPNG() {
-		const remote = require('electron').remote;
-		const path = require('path');
-		const app = remote.app;
-		const appPath:string = app.getAppPath();
+	/**
+	 * APNG画像を保存します。
+	 * @returns {Promise<T>}
+	 * @private
+	 */
+	private _generateApng():Promise<any> {
+		return new Promise(((resolve:Function, reject:Function) => {
+			const remote = require('electron').remote;
+			const path = require('path');
+			const app = remote.app;
+			const appPath:string = app.getAppPath();
 
-		const exec = require('child_process').execFile;
-		const pngPath = path.join(this.temporaryPath, "frame*.png");
+			const exec = require('child_process').execFile;
+			const pngPath = path.join(this.temporaryPath, "frame*.png");
 
-		const compressOptions = this.getCompressOption(this.animationOptionData.compression);
-		const loopOption = "-l" + ( this.animationOptionData.noLoop ? 0 : this.animationOptionData.loop - 1 );
-		const options = [this.selectedPath, pngPath, "1", this.animationOptionData.fps, compressOptions, loopOption];
+			const compressOptions = this.getCompressOption(this.animationOptionData.compression);
+			const loopOption = "-l" + ( this.animationOptionData.noLoop ? 0 : this.animationOptionData.loop - 1 );
+			const options = [
+				`${this.selectedDirectory}/${this.selectedBaseName}.png`,
+				pngPath,
+				"1",
+				this.animationOptionData.fps,
+				compressOptions,
+				loopOption];
 
-		this._showLockDialog();
+			exec(`${appPath}/bin/apngasm`, options, (err:any, stdout:any, stderr:any) => {
 
+				if (!err) {
+					// TODO 書きだしたフォルダーを対応ブラウザーで開く (OSで分岐)
+					//exec(`/Applications/Safari.app`, [this.apngPath]);
 
-		exec(`${appPath}/bin/apngasm`, options, (err:any, stdout:any, stderr:any) => {
-			/* some process */
-			this._hideLockDialog();
+					if (this.animationOptionData.preset = PresetType.LINE) {
+						const validateArr = LineStampValidator.validate(this.selectedPath, this.animationOptionData);
 
-			if (!err) {
-				// TODO 書きだしたフォルダーを対応ブラウザーで開く (OSで分岐)
-				//exec(`/Applications/Safari.app`, [this.apngPath]);
-
-				const validateArr = LineStampValidator.validate(this.selectedPath, this.animationOptionData);
-
-				if (validateArr.length > 0) {
-					alert(validateArr.join("\n"));
+						if (validateArr.length > 0) {
+							alert(validateArr.join("\n\n"));
+						}
+					}
+					resolve();
+				} else {
+					console.error(stderr);
+					reject();
 				}
+			});
+		}));
 
-				// エクスプローラーで開くでも、まだいいかも
-				const {shell} = require('electron');
-				shell.showItemInFolder(this.selectedPath);
-			} else {
-				alert("書き出し失敗");
-			}
-		});
+
 	}
 
 	/**
 	 * WEBP アニメーション画像を作ります。
+	 * @returns {Promise<T>}
 	 * @private
 	 */
-	private _generateWebp() {
-		const remote = require('electron').remote;
-		const path = require('path');
-		const app = remote.app;
-		const appPath:string = app.getAppPath();
+	private _generateWebp():Promise<any> {
+		return new Promise(((resolve:Function, reject:Function) => {
+			const remote = require('electron').remote;
+			const path = require('path');
+			const app = remote.app;
+			const appPath:string = app.getAppPath();
 
-		const execFile = require('child_process').execFile;
-		const pngPath = path.join(this.temporaryPath);
+			const execFile = require('child_process').execFile;
+			const pngPath = path.join(this.temporaryPath);
 
-		const options:string[] = [];
-		const frameMs = Math.round(1000 / this.animationOptionData.fps);
+			const options:string[] = [];
+			const frameMs = Math.round(1000 / this.animationOptionData.fps);
 
-		const pngFiles:string[] = [];
-		for (let i = 0; i < this.imageListComponent.items.length; i++) {
-			// なんかおかしい
-			options.push(`-frame`);
-			options.push(`${pngPath}/frame${i}.png.webp`);
-			options.push(`+${frameMs}+0+0+1`);
-			pngFiles.push(`${pngPath}/frame${i}.png`);
-		}
-		if (this.animationOptionData.noLoop == false) {
-			options.push(`-loop`);
-			options.push(`${this.animationOptionData.loop - 1}`);
-		}
-		options.push(`-o`);
-		options.push(`${this.selectedPath}.webp`);
+			const pngFiles:string[] = [];
+			for (let i = 0; i < this.imageListComponent.items.length; i++) {
+				// なんかおかしい
+				options.push(`-frame`);
+				options.push(`${pngPath}/frame${i}.png.webp`);
+				options.push(`+${frameMs}+0+0+1`);
+				pngFiles.push(`${pngPath}/frame${i}.png`);
+			}
+			if (this.animationOptionData.noLoop == false) {
+				options.push(`-loop`);
+				options.push(`${this.animationOptionData.loop - 1}`);
+			}
+			options.push(`-o`);
+			options.push(`${this.selectedDirectory}/${this.selectedBaseName}.webp`);
 
-		this._convertPng2Webps(pngFiles).then(()=> {
-			execFile(`${appPath}/bin/webpmux`, options, (err:string, stdout:string, stderr:string) => {
-				if (!err) {
-				} else {
-					console.error(stderr);
-				}
+			this._convertPng2Webps(pngFiles).then(()=> {
+				execFile(`${appPath}/bin/webpmux`, options, (err:string, stdout:string, stderr:string) => {
+					if (!err) {
+						resolve();
+					} else {
+						console.error(stderr);
+						reject();
+					}
+				});
+			}).catch(()=> {
+				reject();
 			});
-		});
+		}));
+
 	}
 
 	private _convertPng2Webps(pngPaths:string[]):Promise<any> {
@@ -345,11 +385,11 @@ export class AppComponent {
 	 * HTMLファイルを作成します。
 	 * @private
 	 */
-	private _generateHtml(path:string):void {
+	private _generateHtml():void {
 
 		const fs = require('fs');
 
-		const fileName:string = path.split("/").pop();
+		const fileName:string = this.selectedBaseName;
 
 		let imageElement:string;
 
@@ -385,7 +425,7 @@ export class AppComponent {
   </body>
 </html>`;
 
-		fs.writeFileSync(path + ".html", data);
+		fs.writeFileSync(`${this.selectedDirectory}/${this.selectedBaseName}.html`, data);
 	}
 
 	private getCompressOption(type:CompressionType) {

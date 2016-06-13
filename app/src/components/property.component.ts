@@ -20,7 +20,6 @@ declare function require(value:String):any;
 		<div id="myTabContent" class="tab-content p-x-1 m-t-1">
 			<div class="tab-pane active" id="tab1">
 				
-				
 				<div class="form-group row">
 					<label class="col-sm-6 form-control-label">フレームレート<br>(FPS)</label>
 					<div class="col-sm-6">
@@ -34,7 +33,7 @@ declare function require(value:String):any;
 					<div class="col-sm-6">
 						<div class="checkbox">
 							<label>
-								<input type="checkbox" [(ngModel)]="animationOptionData.noLoop"> 無限ループ
+								<input type="checkbox" class="form-control" [(ngModel)]="animationOptionData.noLoop">無限ループ
 							</label>
 						</div>
 					</div>
