@@ -11,9 +11,9 @@ export class PresetLine {
 		data.compression = CompressionType.zip7;
 		data.pngCompress = true;
 
-		data.exportAPNG = true;
-		data.exportWebP = false;
-		data.exportHTML = false;
+		data.enabledExportApng = true;
+		data.enabledExportWebp = false;
+		data.enabledExportHtml = false;
 
 	}
 }

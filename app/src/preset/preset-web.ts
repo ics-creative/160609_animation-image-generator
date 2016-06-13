@@ -11,8 +11,8 @@ export class PresetWeb {
 		data.compression = CompressionType.zip7;
 		data.pngCompress = true;
 
-		data.exportAPNG = true;
-		data.exportWebP = true;
-		data.exportHTML = true;
+		data.enabledExportApng = true;
+		data.enabledExportWebp = true;
+		data.enabledExportHtml = true;
 	}
 }

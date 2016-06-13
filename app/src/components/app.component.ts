@@ -161,7 +161,7 @@ export class AppComponent {
 			  }
 
 			  // APNGとWebP画像の両方書き出しが有効になっている場合
-			  if (this.animationOptionData.exportHTML == true) {
+			  if (this.animationOptionData.enabledExportHtml == true) {
 				  this._generateHtml(this.apngPath);
 			  }
 		  })
@@ -357,15 +357,15 @@ export class AppComponent {
 
 		let imageElement:string;
 
-		if (this.animationOptionData.exportAPNG && this.animationOptionData.exportWebP) {
+		if (this.animationOptionData.enabledExportApng && this.animationOptionData.enabledExportWebp) {
 			imageElement = `
     <picture>
       <source type="image/webp" srcset="${fileName}.webp" />
       <img src="${fileName}.png" width="${this.animationOptionData.imageInfo.width}" height="${this.animationOptionData.imageInfo.height}" alt="" />
     </picture>`;
-		} else if (this.animationOptionData.exportAPNG) {
+		} else if (this.animationOptionData.enabledExportApng) {
 			imageElement = `<img src="${fileName}.png" width="${this.animationOptionData.imageInfo.width}" height="${this.animationOptionData.imageInfo.height}" alt="" />`;
-		} else if (this.animationOptionData.exportWebP) {
+		} else if (this.animationOptionData.enabledExportWebp) {
 			imageElement = `<img src="${fileName}.webp" width="${this.animationOptionData.imageInfo.width}" height="${this.animationOptionData.imageInfo.height}" alt="" />`;
 		} else {
 			return;
