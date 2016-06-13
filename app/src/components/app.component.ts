@@ -108,7 +108,7 @@ export class AppComponent {
 	generateAnimImage() {
 		const complessOption = this.getCompressOption(this.animationOptionData.compression);
 		const imageType:string = this.optionSelecterComponent.nativeElement.value;
-		
+
 		console.log("--------------options------------");
 		console.log("type:" + this.optionSelecterComponent.nativeElement.value);
 		console.log("noLoop:" + this.animationOptionData.noLoop);
@@ -118,7 +118,7 @@ export class AppComponent {
 		console.log("---------------------------------");
 
 		const ipc = require('electron').ipcRenderer;
-		ipc.send('open-save-dialog',imageType);
+		ipc.send('open-save-dialog', imageType);
 	}
 
 	_deletePNG() {
@@ -141,29 +141,32 @@ export class AppComponent {
 	_copyPNG() {
 
 		this._copyAll()
-			.then(function (results) { // 結果は配列にまとまって帰ってくる ['a', 'b', 'c']
-				return results.map(function (result) {
-					console.log("★★★★★★★★★★ _copyPNG (1) ★★★★★★★★★");
-					console.log(result);
-					return result;
-				});
-			})
-			.then(() => {
-				console.log("★★★★★★★★★★ _copyPNG (2) ★★★★★★★★★");
+		  .then(function (results) { // 結果は配列にまとまって帰ってくる ['a', 'b', 'c']
+			  return results.map(function (result) {
+				  console.log("★★★★★★★★★★ _copyPNG (1) ★★★★★★★★★");
+				  console.log(result);
+				  return result;
+			  });
+		  })
+		  .then(() => {
+			  console.log("★★★★★★★★★★ _copyPNG (2) ★★★★★★★★★");
 
-				switch (this.optionSelecterComponent.nativeElement.value) {
-					case "line" :
-						this._generateAPNG();
-						break;
-					case "web":
-						this._generateWebp();
-						break;
-				}
-			})
-			.catch(()=> {
-				this._hideLockDialog();
-				alert("エラーが発生しました。");
-			}); // どれか一つでも失敗すれば呼ばれる
+			  switch (this.optionSelecterComponent.nativeElement.value) {
+				  case "line" :
+					  this._generateAPNG();
+					  break;
+				  case "web":
+					  this._generateWebp();
+					  break;
+			  }
+
+			  // APNGとWebP画像の両方書き出しが有効になっている場合
+			  this._generateHtml();
+		  })
+		  .catch(()=> {
+			  this._hideLockDialog();
+			  alert("エラーが発生しました。");
+		  }); // どれか一つでも失敗すれば呼ばれる
 
 	}
 
@@ -182,7 +185,7 @@ export class AppComponent {
 
 				console.log(dest);
 				var r = fs.createReadStream(src),
-					w = fs.createWriteStream(dest);
+				  w = fs.createWriteStream(dest);
 				r.on("error", function (err:any) {
 					reject(err);
 				});
@@ -322,16 +325,16 @@ export class AppComponent {
 
 		return new Promise(((resolve:Function, reject:Function)=> {
 			execFile(`${appPath}/bin/cwebp`, [filePath, `-o`, `${filePath}.webp`],
-				(err:any, stdout:any, stderr:any) => {
-					console.log("cwebp コマンドの結果の出力");
-					console.log(stdout);
-					if (!err) {
-						resolve();
-					} else {
-						reject();
-						console.error(stderr);
-					}
-				});
+			  (err:any, stdout:any, stderr:any) => {
+				  console.log("cwebp コマンドの結果の出力");
+				  console.log(stdout);
+				  if (!err) {
+					  resolve();
+				  } else {
+					  reject();
+					  console.error(stderr);
+				  }
+			  });
 		}));
 	}
 
@@ -339,8 +342,36 @@ export class AppComponent {
 	 * HTMLファイルを作成します。
 	 * @private
 	 */
-	private _generateHtml() {
-		// TODO
+	private _generateHtml(path:string):Promise<any> {
+
+		path = this.apngPath;
+
+		const fs = require('fs');
+
+		const fileName:string = path.split("/").pop();
+
+		const data = `<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title></title>
+  </head>
+  <body>
+    <picture>
+	  <source type="image/webp" srcset="${fileName}.webp" />
+	  <img src="${fileName}.png" alt="" />
+	</picture>
+  </body>
+</html>`;
+
+
+		fs.writeFile(path + ".html", data, (error) => {
+			if (error != null) {
+				reject();
+			} else {
+				resolve();
+			}
+		});
 	}
 
 	private getCompressOption(type:CompressionType) {
