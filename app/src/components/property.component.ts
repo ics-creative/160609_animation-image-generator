@@ -50,7 +50,7 @@ declare function require(value:String):any;
 				
 				<div class="checkbox">
 					<label>
-						<input type="checkbox"> APNG書き出し
+						<input type="checkbox" [(ngModel)]="animationOptionData.exportAPNG"> APNG書き出し
 					</label>
 				</div>
 			
@@ -81,13 +81,13 @@ declare function require(value:String):any;
 				
 				<div class="checkbox">
 					<label>
-						<input type="checkbox"> WebP書き出し
+						<input type="checkbox" [(ngModel)]="animationOptionData.exportWebP"> WebP書き出し
 					</label>
 				</div>
 				
 				<div class="checkbox">
 					<label>
-						<input type="checkbox"> HTML書き出し
+						<input type="checkbox" [(ngModel)]="animationOptionData.exportHTML"> HTML書き出し
 					</label>
 				</div>
 
