@@ -1,5 +1,6 @@
 import {CompressionType} from "../type/compression-type";
 import {AnimationImageOptions} from "../data/animation-image-options";
+import {PresetType} from "../type/preset-type";
 
 export class PresetLine {
 
@@ -14,6 +15,8 @@ export class PresetLine {
 		data.enabledExportApng = true;
 		data.enabledExportWebp = false;
 		data.enabledExportHtml = false;
+
+		data.preset = PresetType.LINE;
 
 	}
 }

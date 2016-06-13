@@ -1,5 +1,9 @@
 import {CompressionType} from "../type/compression-type";
+import {PresetType} from "../type/preset-type";
+
 export class AnimationImageOptions {
+
+	preset:PresetType;
 
 	noLoop:boolean;
 	loop:number;

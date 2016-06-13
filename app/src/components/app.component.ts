@@ -17,11 +17,11 @@ declare function require(value:String):any;
 
 			<!-- 拡大率 -->
 			<div class="form-group row m-b-1">
-				<label for="inputPassword" class="col-sm-4 form-control-label">プリセット</label>
-				<div class="col-sm-8">
+				<label for="inputPassword" class="col-sm-3 form-control-label">用途</label>
+				<div class="col-sm-9">
 					<select class="c-select m-b-1" style="width:100%" #optionSelecter>
-						<option value="line">LINEスタンプ</option>
-						<option value="web">Webアニメ画像</option>
+						<option value="line">LINEアニメ−ションスタンプ</option>
+						<option value="web">webページ用アニメ−ション画像</option>
 					</select>
 				</div>
 			</div>
@@ -114,6 +114,7 @@ export class AppComponent {
 		console.log("noLoop:" + this.animationOptionData.noLoop);
 		console.log("loop:" + this.animationOptionData.loop);
 		console.log("fps:" + this.animationOptionData.fps);
+		console.log("fps:" + this.animationOptionData.preset);
 		console.log("compress:" + complessOption);
 		console.log("---------------------------------");
 

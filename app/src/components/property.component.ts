@@ -79,16 +79,18 @@ declare function require(value:String):any;
 					</label>
 				</div>
 				
-				<div class="checkbox">
-					<label>
-						<input type="checkbox" [(ngModel)]="animationOptionData.enabledExportWebp"> WebP書き出し
-					</label>
-				</div>
-				
-				<div class="checkbox">
-					<label>
-						<input type="checkbox" [(ngModel)]="animationOptionData.enabledExportHtml"> HTML書き出し
-					</label>
+				<div *ngIf="animationOptionData.preset == 1">
+					<div class="checkbox">
+						<label>
+							<input type="checkbox" [(ngModel)]="animationOptionData.enabledExportWebp"> WebP書き出し
+						</label>
+					</div>
+					
+					<div class="checkbox">
+						<label>
+							<input type="checkbox" [(ngModel)]="animationOptionData.enabledExportHtml"> HTML書き出し
+						</label>
+					</div>
 				</div>
 
 			</div>
