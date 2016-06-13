@@ -107,9 +107,9 @@ export class AppComponent {
 		event.preventDefault();
 	}
 
-	private handlePresetChange(presetMode:string){
+	private handlePresetChange(presetMode:string) {
 
-		switch(Number(presetMode)){
+		switch (Number(presetMode)) {
 			case PresetType.LINE:
 				PresetLine.setPreset(this.animationOptionData);
 				break;
@@ -118,6 +118,7 @@ export class AppComponent {
 				break;
 		}
 	}
+
 	private imageUpdateEvent() {
 		this.animePreviewComponent.setItems(this.imageListComponent.items);
 	}
@@ -135,9 +136,16 @@ export class AppComponent {
 		del([pngTemporary], {force: true}).then((paths:string[]) => {
 			const fs = require('fs');
 
-			fs.mkdir(this.temporaryPath, ()=> {
-				this._copyPNG();
-			})
+			let stat:any = fs.statSync(this.temporaryPath);
+
+			// フォルダーが存在していなければ
+			if (stat.isDirectory() == false) {
+				// フォルダーを作成
+				fs.mkdirSync(this.temporaryPath);
+			}
+
+			this._copyPNG();
+
 		});
 	}
 
@@ -183,20 +191,21 @@ export class AppComponent {
 				const path = require('path');
 				const src = item.imagePath;
 
+				const destination:string = path.join(this.temporaryPath, `frame${item.frameNumber}.png`);
 
-				const dest = path.join(this.temporaryPath, `frame${item.frameNumber}.png`);
+				const r = fs.createReadStream(src);
+				const w = fs.createWriteStream(destination);
 
-				var r = fs.createReadStream(src),
-				  w = fs.createWriteStream(dest);
-				r.on("error", function (err:any) {
+				r.on("error", (err:any) => {
 					reject(err);
 				});
-				w.on("error", function (err:any) {
+				w.on("error", (err:any) => {
 					reject(err);
 				});
-				w.on("close", function (ex:any) {
+				w.on("close", (ex:any) => {
 					resolve();
 				});
+
 				r.pipe(w);
 			})
 		}))
@@ -232,7 +241,6 @@ export class AppComponent {
 		const options = [this.selectedPath, pngPath, "1", this.animationOptionData.fps, compressOptions, loopOption];
 
 		this._showLockDialog();
-
 
 
 		exec(`${appPath}/bin/apngasm`, options, (err:any, stdout:any, stderr:any) => {
@@ -337,7 +345,7 @@ export class AppComponent {
 	 * HTMLファイルを作成します。
 	 * @private
 	 */
-	private _generateHtml(path:string):Promise<any> {
+	private _generateHtml(path:string):void {
 
 		const fs = require('fs');
 
@@ -377,16 +385,7 @@ export class AppComponent {
   </body>
 </html>`;
 
-		return new Promise((resolve:Function, reject:Function)=> {
-			fs.writeFile(path + ".html", data, (error:any) => {
-				if (error != null) {
-					reject();
-				} else {
-					resolve();
-				}
-			});
-		});
-
+		fs.writeFileSync(path + ".html", data);
 	}
 
 	private getCompressOption(type:CompressionType) {
