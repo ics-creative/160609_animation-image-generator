@@ -6,17 +6,22 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build:app": "cd app && npm run build",
-    "copy:release:app-mac": "copyfiles  -u 1 ./app/bundle.js ./app/index.html ./app/main.js ./libs/package.json tmp-release-mac",
-    "copy:release:bin-mac": "copyfiles -u 2 ./resources/apngasm-2.9-bin-macosx/apngasm tmp-release-mac/bin",
-    "package-mac" : "electron-packager ./tmp-release-mac --platform=darwin --arch=x64 --overwrite --asar",
-    "release-mac": "npm run build:app && npm run copy:release:app-mac && npm run copy:release:bin-mac && npm run package-mac"
+    "clean:app": "del tmp-release-mac tmp-release animation-image-generator*",
+    "copy:release:app": "copyfiles  -u 1 ./app/bundle.js ./app/index.html ./app/main.js ./app/styles/**/*.css ./app/imgs/**/*.* ./resources/package.json ./app/js/**/*.js ./app/styles/**/*.*js ./app/node_modules/bootstrap/dist/js/bootstrap.js ./app/node_modules/bootstrap/dist/css/bootstrap.css tmp-release",
+    "copy:release:app-mac": "npm run copy:release:app && node-mv tmp-release tmp-release-mac ",
+    "copy:release:apngasm-mac": " cp -P ./resources/apngasm-2.9-bin-macosx/apngasm tmp-release-mac/bin/apngasm",
+    "copy:release:webp-mac": "cp -P ./resources/libwebp-0.5.0-mac-10.9/bin/cwebp tmp-release-mac/bin/cwebp & cp -P ./resources/libwebp-0.5.0-mac-10.9/bin/webpmux tmp-release-mac/bin/webpmux",
+    "copy:release:bin-mac": "mkdir tmp-release-mac/bin/ && npm run copy:release:webp-mac && npm run copy:release:apngasm-mac",
+
+    "package-mac": "electron-packager ./tmp-release-mac --platform=darwin --arch=x64 --overwrite --asar",
+    "release-mac": "npm run clean:app && npm run build:app && npm run copy:release:app-mac && npm run copy:release:bin-mac && npm run package-mac"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/ics-creative/160609_animation-image-generator.git"
   },
   "author": "Nozomi Nohara <nozomi.nohara@ics-web.jp> (http://twitter.com/nyamogera)",
-  "contributor" : [
+  "contributor": [
     "Nozomi Nohara <nozomi.nohara@ics-web.jp> (http://twitter.com/nyamogera)",
     "Yasunobu Ikeda <ikeda@ics-web.jp> (http://twitter.com/clockmaker)"
   ],
@@ -27,6 +32,9 @@
   "homepage": "https://github.com/ics-creative/160609_animation-image-generator#readme",
   "devDependencies": {
     "copyfiles": "^0.2.1",
-    "electron-packager": "^7.0.3"
+    "del": "^2.2.0",
+    "del-cli": "^0.2.0",
+    "electron-packager": "^7.0.3",
+    "node-mv": "^0.1.3"
   }
 }
