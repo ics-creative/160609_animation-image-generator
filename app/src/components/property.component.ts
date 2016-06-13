@@ -10,7 +10,7 @@ declare function require(value:String):any;
     <div>
 		<ul class="nav nav-tabs">
 		  <li class="nav-item">
-			<a class="nav-link active" href="#tab1" data-toggle="tab">アニメ設定</a>
+			<a class="nav-link active" href="#tab1" data-toggle="tab">アニメ−ション設定</a>
 		  </li>
 		  <li class="nav-item">
 			<a class="nav-link" href="#tab2" data-toggle="tab">画質設定</a>
@@ -19,13 +19,17 @@ declare function require(value:String):any;
 		
 		<div id="myTabContent" class="tab-content p-x-1 m-t-1">
 			<div class="tab-pane active" id="tab1">
+				
+				
 				<div class="form-group row">
 					<label class="col-sm-6 form-control-label">フレームレート<br>(FPS)</label>
 					<div class="col-sm-6">
-						<input type="number" class="form-control" [(ngModel)]="animationOptionData.fps" min="1" max="60">
+						<input type="number" class="form-control" [(ngModel)]="animationOptionData.fps" min="5" max="20" *ngIf="animationOptionData.preset == 0">
+						<input type="number" class="form-control" [(ngModel)]="animationOptionData.fps" min="1" max="60" *ngIf="animationOptionData.preset == 1">
 					</div>
 				</div>
-				<div class="form-group row">
+				
+				<div class="form-group row" *ngIf="animationOptionData.preset == 1">
 					<label for="inputPassword" class="col-sm-6 form-control-label">ループ設定</label>
 					<div class="col-sm-6">
 						<div class="checkbox">
@@ -39,7 +43,8 @@ declare function require(value:String):any;
 				<div class="form-group row" *ngIf="animationOptionData.noLoop == false">
 					<label for="inputPassword" class="col-sm-6 form-control-label">ループ回数</label>
 					<div class="col-sm-6">
-						<input type="number" class="form-control" [(ngModel)]="animationOptionData.loop" min="1">
+						<input type="number" class="form-control" [(ngModel)]="animationOptionData.loop" min="1" max="4" *ngIf="animationOptionData.preset == 0">
+						<input type="number" class="form-control" [(ngModel)]="animationOptionData.loop" min="1" *ngIf="animationOptionData.preset == 1">
 					</div>
 				</div>
 			
@@ -48,7 +53,7 @@ declare function require(value:String):any;
 			
 				<h6>最適化オプション</h6>
 				
-				<div class="checkbox">
+				<div class="checkbox" *ngIf="animationOptionData.preset == 1">
 					<label>
 						<input type="checkbox" [(ngModel)]="animationOptionData.enabledExportApng"> APNG書き出し
 					</label>

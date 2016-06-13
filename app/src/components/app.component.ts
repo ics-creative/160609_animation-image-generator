@@ -24,7 +24,7 @@ declare function require(value:String):any;
 				<div class="col-sm-9">
 					<select class="c-select m-b-1" style="width:100%" #optionSelecter (change)="handlePresetChange($event.target.value)">
 						<option value="0">LINEアニメ−ションスタンプ</option>
-						<option value="1">webページ用アニメ−ション画像</option>
+						<option value="1">webページ用アニメ−ション</option>
 					</select>
 				</div>
 			</div>
@@ -63,7 +63,8 @@ export class AppComponent {
 	@ViewChild("optionSelecter") optionSelecterComponent:ElementRef;
 
 	private temporaryPath:string;
-	private apngPath:string;
+	private selectedPath:string;
+	private selectedBaseName:string;
 
 	ngOnInit() {
 		this.animationOptionData = new AnimationImageOptions();
@@ -77,7 +78,8 @@ export class AppComponent {
 		const ipc = require('electron').ipcRenderer;
 		ipc.on('selected-save-image', (event:any, path:string) => {
 			this._deletePNG();
-			this.apngPath = path;
+			this.selectedPath = path;
+			this.selectedBaseName = path.split("/").pop();
 		});
 
 		//	テンポラリパス生成
@@ -181,7 +183,7 @@ export class AppComponent {
 
 			  // APNGとWebP画像の両方書き出しが有効になっている場合
 			  if (this.animationOptionData.enabledExportHtml == true) {
-				  this._generateHtml(this.apngPath);
+				  this._generateHtml(this.selectedPath);
 			  }
 		  })
 		  .catch(()=> {
@@ -243,7 +245,7 @@ export class AppComponent {
 
 		const compressOptions = this.getCompressOption(this.animationOptionData.compression);
 		const loopOption = "-l" + ( this.animationOptionData.noLoop ? 0 : this.animationOptionData.loop - 1 );
-		const options = [this.apngPath, pngPath, "1", this.animationOptionData.fps, compressOptions, loopOption];
+		const options = [this.selectedPath, pngPath, "1", this.animationOptionData.fps, compressOptions, loopOption];
 
 		this._showLockDialog();
 		createjs.Ticker.paused = true; // 効かない…
@@ -259,7 +261,7 @@ export class AppComponent {
 				// TODO 書きだしたフォルダーを対応ブラウザーで開く (OSで分岐)
 				//exec(`/Applications/Safari.app`, [this.apngPath]);
 
-				const validateArr = LineStampValidator.validate(this.apngPath, this.animationOptionData);
+				const validateArr = LineStampValidator.validate(this.selectedPath, this.animationOptionData);
 
 				if (validateArr.length > 0) {
 					alert(validateArr.join("\n"));
@@ -267,7 +269,7 @@ export class AppComponent {
 
 				// エクスプローラーで開くでも、まだいいかも
 				const {shell} = require('electron');
-				shell.showItemInFolder(this.apngPath);
+				shell.showItemInFolder(this.selectedPath);
 			} else {
 				alert("書き出し失敗");
 			}
@@ -309,7 +311,7 @@ export class AppComponent {
 			options.push(`${this.animationOptionData.loop - 1}`);
 		}
 		options.push(`-o`);
-		options.push(`${this.apngPath}.webp`);
+		options.push(`${this.selectedPath}.webp`);
 		console.log("options:" + options);
 
 		/// $ webpmux -frame 1.webp +500+0+0+0 -frame 2.webp +500+0+0+0 -frame 3.webp +500+0+0+0 -frame 4.webp +500+0+0+0 -frame 5.webp +500+0+0+0 -o animation.webp

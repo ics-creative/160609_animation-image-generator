@@ -52,7 +52,7 @@ function createWindow() {
 				break;
 			case "web":
 				title = "WepPファイルの保存先を選択";
-				defaultPath = "updateAnimation.png";
+				defaultPath = "updateAnimation.webp";
 				break;
 		}
 		dialog.showSaveDialog({
