@@ -42,10 +42,22 @@ function createWindow() {
 		})
 	});
 
-	ipc.on('open-save-dialog', function (event) {
+	ipc.on('open-save-dialog', function (event, imageType) {
+		let title = "";
+		let defaultPath = "";
+		switch(imageType){
+			case "line":
+				title = "APNGファイルの保存先を選択";
+				defaultPath = "updateAnimation.png";
+				break;
+			case "web":
+				title = "WepPファイルの保存先を選択";
+				defaultPath = "updateAnimation.png";
+				break;
+		}
 		dialog.showSaveDialog({
-			title:"APNGファイルの保存先を選択",
-			defaultPath:"updateAnimation.png",
+			title:title,
+			defaultPath:defaultPath,
 			filters : [ {name: 'Images', extensions: ['png']}],
 			properties: ['openFile', 'openDirectory']
 		}, function (files) {

@@ -28,7 +28,7 @@ declare function require(value:String):any;
 
 			<properties [animationOptionData]="animationOptionData" #properties></properties>
 			<hr />
-			<button (click)="generateAPNG()" class="btn btn-primary center-block">アニメ画像を保存する</button>
+			<button (click)="generateAnimImage()" class="btn btn-primary center-block">アニメ画像を保存する</button>
 		</div>
 		
 		<div class="mod-preview bg-inverse">
@@ -105,8 +105,10 @@ export class AppComponent {
 		this.animePreviewComponent.setItems(this.imageListComponent.items);
 	}
 
-	generateAPNG() {
+	generateAnimImage() {
 		const complessOption = this.getCompressOption(this.animationOptionData.compression);
+		const imageType:string = this.optionSelecterComponent.nativeElement.value;
+		
 		console.log("--------------options------------");
 		console.log("type:" + this.optionSelecterComponent.nativeElement.value);
 		console.log("noLoop:" + this.animationOptionData.noLoop);
@@ -116,7 +118,7 @@ export class AppComponent {
 		console.log("---------------------------------");
 
 		const ipc = require('electron').ipcRenderer;
-		ipc.send('open-save-dialog');
+		ipc.send('open-save-dialog',imageType);
 	}
 
 	_deletePNG() {
@@ -156,7 +158,6 @@ export class AppComponent {
 					case "web":
 						this._generateWebp();
 						break;
-
 				}
 			})
 			.catch(()=> {
