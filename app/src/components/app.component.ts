@@ -149,9 +149,10 @@ export class AppComponent {
 					this._generateAPNG();
 
 					// if Webアニメ画像書き出しモードであれば
-					this._generateWebp();
+					//this._generateWebp();
 				})
 				.catch(()=> {
+					this._hideLockDialog();
 					alert("エラーが発生しました。");
 				}); // どれか一つでも失敗すれば呼ばれる
 
@@ -187,6 +188,17 @@ export class AppComponent {
 		}))
 	}
 
+	_showLockDialog() {
+		const dialog:any = document.querySelector('dialog');
+		dialog.showModal();
+		dialog.style["display"] = "flex"; // こんな書き方をする必要があるのか…
+	}
+	_hideLockDialog() {
+		const dialog:any = document.querySelector('dialog');
+		dialog.close();
+		dialog.style["display"] = "none"; // こんな書き方をする必要があるのか…
+	}
+
 	_generateAPNG() {
 		const remote = require('electron').remote;
 		const path = require('path');
@@ -200,15 +212,13 @@ export class AppComponent {
 		const loopOption = "-l"+( this.animationOptionData.noLoop ? 0 : this.animationOptionData.loop - 1 );
 		const options = [this.apngPath, pngPath, "1", this.animationOptionData.fps, compressOptions, loopOption];
 
-		let dialog:any = document.querySelector('dialog');
-		dialog.showModal();
-		dialog.style["display"] = "flex"; // こんな書き方をする必要があるのか…
+		this._showLockDialog();
 		createjs.Ticker.paused = true; // 効かない…
 
 		exec(`${appPath}/bin/apngasm`, options, (err:any, stdout:any, stderr:any) => {
 			/* some process */
-			dialog.close();
-			dialog.style["display"] = "none"; // こんな書き方をする必要があるのか…
+			this._hideLockDialog();
+
 			createjs.Ticker.paused = false; // 効かない…
 
 			console.log(err, stdout, stderr);
@@ -298,7 +308,7 @@ export class AppComponent {
 		const remote = require('electron').remote;
 		const appPath:string = remote.app.getAppPath();
 		const execFile = require('child_process').execFile;
-		
+
 		return new Promise(((resolve:Function, reject:Function)=>{
 			execFile(`${appPath}/bin/cwebp`,[filePath,`-o`,`${filePath}.webp`],
 					(err:any, stdout:any, stderr:any) => {
