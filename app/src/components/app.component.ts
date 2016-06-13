@@ -19,7 +19,7 @@ declare function require(value:String):any;
 			<div class="form-group row m-b-1">
 				<label for="inputPassword" class="col-sm-4 form-control-label">プリセット</label>
 				<div class="col-sm-8">
-					<select class="c-select m-b-1" style="width:100%">
+					<select class="c-select m-b-1" style="width:100%" #optionSelecter>
 						<option value="line">LINEスタンプ</option>
 						<option value="web">Webアニメ画像</option>
 					</select>
@@ -57,6 +57,7 @@ export class AppComponent {
 	@ViewChild("imageList") imageListComponent:ImageListComponent;
 	@ViewChild("animePreview") animePreviewComponent:AnimPreviewComponent;
 	@ViewChild("myComponent") myComponent:ElementRef;
+	@ViewChild("optionSelecter") optionSelecterComponent:ElementRef;
 
 	private temporaryPath:string;
 	private apngPath:string;
@@ -107,6 +108,7 @@ export class AppComponent {
 	generateAPNG() {
 		const complessOption = this.getCompressOption(this.animationOptionData.compression);
 		console.log("--------------options------------");
+		console.log("type:" + this.optionSelecterComponent.nativeElement.value);
 		console.log("noLoop:" + this.animationOptionData.noLoop);
 		console.log("loop:" + this.animationOptionData.loop);
 		console.log("fps:" + this.animationOptionData.fps);
@@ -146,10 +148,16 @@ export class AppComponent {
 				})
 				.then(() => {
 					console.log("★★★★★★★★★★ _copyPNG (2) ★★★★★★★★★");
-					this._generateAPNG();
 
-					// if Webアニメ画像書き出しモードであれば
-					//this._generateWebp();
+				switch (this.optionSelecterComponent.nativeElement.value) {
+					case "line" :
+					this._generateAPNG();
+						break;
+					case "web":
+						this._generateWebp();
+						break;
+
+				}
 				})
 				.catch(()=> {
 					this._hideLockDialog();
