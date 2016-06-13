@@ -240,7 +240,7 @@ export class AppComponent {
 
 		console.log(appPath);
 
-		const exec = require('child_process').exec;
+		const execFile = require('child_process').execFile;
 		console.log(`${appPath}/bin/webpmux`);
 		const pngPath = path.join(this.temporaryPath);
 
@@ -250,21 +250,25 @@ export class AppComponent {
 		const pngFiles:string[] = [];
 		for(let i=0; i<this.imageListComponent.items.length; i++){
 			// なんかおかしい
-			options.push(`-frame "${pngPath}/frame${i}.png.webp" +${frameMs}+0+0+1`);
+			options.push(`-frame`);
+			options.push(`${pngPath}/frame${i}.png.webp`);
+			options.push(`+${frameMs}+0+0+1`);
 			pngFiles.push(`${pngPath}/frame${i}.png`);
 		}
 		if(this.animationOptionData.noLoop == false){
-			options.push(`-loop ${this.animationOptionData.loop - 1}`);
+			options.push(`-loop`);
+			options.push(`${this.animationOptionData.loop - 1}`);
 		}
-		options.push(`-o "${this.apngPath}.webp"`);
-		//console.log(options);
+		options.push(`-o`);
+		options.push(`${this.apngPath}.webp`);
+		console.log("options:" + options);
 
 		/// $ webpmux -frame 1.webp +500+0+0+0 -frame 2.webp +500+0+0+0 -frame 3.webp +500+0+0+0 -frame 4.webp +500+0+0+0 -frame 5.webp +500+0+0+0 -o animation.webp
 
 		console.log("★ pngFiles")
 		console.log(pngFiles);
 		this._convertPng2Webps(pngFiles).then(()=>{
-			exec(`"${appPath}/bin/webpmux" ${options.join(" ")}`, (err:string, stdout:string, stderr:string) => {
+			execFile(`${appPath}/bin/webpmux`, options, (err:string, stdout:string, stderr:string) => {
 
 				console.log(err, stdout, stderr);
 				if (!err) {
