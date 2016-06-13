@@ -161,13 +161,14 @@ export class AppComponent {
 			  }
 
 			  // APNGとWebP画像の両方書き出しが有効になっている場合
-			  this._generateHtml();
+			  if (this.animationOptionData.exportHTML == true) {
+				  this._generateHtml(this.apngPath);
+			  }
 		  })
 		  .catch(()=> {
 			  this._hideLockDialog();
 			  alert("エラーが発生しました。");
 		  }); // どれか一つでも失敗すれば呼ばれる
-
 	}
 
 	_copyAll() {
@@ -350,28 +351,39 @@ export class AppComponent {
 	 */
 	private _generateHtml(path:string):Promise<any> {
 
-		path = this.apngPath;
-
 		const fs = require('fs');
 
 		const fileName:string = path.split("/").pop();
 
-		const data = `<!DOCTYPE html>
+		let imageElement:string;
+
+		if (this.animationOptionData.exportAPNG && this.animationOptionData.exportWebP) {
+			imageElement = `
+    <picture>
+      <source type="image/webp" srcset="${fileName}.webp" />
+      <img src="${fileName}.png" width="${this.animationOptionData.imageInfo.width}" height="${this.animationOptionData.imageInfo.height}" alt="" />
+    </picture>`;
+		} else if (this.animationOptionData.exportAPNG) {
+			imageElement = `<img src="${fileName}.png" width="${this.animationOptionData.imageInfo.width}" height="${this.animationOptionData.imageInfo.height}" alt="" />`;
+		} else if (this.animationOptionData.exportWebP) {
+			imageElement = `<img src="${fileName}.webp" width="${this.animationOptionData.imageInfo.width}" height="${this.animationOptionData.imageInfo.height}" alt="" />`;
+		} else {
+			return;
+		}
+
+		let data = `<!DOCTYPE html>
 <html>
   <head>
     <meta charset="UTF-8" />
     <title></title>
   </head>
   <body>
-    <picture>
-	  <source type="image/webp" srcset="${fileName}.webp" />
-	  <img src="${fileName}.png" alt="" />
-	</picture>
+  	${imageElement}
   </body>
 </html>`;
 
 		return new Promise((resolve:Function, reject:Function)=> {
-			fs.writeFile(path + ".html", data, (error) => {
+			fs.writeFile(path + ".html", data, (error:any) => {
 				if (error != null) {
 					reject();
 				} else {
