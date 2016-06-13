@@ -423,6 +423,10 @@ class LineStampValidator {
 			}
 		}
 
+		if (options.imageInfo.width > 320 || options.imageInfo.height > 270) {
+			validateArr.push(`画像サイズはW320×H270px以内で制作ください。現在の画像サイズはW${options.imageInfo.width}×H${options.imageInfo.height}pxです。`);
+		}
+
 
 		return validateArr;
 	}
