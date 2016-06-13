@@ -47,6 +47,12 @@ declare function require(value:String):any;
 			<div class="tab-pane" id="tab2">
 			
 				<h6>最適化オプション</h6>
+				
+				<div class="checkbox">
+					<label>
+						<input type="checkbox"> APNG書き出し
+					</label>
+				</div>
 			
 				<div class="checkbox">
 					<label>
@@ -70,6 +76,18 @@ declare function require(value:String):any;
 						<input id="radioStacked1" name="radio-stacked" type="radio"  (click)="animationOptionData.compression=1">
 						<span class="c-indicator"></span>
 						zlib (容量:大)
+					</label>
+				</div>
+				
+				<div class="checkbox">
+					<label>
+						<input type="checkbox"> WebP書き出し
+					</label>
+				</div>
+				
+				<div class="checkbox">
+					<label>
+						<input type="checkbox"> HTML書き出し
 					</label>
 				</div>
 
