@@ -1,3 +1,5 @@
+///	<reference path="../../libs/createjs/createjs.d.ts" />
+
 import {Component, ViewChild, Input, ElementRef} from '@angular/core';
 import {AnimPreviewComponent} from "./anim-preview.component";
 import {PropertiesComponent} from "./property.component";
@@ -242,10 +244,10 @@ export class AppComponent {
 		console.log(`${appPath}/bin/webpmux`);
 		const pngPath = path.join(this.temporaryPath);
 
-		const options = [];
+		const options:string[] = [];
 		const frameMs = Math.round(1000 / this.animationOptionData.fps);
 
-		const pngFiles = [];
+		const pngFiles:string[] = [];
 		for(let i=0; i<this.imageListComponent.items.length; i++){
 			// なんかおかしい
 			options.push(`-frame "${pngPath}/frame${i}.png.webp" +${frameMs}+0+0+1`);
@@ -274,7 +276,7 @@ export class AppComponent {
 	}
 
 	private _convertPng2Webps(pngPaths:string[]):Promise<any>{
-		const promises = [];
+		const promises:Promise<any>[] = [];
 		for(let i=0; i<pngPaths.length; i++){
 			promises.push(this._convertPng2Webp(pngPaths[i]));
 		}
