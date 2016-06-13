@@ -5,12 +5,12 @@ import {PresetType} from "../type/preset-type";
 export class PresetWeb {
 
 	static setPreset(data:AnimationImageOptions) {
-		//data.noLoop = false;
+		data.noLoop = true;
 		//data.loop = 1;
 		//data.iterations = 15;
 		//data.fps = 15;
 		data.compression = CompressionType.zip7;
-		data.pngCompress = true;
+		data.enabledPngCompress = true;
 
 		data.enabledExportApng = true;
 		data.enabledExportWebp = true;

@@ -10,7 +10,7 @@ export class AnimationImageOptions {
 	compression:CompressionType;
 	iterations:number;
 	fps:number;
-	pngCompress:boolean;
+	enabledPngCompress:boolean;
 	
 	enabledExportApng:boolean;
 	enabledExportWebp:boolean;

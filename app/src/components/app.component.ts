@@ -6,6 +6,9 @@ import {PropertiesComponent} from "./property.component";
 import {ImageListComponent} from "./image-list.component";
 import {CompressionType} from "../type/compression-type";
 import {AnimationImageOptions} from "../data/animation-image-options";
+import {PresetType} from "../type/preset-type";
+import {PresetWeb} from "../preset/preset-web";
+import {PresetLine} from "../preset/preset-line";
 
 declare function require(value:String):any;
 
@@ -19,9 +22,9 @@ declare function require(value:String):any;
 			<div class="form-group row m-b-1">
 				<label for="inputPassword" class="col-sm-3 form-control-label">用途</label>
 				<div class="col-sm-9">
-					<select class="c-select m-b-1" style="width:100%" #optionSelecter>
-						<option value="line">LINEアニメ−ションスタンプ</option>
-						<option value="web">webページ用アニメ−ション画像</option>
+					<select class="c-select m-b-1" style="width:100%" #optionSelecter (change)="handlePresetChange($event.target.value)">
+						<option value="0">LINEアニメ−ションスタンプ</option>
+						<option value="1">webページ用アニメ−ション画像</option>
 					</select>
 				</div>
 			</div>
@@ -101,6 +104,21 @@ export class AppComponent {
 		event.preventDefault();
 	}
 
+	private handlePresetChange(presetMode:string){
+		console.log(presetMode);
+
+		switch(Number(presetMode)){
+			case PresetType.LINE:
+				PresetLine.setPreset(this.animationOptionData);
+				break;
+			case PresetType.WEB:
+				PresetWeb.setPreset(this.animationOptionData);
+				break;
+		}
+
+		console.log(this.animationOptionData);
+
+	}
 	imageUpdateEvent() {
 		this.animePreviewComponent.setItems(this.imageListComponent.items);
 	}
