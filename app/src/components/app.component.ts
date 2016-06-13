@@ -9,6 +9,7 @@ import {AnimationImageOptions} from "../data/animation-image-options";
 import {PresetType} from "../type/preset-type";
 import {PresetWeb} from "../preset/preset-web";
 import {PresetLine} from "../preset/preset-line";
+import {LineStampValidator} from "../validators/LineStampValidator";
 
 declare function require(value:String):any;
 
@@ -107,7 +108,6 @@ export class AppComponent {
 	}
 
 	private handlePresetChange(presetMode:string){
-		console.log(presetMode);
 
 		switch(Number(presetMode)){
 			case PresetType.LINE:
@@ -117,40 +117,22 @@ export class AppComponent {
 				PresetWeb.setPreset(this.animationOptionData);
 				break;
 		}
-
-		console.log(this.animationOptionData);
-
 	}
-	imageUpdateEvent() {
+	private imageUpdateEvent() {
 		this.animePreviewComponent.setItems(this.imageListComponent.items);
 	}
 
-	generateAnimImage() {
-		const complessOption = this.getCompressOption(this.animationOptionData.compression);
-		const imageType:string = this.optionSelecterComponent.nativeElement.value;
-
-		console.log("--------------options------------");
-		console.log("type:" + this.optionSelecterComponent.nativeElement.value);
-		console.log("noLoop:" + this.animationOptionData.noLoop);
-		console.log("loop:" + this.animationOptionData.loop);
-		console.log("fps:" + this.animationOptionData.fps);
-		console.log("fps:" + this.animationOptionData.preset);
-		console.log("compress:" + complessOption);
-		console.log("---------------------------------");
-
+	private generateAnimImage() {
 		const ipc = require('electron').ipcRenderer;
-		ipc.send('open-save-dialog', imageType);
+		ipc.send('open-save-dialog', "line");
 	}
 
-	_deletePNG() {
+	private _deletePNG() {
 		const del = require('del');
 		const path = require('path');
 		const pngTemporary = path.join(this.temporaryPath, "*.*");
-		console.log(pngTemporary);
 
 		del([pngTemporary], {force: true}).then((paths:string[]) => {
-			console.log('Deleted files and folders:\n', paths.join('\n'));
-
 			const fs = require('fs');
 
 			fs.mkdir(this.temporaryPath, ()=> {
@@ -159,27 +141,26 @@ export class AppComponent {
 		});
 	}
 
-	_copyPNG() {
+	private _copyPNG() {
 
 		this._copyAll()
 		  .then(function (results) { // 結果は配列にまとまって帰ってくる ['a', 'b', 'c']
 			  return results.map(function (result) {
-				  console.log("★★★★★★★★★★ _copyPNG (1) ★★★★★★★★★");
-				  console.log(result);
 				  return result;
 			  });
 		  })
 		  .then(() => {
-			  console.log("★★★★★★★★★★ _copyPNG (2) ★★★★★★★★★");
 
-			  switch (this.optionSelecterComponent.nativeElement.value) {
-				  case "line" :
-					  this._generateAPNG();
-					  break;
-				  case "web":
-					  this._generateWebp();
-					  break;
+			  // APNG書き出しが有効になっている場合
+			  if (this.animationOptionData.enabledExportApng == true) {
+				  this._generateAPNG();
 			  }
+
+			  // APNG書き出しが有効になっている場合
+			  if (this.animationOptionData.enabledExportWebp == true) {
+				  this._generateWebp();
+			  }
+
 
 			  // APNGとWebP画像の両方書き出しが有効になっている場合
 			  if (this.animationOptionData.enabledExportHtml == true) {
@@ -192,7 +173,7 @@ export class AppComponent {
 		  }); // どれか一つでも失敗すれば呼ばれる
 	}
 
-	_copyAll() {
+	private _copyAll() {
 
 		const fs = require('fs');
 
@@ -201,11 +182,10 @@ export class AppComponent {
 
 				const path = require('path');
 				const src = item.imagePath;
-				console.log(src);
+
 
 				const dest = path.join(this.temporaryPath, `frame${item.frameNumber}.png`);
 
-				console.log(dest);
 				var r = fs.createReadStream(src),
 				  w = fs.createWriteStream(dest);
 				r.on("error", function (err:any) {
@@ -222,19 +202,23 @@ export class AppComponent {
 		}))
 	}
 
-	_showLockDialog() {
+	private _showLockDialog() {
 		const dialog:any = document.querySelector('dialog');
 		dialog.showModal();
 		dialog.style["display"] = "flex"; // こんな書き方をする必要があるのか…
+
+		createjs.Ticker.paused = true; // 効かない…
 	}
 
-	_hideLockDialog() {
+	private _hideLockDialog() {
 		const dialog:any = document.querySelector('dialog');
 		dialog.close();
 		dialog.style["display"] = "none"; // こんな書き方をする必要があるのか…
+
+		createjs.Ticker.paused = false; // 効かない…
 	}
 
-	_generateAPNG() {
+	private _generateAPNG() {
 		const remote = require('electron').remote;
 		const path = require('path');
 		const app = remote.app;
@@ -248,15 +232,13 @@ export class AppComponent {
 		const options = [this.selectedPath, pngPath, "1", this.animationOptionData.fps, compressOptions, loopOption];
 
 		this._showLockDialog();
-		createjs.Ticker.paused = true; // 効かない…
+
+
 
 		exec(`${appPath}/bin/apngasm`, options, (err:any, stdout:any, stderr:any) => {
 			/* some process */
 			this._hideLockDialog();
 
-			createjs.Ticker.paused = false; // 効かない…
-
-			console.log(err, stdout, stderr);
 			if (!err) {
 				// TODO 書きだしたフォルダーを対応ブラウザーで開く (OSで分岐)
 				//exec(`/Applications/Safari.app`, [this.apngPath]);
@@ -281,18 +263,12 @@ export class AppComponent {
 	 * @private
 	 */
 	private _generateWebp() {
-
-		console.log("★_generateWebp");
-
 		const remote = require('electron').remote;
 		const path = require('path');
 		const app = remote.app;
 		const appPath:string = app.getAppPath();
 
-		console.log(appPath);
-
 		const execFile = require('child_process').execFile;
-		console.log(`${appPath}/bin/webpmux`);
 		const pngPath = path.join(this.temporaryPath);
 
 		const options:string[] = [];
@@ -312,16 +288,9 @@ export class AppComponent {
 		}
 		options.push(`-o`);
 		options.push(`${this.selectedPath}.webp`);
-		console.log("options:" + options);
 
-		/// $ webpmux -frame 1.webp +500+0+0+0 -frame 2.webp +500+0+0+0 -frame 3.webp +500+0+0+0 -frame 4.webp +500+0+0+0 -frame 5.webp +500+0+0+0 -o animation.webp
-
-		console.log("★ pngFiles")
-		console.log(pngFiles);
 		this._convertPng2Webps(pngFiles).then(()=> {
 			execFile(`${appPath}/bin/webpmux`, options, (err:string, stdout:string, stderr:string) => {
-
-				console.log(err, stdout, stderr);
 				if (!err) {
 				} else {
 					console.error(stderr);
@@ -354,8 +323,6 @@ export class AppComponent {
 		return new Promise(((resolve:Function, reject:Function)=> {
 			execFile(`${appPath}/bin/cwebp`, [filePath, `-o`, `${filePath}.webp`],
 			  (err:any, stdout:any, stderr:any) => {
-				  console.log("cwebp コマンドの結果の出力");
-				  console.log(stdout);
 				  if (!err) {
 					  resolve();
 				  } else {
@@ -433,41 +400,10 @@ export class AppComponent {
 		}
 	}
 
-	openDirectories() {
+	private openDirectories() {
 		this.imageListComponent.openDirectories();
 	}
 
 }
 
-class LineStampValidator {
-	static validate(output:string, options:AnimationImageOptions):string[] {
-		const validateArr:string[] = [];
 
-		const fs = require('fs');
-		const stat:{size:number} = fs.statSync(output);
-
-		if (stat.size > 300 * 1024) {
-			validateArr.push(`出力した画像の容量が300KBを超えました(現在は${Math.round(stat.size / 1000)}KBです)。`);
-		}
-
-		if (options.imageInfo.length < 5 || 20 < options.imageInfo.length) {
-			validateArr.push(`イラストは最低5~最大20枚で設定ください(現在は${options.imageInfo.length}枚です)。`);
-		}
-
-		if (options.noLoop == true) {
-			validateArr.push(`ループ回数が無限になっています。再生時間に合わせてループの数を指定ください。`);
-		} else {
-			let playTime = options.imageInfo.length * options.loop / options.fps;
-			if ([1, 2, 3, 4].indexOf(playTime) == -1) {
-				validateArr.push(`再生時間は1、2、3、4秒のいずれかで設定ください。現在の${Math.round(playTime * 100) / 100}秒は設定できません。`);
-			}
-		}
-
-		if (options.imageInfo.width > 320 || options.imageInfo.height > 270) {
-			validateArr.push(`画像サイズはW320×H270px以内で制作ください。現在の画像サイズはW${options.imageInfo.width}×H${options.imageInfo.height}pxです。`);
-		}
-
-
-		return validateArr;
-	}
-}

@@ -47,12 +47,12 @@ function createWindow() {
 		let defaultPath = "";
 		switch(imageType){
 			case "line":
-				title = "APNGファイルの保存先を選択";
-				defaultPath = "updateAnimation.png";
+				title = "ファイルの保存先を選択";
+				defaultPath = "名称未設定.png";
 				break;
 			case "web":
-				title = "WepPファイルの保存先を選択";
-				defaultPath = "updateAnimation.webp";
+				title = "ファイルの保存先を選択";
+				defaultPath = "名称未設定.webp";
 				break;
 		}
 		dialog.showSaveDialog({

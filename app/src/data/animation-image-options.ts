@@ -11,7 +11,7 @@ export class AnimationImageOptions {
 	iterations:number;
 	fps:number;
 	enabledPngCompress:boolean;
-	
+
 	enabledExportApng:boolean;
 	enabledExportWebp:boolean;
 	enabledExportHtml:boolean;
