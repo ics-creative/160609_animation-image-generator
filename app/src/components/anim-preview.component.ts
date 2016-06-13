@@ -9,9 +9,11 @@ import {ImageData} from "../data/image-data";
 	template: `
 
 	<div class="please-drag-here" *ngIf="items.length == 0">
-
-		<p>ここに連番画像(PNG)をドラッグください</p>
-
+		<div class="text-xs-center">
+			<h4>ここに連番画像(PNG)ファイルをドロップ</h4>
+			<div><small>または</small></div>
+			<button class="btn btn-default m-t-1">ファイルを選択</button>
+		</div>
 	</div>
 
 	<div class="anim-preview p-a-1" *ngIf="items.length > 0">
