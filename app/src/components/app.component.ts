@@ -280,7 +280,8 @@ export class AppComponent {
 					// TODO 書きだしたフォルダーを対応ブラウザーで開く (OSで分岐)
 					//exec(`/Applications/Safari.app`, [this.apngPath]);
 
-					if (this.animationOptionData.preset = PresetType.LINE) {
+
+					if (this.animationOptionData.preset == PresetType.LINE) {
 						const validateArr = LineStampValidator.validate(this.selectedPath, this.animationOptionData);
 
 						if (validateArr.length > 0) {
