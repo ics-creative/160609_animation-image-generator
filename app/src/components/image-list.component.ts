@@ -41,6 +41,9 @@ export class ImageListComponent {
 
 		const length = event.dataTransfer.files ? event.dataTransfer.files.length : 0;
 
+		//	再度アイテムがドロップされたらリセットするように調整
+		this.items = [];
+		
 		for (let i = 0; i < length; i++) {
 			const file:any = event.dataTransfer.files[i];
 			const filePath = file.path;
