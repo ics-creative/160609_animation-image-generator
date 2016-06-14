@@ -26,17 +26,17 @@ import {ImageData} from "../data/image-data";
 			</span>
 
 			<!-- 拡大率 -->
-			<select class="c-select mod-zoom-select">
+			<select class="c-select mod-zoom-select" #selectScale>
 				<option value="0.25">25%</option>
 				<option value="0.5">50%</option>
 				<option value="1.0" selected>100%</option>
-				<option value="2.0" selected>200%</option>
+				<option value="2.0">200%</option>
 			</select>
+			<p>{{selectScale.value}}</p>
 		</figcaption>
 		
-
 		<div class="preview-area m-t-1">
-			<div >
+			<div [ngStyle]="{ 'transform':'scale(' + selectScale.value + ')' }" >
 				<img data-src="{{imagePath}}">
 			</div>
 		
@@ -61,6 +61,7 @@ import {ImageData} from "../data/image-data";
 export class AnimPreviewComponent {
 	@Input() imagePath:string;
 	@Input() animationOptionData:AnimationImageOptions;
+	@Input() canvasScale:number;
 
 	private items:ImageData[];
 	private playing:boolean;
@@ -69,8 +70,13 @@ export class AnimPreviewComponent {
 	private imageW:number;
 	private imageH:number;
 
+	private changeScale(value:number) {
+		this.canvasScale = value;
+	}
+
 	ngOnInit() {
 		this.items = [];
+		this.canvasScale = 1;
 
 		createjs.Ticker.framerate = this.animationOptionData.fps;
 		createjs.Ticker.on("tick", this.loop, this);
@@ -85,7 +91,6 @@ export class AnimPreviewComponent {
 			this.playing = true;
 
 			this.checkImageSize(this.imagePath);
-
 
 			this.animationOptionData.imageInfo.length = items.length;
 		}
