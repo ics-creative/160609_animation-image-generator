@@ -14,8 +14,9 @@
     "copy:release:webp-mac": "cp -P ./resources/libwebp-0.5.0-mac-10.9/bin/cwebp tmp-release-mac/bin/cwebp & cp -P ./resources/libwebp-0.5.0-mac-10.9/bin/webpmux tmp-release-mac/bin/webpmux",
     "copy:release:bin-mac": "mkdir tmp-release-mac/bin/ && npm run copy:release:webp-mac && npm run copy:release:apngasm-mac",
 
+    "install:package-mac" : "cd tmp-release-mac && npm install --production",
     "package-mac": "electron-packager ./tmp-release-mac --platform=darwin --arch=x64 --overwrite --asar",
-    "release-mac": "npm run clean:app && npm run build:app && npm run copy:release:app-mac && npm run copy:release:bin-mac && npm run package-mac",
+    "release-mac": "npm run clean:app && npm run build:app && npm run copy:release:app-mac && npm run copy:release:bin-mac && npm run install:package-mac && npm run package-mac",
 
 
     "copy:release:app-win32": "npm run copy:release:app && node-mv tmp-release tmp-release-win32 ",
