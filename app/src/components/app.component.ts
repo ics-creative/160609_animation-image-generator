@@ -79,11 +79,7 @@ export class AppComponent {
 		//	保存先の指定返却
 		const ipc = require('electron').ipcRenderer;
 		ipc.on('selected-save-image', (event:any, path:string) => {
-			this._deletePNG();
-			this.selectedPath = path;
-			const pathArr = path.split("/");
-			this.selectedBaseName = pathArr.pop().split(".").shift();
-			this.selectedDirectory = pathArr.join("/");
+			this._exportImages(path);
 		});
 
 		//	テンポラリパス生成
@@ -131,7 +127,14 @@ export class AppComponent {
 		ipc.send('open-save-dialog', "line");
 	}
 
-	private _deletePNG() {
+	/**
+	 * 作業用フォルダーのクリーンアップ
+	 * @returns {Promise<any>}
+	 * @private
+	 */
+	private _cleanTemporary():Promise<any> {
+		return new Promise(((resolve:Function, reject:Function) => {
+
 		const del = require('del');
 		const path = require('path');
 		const pngTemporary = path.join(this.temporaryPath, "*.*");
@@ -146,17 +149,25 @@ export class AppComponent {
 				// フォルダーを作成
 				fs.mkdirSync(this.temporaryPath);
 			}
-
-			this._copyPNG();
-
+				console.log("clean-temporary:success");
+				resolve();
 		});
 	}
+	}
 
-	private _copyPNG() {
+	private _exportImages(path:string) {
+
+		this.selectedPath = path;
+		const pathArr = path.split("/");
+		this.selectedBaseName = pathArr.pop().split(".").shift();
+		this.selectedDirectory = pathArr.join("/");
 
 		this._showLockDialog();
 
-		this._copyAll()
+		this._cleanTemporary()
+			.then(() => {
+				return this._copyAll();
+			})
 		  .then(function (results) { // 結果は配列にまとまって帰ってくる ['a', 'b', 'c']
 			  return results.map(function (result) {
 				  return result;
@@ -169,7 +180,7 @@ export class AppComponent {
 			  }
 		  })
 		  .then(() => {
-			  // APNG書き出しが有効になっている場合
+				// WebP書き出しが有効になっている場合
 			  if (this.animationOptionData.enabledExportWebp == true) {
 				  return this._generateWebp();
 			  }
