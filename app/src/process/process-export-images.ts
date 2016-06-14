@@ -114,7 +114,7 @@ export class ProcessExportImage {
 						// フォルダーを作成
 						fs.mkdirSync(this.temporaryCompressPath);
 					} catch (e) {
-						console.log("フォルダーの作成に失敗しました。:" + this.temporaryPath);
+						console.log("フォルダーの作成に失敗しました。:" + this.temporaryCompressPath);
 					}
 
 					console.log("clean-temporary:success");
