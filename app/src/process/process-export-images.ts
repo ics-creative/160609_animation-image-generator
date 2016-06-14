@@ -106,14 +106,14 @@ export class ProcessExportImage {
 					// フォルダーを作成
 					try {
 						fs.mkdirSync(this.temporaryPath);
-					} catch (e:any) {
+					} catch (e) {
 						console.log("フォルダーの作成に失敗しました。:" + this.temporaryPath);
 					}
 
 					try {
 						// フォルダーを作成
 						fs.mkdirSync(this.temporaryCompressPath);
-					} catch (e:any) {
+					} catch (e) {
 						console.log("フォルダーの作成に失敗しました。:" + this.temporaryPath);
 					}
 
