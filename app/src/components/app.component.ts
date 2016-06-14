@@ -171,11 +171,6 @@ export class AppComponent {
 			.then(() => {
 				return this._copyTemporaryDirectory();
 			})
-			.then(function (results) { // 結果は配列にまとまって帰ってくる ['a', 'b', 'c']
-				return results.map(function (result) {
-					return result;
-				});
-			})
 			.then(() => {
 				// APNG書き出しが有効になっている場合
 				if (this.animationOptionData.enabledExportApng == true) {
@@ -210,33 +205,38 @@ export class AppComponent {
 	}
 
 	private _copyTemporaryDirectory() {
+		const promises:Promise<any>[] = this.imageListComponent.items.map((item) => {
+			return this._copyTemporaryImage(item)
+		});
+		console.log(promises);
+		return Promise.all(promises)
+	}
 
-		const fs = require('fs');
+	private _copyTemporaryImage(item):Promise<any> {
+		return new Promise((resolve:Function, reject:Function) => {
 
-		return Promise.all(this.imageListComponent.items.map((item) => {
-			return new Promise((resolve, reject) => {
+			console.log("item:" + item);
+			const fs = require('fs');
+			const path = require('path');
+			const src = item.imagePath;
 
-				const path = require('path');
-				const src = item.imagePath;
+			const destination:string = path.join(this.temporaryPath, `frame${item.frameNumber}.png`);
 
-				const destination:string = path.join(this.temporaryPath, `frame${item.frameNumber}.png`);
+			const r = fs.createReadStream(src);
+			const w = fs.createWriteStream(destination);
 
-				const r = fs.createReadStream(src);
-				const w = fs.createWriteStream(destination);
-
-				r.on("error", (err:any) => {
-					reject(err);
-				});
-				w.on("error", (err:any) => {
-					reject(err);
-				});
-				w.on("close", (ex:any) => {
-					resolve();
-				});
-
-				r.pipe(w);
-			})
-		}))
+			r.on("error", (err:any) => {
+				reject(err);
+			});
+			w.on("error", (err:any) => {
+				reject(err);
+			});
+			w.on("close", (ex:any) => {
+				console.log("close");
+				resolve();
+			});
+			r.pipe(w);
+		});
 	}
 
 	/**
