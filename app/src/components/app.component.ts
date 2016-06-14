@@ -169,7 +169,7 @@ export class AppComponent {
 
 		this._cleanTemporary()
 			.then(() => {
-				return this._copyAll();
+				return this._copyTemporaryDirectory();
 			})
 			.then(function (results) { // 結果は配列にまとまって帰ってくる ['a', 'b', 'c']
 				return results.map(function (result) {
@@ -209,7 +209,7 @@ export class AppComponent {
 			});
 	}
 
-	private _copyAll() {
+	private _copyTemporaryDirectory() {
 
 		const fs = require('fs');
 
