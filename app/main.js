@@ -61,7 +61,11 @@ function createWindow() {
 			filters : [ {name: 'Images', extensions: ['png']}],
 			properties: ['openFile', 'openDirectory']
 		}, function (files) {
-			if (files) event.sender.send('selected-save-image', files)
+			if (files){
+				event.sender.send('selected-save-image', files)
+			} else{
+				event.sender.send('unlock-ui')
+			}
 		})
 	});
 }

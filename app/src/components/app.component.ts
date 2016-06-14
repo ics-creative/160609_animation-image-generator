@@ -82,6 +82,10 @@ export class AppComponent {
 			this._exportImages(path);
 		});
 
+		ipc.on('unlock-ui', (event:any) => {
+			this._hideLockDialog();
+		})
+
 		//	テンポラリパス生成
 		const remote = require('electron').remote;
 		const app = remote.app;
@@ -125,6 +129,7 @@ export class AppComponent {
 	private generateAnimImage() {
 		const ipc = require('electron').ipcRenderer;
 		ipc.send('open-save-dialog', "line");
+		this._showLockDialog();
 	}
 
 	/**
@@ -135,24 +140,24 @@ export class AppComponent {
 	private _cleanTemporary():Promise<any> {
 		return new Promise(((resolve:Function, reject:Function) => {
 
-		const del = require('del');
-		const path = require('path');
-		const pngTemporary = path.join(this.temporaryPath, "*.*");
+			const del = require('del');
+			const path = require('path');
+			const pngTemporary = path.join(this.temporaryPath, "*.*");
 
-		del([pngTemporary], {force: true}).then((paths:string[]) => {
-			const fs = require('fs');
+			del([pngTemporary], {force: true}).then((paths:string[]) => {
+				const fs = require('fs');
 
-			let stat:any = fs.statSync(this.temporaryPath);
+				let stat:any = fs.statSync(this.temporaryPath);
 
-			// フォルダーが存在していなければ
-			if (stat.isDirectory() == false) {
-				// フォルダーを作成
-				fs.mkdirSync(this.temporaryPath);
-			}
+				// フォルダーが存在していなければ
+				if (stat.isDirectory() == false) {
+					// フォルダーを作成
+					fs.mkdirSync(this.temporaryPath);
+				}
 				console.log("clean-temporary:success");
 				resolve();
-		});
-	}
+			});
+		}
 	}
 
 	private _exportImages(path:string) {
@@ -162,48 +167,46 @@ export class AppComponent {
 		this.selectedBaseName = pathArr.pop().split(".").shift();
 		this.selectedDirectory = pathArr.join("/");
 
-		this._showLockDialog();
-
 		this._cleanTemporary()
 			.then(() => {
 				return this._copyAll();
 			})
-		  .then(function (results) { // 結果は配列にまとまって帰ってくる ['a', 'b', 'c']
-			  return results.map(function (result) {
-				  return result;
-			  });
-		  })
-		  .then(() => {
-			  // APNG書き出しが有効になっている場合
-			  if (this.animationOptionData.enabledExportApng == true) {
-				  return this._generateApng();
-			  }
-		  })
-		  .then(() => {
+			.then(function (results) { // 結果は配列にまとまって帰ってくる ['a', 'b', 'c']
+				return results.map(function (result) {
+					return result;
+				});
+			})
+			.then(() => {
+				// APNG書き出しが有効になっている場合
+				if (this.animationOptionData.enabledExportApng == true) {
+					return this._generateApng();
+				}
+			})
+			.then(() => {
 				// WebP書き出しが有効になっている場合
-			  if (this.animationOptionData.enabledExportWebp == true) {
-				  return this._generateWebp();
-			  }
-		  })
-		  .then(()=> {
-			  // APNGとWebP画像の両方書き出しが有効になっている場合
-			  if (this.animationOptionData.enabledExportHtml == true) {
-				  this._generateHtml();
-			  }
-		  })
-		  .then(()=> {
-			  /* some process */
-			  this._hideLockDialog();
+				if (this.animationOptionData.enabledExportWebp == true) {
+					return this._generateWebp();
+				}
+			})
+			.then(()=> {
+				// APNGとWebP画像の両方書き出しが有効になっている場合
+				if (this.animationOptionData.enabledExportHtml == true) {
+					this._generateHtml();
+				}
+			})
+			.then(()=> {
+				/* some process */
+				this._hideLockDialog();
 
-			  // エクスプローラーで開くでも、まだいいかも
-			  const {shell} = require('electron');
-			  shell.showItemInFolder(this.selectedPath);
-		  })
-		  .catch(()=> {
-			  // どれか一つでも失敗すれば呼ばれる
-			  this._hideLockDialog();
-			  alert("エラーが発生しました。");
-		  });
+				// エクスプローラーで開くでも、まだいいかも
+				const {shell} = require('electron');
+				shell.showItemInFolder(this.selectedPath);
+			})
+			.catch(()=> {
+				// どれか一つでも失敗すれば呼ばれる
+				this._hideLockDialog();
+				alert("エラーが発生しました。");
+			});
 	}
 
 	private _copyAll() {
@@ -291,7 +294,6 @@ export class AppComponent {
 					// TODO 書きだしたフォルダーを対応ブラウザーで開く (OSで分岐)
 					//exec(`/Applications/Safari.app`, [this.apngPath]);
 
-
 					if (this.animationOptionData.preset == PresetType.LINE) {
 						const validateArr = LineStampValidator.validate(this.selectedPath, this.animationOptionData);
 
@@ -306,7 +308,6 @@ export class AppComponent {
 				}
 			});
 		}));
-
 
 	}
 
@@ -379,17 +380,16 @@ export class AppComponent {
 		const appPath:string = remote.app.getAppPath();
 		const execFile = require('child_process').execFile;
 
-
 		return new Promise(((resolve:Function, reject:Function)=> {
 			execFile(`${appPath}/bin/cwebp`, [filePath, `-o`, `${filePath}.webp`],
-			  (err:any, stdout:any, stderr:any) => {
-				  if (!err) {
-					  resolve();
-				  } else {
-					  reject();
-					  console.error(stderr);
-				  }
-			  });
+				(err:any, stdout:any, stderr:any) => {
+					if (!err) {
+						resolve();
+					} else {
+						reject();
+						console.error(stderr);
+					}
+				});
 		}));
 	}
 
