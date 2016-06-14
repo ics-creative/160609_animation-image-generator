@@ -8,7 +8,9 @@ declare function require(value:String):any;
 
 export class ProcessExportImage {
 
+	private temporaryCompressPath:string;
 	private temporaryPath:string;
+	private temporaryLastPath:string;
 	private selectedPath:string;
 	private selectedDirectory:string;
 	private selectedBaseName:string;
@@ -18,18 +20,17 @@ export class ProcessExportImage {
 
 	constructor() {
 
+	}
+
+	public  exec(filePath:string, itemList:ImageData[], animationOptionData:AnimationImageOptions):Promise<any> {
+
 		//	テンポラリパス生成
 		const remote = require('electron').remote;
 		const app = remote.app;
 		const path = require('path');
-
-		this.temporaryPath = path.join(app.getPath('temp'), "a-img-generator");
-	}
-
-	public  exec(filePath:string, itemList:ImageData[], animationOptionData:AnimationImageOptions):Promise<any> {
-		const path = require('path');
 		this.itemList = itemList;
-
+		this.temporaryPath = path.join(app.getPath('temp'), "a-img-generator");
+		this.temporaryCompressPath = path.join(app.getPath('temp'), "a-img-generator-compress");
 		this.animationOptionData = animationOptionData;
 		this.selectedPath = filePath;
 		const pathArr = filePath.split("/");
@@ -43,14 +44,22 @@ export class ProcessExportImage {
 					return this._copyTemporaryDirectory();
 				})
 				.then(() => {
-					console.log("copyTemporaryDirectory1:success");
+					if (this.animationOptionData.enabledPngCompress == true) {
+						//	最終的なテンポラリパスを設定する
+						this.temporaryLastPath = this.temporaryCompressPath;
+						return this._pngCompress();
+					} else {
+						//	最終的なテンポラリパスを設定する
+						this.temporaryLastPath = this.temporaryPath;
+					}
+				})
+				.then(() => {
 					// APNG書き出しが有効になっている場合
 					if (this.animationOptionData.enabledExportApng == true) {
 						return this._generateApng();
 					}
 				})
 				.then(() => {
-					console.log("copyTemporaryDirectory2:success");
 					// WebP書き出しが有効になっている場合
 					if (this.animationOptionData.enabledExportWebp == true) {
 						return this._generateWebp();
@@ -86,34 +95,44 @@ export class ProcessExportImage {
 	private _cleanTemporary():Promise<any> {
 		return new Promise(((resolve:Function, reject:Function) => {
 
-			const del = require('del');
-			const path = require('path');
-			const pngTemporary = path.join(this.temporaryPath, "*.*");
+				const del = require('del');
+				const path = require('path');
+				const pngTemporary = path.join(this.temporaryPath, "*.*");
+				const pngCompressTemporary = path.join(this.temporaryCompressPath, "*.*");
 
-			del([pngTemporary], {force: true}).then((paths:string[]) => {
-				const fs = require('fs');
+				del([pngTemporary, pngCompressTemporary], {force: true}).then((paths:string[]) => {
+					const fs = require('fs');
 
-				let stat:any = fs.statSync(this.temporaryPath);
-
-				// フォルダーが存在していなければ
-				if (stat.isDirectory() == false) {
 					// フォルダーを作成
-					fs.mkdirSync(this.temporaryPath);
-				}
-				console.log("clean-temporary:success");
-				resolve();
-			});
-		}));
+					try {
+						fs.mkdirSync(this.temporaryPath);
+					} catch (e:any) {
+						console.log("フォルダーの作成に失敗しました。:" + this.temporaryPath);
+					}
+
+					try {
+						// フォルダーを作成
+						fs.mkdirSync(this.temporaryCompressPath);
+					} catch (e:any) {
+						console.log("フォルダーの作成に失敗しました。:" + this.temporaryPath);
+					}
+
+					console.log("clean-temporary:success");
+					resolve();
+				});
+			}
+
+		));
 	}
 
 	private _copyTemporaryDirectory() {
-		const promises:Promise<any>[] = this.itemList.map((item) => {
+		const promises:Promise<any>[] = this.itemList.map((item:any) => {
 			return this._copyTemporaryImage(item);
 		});
 		return Promise.all(promises);
 	}
 
-	private _copyTemporaryImage(item):Promise<any> {
+	private _copyTemporaryImage(item:any):Promise < any > {
 		return new Promise((resolve:Function, reject:Function) => {
 
 			const fs = require('fs');
@@ -143,7 +162,7 @@ export class ProcessExportImage {
 	 * @returns {Promise<T>}
 	 * @private
 	 */
-	private _generateApng():Promise<any> {
+	private _generateApng():Promise < any > {
 		return new Promise(((resolve:Function, reject:Function) => {
 			const remote = require('electron').remote;
 			const path = require('path');
@@ -151,7 +170,7 @@ export class ProcessExportImage {
 			const appPath:string = app.getAppPath();
 
 			const exec = require('child_process').execFile;
-			const pngPath = path.join(this.temporaryPath, "frame*.png");
+			const pngPath = path.join(this.temporaryLastPath, "frame*.png");
 
 			const compressOptions = this.getCompressOption(this.animationOptionData.compression);
 			const loopOption = "-l" + ( this.animationOptionData.noLoop ? 0 : this.animationOptionData.loop - 1 );
@@ -192,7 +211,7 @@ export class ProcessExportImage {
 	 * @returns {Promise<T>}
 	 * @private
 	 */
-	private _generateWebp():Promise<any> {
+	private _generateWebp():Promise < any > {
 		return new Promise(((resolve:Function, reject:Function) => {
 			const remote = require('electron').remote;
 			const path = require('path');
@@ -200,7 +219,7 @@ export class ProcessExportImage {
 			const appPath:string = app.getAppPath();
 
 			const execFile = require('child_process').execFile;
-			const pngPath = path.join(this.temporaryPath);
+			const pngPath = path.join(this.temporaryLastPath);
 
 			const options:string[] = [];
 			const frameMs = Math.round(1000 / this.animationOptionData.fps);
@@ -238,8 +257,8 @@ export class ProcessExportImage {
 
 	}
 
-	private _convertPng2Webps(pngPaths:string[]):Promise<any> {
-		const promises:Promise<any>[] = [];
+	private  _convertPng2Webps(pngPaths:string[]):Promise < any > {
+		const promises:Promise < any > [] = [];
 		for (let i = 0; i < pngPaths.length; i++) {
 			promises.push(this._convertPng2Webp(pngPaths[i]));
 		}
@@ -253,7 +272,7 @@ export class ProcessExportImage {
 		}));
 	}
 
-	private _convertPng2Webp(filePath:string):Promise<any> {
+	private _convertPng2Webp(filePath:string):Promise < any > {
 		const remote = require('electron').remote;
 		const appPath:string = remote.app.getAppPath();
 		const execFile = require('child_process').execFile;
@@ -327,6 +346,32 @@ export class ProcessExportImage {
 			case CompressionType.Zopfli:
 				return "-z2";
 		}
+	}
+
+	private _pngCompress() {
+		return new Promise((resolve, reject) => {
+
+			const remote = require('electron').remote;
+			const app = remote.app;
+			const path = require('path');
+			const filePath = path.join(this.temporaryPath, "frame0.png");
+			const fs = require('fs');
+			const compressedPath = path.join(app.getPath('temp'), "a-img-generator-compress");
+
+			const imagemin = require("imagemin");
+			const imageminPngQuant = require("imagemin-pngquant");
+
+			imagemin([`${this.temporaryPath}/*.png`], compressedPath, {
+				plugins: [
+					imageminPngQuant({quality: '65-80'})
+				]
+			}).then((files:any) => {
+				console.log(files);
+				resolve();
+				//=> [{data: <Buffer 89 50 4e …>, path: 'build/images/foo.jpg'}, …]
+			});
+		});
+
 	}
 
 }
