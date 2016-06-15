@@ -8,7 +8,7 @@ export class PresetWeb {
 		data.noLoop = true;
 		//data.loop = 1;
 		//data.iterations = 15;
-		//data.fps = 15;
+		data.fps = 30;
 		data.compression = CompressionType.zip7;
 		data.enabledPngCompress = true;
 
