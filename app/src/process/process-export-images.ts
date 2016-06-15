@@ -288,9 +288,22 @@ export class ProcessExportImage {
 		const remote = require('electron').remote;
 		const appPath:string = remote.app.getAppPath();
 		const execFile = require('child_process').execFile;
+		const options:stirng[] = [];
+		options.push(filePath);
+		options.push(`-o`);
+		options.push(`${filePath}.webp`);
+		options.push(filePath);
+
+		if(false){
+			options.push(`-preset`);
+			options.push(`drawing`);
+		}else{
+			options.push(`-lossless`);
+		}
+
 
 		return new Promise(((resolve:Function, reject:Function)=> {
-			execFile(`${appPath}/bin/cwebp`, [filePath, `-o`, `${filePath}.webp`],
+			execFile(`${appPath}/bin/cwebp`, options,
 				(err:any, stdout:any, stderr:any) => {
 					if (!err) {
 						resolve();
