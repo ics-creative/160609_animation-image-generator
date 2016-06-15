@@ -14,7 +14,7 @@ declare function require(value:String):any;
 		<div class="text-xs-center">
 			<h4>ここに連番画像(PNG)ファイルをドロップ</h4>
 			<div><small>または</small></div>
-			<button class="btn btn-default m-t-1" (click)="openDirectories()">ファイルを選択</button>
+			<button class="btn btn-default m-t-1" [ngClass]="{disabled: openingDirectories == true}" (click)="openDirectories()">ファイルを選択</button>
 		</div>
 	</div>
 
@@ -70,12 +70,26 @@ export class AnimPreviewComponent {
 	private currentLoopCount:number;
 	private imageW:number;
 	private imageH:number;
+	private openingDirectories:boolean;
 
 	ngOnInit() {
 		this.items = [];
 
 		createjs.Ticker.framerate = this.animationOptionData.fps;
 		createjs.Ticker.on("tick", this.loop, this);
+		
+		const ipc = require('electron').ipcRenderer;
+
+		ipc.on('selected-open-images', (event:any, filePathList:string[]) => {
+			this._selectedImages(filePathList);
+			this._hideLockDialog();
+		});
+
+	}
+
+	private _selectedImages(filePathList:string[]) {
+		this.openingDirectories = false;
+		this.setFilePathList(filePathList);
 	}
 
 	public setItems(items:ImageData[]) {
@@ -128,9 +142,9 @@ export class AnimPreviewComponent {
 	}
 
 	openDirectories() {
+		this.openingDirectories = true;
 		const ipc = require('electron').ipcRenderer;
 		ipc.send('open-file-dialog');
-
 	}
 
 	private checkImageSize(path:string):void {
@@ -153,6 +167,35 @@ export class AnimPreviewComponent {
 			this.currentFrame = 0;
 			this.currentLoopCount = 0;
 		}
+	}
+
+	private setFilePathList(filePathList:string[]) {
+
+		var path = require('path');
+
+		const length = filePathList ? filePathList.length : 0;
+
+		//	再度アイテムがドロップされたらリセットするように調整
+		this.items = [];
+
+		for (let i = 0; i < length; i++) {
+			const filePath = filePathList[i];
+
+			if (path.extname(filePath) == ".png") {
+				path.dirname(filePath);
+
+				const item:ImageData = new ImageData();
+				item.imageBaseName = path.basename(filePath);
+				item.imagePath = filePath;
+				item.frameNumber = this.items.length;
+
+				this.items.push(item);
+			}
+		}
+		this.numbering();
+
+		this.setItems(this.items);
+
 	}
 
 	public handleDrop(event:DragEvent) {

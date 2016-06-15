@@ -73,7 +73,6 @@ export class AppComponent {
 		ipc.on('selected-save-image', (event:any, path:string) => {
 			this._exportImages(path);
 		});
-
 		ipc.on('unlock-ui', (event:any) => {
 			this._hideLockDialog();
 		})

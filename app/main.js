@@ -39,9 +39,15 @@ function createWindow() {
 function openFileDialog(event) {
 	const dialog = require('electron').dialog;
 	dialog.showOpenDialog({
-		properties: ['openFile', 'openDirectory']
+		properties: ['openFile', 'openDirectory', 'multiSelections'],
+		filters: [{name: 'Images', extensions: ['png']}]
 	}, function (files) {
-		if (files) event.sender.send('selected-directory', files)
+
+		if (files) {
+			event.sender.send('selected-open-images', files)
+		} else {
+			event.sender.send('unlock-ui')
+		}
 	})
 }
 
