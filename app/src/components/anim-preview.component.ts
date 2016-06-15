@@ -38,7 +38,7 @@ declare function require(value:String):any;
 	
 		
 		<div class="preview-area m-t-1">
-			<div [ngStyle]="{ 'transform':'scale(' + selectScale.value + ')' }" >
+			<div [ngStyle]="{ 'zoom':selectScale.value}" >
 				<img data-src="{{imagePath}}">
 			</div>
 		
@@ -149,8 +149,8 @@ export class AnimPreviewComponent {
 	}
 
 	openDirectories() {
-		if( this.openingDirectories ){
-			return ;
+		if (this.openingDirectories) {
+			return;
 		}
 		this.openingDirectories = true;
 		const ipc = require('electron').ipcRenderer;
