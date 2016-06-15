@@ -18,6 +18,22 @@
   - ループ設定
   - APNGの容量を小さくするオプション(少しだけ画質が劣化しますが、容量はかなり小さくなります)
 
+## インストール方法
+
+次のURLからソフトウェアをダウンロードください。
+
+### ダウンロードURL
+
+- [OS Xはこちらから](https://github.com/ics-creative/160609_animation-image-generator/releases/download/release-0.1.0/Software-Mac.zip)
+- Windowsは準備中
+
+#### OS Xユーザーの方へ
+
+アプリケーションの起動またはインストールを行うと「開発元が未確認のため開けません」エラーが表示されます。お手数ですが次のサイトを参考に、起動ください。
+
+- [Macの開発元が未確認で開けないアプリはControlキーで幸せになれる | あなたのスイッチを押すブログ](http://bamka.info/mac-app-security)
+
+
 ## 使い方
 
 ### ①素材の作成
