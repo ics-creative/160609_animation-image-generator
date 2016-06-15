@@ -6,6 +6,7 @@
 .mod-setting {
   width: 350px;
   height: 100%;
+  overflow: auto;
 }
 
 .mod-preview {
@@ -15,4 +16,21 @@
 
 .mod-statusbar {
   height: 24px;
+  line-height: 24px;
+  text-align: right;
+  padding: 0 20px;
+}
+
+.mod-statusbar a {
+  color: #fff;
+  display: inline-block;
+  padding: 0 0.5em;
+  min-width: 24px;
+  text-align: center;
+}
+
+.mod-statusbar a:hover {
+  color: #fff;
+  text-decoration: none;
+  background: rgba(255, 255, 255, 0.5);
 }

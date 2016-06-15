@@ -38,9 +38,11 @@ declare function require(value:String):any;
 		</div>
 	</div>
 
-	<div class="mod-statusbar bg-success">
-		<a href="https://ics.media/" target="_blank">ICS</a>
-		<i class="fa fa-smile-o"></i>
+	<div class="mod-statusbar bg-primary">
+		<a href="https://ics.media/" target="_blank">開発会社について</a>
+		<a href="https://www.facebook.com/icswebjp" target="_blank"><i class="fa fa-facebook"></i></a>
+		<a href="https://twitter.com/icsweb" target="_blank"><i class="fa fa-twitter"></i></a>
+		<a href="https://docs.google.com/a/ics-web.jp/forms/d/1umiF4furuMKgWO-7ouCSiclBdejloTE25sbFB70BuVY/prefill" target="_blank"><i class="fa fa-smile-o"></i></a>
 	</div>
 	
 	
@@ -144,6 +146,7 @@ export class AppComponent {
 		const dialog:any = document.querySelector('dialog');
 		dialog.showModal();
 		dialog.style["display"] = "flex"; // こんな書き方をする必要があるのか…
+		document.body.style.cursor = "progress";
 
 		createjs.Ticker.paused = true; // 効かない…
 	}
@@ -156,6 +159,7 @@ export class AppComponent {
 		const dialog:any = document.querySelector('dialog');
 		dialog.close();
 		dialog.style["display"] = "none"; // こんな書き方をする必要があるのか…
+		document.body.style.cursor = "auto";
 
 		createjs.Ticker.paused = false; // 効かない…
 	}
