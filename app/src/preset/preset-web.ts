@@ -6,10 +6,10 @@ export class PresetWeb {
 
 	static setPreset(data:AnimationImageOptions) {
 		data.noLoop = true;
-		//data.loop = 1;
-		//data.iterations = 15;
+		data.loop = 4;
+		// data.iterations = 15;
 		data.fps = 30;
-		data.compression = CompressionType.zip7;
+		data.compression = CompressionType.zlib;
 		data.enabledPngCompress = true;
 
 		data.enabledExportApng = true;

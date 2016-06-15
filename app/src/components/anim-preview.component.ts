@@ -20,6 +20,7 @@ declare function require(value:String):any;
 
 	<div class="anim-preview p-a-1" *ngIf="items.length > 0">
 		<p>
+		
 			フレームサイズ <span class="label label-success">W {{imageW}} × H {{imageH}} px</span> 
 			/ 総フレーム数 <span class="label label-success">{{items.length}}</span>
 			<span *ngIf="animationOptionData.noLoop == false">
@@ -44,6 +45,8 @@ declare function require(value:String):any;
 					<option value="1.0" selected>100%</option>
 					<option value="2.0">200%</option>
 				</select>
+				
+				<button class="btn btn-secondary-outline btn-sm m-l-1" [ngClass]="{disabled: openingDirectories == true}" (click)="openDirectories()">ファイルを再選択</button>
 			</div>
 		</div>
 		

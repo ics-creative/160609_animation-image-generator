@@ -14,7 +14,7 @@ declare function require(value:String):any;
 @Component({
 	selector: 'my-app',
 	template: `
-    <div class="app-component"  #myComponent>		
+    <div class="app-component" #myComponent>		
 		<div class="mod-setting p-a-1">
 
 			<!-- 拡大率 -->
@@ -22,7 +22,7 @@ declare function require(value:String):any;
 				<label for="inputPassword" class="col-sm-3 form-control-label">用途</label>
 				<div class="col-sm-9">
 					<select class="c-select m-b-1" style="width:100%" #optionSelecter (change)="handlePresetChange($event.target.value)">
-						<option value="0" [selected]="presetMode==0" >LINEアニメ−ションスタンプ</option>
+						<option value="0" [selected]="presetMode==0">LINEアニメ−ションスタンプ</option>
 						<option value="1" [selected]="presetMode==1">webページ用アニメ−ション</option>
 					</select>
 				</div>
@@ -30,7 +30,7 @@ declare function require(value:String):any;
 
 			<properties [animationOptionData]="animationOptionData" #properties></properties>
 			<hr />
-			<button (click)="generateAnimImage()" class="btn btn-primary-outline center-block"  [ngClass]="{disabled: !imageSelected}" >アニメ画像を保存する</button>
+			<button (click)="generateAnimImage()" class="btn btn-primary-outline center-block" [ngClass]="{disabled: !imageSelected}" >アニメ画像を保存する</button>
 		</div>
 		
 		<div class="mod-preview bg-inverse">
@@ -42,12 +42,12 @@ declare function require(value:String):any;
 		<a href="https://ics.media/" target="_blank">開発会社について</a>
 		<a href="https://www.facebook.com/icswebjp" target="_blank"><i class="fa fa-facebook"></i></a>
 		<a href="https://twitter.com/icsweb" target="_blank"><i class="fa fa-twitter"></i></a>
-		<a href="https://docs.google.com/a/ics-web.jp/forms/d/1umiF4furuMKgWO-7ouCSiclBdejloTE25sbFB70BuVY/prefill" target="_blank"><i class="fa fa-smile-o"></i></a>
+		<a href="http://goo.gl/forms/5DUI1UnTUXR6AmCw2" target="_blank"><i class="fa fa-smile-o"></i></a>
 	</div>
 	
 	
 	<dialog style="display: none;">
-		<img src="imgs/preloader.webp" />
+		<img src="imgs/preloader.webp" width="52" height="52" />
 	</dialog>
   `,
 	directives: [AnimPreviewComponent, PropertiesComponent],
@@ -133,7 +133,16 @@ export class AppComponent {
 			return;
 		}
 
-		let type = ( this.animationOptionData.enabledExportWebp && !this.animationOptionData.enabledExportApng ) ? "web" : "line";
+		if(this.animationOptionData.enabledExportApng == false
+		 && this.animationOptionData.enabledExportWebp == false){
+			alert("出力画像の形式を選択ください。");
+			return;
+		}
+
+
+		let type = (this.animationOptionData.enabledExportWebp && !this.animationOptionData.enabledExportApng)
+			? "web"
+			: "line";
 
 		const ipc = require('electron').ipcRenderer;
 		ipc.send('open-save-dialog', type);
