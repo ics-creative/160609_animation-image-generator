@@ -54,45 +54,47 @@ declare function require(value:String):any;
 				
 				<div class="checkbox" *ngIf="animationOptionData.preset == 1">
 					<label>
-						<input type="checkbox" [(ngModel)]="animationOptionData.enabledExportApng"> APNG書き出し
+						<input type="checkbox" [(ngModel)]="animationOptionData.enabledExportApng"> APNGファイル出力
 					</label>
 				</div>
 			
-				<div class="checkbox">
-					<label>
-						<input type="checkbox" [(ngModel)]="animationOptionData.enabledPngCompress"> PNG事前圧縮を利用
-					</label>
-				</div>
-			
-				<h6>圧縮設定</h6>
-				<div class="c-inputs-stacked">
-					<label class="c-input c-radio">
-						<input id="radioStacked2" name="radio-stacked" type="radio" (click)="animationOptionData.compression=3">
-						<span class="c-indicator"></span>
-						zopfli (容量:小)
-					</label>
-					<label class="c-input c-radio">
-						<input id="radioStacked2" name="radio-stacked" type="radio" (click)="animationOptionData.compression=2">
-						<span class="c-indicator"></span>
-						7zip (容量:中)
-					</label>
-					<label class="c-input c-radio">
-						<input id="radioStacked1" name="radio-stacked" type="radio"  (click)="animationOptionData.compression=1">
-						<span class="c-indicator"></span>
-						zlib (容量:大)
-					</label>
+				<div *ngIf="animationOptionData.enabledExportApng == true" class="card card-block">
+					<div class="checkbox">
+						<label>
+							<input type="checkbox" [(ngModel)]="animationOptionData.enabledPngCompress"> 容量最適化
+						</label>
+					</div>
+				
+					<h6>圧縮方式</h6>
+					<div class="c-inputs-stacked">
+						<label class="c-input c-radio">
+							<input id="radioStacked2" name="radio-stacked" type="radio" (click)="animationOptionData.compression=3">
+							<span class="c-indicator"></span>
+							zopfli (容量:小)
+						</label>
+						<label class="c-input c-radio">
+							<input id="radioStacked2" name="radio-stacked" type="radio" (click)="animationOptionData.compression=2">
+							<span class="c-indicator"></span>
+							7zip (容量:中)
+						</label>
+						<label class="c-input c-radio">
+							<input id="radioStacked1" name="radio-stacked" type="radio"  (click)="animationOptionData.compression=1">
+							<span class="c-indicator"></span>
+							zlib (容量:大)
+						</label>
+					</div>
 				</div>
 				
 				<div *ngIf="animationOptionData.preset == 1">
 					<div class="checkbox">
 						<label>
-							<input type="checkbox" [(ngModel)]="animationOptionData.enabledExportWebp"> WebP書き出し
+							<input type="checkbox" [(ngModel)]="animationOptionData.enabledExportWebp"> WebPファイル出力
 						</label>
 					</div>
 					
 					<div class="checkbox">
 						<label>
-							<input type="checkbox" [(ngModel)]="animationOptionData.enabledExportHtml"> HTML書き出し
+							<input type="checkbox" [(ngModel)]="animationOptionData.enabledExportHtml"> HTMLファイル出力
 						</label>
 					</div>
 				</div>
