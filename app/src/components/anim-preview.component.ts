@@ -88,7 +88,7 @@ export class AnimPreviewComponent {
 
 			this.animationOptionData.imageInfo.length = items.length;
 		}
-	
+	}
 
 	private updateAnimation() {
 
