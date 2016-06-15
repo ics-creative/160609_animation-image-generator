@@ -33,8 +33,8 @@ export class ProcessExportImage {
 		this.temporaryCompressPath = path.join(app.getPath('temp'), "a-img-generator-compress");
 		this.animationOptionData = animationOptionData;
 		this.selectedPath = filePath;
-		this.selectedBaseName = path.basename(this.selectedPath);
-		this.selectedDirectory = path.diraname(this.selectedPath);
+		this.selectedBaseName = path.basename(this.selectedPath, '.png');
+		this.selectedDirectory = path.dirname(this.selectedPath);
 
 		return new Promise((resolve:Function, reject:Function) => {
 
@@ -172,23 +172,24 @@ export class ProcessExportImage {
 			const pngPath = path.join(this.temporaryLastPath, "frame*.png");
 
 			const compressOptions = this.getCompressOption(this.animationOptionData.compression);
+			const exportFilePath = path.join(this.selectedDirectory, `${this.selectedBaseName}.png`);
 			const loopOption = "-l" + ( this.animationOptionData.noLoop ? 0 : this.animationOptionData.loop - 1 );
 			const options = [
-				path.join( this.selectedDirectory,`${this.selectedBaseName}.png`),
+				exportFilePath,
 				pngPath,
 				"1",
 				this.animationOptionData.fps,
 				compressOptions,
 				loopOption];
 
-			exec(`${appPath}/bin/apngasm`, options, (err:any, stdout:any, stderr:any) => {
+			exec(path.join(appPath, "/bin/apngasm"), options, (err:any, stdout:any, stderr:any) => {
 
 				if (!err) {
 					// TODO 書きだしたフォルダーを対応ブラウザーで開く (OSで分岐)
 					//exec(`/Applications/Safari.app`, [this.apngPath]);
 
 					if (this.animationOptionData.preset == PresetType.LINE) {
-						const validateArr = LineStampValidator.validate(this.selectedPath, this.animationOptionData);
+						const validateArr = LineStampValidator.validate(exportFilePath, this.animationOptionData);
 
 						if (validateArr.length > 0) {
 							alert(validateArr.join("\n\n"));
@@ -238,7 +239,7 @@ export class ProcessExportImage {
 			}
 
 			options.push(`-o`);
-			options.push(path.join( this.selectedDirectory,`${this.selectedBaseName}.webp`));
+			options.push(path.join(this.selectedDirectory, `${this.selectedBaseName}.webp`));
 
 			this._convertPng2Webps(pngFiles).then(()=> {
 				execFile(`${appPath}/bin/webpmux`, options, (err:string, stdout:string, stderr:string) => {
@@ -296,7 +297,7 @@ export class ProcessExportImage {
 	private _generateHtml():void {
 
 		const fs = require('fs');
-
+		const path = require('path');
 		const fileName:string = this.selectedBaseName;
 
 		let imageElement:string;
@@ -333,7 +334,7 @@ export class ProcessExportImage {
   </body>
 </html>`;
 
-		fs.writeFileSync(`${this.selectedDirectory}/${this.selectedBaseName}.html`, data);
+		fs.writeFileSync(path.join(`${this.selectedDirectory}`, `${this.selectedBaseName}.html`), data);
 	}
 
 	private getCompressOption(type:CompressionType) {
@@ -353,7 +354,6 @@ export class ProcessExportImage {
 			const remote = require('electron').remote;
 			const app = remote.app;
 			const path = require('path');
-			const filePath = path.join(this.temporaryPath, "frame0.png");
 			const fs = require('fs');
 			const compressedPath = path.join(app.getPath('temp'), "a-img-generator-compress");
 
