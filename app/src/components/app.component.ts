@@ -146,6 +146,7 @@ export class AppComponent {
 		const dialog:any = document.querySelector('dialog');
 		dialog.showModal();
 		dialog.style["display"] = "flex"; // こんな書き方をする必要があるのか…
+		document.body.style.cursor = "progress";
 
 		createjs.Ticker.paused = true; // 効かない…
 	}
@@ -158,6 +159,7 @@ export class AppComponent {
 		const dialog:any = document.querySelector('dialog');
 		dialog.close();
 		dialog.style["display"] = "none"; // こんな書き方をする必要があるのか…
+		document.body.style.cursor = "auto";
 
 		createjs.Ticker.paused = false; // 効かない…
 	}
