@@ -32,41 +32,44 @@ function createWindow() {
 	}
 
 	const ipc = require('electron').ipcMain;
+	ipc.on('open-file-dialog', openFileDialog);
+	ipc.on('open-save-dialog', openSaveDialog);
+}
+
+function openFileDialog(event) {
 	const dialog = require('electron').dialog;
+	dialog.showOpenDialog({
+		properties: ['openFile', 'openDirectory']
+	}, function (files) {
+		if (files) event.sender.send('selected-directory', files)
+	})
+}
 
-	ipc.on('open-file-dialog', function (event) {
-		dialog.showOpenDialog({
-			properties: ['openFile', 'openDirectory']
-		}, function (files) {
-			if (files) event.sender.send('selected-directory', files)
-		})
-	});
-
-	ipc.on('open-save-dialog', function (event, imageType) {
-		let title = "";
-		let defaultPath = "";
-		switch(imageType){
-			case "line":
-				title = "ファイルの保存先を選択";
-				defaultPath = "名称未設定.png";
-				break;
-			case "web":
-				title = "ファイルの保存先を選択";
-				defaultPath = "名称未設定.webp";
-				break;
+function openSaveDialog(event, imageType) {
+	let title = "";
+	let defaultPath = "";
+	switch (imageType) {
+		case "line":
+			title = "ファイルの保存先を選択";
+			defaultPath = "名称未設定.png";
+			break;
+		case "web":
+			title = "ファイルの保存先を選択";
+			defaultPath = "名称未設定.webp";
+			break;
+	}
+	const dialog = require('electron').dialog;
+	dialog.showSaveDialog({
+		title: title,
+		defaultPath: defaultPath,
+		filters: [{name: 'Images', extensions: ['png']}],
+		properties: ['openFile', 'openDirectory']
+	}, function (files) {
+		if (files) {
+			event.sender.send('selected-save-image', files)
+		} else {
+			event.sender.send('unlock-ui')
 		}
-		dialog.showSaveDialog({
-			title:title,
-			defaultPath:defaultPath,
-			filters : [ {name: 'Images', extensions: ['png']}],
-			properties: ['openFile', 'openDirectory']
-		}, function (files) {
-			if (files){
-				event.sender.send('selected-save-image', files)
-			} else{
-				event.sender.send('unlock-ui')
-			}
-		})
 	});
 }
 
