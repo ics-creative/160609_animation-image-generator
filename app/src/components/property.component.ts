@@ -78,7 +78,7 @@ declare function require(value:String):any;
 							7zip (容量:中)
 						</label>
 						<label class="c-input c-radio">
-							<input id="radioStacked1" name="radio-stacked" type="radio"  (click)="animationOptionData.compression=1"  [checked]="animationOptionData.compression==1">
+							<input id="radioStacked1" name="radio-stacked" type="radio" (click)="animationOptionData.compression=1" [checked]="animationOptionData.compression==1">
 							<span class="c-indicator"></span>
 							zlib (容量:大)
 						</label>
