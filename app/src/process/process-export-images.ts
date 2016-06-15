@@ -198,7 +198,7 @@ export class ProcessExportImage {
 							alert(validateArr.join("\n\n"));
 						}
 					}
-					console.error("generateAPNG:success");
+					console.log("generateAPNG:success");
 					resolve();
 				} else {
 					console.error("generateAPNG:error\n→" + stderr);
