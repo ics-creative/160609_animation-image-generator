@@ -40,7 +40,9 @@ declare function require(value:String):any;
 
 	<div class="mod-statusbar bg-success">
 		<a href="https://ics.media/" target="_blank">ICS</a>
+		<i class="fa fa-smile-o"></i>
 	</div>
+	
 	
 	<dialog style="display: none;">
 		<img src="imgs/loading.gif" />

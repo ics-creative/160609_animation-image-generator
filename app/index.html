@@ -1,23 +1,24 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="UTF-8" />
-    <title>連番画像からのアニメーション制作ツール</title>
-    <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.css" />
-    <link rel="stylesheet" href="styles/main.css" />
-    <script src="js/jquery.min.js"></script>
-    <script src="js/createjs-2015.11.26.min.js"></script>
-    <script>
-      if (typeof module === "object" && module.exports) {
-        window.$ = window.jQuery = module.exports;
-        module.exports = {};
-      }
-    </script>
-    <!--<script src="node_modules/jquery/dist/jquery.js"></script>-->
-    <script src="node_modules/bootstrap/dist/js/bootstrap.js"></script>
-    <script src="bundle.js"></script>
-  </head>
-  <body>
-    <my-app></my-app>
-  </body>
+<head>
+	<meta charset="UTF-8"/>
+	<title>連番画像からのアニメーション制作ツール</title>
+	<link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.css"/>
+	<link rel="stylesheet" href="styles/main.css"/>
+	<link rel="stylesheet" href="resources/font-awesome-4.6.3/css/font-awesome.min.css">
+	<script src="js/jquery.min.js"></script>
+	<script src="js/createjs-2015.11.26.min.js"></script>
+	<script>
+		if (typeof module === "object" && module.exports) {
+			window.$ = window.jQuery = module.exports;
+			module.exports = {};
+		}
+	</script>
+	<!--<script src="node_modules/jquery/dist/jquery.js"></script>-->
+	<script src="node_modules/bootstrap/dist/js/bootstrap.js"></script>
+	<script src="bundle.js"></script>
+</head>
+<body>
+<my-app></my-app>
+</body>
 </html>

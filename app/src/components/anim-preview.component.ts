@@ -149,8 +149,8 @@ export class AnimPreviewComponent {
 	}
 
 	openDirectories() {
-		if (this.openingDirectories) {
-			return;
+		if( this.openingDirectories ){
+			return ;
 		}
 		this.openingDirectories = true;
 		const ipc = require('electron').ipcRenderer;
