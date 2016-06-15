@@ -162,7 +162,7 @@ export class ProcessExportImage {
 	 * @returns {Promise<T>}
 	 * @private
 	 */
-	private _generateApng():Promise < any > {
+	private _generateApng():Promise<any> {
 		return new Promise(((resolve:Function, reject:Function) => {
 			const remote = require('electron').remote;
 			const path = require('path');
@@ -174,7 +174,9 @@ export class ProcessExportImage {
 
 			const compressOptions = this.getCompressOption(this.animationOptionData.compression);
 			const exportFilePath = path.join(this.selectedDirectory, `${this.selectedBaseName}.png`);
-			const loopOption = "-l" + ( this.animationOptionData.noLoop ? 0 : this.animationOptionData.loop - 1 );
+			console.log("this.animationOptionData.loop : " + this.animationOptionData.loop);
+			const loopOption = "-l" + ( this.animationOptionData.noLoop ? 0 : this.animationOptionData.loop );
+			console.log("loopOption : " + loopOption);
 			const options = [
 				exportFilePath,
 				pngPath,
@@ -236,7 +238,16 @@ export class ProcessExportImage {
 
 			if (this.animationOptionData.noLoop == false) {
 				options.push(`-loop`);
-				options.push(`${this.animationOptionData.loop - 1}`);
+				let loopNum = this.animationOptionData.loop - 1;
+
+				// ループ回数が0だと無限ループになる
+				// ループ回数が1だと2ループになる
+				// 一回きりの再生ができない・・・！
+				if(loopNum == 0){
+					loopNum = 1; // バグ
+				}
+
+				options.push(loopNum + "");
 			}
 
 			options.push(`-o`);
@@ -363,7 +374,7 @@ export class ProcessExportImage {
 
 			imagemin([`${this.temporaryPath}/*.png`], compressedPath, {
 				plugins: [
-					imageminPngQuant({quality: '65-80', speed:1})
+					imageminPngQuant({quality: '65-80', speed: 1})
 				]
 			}).then((files:any) => {
 				console.log(files);
