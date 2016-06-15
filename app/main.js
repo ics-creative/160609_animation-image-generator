@@ -5,6 +5,7 @@ const {BrowserWindow} = electron;
 
 let win;
 let client;
+var lastSelectSaveDirectories = app.getPath('desktop')
 
 if (process.env.NODE_ENV === 'production') {
 	client = require('electron-connect').client;
@@ -53,26 +54,42 @@ function openFileDialog(event) {
 
 function openSaveDialog(event, imageType) {
 	let title = "";
+	let defaultPathName = "";
 	let defaultPath = "";
 	switch (imageType) {
 		case "line":
 			title = "ファイルの保存先を選択";
-			defaultPath = "名称未設定.png";
+			defaultPathName = "名称未設定.png";
 			break;
 		case "web":
 			title = "ファイルの保存先を選択";
 			defaultPath = "名称未設定.webp";
 			break;
 	}
+
+	const fs = require('fs');
+	try {
+		fs.statSync(lastSelectSaveDirectories);
+	} catch (e) {
+		console.log("catch!");
+		//	失敗したらパス修正
+		lastSelectSaveDirectories = app.getPath("desktop");
+	}
+	const path = require('path');
+	defaultPath = path.join(lastSelectSaveDirectories, defaultPathName);
+
 	const dialog = require('electron').dialog;
 	dialog.showSaveDialog({
 		title: title,
 		defaultPath: defaultPath,
 		filters: [{name: 'Images', extensions: ['png']}],
 		properties: ['openFile', 'openDirectory']
-	}, function (files) {
-		if (files) {
-			event.sender.send('selected-save-image', files)
+	}, function (fileName) {
+		if (fileName) {
+			const path = require("path");
+			console.log("files[0]" + fileName);
+			lastSelectSaveDirectories = path.dirname(fileName);
+			event.sender.send('selected-save-image', fileName)
 		} else {
 			event.sender.send('unlock-ui')
 		}
