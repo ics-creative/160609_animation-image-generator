@@ -21,27 +21,27 @@ declare function require(value:String):any;
 			<div class="tab-pane active" id="tab1">
 				
 				<div class="form-group row">
-					<label class="col-sm-6 form-control-label">フレームレート<br>(FPS)</label>
-					<div class="col-sm-6">
+					<label class="col-sm-5 form-control-label">フレームレート<br>(FPS)</label>
+					<div class="col-sm-7">
 						<input type="number" class="form-control" [(ngModel)]="animationOptionData.fps" min="5" max="20" *ngIf="animationOptionData.preset == 0">
 						<input type="number" class="form-control" [(ngModel)]="animationOptionData.fps" min="1" max="60" *ngIf="animationOptionData.preset == 1">
 					</div>
 				</div>
 				
 				<div class="form-group row" *ngIf="animationOptionData.preset == 1">
-					<label for="inputPassword" class="col-sm-6 form-control-label">ループ設定</label>
-					<div class="col-sm-6">
+					<label for="inputPassword" class="col-sm-5 form-control-label">ループ設定</label>
+					<div class="col-sm-7">
 						<div class="checkbox">
 							<label>
-								<input type="checkbox" class="form-control" [(ngModel)]="animationOptionData.noLoop">無限ループ
+								<input type="checkbox" [(ngModel)]="animationOptionData.noLoop"> 無限ループ
 							</label>
 						</div>
 					</div>
 				</div>
 				
 				<div class="form-group row" *ngIf="animationOptionData.noLoop == false">
-					<label for="inputPassword" class="col-sm-6 form-control-label">ループ回数</label>
-					<div class="col-sm-6">
+					<label for="inputPassword" class="col-sm-5 form-control-label">ループ回数</label>
+					<div class="col-sm-7">
 						<input type="number" class="form-control" [(ngModel)]="animationOptionData.loop" min="1" max="4" *ngIf="animationOptionData.preset == 0">
 						<input type="number" class="form-control" [(ngModel)]="animationOptionData.loop" min="1" *ngIf="animationOptionData.preset == 1">
 					</div>
@@ -49,9 +49,7 @@ declare function require(value:String):any;
 			
 			</div>
 			<div class="tab-pane" id="tab2">
-			
-				<h6>最適化オプション</h6>
-				
+							
 				<div class="checkbox" *ngIf="animationOptionData.preset == 1">
 					<label>
 						<input type="checkbox" [(ngModel)]="animationOptionData.enabledExportApng"> APNGファイル出力

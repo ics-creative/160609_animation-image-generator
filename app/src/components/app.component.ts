@@ -30,7 +30,7 @@ declare function require(value:String):any;
 
 			<properties [animationOptionData]="animationOptionData" #properties></properties>
 			<hr />
-			<button (click)="generateAnimImage()"  class="btn btn-primary center-block"  [ngClass]="{disabled: !imageSelected}" >アニメ画像を保存する</button>
+			<button (click)="generateAnimImage()" class="btn btn-primary-outline center-block"  [ngClass]="{disabled: !imageSelected}" >アニメ画像を保存する</button>
 		</div>
 		
 		<div class="mod-preview bg-inverse">

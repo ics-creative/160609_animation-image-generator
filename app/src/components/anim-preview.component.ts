@@ -14,21 +14,18 @@ declare function require(value:String):any;
 		<div class="text-xs-center">
 			<h4>ここに連番画像(PNG)ファイルをドロップ</h4>
 			<div><small>または</small></div>
-			<button class="btn btn-default m-t-1" [ngClass]="{disabled: openingDirectories == true}" (click)="openDirectories()">ファイルを選択</button>
+			<button class="btn btn-primary m-t-1" [ngClass]="{disabled: openingDirectories == true}" (click)="openDirectories()">ファイルを選択</button>
 		</div>
 	</div>
 
 	<div class="anim-preview p-a-1" *ngIf="items.length > 0">
-		<p>アニメーションプレビュー</p>
-		<figcaption class="figure-caption">
-			フレームサイズ <span class="label label-default">W {{imageW}} × H {{imageH}} px</span> 
-			/ 総フレーム数 <span class="label label-default">{{items.length}}</span>
+		<p>
+			フレームサイズ <span class="label label-success">W {{imageW}} × H {{imageH}} px</span> 
+			/ 総フレーム数 <span class="label label-success">{{items.length}}</span>
 			<span *ngIf="animationOptionData.noLoop == false">
-				/ 再生時間 <span class="label label-default">{{items.length * animationOptionData.loop / animationOptionData.fps}}秒</span>
+				/ 再生時間 <span class="label label-success">{{items.length * animationOptionData.loop / animationOptionData.fps}}秒</span>
 			</span>
-
-			
-		</figcaption>
+		</p>
 		
 		<div class="preview-area m-t-1">
 			<div [ngStyle]="{ 'zoom' : scaleValue }" >
@@ -36,8 +33,8 @@ declare function require(value:String):any;
 			</div>
 		
 			<div class="m-t-1">
-				<button class="btn btn-default btn-sm" [ngClass]="{disabled: playing == true}" (click)="resume();">再生</button>
-				<button class="btn btn-default btn-sm" [ngClass]="{disabled: playing == false}" (click)="pause();">停止</button>
+				<button class="btn btn-secondary-outline btn-sm" [ngClass]="{disabled: playing == true}" (click)="resume();"><i class="fa fa-play"></i></button>
+				<button class="btn btn-secondary-outline btn-sm" [ngClass]="{disabled: playing == false}" (click)="pause();"><i class="fa fa-stop"></i></button>
 				
 				<span class="m-l-1">表示倍率</span>
 				<!-- 拡大率 -->
