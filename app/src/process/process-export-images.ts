@@ -33,7 +33,8 @@ export class ProcessExportImage {
 		this.temporaryCompressPath = path.join(app.getPath('temp'), "a-img-generator-compress");
 		this.animationOptionData = animationOptionData;
 		this.selectedPath = filePath;
-		this.selectedBaseName = path.basename(this.selectedPath, '.png');
+		const extName = path.extname(this.selectedPath);
+		this.selectedBaseName = path.basename(this.selectedPath, extName);
 		this.selectedDirectory = path.dirname(this.selectedPath);
 
 		return new Promise((resolve:Function, reject:Function) => {

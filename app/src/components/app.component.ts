@@ -113,12 +113,14 @@ export class AppComponent {
 	private generateAnimImage() {
 
 		//	画像が選択されていないので保存しない。
-		if( !this.imageSelected ) {
-			return ;
+		if (!this.imageSelected) {
+			return;
 		}
 
+		let type = ( this.animationOptionData.enabledExportWebp && !this.animationOptionData.enabledExportApng ) ? "web" : "line";
+
 		const ipc = require('electron').ipcRenderer;
-		ipc.send('open-save-dialog', "line");
+		ipc.send('open-save-dialog', type);
 		this._showLockDialog();
 	}
 

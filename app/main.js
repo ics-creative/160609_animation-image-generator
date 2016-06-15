@@ -56,14 +56,17 @@ function openSaveDialog(event, imageType) {
 	let title = "";
 	let defaultPathName = "";
 	let defaultPath = "";
+	let extention = "";
 	switch (imageType) {
 		case "line":
 			title = "ファイルの保存先を選択";
 			defaultPathName = "名称未設定.png";
+			extention = "png";
 			break;
 		case "web":
 			title = "ファイルの保存先を選択";
 			defaultPath = "名称未設定.webp";
+			extention = "webp";
 			break;
 	}
 
@@ -82,7 +85,7 @@ function openSaveDialog(event, imageType) {
 	dialog.showSaveDialog({
 		title: title,
 		defaultPath: defaultPath,
-		filters: [{name: 'Images', extensions: ['png']}],
+		filters: [{name: 'Images', extensions: [extention]}],
 		properties: ['openFile', 'openDirectory']
 	}, function (fileName) {
 		if (fileName) {
