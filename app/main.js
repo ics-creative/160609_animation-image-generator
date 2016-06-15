@@ -97,7 +97,6 @@ function openSaveDialog(event, imageType) {
 	}, function (fileName) {
 		if (fileName) {
 			const path = require("path");
-			console.log("files[0]" + fileName);
 			lastSelectSaveDirectories = path.dirname(fileName);
 			event.sender.send('selected-save-image', fileName);
 		} else {
