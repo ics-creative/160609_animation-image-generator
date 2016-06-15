@@ -4,7 +4,9 @@ import 'zone.js/dist/zone';
 
 import {bootstrap} from '@angular/platform-browser-dynamic';
 import {AppComponent} from './components/app.component'
+import {enableProdMode} from "@angular/platform-browser/src/facade/lang";
 
+enableProdMode();
 bootstrap(AppComponent);
 
 
@@ -15,7 +17,7 @@ function onLoad(){
 }
 
 /**
- * ドラッグ&ドロップの動作を阻止する
+ * ドラッグ&ドロップの動作を阻止します。
  */
 function _cancelDragAndDrop() {
 	document.addEventListener("dragover", _handleDragOver);
