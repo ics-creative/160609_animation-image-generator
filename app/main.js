@@ -2,6 +2,7 @@
 const electron = require('electron');
 const {app} = electron;
 const {BrowserWindow} = electron;
+const {shell} = require('electron');
 
 let win;
 let client;
@@ -25,6 +26,12 @@ function createWindow() {
 	// メインウィンドウが閉じられたときの処理
 	win.on('closed', ()=> {
 		win = null;
+	});
+
+	//	別ウィンドウで開く
+	win.webContents.on('new-window', function (event, url) {
+		shell.openExternal(url);
+		event.preventDefault();
 	});
 
 	// Connect to server process
