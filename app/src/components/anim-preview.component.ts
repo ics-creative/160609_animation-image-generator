@@ -32,8 +32,8 @@ import {ImageData} from "../data/image-data";
 				<option value="1.0" selected>100%</option>
 				<option value="2.0">200%</option>
 			</select>
-			<p>{{selectScale.value}}</p>
 		</figcaption>
+	
 		
 		<div class="preview-area m-t-1">
 			<div [ngStyle]="{ 'transform':'scale(' + selectScale.value + ')' }" >
@@ -61,7 +61,6 @@ import {ImageData} from "../data/image-data";
 export class AnimPreviewComponent {
 	@Input() imagePath:string;
 	@Input() animationOptionData:AnimationImageOptions;
-	@Input() canvasScale:number;
 
 	private items:ImageData[];
 	private playing:boolean;
@@ -69,10 +68,6 @@ export class AnimPreviewComponent {
 	private currentLoopCount:number;
 	private imageW:number;
 	private imageH:number;
-
-	private changeScale(value:number) {
-		this.canvasScale = value;
-	}
 
 	ngOnInit() {
 		this.items = [];
