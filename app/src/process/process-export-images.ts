@@ -363,7 +363,7 @@ export class ProcessExportImage {
 
 			imagemin([`${this.temporaryPath}/*.png`], compressedPath, {
 				plugins: [
-					imageminPngQuant({quality: '65-80'})
+					imageminPngQuant({quality: '65-80', speed:1})
 				]
 			}).then((files:any) => {
 				console.log(files);
