@@ -57,7 +57,7 @@ declare function require(value:String):any;
 						<input type="checkbox" [(ngModel)]="animationOptionData.enabledExportApng"> APNG書き出し
 					</label>
 				</div>
-			
+			f
 				<div class="checkbox">
 					<label>
 						<input type="checkbox" [(ngModel)]="animationOptionData.enabledPngCompress"> PNG事前圧縮を利用
@@ -67,7 +67,7 @@ declare function require(value:String):any;
 				<h6>圧縮設定</h6>
 				<div class="c-inputs-stacked">
 					<label class="c-input c-radio">
-						<input id="radioStacked2" name="radio-stacked" type="radio" (click)="animationOptionData.compression=3">
+						<input id="radioStacked2" name="radio-stacked" type="radio"  (click)="animationOptionData.compression=3">
 						<span class="c-indicator"></span>
 						zopfli (容量:小)
 					</label>
@@ -76,6 +76,7 @@ declare function require(value:String):any;
 						<span class="c-indicator"></span>
 						7zip (容量:中)
 					</label>
+		
 					<label class="c-input c-radio">
 						<input id="radioStacked1" name="radio-stacked" type="radio"  (click)="animationOptionData.compression=1">
 						<span class="c-indicator"></span>

@@ -28,17 +28,16 @@ declare function require(value:String):any;
 			</span>
 
 			<!-- 拡大率 -->
-			<select class="c-select mod-zoom-select" #selectScale>
+			<select class="c-select mod-zoom-select" #selectScale (change)="selectScaleValue(selectScale.value)">
 				<option value="0.25">25%</option>
 				<option value="0.5">50%</option>
 				<option value="1.0" selected>100%</option>
 				<option value="2.0">200%</option>
 			</select>
 		</figcaption>
-	
 		
 		<div class="preview-area m-t-1">
-			<div [ngStyle]="{ 'zoom':selectScale.value}" >
+			<div [ngStyle]="{ 'zoom':scaleValue}" >
 				<img data-src="{{imagePath}}">
 			</div>
 		
@@ -73,6 +72,12 @@ export class AnimPreviewComponent {
 	private imageH:number;
 	private openingDirectories:boolean;
 	private imageUpdateEvent = new EventEmitter();
+
+	private scaleValue:number;
+
+	private selectScaleValue(scaleValue:number) {
+		this.scaleValue = scaleValue;
+	}
 
 	ngOnInit() {
 		this.items = [];
