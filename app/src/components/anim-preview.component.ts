@@ -77,12 +77,11 @@ export class AnimPreviewComponent {
 
 		createjs.Ticker.framerate = this.animationOptionData.fps;
 		createjs.Ticker.on("tick", this.loop, this);
-		
+
 		const ipc = require('electron').ipcRenderer;
 
 		ipc.on('selected-open-images', (event:any, filePathList:string[]) => {
 			this._selectedImages(filePathList);
-			this._hideLockDialog();
 		});
 
 	}
