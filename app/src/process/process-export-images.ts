@@ -33,9 +33,8 @@ export class ProcessExportImage {
 		this.temporaryCompressPath = path.join(app.getPath('temp'), "a-img-generator-compress");
 		this.animationOptionData = animationOptionData;
 		this.selectedPath = filePath;
-		const pathArr = filePath.split("/");
-		this.selectedBaseName = pathArr.pop().split(".").shift();
-		this.selectedDirectory = pathArr.join("/");
+		this.selectedBaseName = path.basename(this.selectedPath);
+		this.selectedDirectory = path.diraname(this.selectedPath);
 
 		return new Promise((resolve:Function, reject:Function) => {
 
@@ -175,7 +174,7 @@ export class ProcessExportImage {
 			const compressOptions = this.getCompressOption(this.animationOptionData.compression);
 			const loopOption = "-l" + ( this.animationOptionData.noLoop ? 0 : this.animationOptionData.loop - 1 );
 			const options = [
-				`${this.selectedDirectory}/${this.selectedBaseName}.png`,
+				path.join( this.selectedDirectory,`${this.selectedBaseName}.png`),
 				pngPath,
 				"1",
 				this.animationOptionData.fps,
@@ -239,7 +238,7 @@ export class ProcessExportImage {
 			}
 
 			options.push(`-o`);
-			options.push(`${this.selectedDirectory}/${this.selectedBaseName}.webp`);
+			options.push(path.join( this.selectedDirectory,`${this.selectedBaseName}.webp`));
 
 			this._convertPng2Webps(pngFiles).then(()=> {
 				execFile(`${appPath}/bin/webpmux`, options, (err:string, stdout:string, stderr:string) => {
