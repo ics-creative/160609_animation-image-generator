@@ -42,7 +42,7 @@ declare function require(value:String):any;
 		<a href="https://ics.media/" target="_blank">開発会社について</a>
 		<a href="https://www.facebook.com/icswebjp" target="_blank"><i class="fa fa-facebook"></i></a>
 		<a href="https://twitter.com/icsweb" target="_blank"><i class="fa fa-twitter"></i></a>
-		<a href="https://docs.google.com/a/ics-web.jp/forms/d/1umiF4furuMKgWO-7ouCSiclBdejloTE25sbFB70BuVY/prefill" target="_blank"><i class="fa fa-smile-o"></i></a>
+		<a href="http://goo.gl/forms/5DUI1UnTUXR6AmCw2" target="_blank"><i class="fa fa-smile-o"></i></a>
 	</div>
 	
 	
@@ -133,7 +133,16 @@ export class AppComponent {
 			return;
 		}
 
-		let type = ( this.animationOptionData.enabledExportWebp && !this.animationOptionData.enabledExportApng ) ? "web" : "line";
+		if(this.animationOptionData.enabledExportApng == false
+		 && this.animationOptionData.enabledExportWebp == false){
+			alert("出力画像の形式を選択ください。");
+			return;
+		}
+
+
+		let type = (this.animationOptionData.enabledExportWebp && !this.animationOptionData.enabledExportApng)
+			? "web"
+			: "line";
 
 		const ipc = require('electron').ipcRenderer;
 		ipc.send('open-save-dialog', type);
