@@ -68,17 +68,17 @@ declare function require(value:String):any;
 					<h6>圧縮方式</h6>
 					<div class="c-inputs-stacked">
 						<label class="c-input c-radio">
-							<input id="radioStacked2" name="radio-stacked" type="radio" (click)="animationOptionData.compression=3">
+							<input id="radioStacked2" name="radio-stacked" type="radio" (click)="animationOptionData.compression=3" [checked]="animationOptionData.compression==3">
 							<span class="c-indicator"></span>
 							zopfli (容量:小)
 						</label>
 						<label class="c-input c-radio">
-							<input id="radioStacked2" name="radio-stacked" type="radio" (click)="animationOptionData.compression=2">
+							<input id="radioStacked2" name="radio-stacked" type="radio" (click)="animationOptionData.compression=2" [checked]="animationOptionData.compression==2">
 							<span class="c-indicator"></span>
 							7zip (容量:中)
 						</label>
 						<label class="c-input c-radio">
-							<input id="radioStacked1" name="radio-stacked" type="radio"  (click)="animationOptionData.compression=1">
+							<input id="radioStacked1" name="radio-stacked" type="radio"  (click)="animationOptionData.compression=1"  [checked]="animationOptionData.compression==1">
 							<span class="c-indicator"></span>
 							zlib (容量:大)
 						</label>
