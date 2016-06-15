@@ -27,13 +27,7 @@ declare function require(value:String):any;
 				/ 再生時間 <span class="label label-default">{{items.length * animationOptionData.loop / animationOptionData.fps}}秒</span>
 			</span>
 
-			<!-- 拡大率 -->
-			<select class="c-select mod-zoom-select" #selectScale (change)="selectScaleValue(selectScale.value)">
-				<option value="0.25">25%</option>
-				<option value="0.5">50%</option>
-				<option value="1.0" selected>100%</option>
-				<option value="2.0">200%</option>
-			</select>
+			
 		</figcaption>
 		
 		<div class="preview-area m-t-1">
@@ -44,6 +38,15 @@ declare function require(value:String):any;
 			<div class="m-t-1">
 				<button class="btn btn-default btn-sm" [ngClass]="{disabled: playing == true}" (click)="resume();">再生</button>
 				<button class="btn btn-default btn-sm" [ngClass]="{disabled: playing == false}" (click)="pause();">停止</button>
+				
+				<span class="m-l-1">表示倍率</span>
+				<!-- 拡大率 -->
+				<select class="c-select mod-zoom-select" #selectScale (change)="selectScaleValue(selectScale.value)">
+					<option value="0.25">25%</option>
+					<option value="0.5">50%</option>
+					<option value="1.0" selected>100%</option>
+					<option value="2.0">200%</option>
+				</select>
 			</div>
 		</div>
 		
