@@ -42,8 +42,9 @@ declare function require(value:String):any;
 				<img data-src="{{imagePath}}">
 			</div>
 		
-			<div class="m-t-1" *ngIf="animationOptionData.noLoop == false">
-				<button class="btn btn-primary btn-sm" [ngClass]="{disabled: playing == true}" (click)="resume();">再生</button>
+			<div class="m-t-1">
+				<button class="btn btn-default btn-sm" [ngClass]="{disabled: playing == true}" (click)="resume();">再生</button>
+				<button class="btn btn-default btn-sm" [ngClass]="{disabled: playing == false}" (click)="pause();">停止</button>
 			</div>
 		</div>
 		
@@ -170,12 +171,18 @@ export class AnimPreviewComponent {
 		image.src = path;
 	}
 
-	private resume() {
+	private resume():void {
 		if (this.items) {
 			this.playing = true;
 
 			this.currentFrame = 0;
 			this.currentLoopCount = 0;
+		}
+	}
+
+	private pause():void {
+		if (this.items) {
+			this.playing = false;
 		}
 	}
 
