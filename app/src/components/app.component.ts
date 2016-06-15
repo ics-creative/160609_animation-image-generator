@@ -14,7 +14,7 @@ declare function require(value:String):any;
 @Component({
 	selector: 'my-app',
 	template: `
-    <div class="app-component"  #myComponent>		
+    <div class="app-component" #myComponent>		
 		<div class="mod-setting p-a-1">
 
 			<!-- 拡大率 -->
@@ -22,7 +22,7 @@ declare function require(value:String):any;
 				<label for="inputPassword" class="col-sm-3 form-control-label">用途</label>
 				<div class="col-sm-9">
 					<select class="c-select m-b-1" style="width:100%" #optionSelecter (change)="handlePresetChange($event.target.value)">
-						<option value="0" [selected]="presetMode==0" >LINEアニメ−ションスタンプ</option>
+						<option value="0" [selected]="presetMode==0">LINEアニメ−ションスタンプ</option>
 						<option value="1" [selected]="presetMode==1">webページ用アニメ−ション</option>
 					</select>
 				</div>
@@ -30,7 +30,7 @@ declare function require(value:String):any;
 
 			<properties [animationOptionData]="animationOptionData" #properties></properties>
 			<hr />
-			<button (click)="generateAnimImage()" class="btn btn-primary-outline center-block"  [ngClass]="{disabled: !imageSelected}" >アニメ画像を保存する</button>
+			<button (click)="generateAnimImage()" class="btn btn-primary-outline center-block" [ngClass]="{disabled: !imageSelected}" >アニメ画像を保存する</button>
 		</div>
 		
 		<div class="mod-preview bg-inverse">
