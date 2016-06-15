@@ -220,7 +220,7 @@ export class ProcessExportImage {
 			const appPath:string = app.getAppPath();
 
 			const execFile = require('child_process').execFile;
-			const pngPath = path.join(this.temporaryLastPath);
+			const pngPath = path.join(this.temporaryPath);
 
 			const options:string[] = [];
 			const frameMs = Math.round(1000 / this.animationOptionData.fps);
