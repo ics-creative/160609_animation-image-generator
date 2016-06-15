@@ -38,7 +38,7 @@ declare function require(value:String):any;
 	
 		
 		<div class="preview-area m-t-1">
-			<div [ngStyle]="{ 'zoom':selectScale.value}" >
+			<div [ngStyle]="{ 'zoom' : selectScale.value }" >
 				<img data-src="{{imagePath}}">
 			</div>
 		
