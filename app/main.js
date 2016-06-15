@@ -47,7 +47,7 @@ function openFileDialog(event) {
 		if (files) {
 			event.sender.send('selected-open-images', files)
 		} else {
-			event.sender.send('unlock-ui')
+			event.sender.send('unlock-select-ui');
 		}
 	})
 }
@@ -89,9 +89,9 @@ function openSaveDialog(event, imageType) {
 			const path = require("path");
 			console.log("files[0]" + fileName);
 			lastSelectSaveDirectories = path.dirname(fileName);
-			event.sender.send('selected-save-image', fileName)
+			event.sender.send('selected-save-image', fileName);
 		} else {
-			event.sender.send('unlock-ui')
+			event.sender.send('unlock-ui');
 		}
 	});
 }

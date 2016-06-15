@@ -30,11 +30,11 @@ declare function require(value:String):any;
 
 			<properties [animationOptionData]="animationOptionData" #properties></properties>
 			<hr />
-			<button (click)="generateAnimImage()" class="btn btn-primary center-block">アニメ画像を保存する</button>
+			<button (click)="generateAnimImage()"  class="btn btn-primary center-block"  [ngClass]="{disabled: !imageSelected}" >アニメ画像を保存する</button>
 		</div>
 		
 		<div class="mod-preview bg-inverse">
-			<anim-preview [animationOptionData]="animationOptionData" #animePreview></anim-preview>
+			<anim-preview [animationOptionData]="animationOptionData" (imageUpdateEvent)="imageUpdateEvent()" #animePreview></anim-preview>
 		</div>
 	</div>
 
@@ -52,6 +52,7 @@ declare function require(value:String):any;
 export class AppComponent {
 
 	private exportImagesProcess:ProcessExportImage;
+	private imageSelected:boolean;
 	@Input() animationOptionData:AnimationImageOptions;
 	@ViewChild("properties") propertiesComponent:PropertiesComponent;
 	@ViewChild("animePreview") animePreviewComponent:AnimPreviewComponent;
@@ -60,6 +61,8 @@ export class AppComponent {
 
 	ngOnInit() {
 		this.animationOptionData = new AnimationImageOptions();
+
+		this.imageSelected = false;
 
 		// はじめはLINEスタンプのプリセットにする
 		PresetLine.setPreset(this.animationOptionData);
@@ -108,13 +111,18 @@ export class AppComponent {
 	}
 
 	private generateAnimImage() {
+
+		//	画像が選択されていないので保存しない。
+		if( !this.imageSelected ) {
+			return ;
+		}
+
 		const ipc = require('electron').ipcRenderer;
 		ipc.send('open-save-dialog', "line");
 		this._showLockDialog();
 	}
 
 	private _exportImages(path:string) {
-
 		this.exportImagesProcess.exec(path, this.animePreviewComponent.items, this.animationOptionData).then(() => {
 			this._hideLockDialog();
 		}).catch(() => {
@@ -148,8 +156,8 @@ export class AppComponent {
 		createjs.Ticker.paused = false; // 効かない…
 	}
 
-	private openDirectories() {
-		this.animePreviewComponent.openDirectories();
+	private imageUpdateEvent() {
+		this.imageSelected = this.animePreviewComponent.items.length >= 1;
 	}
 
 }

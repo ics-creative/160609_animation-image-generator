@@ -1,6 +1,6 @@
 ///<reference path="../../libs/createjs/createjs.d.ts" />
 
-import {Component, ViewChild, Input} from '@angular/core';
+import {Component, Input, EventEmitter} from "@angular/core";
 import {AnimationImageOptions} from "../data/animation-image-options";
 import {ImageData} from "../data/image-data";
 
@@ -57,6 +57,7 @@ declare function require(value:String):any;
 		</div>
 	</div>
   `,
+	events: ["imageUpdateEvent"],
 	styleUrls: ['./styles/anim-preview.css'],
 })
 
@@ -71,6 +72,7 @@ export class AnimPreviewComponent {
 	private imageW:number;
 	private imageH:number;
 	private openingDirectories:boolean;
+	private imageUpdateEvent = new EventEmitter();
 
 	ngOnInit() {
 		this.items = [];
@@ -84,6 +86,10 @@ export class AnimPreviewComponent {
 			this._selectedImages(filePathList);
 		});
 
+		ipc.on('unlock-select-ui', (event:any, filePathList:string[]) => {
+			console.log("unlockUI");
+			this.openingDirectories = false;
+		});
 	}
 
 	private _selectedImages(filePathList:string[]) {
@@ -103,6 +109,8 @@ export class AnimPreviewComponent {
 
 			this.animationOptionData.imageInfo.length = items.length;
 		}
+
+		this.imageUpdateEvent.emit(null);
 	}
 
 	private updateAnimation() {
@@ -141,6 +149,9 @@ export class AnimPreviewComponent {
 	}
 
 	openDirectories() {
+		if (this.openingDirectories) {
+			return;
+		}
 		this.openingDirectories = true;
 		const ipc = require('electron').ipcRenderer;
 		ipc.send('open-file-dialog');
