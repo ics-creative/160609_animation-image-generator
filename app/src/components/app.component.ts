@@ -22,8 +22,8 @@ declare function require(value:String):any;
 				<label for="inputPassword" class="col-sm-3 form-control-label">用途</label>
 				<div class="col-sm-9">
 					<select class="c-select m-b-1" style="width:100%" #optionSelecter (change)="handlePresetChange($event.target.value)">
-						<option value="0">LINEアニメ−ションスタンプ</option>
-						<option value="1">webページ用アニメ−ション</option>
+						<option value="0" [selected]="presetMode==0" >LINEアニメ−ションスタンプ</option>
+						<option value="1" [selected]="presetMode==1">webページ用アニメ−ション</option>
 					</select>
 				</div>
 			</div>
@@ -55,9 +55,16 @@ declare function require(value:String):any;
 })
 export class AppComponent {
 
+	private get PRESET_ID():string {
+		return 'preset_id';
+	}
+
 	private exportImagesProcess:ProcessExportImage;
 	private imageSelected:boolean;
+	private presetMode:number;
+
 	@Input() animationOptionData:AnimationImageOptions;
+
 	@ViewChild("properties") propertiesComponent:PropertiesComponent;
 	@ViewChild("animePreview") animePreviewComponent:AnimPreviewComponent;
 	@ViewChild("myComponent") myComponent:ElementRef;
@@ -68,12 +75,11 @@ export class AppComponent {
 
 		this.imageSelected = false;
 
-		// はじめはLINEスタンプのプリセットにする
-		PresetLine.setPreset(this.animationOptionData);
-
 		this.exportImagesProcess = new ProcessExportImage();
 
-		// TODO 前回起動時のプリセットは覚えておきたい
+		// 初回プリセットの設定
+		this.presetMode = Number(localStorage.getItem(this.PRESET_ID));
+		this.changePreset(this.presetMode);
 
 		//	保存先の指定返却
 		const ipc = require('electron').ipcRenderer;
@@ -83,7 +89,6 @@ export class AppComponent {
 		ipc.on('unlock-ui', (event:any) => {
 			this._hideLockDialog();
 		})
-
 	}
 
 	ngAfterViewInit() {
@@ -104,7 +109,14 @@ export class AppComponent {
 
 	private handlePresetChange(presetMode:string) {
 
-		switch (Number(presetMode)) {
+		localStorage.setItem(this.PRESET_ID, presetMode);
+		this.presetMode = Number(presetMode);
+
+		this.changePreset(this.presetMode);
+	}
+
+	private changePreset(presetMode:number) {
+		switch (presetMode) {
 			case PresetType.LINE:
 				PresetLine.setPreset(this.animationOptionData);
 				break;
