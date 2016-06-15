@@ -47,7 +47,7 @@ declare function require(value:String):any;
 	
 	
 	<dialog style="display: none;">
-		<img src="imgs/preloader.webp" />
+		<img src="imgs/preloader.webp" width="52" height="52" />
 	</dialog>
   `,
 	directives: [AnimPreviewComponent, PropertiesComponent],
