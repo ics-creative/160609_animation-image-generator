@@ -6,6 +6,7 @@
 .mod-setting {
   width: 350px;
   height: 100%;
+  overflow: auto;
 }
 
 .mod-preview {
