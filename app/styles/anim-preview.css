@@ -12,7 +12,7 @@
 }
 
 .preview-area img {
-  background: url(../app/imgs/opacity.png) repeat;
+  background: url(./imgs/opacity.png) repeat;
 }
 
 .frame-image-container {
@@ -32,7 +32,7 @@
 }
 
 .frame-image {
-  background: url(../app/imgs/opacity.png) repeat;
+  background: url(./imgs/opacity.png) repeat;
 }
 
 
