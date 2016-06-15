@@ -71,7 +71,6 @@ export class AnimPreviewComponent {
 
 	ngOnInit() {
 		this.items = [];
-		this.canvasScale = 1;
 
 		createjs.Ticker.framerate = this.animationOptionData.fps;
 		createjs.Ticker.on("tick", this.loop, this);
