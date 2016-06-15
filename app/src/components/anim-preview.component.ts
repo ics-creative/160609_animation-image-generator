@@ -1,8 +1,10 @@
+///<reference path="../../libs/createjs/createjs.d.ts" />
+
 import {Component, ViewChild, Input} from '@angular/core';
 import {AnimationImageOptions} from "../data/animation-image-options";
 import {ImageData} from "../data/image-data";
 
-///<reference path="../../libs/createjs/createjs.d.ts" />
+declare function require(value:String):any;
 
 @Component({
 	selector: 'anim-preview',
@@ -12,7 +14,7 @@ import {ImageData} from "../data/image-data";
 		<div class="text-xs-center">
 			<h4>ここに連番画像(PNG)ファイルをドロップ</h4>
 			<div><small>または</small></div>
-			<button class="btn btn-default m-t-1">ファイルを選択</button>
+			<button class="btn btn-default m-t-1" (click)="openDirectories()">ファイルを選択</button>
 		</div>
 	</div>
 
@@ -62,7 +64,7 @@ export class AnimPreviewComponent {
 	@Input() imagePath:string;
 	@Input() animationOptionData:AnimationImageOptions;
 
-	private items:ImageData[];
+	public items:ImageData[];
 	private playing:boolean;
 	private currentFrame:number;
 	private currentLoopCount:number;
@@ -125,6 +127,12 @@ export class AnimPreviewComponent {
 		}
 	}
 
+	openDirectories() {
+		const ipc = require('electron').ipcRenderer;
+		ipc.send('open-file-dialog');
+
+	}
+
 	private checkImageSize(path:string):void {
 		let image = new Image();
 		image.onload = ()=> {
@@ -144,6 +152,60 @@ export class AnimPreviewComponent {
 
 			this.currentFrame = 0;
 			this.currentLoopCount = 0;
+		}
+	}
+
+	public handleDrop(event:DragEvent) {
+		var path = require('path');
+
+		const length = event.dataTransfer.files ? event.dataTransfer.files.length : 0;
+
+		//	再度アイテムがドロップされたらリセットするように調整
+		this.items = [];
+
+		for (let i = 0; i < length; i++) {
+			const file:any = event.dataTransfer.files[i];
+			const filePath = file.path;
+
+			if (path.extname(filePath) == ".png") {
+				path.dirname(filePath);
+
+				const item:ImageData = new ImageData();
+				item.imageBaseName = path.basename(filePath);
+				item.imagePath = filePath;
+				item.frameNumber = this.items.length;
+
+				this.items.push(item);
+			}
+		}
+
+		this.numbering();
+
+		this.setItems(this.items);
+
+		event.preventDefault();
+	}
+
+	/**
+	 * 再ナンバリングする。
+	 */
+	private numbering() {
+
+		this.items.sort(function (a, b) {
+			const aRes = a.imageBaseName.match(/\d+/g);
+			const bRes = b.imageBaseName.match(/\d+/g);
+
+			const aNum = aRes.length >= 1 ? parseInt(aRes.pop()) : 0;
+			const bNum = bRes.length >= 1 ? parseInt(bRes.pop()) : 0;
+
+			if (aNum < bNum) return -1;
+			if (aNum > bNum) return 1;
+			return 0;
+		});
+
+		const length = this.items.length;
+		for (let i = 0; i < length; i++) {
+			this.items[i].frameNumber = i;
 		}
 	}
 

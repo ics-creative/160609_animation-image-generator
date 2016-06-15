@@ -104,4 +104,5 @@ declare function require(value:String):any;
 })
 export class PropertiesComponent {
 	@Input() animationOptionData:AnimationImageOptions;
+
 }

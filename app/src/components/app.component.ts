@@ -1,15 +1,12 @@
 ///	<reference path="../../libs/createjs/createjs.d.ts" />
 
-import {Component, ViewChild, Input, ElementRef} from '@angular/core';
+import {Component, ViewChild, Input, ElementRef} from "@angular/core";
 import {AnimPreviewComponent} from "./anim-preview.component";
 import {PropertiesComponent} from "./property.component";
-import {ImageListComponent} from "./image-list.component";
-import {CompressionType} from "../type/compression-type";
 import {AnimationImageOptions} from "../data/animation-image-options";
 import {PresetType} from "../type/preset-type";
 import {PresetWeb} from "../preset/preset-web";
 import {PresetLine} from "../preset/preset-line";
-import {LineStampValidator} from "../validators/LineStampValidator";
 import {ProcessExportImage} from "../process/process-export-images";
 
 declare function require(value:String):any;
@@ -38,9 +35,6 @@ declare function require(value:String):any;
 		
 		<div class="mod-preview bg-inverse">
 			<anim-preview [animationOptionData]="animationOptionData" #animePreview></anim-preview>
-			
-			<!-- <button (click)="openDirectories()">open</button> -->
-			<image-list #imageList  (imageUpdateEvent)="imageUpdateEvent()"></image-list>
 		</div>
 	</div>
 
@@ -52,7 +46,7 @@ declare function require(value:String):any;
 		<img src="imgs/loading.gif" />
 	</dialog>
   `,
-	directives: [AnimPreviewComponent, PropertiesComponent, ImageListComponent],
+	directives: [AnimPreviewComponent, PropertiesComponent],
 	styleUrls: ['./styles/app.css']
 })
 export class AppComponent {
@@ -60,7 +54,6 @@ export class AppComponent {
 	private exportImagesProcess:ProcessExportImage;
 	@Input() animationOptionData:AnimationImageOptions;
 	@ViewChild("properties") propertiesComponent:PropertiesComponent;
-	@ViewChild("imageList") imageListComponent:ImageListComponent;
 	@ViewChild("animePreview") animePreviewComponent:AnimPreviewComponent;
 	@ViewChild("myComponent") myComponent:ElementRef;
 	@ViewChild("optionSelecter") optionSelecterComponent:ElementRef;
@@ -95,7 +88,7 @@ export class AppComponent {
 		});
 
 		component.addEventListener("drop", (event:DragEvent)=> {
-			this.imageListComponent.handleDrop(event);
+			this.animePreviewComponent.handleDrop(event);
 		});
 	}
 
@@ -115,10 +108,6 @@ export class AppComponent {
 		}
 	}
 
-	private imageUpdateEvent() {
-		this.animePreviewComponent.setItems(this.imageListComponent.items);
-	}
-
 	private generateAnimImage() {
 		const ipc = require('electron').ipcRenderer;
 		ipc.send('open-save-dialog', "line");
@@ -127,7 +116,7 @@ export class AppComponent {
 
 	private _exportImages(path:string) {
 
-		this.exportImagesProcess.exec(path, this.imageListComponent.items, this.animationOptionData).then(() => {
+		this.exportImagesProcess.exec(path, this.animePreviewComponent.items, this.animationOptionData).then(() => {
 			this._hideLockDialog();
 		}).catch(() => {
 			this._hideLockDialog();
@@ -161,7 +150,7 @@ export class AppComponent {
 	}
 
 	private openDirectories() {
-		this.imageListComponent.openDirectories();
+		this.animePreviewComponent.openDirectories();
 	}
 
 }
