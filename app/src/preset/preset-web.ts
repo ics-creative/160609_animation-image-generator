@@ -11,6 +11,7 @@ export class PresetWeb {
 		data.fps = 30;
 		data.compression = CompressionType.zlib;
 		data.enabledPngCompress = true;
+		data.enabledWebpCompress = false;
 
 		data.enabledExportApng = true;
 		data.enabledExportWebp = true;

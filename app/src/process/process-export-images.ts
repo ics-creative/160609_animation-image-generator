@@ -294,11 +294,13 @@ export class ProcessExportImage {
 		options.push(`${filePath}.webp`);
 		options.push(filePath);
 
-		if(false){
-			options.push(`-preset`);
-			options.push(`drawing`);
+		if(this.animationOptionData.enabledWebpCompress === true){
+			options.push(`-preset`, `drawing`);
 		}else{
 			options.push(`-lossless`);
+			// 超低容量設定
+			// options.push(`-q`, `100`);
+			// options.push(`-m`, `6`);
 		}
 
 

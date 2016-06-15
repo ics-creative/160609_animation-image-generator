@@ -8,9 +8,11 @@ export class AnimationImageOptions {
 	noLoop:boolean;
 	loop:number;
 	compression:CompressionType;
+
 	iterations:number;
 	fps:number;
 	enabledPngCompress:boolean;
+	enabledWebpCompress:boolean;
 
 	enabledExportApng:boolean;
 	enabledExportWebp:boolean;

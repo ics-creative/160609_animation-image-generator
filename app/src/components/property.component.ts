@@ -90,6 +90,14 @@ declare function require(value:String):any;
 						</label>
 					</div>
 					
+					<div *ngIf="animationOptionData.enabledExportWebp == true" class="card card-block">
+					<div class="checkbox">
+						<label>
+							<input type="checkbox" [(ngModel)]="animationOptionData.enabledWebpCompress"> 容量最適化
+						</label>
+					</div>
+				</div>
+					
 					<div class="checkbox">
 						<label>
 							<input type="checkbox" [(ngModel)]="animationOptionData.enabledExportHtml"> HTMLファイル出力
