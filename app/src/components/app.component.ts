@@ -8,6 +8,7 @@ import {PresetType} from "../type/preset-type";
 import {PresetWeb} from "../preset/preset-web";
 import {PresetLine} from "../preset/preset-line";
 import {ProcessExportImage} from "../process/process-export-images";
+import {AppConfig} from "../config/app-config";
 
 declare function require(value:String):any;
 
@@ -39,10 +40,15 @@ declare function require(value:String):any;
 	</div>
 
 	<div class="mod-statusbar bg-primary">
-		<a href="https://ics.media/" target="_blank">開発会社について</a>
-		<a href="https://www.facebook.com/icswebjp" target="_blank"><i class="fa fa-facebook"></i></a>
-		<a href="https://twitter.com/icsweb" target="_blank"><i class="fa fa-twitter"></i></a>
-		<a href="http://goo.gl/forms/5DUI1UnTUXR6AmCw2" target="_blank"><i class="fa fa-smile-o"></i></a>
+		<div class="container-fluid p-l-0 p-r-0">
+			<div class="col-sm-6 text-sm-left">バージョン {{appConfig.version}}</div>
+			<div class="col-sm-6 text-sm-right">
+				<a href="https://ics.media/" target="_blank">開発会社について</a>
+				<a href="https://www.facebook.com/icswebjp" target="_blank"><i class="fa fa-facebook"></i></a>
+				<a href="https://twitter.com/icsweb" target="_blank"><i class="fa fa-twitter"></i></a>
+				<a href="http://goo.gl/forms/5DUI1UnTUXR6AmCw2" target="_blank"><i class="fa fa-smile-o"></i></a>
+			</div>
+		</div>
 	</div>
 	
 	
@@ -62,6 +68,8 @@ export class AppComponent {
 	private exportImagesProcess:ProcessExportImage;
 	private imageSelected:boolean;
 	private presetMode:number;
+
+	private appConfig:AppConfig = new AppConfig();
 
 	@Input() animationOptionData:AnimationImageOptions;
 
