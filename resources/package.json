@@ -22,7 +22,5 @@
   },
 
   "dependencies": {
-    "imagemin": "^5.2.1",
-    "imagemin-pngquant": "^5.0.0"
   }
 }
