@@ -288,7 +288,7 @@ export class ProcessExportImage {
 		const remote = require('electron').remote;
 		const appPath:string = remote.app.getAppPath();
 		const execFile = require('child_process').execFile;
-		const options:stirng[] = [];
+		const options:string[] = [];
 		options.push(filePath);
 		options.push(`-o`);
 		options.push(`${filePath}.webp`);
