@@ -8,6 +8,7 @@ import {PresetType} from "../type/preset-type";
 import {PresetWeb} from "../preset/preset-web";
 import {PresetLine} from "../preset/preset-line";
 import {ProcessExportImage} from "../process/process-export-images";
+import {AppConfig} from "../config/app-config";
 
 declare function require(value:String):any;
 
@@ -21,7 +22,10 @@ declare function require(value:String):any;
 			<div class="form-group row m-b-1">
 				<label for="inputPassword" class="col-sm-3 form-control-label">用途</label>
 				<div class="col-sm-9">
-					<select class="c-select m-b-1" style="width:100%" #optionSelecter (change)="handlePresetChange($event.target.value)">
+					<select class="c-select m-b-1"
+					        style="width:100%"
+					        #optionSelecter
+					        (change)="handlePresetChange($event.target.value)">
 						<option value="0" [selected]="presetMode==0">LINEアニメ−ションスタンプ</option>
 						<option value="1" [selected]="presetMode==1">webページ用アニメ−ション</option>
 					</select>
@@ -30,19 +34,31 @@ declare function require(value:String):any;
 
 			<properties [animationOptionData]="animationOptionData" #properties></properties>
 			<hr />
-			<button (click)="generateAnimImage()" class="btn btn-primary-outline center-block" [ngClass]="{disabled: !imageSelected}" >アニメ画像を保存する</button>
+			<button (click)="generateAnimImage()" 
+				class="btn btn-primary-outline center-block"
+				[ngClass]="{disabled: !imageSelected}" >
+					アニメ画像を保存する
+			</button>
 		</div>
 		
 		<div class="mod-preview bg-inverse">
-			<anim-preview [animationOptionData]="animationOptionData" (imageUpdateEvent)="imageUpdateEvent()" #animePreview></anim-preview>
+			<anim-preview [animationOptionData]="animationOptionData"
+			              (imageUpdateEvent)="imageUpdateEvent()" 
+			              #animePreview>
+			</anim-preview>
 		</div>
 	</div>
 
 	<div class="mod-statusbar bg-primary">
-		<a href="https://ics.media/" target="_blank">開発会社について</a>
-		<a href="https://www.facebook.com/icswebjp" target="_blank"><i class="fa fa-facebook"></i></a>
-		<a href="https://twitter.com/icsweb" target="_blank"><i class="fa fa-twitter"></i></a>
-		<a href="http://goo.gl/forms/5DUI1UnTUXR6AmCw2" target="_blank"><i class="fa fa-smile-o"></i></a>
+		<div class="container-fluid p-l-0 p-r-0">
+			<div class="col-sm-6 text-sm-left">バージョン {{appConfig.version}}</div>
+			<div class="col-sm-6 text-sm-right">
+				<a href="https://ics.media/" target="_blank">開発会社について</a>
+				<a href="https://www.facebook.com/icswebjp" target="_blank"><i class="fa fa-facebook"></i></a>
+				<a href="https://twitter.com/icsweb" target="_blank"><i class="fa fa-twitter"></i></a>
+				<a href="http://goo.gl/forms/5DUI1UnTUXR6AmCw2" target="_blank"><i class="fa fa-smile-o"></i></a>
+			</div>
+		</div>
 	</div>
 	
 	
@@ -62,6 +78,8 @@ export class AppComponent {
 	private exportImagesProcess:ProcessExportImage;
 	private imageSelected:boolean;
 	private presetMode:number;
+
+	private appConfig:AppConfig = new AppConfig();
 
 	@Input() animationOptionData:AnimationImageOptions;
 
@@ -133,8 +151,8 @@ export class AppComponent {
 			return;
 		}
 
-		if(this.animationOptionData.enabledExportApng == false
-		 && this.animationOptionData.enabledExportWebp == false){
+		if (this.animationOptionData.enabledExportApng == false
+			&& this.animationOptionData.enabledExportWebp == false) {
 			alert("出力画像の形式を選択ください。");
 			return;
 		}
@@ -150,9 +168,10 @@ export class AppComponent {
 	}
 
 	private _exportImages(path:string) {
-		this.exportImagesProcess.exec(path, this.animePreviewComponent.items, this.animationOptionData).then(() => {
-			this._hideLockDialog();
-		}).catch(() => {
+		this.exportImagesProcess.exec(path, this.animePreviewComponent.items, this.animationOptionData)
+			.then(() => {
+				this._hideLockDialog();
+			}).catch(() => {
 			this._hideLockDialog();
 			alert(this.exportImagesProcess.errorMessage);
 		});

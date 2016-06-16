@@ -36,6 +36,11 @@ declare function require(value:String):any;
 			<div class="m-t-1">
 				<button class="btn btn-secondary-outline btn-sm" [ngClass]="{disabled: playing == true}" (click)="resume();"><i class="fa fa-play"></i></button>
 				<button class="btn btn-secondary-outline btn-sm" [ngClass]="{disabled: playing == false}" (click)="pause();"><i class="fa fa-stop"></i></button>
+				<button class="btn btn-secondary-outline btn-sm"
+				 				[ngClass]="{disabled: currentFrame == 0 && currentLoopCount == 0 }"
+				 				(click)="gotoAndStop(0);">
+					<i class="fa fa-step-backward"></i>
+				</button>
 				
 				<span class="m-l-1">表示倍率</span>
 				<!-- 拡大率 -->
@@ -191,6 +196,18 @@ export class AnimPreviewComponent {
 	private pause():void {
 		if (this.items) {
 			this.playing = false;
+		}
+	}
+
+	/**
+	 * 指定したフレームにタイムラインを移動し、停止します。
+	 * @param frame
+	 */
+	private gotoAndStop(frame:number):void{
+		if (this.items) {
+			this.playing = false;
+			this.currentFrame = frame;
+			this.currentLoopCount = 0;
 		}
 	}
 
