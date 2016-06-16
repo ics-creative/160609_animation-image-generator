@@ -68,7 +68,7 @@ declare function require(value:String):any;
 	</dialog>
   `,
 	directives: [AnimPreviewComponent, PropertiesComponent],
-	styleUrls: ['./styles/app.css']
+	styleUrls: ['./styles/component-app.css']
 })
 export class AppComponent {
 

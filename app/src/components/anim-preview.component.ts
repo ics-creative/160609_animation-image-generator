@@ -82,7 +82,7 @@ declare function require(value:String):any;
 	</div>
   `,
 	events: ["clickFileSelectButtonEvent"],
-	styleUrls: ['./styles/anim-preview.css'],
+	styleUrls: ['./styles/component-anim-preview.css'],
 })
 
 export class AnimPreviewComponent implements OnChanges {
