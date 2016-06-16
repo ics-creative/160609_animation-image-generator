@@ -8,6 +8,8 @@ declare function require(value:String):any;
 
 export class ProcessExportImage {
 
+	public errorMessage:string;
+	
 	private temporaryCompressPath:string;
 	private temporaryPath:string;
 	private temporaryLastPath:string;
@@ -36,7 +38,7 @@ export class ProcessExportImage {
 		const extName = path.extname(this.selectedPath);
 		this.selectedBaseName = path.basename(this.selectedPath, extName);
 		this.selectedDirectory = path.dirname(this.selectedPath);
-
+		this.errorMessage = "エラーが発生しました。";	//	デフォルトのエラーメッセージ
 		return new Promise((resolve:Function, reject:Function) => {
 
 			this._cleanTemporary()
@@ -202,6 +204,8 @@ export class ProcessExportImage {
 					console.log("generateAPNG:success");
 					resolve();
 				} else {
+					this.errorMessage = "APNGの生成に失敗しました。";
+
 					console.error("generateAPNG:error\n→" + stderr);
 					reject();
 				}
@@ -244,7 +248,7 @@ export class ProcessExportImage {
 				// ループ回数が0だと無限ループになる
 				// ループ回数が1だと2ループになる
 				// 一回きりの再生ができない・・・！
-				if(loopNum == 0){
+				if (loopNum == 0) {
 					loopNum = 1; // バグ
 				}
 
@@ -264,6 +268,7 @@ export class ProcessExportImage {
 					}
 				});
 			}).catch(()=> {
+				this.errorMessage = "WebPの生成に失敗しました。";
 				reject();
 			});
 		}));
@@ -295,15 +300,14 @@ export class ProcessExportImage {
 		options.push(`${filePath}.webp`);
 		options.push(filePath);
 
-		if(this.animationOptionData.enabledWebpCompress === true){
+		if (this.animationOptionData.enabledWebpCompress === true) {
 			options.push(`-preset`, `drawing`);
-		}else{
+		} else {
 			options.push(`-lossless`);
 			// 超低容量設定
 			// options.push(`-q`, `100`);
 			// options.push(`-m`, `6`);
 		}
-
 
 		return new Promise(((resolve:Function, reject:Function)=> {
 			execFile(`${appPath}/bin/cwebp`, options,
@@ -396,6 +400,8 @@ export class ProcessExportImage {
 				console.log(files);
 				resolve();
 				//=> [{data: <Buffer 89 50 4e …>, path: 'build/images/foo.jpg'}, …]
+			}).catch(()=> {
+				this.errorMessage = "PNG画像事前圧縮に失敗しました。";
 			});
 		});
 
