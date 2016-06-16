@@ -11,6 +11,7 @@ import {PresetLine} from "../preset/preset-line";
 import {ProcessExportImage} from "../process/process-export-images";
 import {AppConfig} from "../config/app-config";
 import {ImageData} from "../data/image-data";
+import {Menu} from "../menu/menu";
 
 declare function require(value:String):any;
 
@@ -94,6 +95,10 @@ export class AppComponent {
 	@ViewChild("optionSelecter") optionSelecterComponent:ElementRef;
 
 	ngOnInit() {
+
+		const menu:Menu = new Menu(this.appConfig);
+		menu.createMenu();
+
 		this.animationOptionData = new AnimationImageOptions();
 
 		this.isImageSelected = false;
