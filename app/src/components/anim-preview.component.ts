@@ -72,7 +72,9 @@ declare function require(value:String):any;
 			<div *ngIf="items.length >= 1" >
 				<div *ngFor="let item of items; let i = index"
 				     class="frame-image-container"
-				     [ngClass]="{active: currentFrame == i}">
+				     [ngClass]="{active: currentFrame == i}"
+				     (click)="gotoAndStop(i);"
+				     >
 					<img data-src="{{item.imagePath}}" class="frame-image img-fluid" />
 				</div>
 			</div>
@@ -181,6 +183,8 @@ export class AnimPreviewComponent implements OnChanges {
 			this.playing = false;
 			this.currentFrame = frame;
 			this.currentLoopCount = 0;
+
+			this.imagePath = this.items[this.currentFrame].imagePath;
 		}
 	}
 }

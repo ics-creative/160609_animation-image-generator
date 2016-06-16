@@ -37,7 +37,7 @@ declare function require(value:String):any;
 			<hr />
 			<button (click)="generateAnimImage()" 
 				      class="btn btn-primary-outline center-block"
-				      [ngClass]="{disabled: !imageSelected}" >
+				      [ngClass]="{disabled: !isImageSelected}" >
 					        アニメ画像を保存する
 			</button>
 		</div>
@@ -77,7 +77,7 @@ export class AppComponent {
 	}
 
 	private exportImagesProcess:ProcessExportImage;
-	private imageSelected:boolean;
+	private isImageSelected:boolean;
 	private presetMode:number;
 
 	private openingDirectories:boolean;
@@ -94,7 +94,7 @@ export class AppComponent {
 	ngOnInit() {
 		this.animationOptionData = new AnimationImageOptions();
 
-		this.imageSelected = false;
+		this.isImageSelected = false;
 
 		this.exportImagesProcess = new ProcessExportImage();
 
@@ -208,7 +208,7 @@ export class AppComponent {
 	private generateAnimImage() {
 
 		//	画像が選択されていないので保存しない。
-		if (!this.imageSelected) {
+		if (!this.isImageSelected) {
 			return;
 		}
 
@@ -334,7 +334,7 @@ export class AppComponent {
 			this.checkImageSize(items[0].imagePath);
 			this.animationOptionData.imageInfo.length = items.length;
 		}
-		this.imageSelected = this.items.length >= 1;
+		this.isImageSelected = this.items.length >= 1;
 	}
 
 
