@@ -21,7 +21,7 @@ function createWindow() {
 	win.loadURL(`file://${__dirname}/index.html`);
 
 	// デベロッパーツールの起動
-	//win.webContents.openDevTools();
+	win.webContents.openDevTools();
 
 	// メインウィンドウが閉じられたときの処理
 	win.on('closed', ()=> {
@@ -46,10 +46,14 @@ function createWindow() {
 
 function openFileDialog(event) {
 	const dialog = require('electron').dialog;
-	dialog.showOpenDialog({
+	const dialogOption = process.platform == 'win32' ? {
 		properties: ['openFile', 'openDirectory', 'multiSelections'],
-		filters: [{name: 'Images', extensions: ['png']}]
-	}, function (files) {
+		filters: [{name: 'Images', extensions: ["*"]}]
+	} : {
+		properties: ['openFile', 'openDirectory', 'multiSelections'],
+		filters: [{name: 'Images', extensions: ["png"]}]
+	};
+	dialog.showOpenDialog(dialogOption, function (files) {
 
 		if (files) {
 			event.sender.send('selected-open-images', files)
@@ -110,5 +114,5 @@ app.on('ready', createWindow);
 
 // 全てのウィンドウが閉じたらアプリケーションを終了します
 app.on('window-all-closed', ()=> {
-		app.quit();
+	app.quit();
 });
