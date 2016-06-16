@@ -3,6 +3,10 @@
   height: calc(100% - 24px);
 }
 
+.isDragOver {
+  cursor: copy;
+}
+
 .mod-setting {
   width: 350px;
   height: 100%;

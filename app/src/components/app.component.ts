@@ -9,13 +9,14 @@ import {PresetWeb} from "../preset/preset-web";
 import {PresetLine} from "../preset/preset-line";
 import {ProcessExportImage} from "../process/process-export-images";
 import {AppConfig} from "../config/app-config";
+import {ImageData} from "../data/image-data";
 
 declare function require(value:String):any;
 
 @Component({
 	selector: 'my-app',
 	template: `
-    <div class="app-component" #myComponent>		
+    <div class="app-component" #myComponent [ngClass]="{isDragOver : _isDragover == true}">		
 		<div class="mod-setting p-a-1">
 
 			<!-- 拡大率 -->
@@ -32,19 +33,19 @@ declare function require(value:String):any;
 				</div>
 			</div>
 
-			<properties [animationOptionData]="animationOptionData" #properties></properties>
+			<properties [animationOptionData]="animationOptionData"></properties>
 			<hr />
 			<button (click)="generateAnimImage()" 
-				class="btn btn-primary-outline center-block"
-				[ngClass]="{disabled: !imageSelected}" >
-					アニメ画像を保存する
+				      class="btn btn-primary-outline center-block"
+				      [ngClass]="{disabled: !imageSelected}" >
+					        アニメ画像を保存する
 			</button>
 		</div>
 		
 		<div class="mod-preview bg-inverse">
 			<anim-preview [animationOptionData]="animationOptionData"
-			              (imageUpdateEvent)="imageUpdateEvent()" 
-			              #animePreview>
+			              [items]="items"
+			              (clickFileSelectButtonEvent)="handleClickFileSelectButton();">
 			</anim-preview>
 		</div>
 	</div>
@@ -79,12 +80,14 @@ export class AppComponent {
 	private imageSelected:boolean;
 	private presetMode:number;
 
+	private openingDirectories:boolean;
+	private items:ImageData[] = [];
+
 	private appConfig:AppConfig = new AppConfig();
+	private _isDragover:boolean = false;
 
 	@Input() animationOptionData:AnimationImageOptions;
 
-	@ViewChild("properties") propertiesComponent:PropertiesComponent;
-	@ViewChild("animePreview") animePreviewComponent:AnimPreviewComponent;
 	@ViewChild("myComponent") myComponent:ElementRef;
 	@ViewChild("optionSelecter") optionSelecterComponent:ElementRef;
 
@@ -106,24 +109,82 @@ export class AppComponent {
 		});
 		ipc.on('unlock-ui', (event:any) => {
 			this._hideLockDialog();
-		})
+		});
+
+		ipc.on('selected-open-images', (event:any, filePathList:string[]) => {
+			this._selectedImages(filePathList);
+		});
+
+		ipc.on('unlock-select-ui', (event:any, filePathList:string[]) => {
+			console.log("unlockUI");
+			this.openingDirectories = false;
+		});
 	}
 
 	ngAfterViewInit() {
 
 		const component = this.myComponent.nativeElement;
 		component.addEventListener("dragover", (event:DragEvent)=> {
-			this._handleDragOver(event);
+			this._isDragover = true;
+			event.preventDefault();
+		});
+
+		component.addEventListener("dragout", (event:DragEvent)=> {
+			this._isDragover = false;
 		});
 
 		component.addEventListener("drop", (event:DragEvent)=> {
-			this.animePreviewComponent.handleDrop(event);
+			this._isDragover = false;
+			this.handleDrop(event);
 		});
 	}
 
-	private _handleDragOver(event:DragEvent) {
+	private openDirectories() {
+		if (this.openingDirectories) {
+			return;
+		}
+		this.openingDirectories = true;
+		const ipc = require('electron').ipcRenderer;
+		ipc.send('open-file-dialog');
+	}
+
+	private _selectedImages(filePathList:string[]) {
+		this.openingDirectories = false;
+		this.setFilePathList(filePathList);
+	}
+
+
+	private handleDrop(event:DragEvent) {
+		var path = require('path');
+
+		const length = event.dataTransfer.files ? event.dataTransfer.files.length : 0;
+
+		//	再度アイテムがドロップされたらリセットするように調整
+		this.items = [];
+
+		for (let i = 0; i < length; i++) {
+			const file:any = event.dataTransfer.files[i];
+			const filePath = file.path;
+
+			if (path.extname(filePath) == ".png") {
+				path.dirname(filePath);
+
+				const item:ImageData = new ImageData();
+				item.imageBaseName = path.basename(filePath);
+				item.imagePath = filePath;
+				item.frameNumber = this.items.length;
+
+				this.items.push(item);
+			}
+		}
+
+		this.numbering();
+
+		this.setItems(this.items);
+
 		event.preventDefault();
 	}
+
 
 	private handlePresetChange(presetMode:string) {
 
@@ -168,7 +229,7 @@ export class AppComponent {
 	}
 
 	private _exportImages(path:string) {
-		this.exportImagesProcess.exec(path, this.animePreviewComponent.items, this.animationOptionData)
+		this.exportImagesProcess.exec(path, this.items, this.animationOptionData)
 			.then(() => {
 				this._hideLockDialog();
 			}).catch(() => {
@@ -204,10 +265,96 @@ export class AppComponent {
 		createjs.Ticker.paused = false; // 効かない…
 	}
 
-	private imageUpdateEvent() {
-		this.imageSelected = this.animePreviewComponent.items.length >= 1;
+
+	private handleClickFileSelectButton():void {
+		if (this.openingDirectories === true) {
+			return;
+		}
+		this.openingDirectories = true;
+		const ipc = require('electron').ipcRenderer;
+		ipc.send('open-file-dialog');
 	}
 
+
+	private setFilePathList(filePathList:string[]):void {
+
+		var path = require('path');
+
+		const length = filePathList ? filePathList.length : 0;
+
+		//	再度アイテムがドロップされたらリセットするように調整
+		this.items = [];
+
+		for (let i = 0; i < length; i++) {
+			const filePath = filePathList[i];
+
+			if (path.extname(filePath) == ".png") {
+				path.dirname(filePath);
+
+				const item:ImageData = new ImageData();
+				item.imageBaseName = path.basename(filePath);
+				item.imagePath = filePath;
+				item.frameNumber = this.items.length;
+
+				this.items.push(item);
+			}
+		}
+		this.numbering();
+
+		this.setItems(this.items);
+
+	}
+
+	/**
+	 * 再ナンバリングする。
+	 */
+	private numbering():void {
+
+		this.items.sort(function (a, b) {
+			const aRes = a.imageBaseName.match(/\d+/g);
+			const bRes = b.imageBaseName.match(/\d+/g);
+
+			const aNum = aRes.length >= 1 ? parseInt(aRes.pop()) : 0;
+			const bNum = bRes.length >= 1 ? parseInt(bRes.pop()) : 0;
+
+			if (aNum < bNum) return -1;
+			if (aNum > bNum) return 1;
+			return 0;
+		});
+
+		const length = this.items.length;
+		for (let i = 0; i < length; i++) {
+			this.items[i].frameNumber = i;
+		}
+	}
+
+	private setItems(items:ImageData[]):void {
+		this.items = items;
+		if (items.length >= 1) {
+			// this.imagePath = this.items[0].imagePath;
+			// this.currentFrame = 0;
+			// this.currentLoopCount = 0;
+			// this.playing = true;
+
+			// this.checkImageSize(this.imagePath);
+
+			this.animationOptionData.imageInfo.length = items.length;
+		}
+
+		this.imageSelected = this.items.length >= 1;
+		//this.imageUpdateEvent.emit(null);
+	}
+
+
+	private checkImageSize(path:string):void {
+		let image = new Image();
+		image.onload = ()=> {
+			// 情報の更新
+			this.animationOptionData.imageInfo.width = image.width;
+			this.animationOptionData.imageInfo.height = image.height;
+		};
+		image.src = path;
+	}
 }
 
 
