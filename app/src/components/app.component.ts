@@ -21,8 +21,8 @@ declare function require(value:String):any;
 
 			<!-- 拡大率 -->
 			<div class="form-group row m-b-1">
-				<label for="inputPassword" class="col-sm-3 form-control-label">用途</label>
-				<div class="col-sm-9">
+				<label for="inputPassword" class="col-sm-2 form-control-label">用途</label>
+				<div class="col-sm-10">
 					<select class="c-select m-b-1"
 					        style="width:100%"
 					        #optionSelecter
