@@ -22,7 +22,10 @@ declare function require(value:String):any;
 			<div class="form-group row m-b-1">
 				<label for="inputPassword" class="col-sm-3 form-control-label">用途</label>
 				<div class="col-sm-9">
-					<select class="c-select m-b-1" style="width:100%" #optionSelecter (change)="handlePresetChange($event.target.value)">
+					<select class="c-select m-b-1"
+					        style="width:100%"
+					        #optionSelecter
+					        (change)="handlePresetChange($event.target.value)">
 						<option value="0" [selected]="presetMode==0">LINEアニメ−ションスタンプ</option>
 						<option value="1" [selected]="presetMode==1">webページ用アニメ−ション</option>
 					</select>
@@ -31,11 +34,18 @@ declare function require(value:String):any;
 
 			<properties [animationOptionData]="animationOptionData" #properties></properties>
 			<hr />
-			<button (click)="generateAnimImage()" class="btn btn-primary-outline center-block" [ngClass]="{disabled: !imageSelected}" >アニメ画像を保存する</button>
+			<button (click)="generateAnimImage()" 
+				class="btn btn-primary-outline center-block"
+				[ngClass]="{disabled: !imageSelected}" >
+					アニメ画像を保存する
+			</button>
 		</div>
 		
 		<div class="mod-preview bg-inverse">
-			<anim-preview [animationOptionData]="animationOptionData" (imageUpdateEvent)="imageUpdateEvent()" #animePreview></anim-preview>
+			<anim-preview [animationOptionData]="animationOptionData"
+			              (imageUpdateEvent)="imageUpdateEvent()" 
+			              #animePreview>
+			</anim-preview>
 		</div>
 	</div>
 
@@ -141,8 +151,8 @@ export class AppComponent {
 			return;
 		}
 
-		if(this.animationOptionData.enabledExportApng == false
-		 && this.animationOptionData.enabledExportWebp == false){
+		if (this.animationOptionData.enabledExportApng == false
+			&& this.animationOptionData.enabledExportWebp == false) {
 			alert("出力画像の形式を選択ください。");
 			return;
 		}
@@ -158,9 +168,10 @@ export class AppComponent {
 	}
 
 	private _exportImages(path:string) {
-		this.exportImagesProcess.exec(path, this.animePreviewComponent.items, this.animationOptionData).then(() => {
-			this._hideLockDialog();
-		}).catch(() => {
+		this.exportImagesProcess.exec(path, this.animePreviewComponent.items, this.animationOptionData)
+			.then(() => {
+				this._hideLockDialog();
+			}).catch(() => {
 			this._hideLockDialog();
 			alert(this.exportImagesProcess.errorMessage);
 		});
