@@ -5,6 +5,7 @@ import {LineStampValidator} from "../validators/LineStampValidator";
 import {CompressionType} from "../type/compression-type";
 
 declare function require(value:String):any;
+declare var process:{platform:string};
 
 export class ProcessExportImage {
 
@@ -17,11 +18,13 @@ export class ProcessExportImage {
 	private selectedDirectory:string;
 	private selectedBaseName:string;
 	private itemList:ImageData[];
+	private exeExt:string;
 
 	private animationOptionData:AnimationImageOptions;
 
 	constructor() {
-
+		//	platformで実行先の拡張子を変える
+		this.exeExt = process.platform == 'win32' ? ".exe" : "";
 	}
 
 	public  exec(filePath:string, itemList:ImageData[], animationOptionData:AnimationImageOptions):Promise<any> {
@@ -188,7 +191,7 @@ export class ProcessExportImage {
 				compressOptions,
 				loopOption];
 
-			exec(path.join(appPath, "/bin/apngasm"), options, (err:any, stdout:any, stderr:any) => {
+			exec(path.join(appPath, `/bin/apngasm${this.exeExt}`), options, (err:any, stdout:any, stderr:any) => {
 
 				if (!err) {
 					// TODO 書きだしたフォルダーを対応ブラウザーで開く (OSで分岐)
@@ -259,7 +262,7 @@ export class ProcessExportImage {
 			options.push(path.join(this.selectedDirectory, `${this.selectedBaseName}.webp`));
 
 			this._convertPng2Webps(pngFiles).then(()=> {
-				execFile(`${appPath}/bin/webpmux`, options, (err:string, stdout:string, stderr:string) => {
+				execFile(`${appPath}/bin/webpmux${this.exeExt}`, options, (err:string, stdout:string, stderr:string) => {
 					if (!err) {
 						resolve();
 					} else {
@@ -310,7 +313,7 @@ export class ProcessExportImage {
 		}
 
 		return new Promise(((resolve:Function, reject:Function)=> {
-			execFile(`${appPath}/bin/cwebp`, options,
+			execFile(`${appPath}/bin/cwebp${this.exeExt}`, options,
 				(err:any, stdout:any, stderr:any) => {
 					if (!err) {
 						resolve();
@@ -382,6 +385,8 @@ export class ProcessExportImage {
 
 	private _pngCompress() {
 		return new Promise((resolve, reject) => {
+
+			this.errorMessage = "PNGの事前圧縮に失敗しました。";
 
 			const remote = require('electron').remote;
 			const app = remote.app;
