@@ -44,7 +44,8 @@ export class ProcessExportImage {
 					return this._copyTemporaryDirectory();
 				})
 				.then(() => {
-					if (this.animationOptionData.enabledPngCompress == true) {
+					if (this.animationOptionData.enabledPngCompress == true
+						&& this.animationOptionData.enabledExportApng) {	// APNGを生成しない場合はPNG圧縮の処理をしない。
 						//	最終的なテンポラリパスを設定する
 						this.temporaryLastPath = this.temporaryCompressPath;
 						return this._pngCompress();
