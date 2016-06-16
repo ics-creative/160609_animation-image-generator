@@ -10,7 +10,7 @@ declare var process:{platform:string};
 export class ProcessExportImage {
 
 	public errorMessage:string;
-	
+
 	private temporaryCompressPath:string;
 	private temporaryPath:string;
 	private temporaryLastPath:string;
@@ -42,6 +42,17 @@ export class ProcessExportImage {
 		this.selectedBaseName = path.basename(this.selectedPath, extName);
 		this.selectedDirectory = path.dirname(this.selectedPath);
 		this.errorMessage = "エラーが発生しました。";	//	デフォルトのエラーメッセージ
+
+		// PNG事前圧縮&APNGファイルを生成する
+		const compressPNG = (this.animationOptionData.enabledPngCompress && this.animationOptionData.enabledExportApng);
+
+		//	最終的なテンポラリパスを設定する
+		if (compressPNG) {
+			this.temporaryLastPath = this.temporaryCompressPath;
+		} else {
+			this.temporaryLastPath = this.temporaryPath;
+		}
+
 		return new Promise((resolve:Function, reject:Function) => {
 
 			this._cleanTemporary()
@@ -49,14 +60,8 @@ export class ProcessExportImage {
 					return this._copyTemporaryDirectory();
 				})
 				.then(() => {
-					if (this.animationOptionData.enabledPngCompress == true
-						&& this.animationOptionData.enabledExportApng) {	// APNGを生成しない場合はPNG圧縮の処理をしない。
-						//	最終的なテンポラリパスを設定する
-						this.temporaryLastPath = this.temporaryCompressPath;
-						return this._pngCompress();
-					} else {
-						//	最終的なテンポラリパスを設定する
-						this.temporaryLastPath = this.temporaryPath;
+					if (compressPNG) {
+						return this._pngCompressAll();
 					}
 				})
 				.then(() => {
@@ -383,7 +388,8 @@ export class ProcessExportImage {
 		}
 	}
 
-	private _pngCompress() {
+	private _pngCompress(item:ImageData) {
+
 		return new Promise((resolve, reject) => {
 
 			this.errorMessage = "PNGの事前圧縮に失敗しました。";
@@ -392,24 +398,36 @@ export class ProcessExportImage {
 			const app = remote.app;
 			const path = require('path');
 			const fs = require('fs');
-			const compressedPath = path.join(app.getPath('temp'), "a-img-generator-compress");
+			const appPath:string = app.getAppPath();
+			const execFile = require('child_process').execFile;
 
-			const imagemin = require("imagemin");
-			const imageminPngQuant = require("imagemin-pngquant");
+			const options:string[] = [
+				"--quality=65-80", "--speed", "1",
+				"--output", path.join(`${this.temporaryCompressPath}`, `frame${item.frameNumber}.png`),
+				"--", path.join(`${this.temporaryPath}`, `frame${item.frameNumber}.png`)
+			];
 
-			imagemin([`${this.temporaryPath}/*.png`], compressedPath, {
-				plugins: [
-					imageminPngQuant({quality: '65-80', speed: 1})
-				]
-			}).then((files:any) => {
-				console.log(files);
-				resolve();
-				//=> [{data: <Buffer 89 50 4e …>, path: 'build/images/foo.jpg'}, …]
-			}).catch(()=> {
-				this.errorMessage = "PNG画像事前圧縮に失敗しました。";
-			});
+			execFile(`${appPath}/bin/pngquant${this.exeExt}`, options,
+				(err:any, stdout:any, stderr:any) => {
+					if (!err) {
+						resolve();
+					} else {
+						this.errorMessage = "PNG画像事前圧縮に失敗しました。";
+						console.error(err);
+						console.error(stderr);
+						reject();
+					}
+				});
 		});
 
+	}
+
+	private _pngCompressAll() {
+
+		const promises:Promise<any>[] = this.itemList.map((item:any) => {
+			return this._pngCompress(item);
+		});
+		return Promise.all(promises);
 	}
 
 }

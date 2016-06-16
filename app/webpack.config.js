@@ -5,6 +5,6 @@ module.exports = {
   },
   target: "atom",
   plugins: [
-    new webpack.ExternalsPlugin('commonjs', ['electron','imagemin','imagemin-pngquant']),
+    new webpack.ExternalsPlugin('commonjs', ['electron']),
   ]
 };
