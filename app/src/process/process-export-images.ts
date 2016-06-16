@@ -367,6 +367,11 @@ export class ProcessExportImage {
 <html>
   <head>
     <meta charset="UTF-8" />
+    <style>
+      /* 確認用のCSS */
+      body { background: #444; }
+      picture img { background: url(https://raw.githubusercontent.com/ics-creative/160609_animation-image-generator/master/app/imgs/opacity.png); }
+    </style>
   </head>
   <body>
   	${imageElement}
