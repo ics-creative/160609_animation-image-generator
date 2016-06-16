@@ -10,10 +10,11 @@ declare function require(value:String):any;
     <div>
 		<ul class="nav nav-tabs">
 		  <li class="nav-item">
-			<a class="nav-link active" href="#tab1" data-toggle="tab">アニメ−ション設定</a>
+		    <!-- ホントは a 要素を使うべきだが、ドラッグできる不都合があったので span 要素で回避。href 属性はご愛嬌で・・・ -->
+			  <span class="nav-link active" href="#tab1" data-toggle="tab">アニメ−ション設定</span>
 		  </li>
 		  <li class="nav-item">
-			<a class="nav-link" href="#tab2" data-toggle="tab">画質設定</a>
+			  <span class="nav-link" href="#tab2" data-toggle="tab">画質設定</span>
 		  </li>
 		</ul>
 		
@@ -21,16 +22,16 @@ declare function require(value:String):any;
 			<div class="tab-pane active" id="tab1">
 				
 				<div class="form-group row">
-					<label class="col-sm-5 form-control-label">フレームレート<br>(FPS)</label>
-					<div class="col-sm-7">
+					<label class="col-sm-6 form-control-label">フレームレート<br>(FPS)</label>
+					<div class="col-sm-6">
 						<input type="number" class="form-control" [(ngModel)]="animationOptionData.fps" min="5" max="20" *ngIf="animationOptionData.preset == 0">
 						<input type="number" class="form-control" [(ngModel)]="animationOptionData.fps" min="1" max="60" *ngIf="animationOptionData.preset == 1">
 					</div>
 				</div>
 				
 				<div class="form-group row" *ngIf="animationOptionData.preset == 1">
-					<label for="inputPassword" class="col-sm-5 form-control-label">ループ設定</label>
-					<div class="col-sm-7">
+					<label for="inputPassword" class="col-sm-6 form-control-label">ループ設定</label>
+					<div class="col-sm-6" >
 						<div class="checkbox">
 							<label>
 								<input type="checkbox" [(ngModel)]="animationOptionData.noLoop"> 無限ループ
@@ -40,8 +41,8 @@ declare function require(value:String):any;
 				</div>
 				
 				<div class="form-group row" *ngIf="animationOptionData.noLoop == false">
-					<label for="inputPassword" class="col-sm-5 form-control-label">ループ回数</label>
-					<div class="col-sm-7">
+					<label for="inputPassword" class="col-sm-6 form-control-label">ループ回数</label>
+					<div class="col-sm-6" data-toggle="tooltip" data-placement="bottom" title="Tooltip on bottom">
 						<input type="number" class="form-control" [(ngModel)]="animationOptionData.loop" min="1" max="4" *ngIf="animationOptionData.preset == 0">
 						<input type="number" class="form-control" [(ngModel)]="animationOptionData.loop" min="1" *ngIf="animationOptionData.preset == 1">
 					</div>
@@ -108,7 +109,8 @@ declare function require(value:String):any;
 			</div>
 		</div>
 	</div>
-  `
+  `,
+	styleUrls: ['./styles/component-property.css']
 })
 export class PropertiesComponent {
 	@Input() animationOptionData:AnimationImageOptions;

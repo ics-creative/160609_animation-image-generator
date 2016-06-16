@@ -8,13 +8,13 @@
 }
 
 .mod-setting {
-  width: 350px;
+  width: 300px;
   height: 100%;
   overflow: auto;
 }
 
 .mod-preview {
-  width: calc(100% - 350px);
+  width: calc(100% - 300px);
   height: 100%;
 }
 
