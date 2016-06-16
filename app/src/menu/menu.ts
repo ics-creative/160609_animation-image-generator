@@ -20,39 +20,58 @@ export class Menu {
 		const template:any[] = [];
 
 		const name = app.getName();
-		template.push({
-			label: name,
-			submenu: [{
-				label: 'About ' + name,
+		if (process.platform == 'darwin') {
+			template.push({
+				label: name,
+				submenu: [{
+					label: 'About',
+					click() {
+						alert("version " + version);
+					}
+				},
+					{
+						label: 'Quit', accelerator: 'Command+Q',
+						click()
+						{
+							app.quit();
+						}
+					}]
+			});
+		}
+
+		const helpMenu:any[] = [
+			{
+				label: "ヘルプ",
 				click() {
-					alert("version:" + version);
+					shell.openExternal("https://github.com/ics-creative/160609_animation-image-generator/tree/master/help");
 				}
 			},
 			{
-				label: 'Quit', accelerator: 'Command+Q',
-				click()
-				{
-					app.quit();
+				label: "不具合報告＆機能要望",
+				click() {
+					shell.openExternal("http://goo.gl/forms/5DUI1UnTUXR6AmCw2");
 				}
-			}]
-		});
+			}
+		];
+
+		/*
+		if (process.platform == 'win32') {
+			helpMenu.push({type: 'separator'});
+			helpMenu.push(
+				{
+					label: "アニメ画像に変換する君について",
+					click()
+					{
+						shell.openExternal("https://github.com/ics-creative/160609_animation-image-generator/tree/master/help");
+					}
+				}
+			);
+		}
+		*/
 
 		template.push({
 			label: "ヘルプ",
-			submenu: [
-				{
-					label: "ヘルプ",
-					click() {
-						shell.openExternal("https://github.com/ics-creative/160609_animation-image-generator/tree/master/help");
-					}
-				},
-				{
-					label: "不具合報告＆機能要望",
-					click() {
-						shell.openExternal("http://goo.gl/forms/5DUI1UnTUXR6AmCw2");
-					}
-				}
-			]
+			submenu: helpMenu
 		});
 		const menu = Menu.buildFromTemplate(template);
 		Menu.setApplicationMenu(menu);
