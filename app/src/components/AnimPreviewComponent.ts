@@ -3,6 +3,8 @@
 import {Component, Input, EventEmitter, OnChanges} from "@angular/core";
 import {AnimationImageOptions} from "../data/AnimationImageOptions";
 import {ImageData} from "../data/ImageData";
+import {LineStampValidator} from "../validators/LineStampValidator";
+import {PresetType} from "../type/PresetType";
 
 declare function require(value:String):any;
 
@@ -26,6 +28,10 @@ export class AnimPreviewComponent implements OnChanges {
 	private currentLoopCount:number = 0;
 	private scaleValue:number = 1.0;
 
+	private isValidFrameSize:boolean = true;
+	private isValidFrameLength:boolean = true;
+	private isValidTime:boolean = true;
+
 	private selectScaleValue(scaleValue:number):void {
 		this.scaleValue = scaleValue;
 	}
@@ -45,6 +51,8 @@ export class AnimPreviewComponent implements OnChanges {
 			this.currentFrame = 0;
 			this.currentLoopCount = 0;
 			this.playing = true;
+
+
 		}
 	}
 
@@ -77,6 +85,18 @@ export class AnimPreviewComponent implements OnChanges {
 
 	private loop():void {
 		createjs.Ticker.framerate = this.animationOptionData.fps;
+
+		// ここでバリデートするのは間違っていると思うが・・・・
+		if (this.animationOptionData.preset == PresetType.LINE) {
+			this.isValidFrameSize = LineStampValidator.validateFrameSize(this.animationOptionData);
+			this.isValidFrameLength = LineStampValidator.validateFrameLength(this.animationOptionData);
+			this.isValidTime = LineStampValidator.validateTime(this.animationOptionData);
+		} else {
+			this.isValidFrameSize = true;
+			this.isValidFrameLength = true;
+			this.isValidTime = true;
+		}
+
 
 		if (!this.items || !this.playing) {
 			this.playing = false;
@@ -114,5 +134,9 @@ export class AnimPreviewComponent implements OnChanges {
 
 			this.imagePath = this.items[this.currentFrame].imagePath;
 		}
+	}
+
+	private check():boolean {
+		return false;
 	}
 }
