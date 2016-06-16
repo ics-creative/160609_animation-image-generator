@@ -1,0 +1,54 @@
+<div class="app-component" #myComponent [ngClass]="{isDragOver : _isDragover == true}">
+  <div class="mod-setting p-a-1">
+
+    <!-- 拡大率 -->
+    <div class="form-group row m-b-1">
+      <label for="inputPassword" class="col-sm-2 form-control-label">用途</label>
+      <div class="col-sm-10">
+        <select class="c-select m-b-1"
+                style="width:100%"
+                #optionSelecter
+                (change)="handlePresetChange($event.target.value)">
+          <option value="0" [selected]="presetMode==0">LINEアニメ−ションスタンプ</option>
+          <option value="1" [selected]="presetMode==1">webページ用アニメ−ション</option>
+        </select>
+      </div>
+    </div>
+
+    <properties [animationOptionData]="animationOptionData"></properties>
+    <hr/>
+    <button (click)="generateAnimImage()"
+            class="btn btn-primary-outline center-block"
+            [ngClass]="{disabled: !isImageSelected}"
+    >
+      アニメ画像を保存する
+    </button>
+  </div>
+
+  <div class="mod-preview bg-inverse">
+    <anim-preview [animationOptionData]="animationOptionData"
+                  [items]="items"
+                  (clickFileSelectButtonEvent)="handleClickFileSelectButton();">
+    </anim-preview>
+  </div>
+</div>
+
+<div class="mod-statusbar bg-primary">
+  <div class="container-fluid p-l-0 p-r-0">
+    <div class="col-sm-6 text-sm-left">バージョン {{appConfig.version}}</div>
+    <div class="col-sm-6 text-sm-right">
+      <a href="https://ics.media/" target="_blank">開発会社について</a>
+      <a href="https://www.facebook.com/icswebjp" target="_blank"><i class="fa fa-facebook" data-toggle="tooltip"
+                                                                     data-placement="top" title="Facebook"></i></a>
+      <a href="https://twitter.com/icsweb" target="_blank"><i class="fa fa-twitter" data-toggle="tooltip"
+                                                              data-placement="top" title="Twitter"></i></a>
+      <a href="http://goo.gl/forms/5DUI1UnTUXR6AmCw2" target="_blank" data-toggle="tooltip" data-placement="left"
+         title="不具合報告＆機能要望"><i class="fa fa-smile-o"></i></a>
+    </div>
+  </div>
+</div>
+
+
+<dialog style="display: none;">
+  <img src="imgs/preloader.webp" width="52" height="52"/>
+</dialog>

@@ -6,7 +6,7 @@ declare var process:{platform:string};
  * アプリケーションメニューの制御クラスです。
  */
 export class Menu {
-	
+
 	constructor(private appConfig:AppConfig) {
 	}
 
