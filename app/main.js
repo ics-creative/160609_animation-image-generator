@@ -46,11 +46,8 @@ function createWindow() {
 
 function openFileDialog(event) {
 	const dialog = require('electron').dialog;
-	const dialogOption = process.platform == 'win32' ? {
-		properties: ['openFile', 'openDirectory', 'multiSelections'],
-		filters: [{name: 'Images', extensions: ["*"]}]
-	} : {
-		properties: ['openFile', 'openDirectory', 'multiSelections'],
+	const dialogOption = {
+		properties: ['openFile', 'multiSelections'],
 		filters: [{name: 'Images', extensions: ["png"]}]
 	};
 	dialog.showOpenDialog(dialogOption, function (files) {
