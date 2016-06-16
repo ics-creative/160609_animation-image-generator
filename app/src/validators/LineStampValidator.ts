@@ -40,7 +40,7 @@ export class LineStampValidator {
 
 	static validateTime(options:AnimationImageOptions):boolean {
 		let playTime = options.imageInfo.length * options.loop / options.fps;
-		return [1, 2, 3, 4].indexOf(playTime) > 0;
+		return [1, 2, 3, 4].indexOf(playTime) >= 0;
 	}
 
 	static validateFrameLength(options:AnimationImageOptions):boolean {

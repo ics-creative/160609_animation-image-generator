@@ -206,7 +206,7 @@ export class ProcessExportImage {
 						const validateArr = LineStampValidator.validate(exportFilePath, this.animationOptionData);
 
 						if (validateArr.length > 0) {
-							alert(validateArr.join("\n\n"));
+							alert("APNGファイルを作成しましたが、LINEアニメーションスタンプのガイドラインに適しない箇所がありました。次の項目を再確認ください。\n\n・" + validateArr.join("\n\n・"));
 						}
 					}
 					console.log("generateAPNG:success");
