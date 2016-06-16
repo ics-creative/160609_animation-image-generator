@@ -162,7 +162,7 @@ export class AppComponent {
 			this._hideLockDialog();
 		}).catch(() => {
 			this._hideLockDialog();
-			alert("エラーが発生しました。");
+			alert(this.exportImagesProcess.errorMessage);
 		});
 
 	}

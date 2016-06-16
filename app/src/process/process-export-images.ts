@@ -5,9 +5,12 @@ import {LineStampValidator} from "../validators/LineStampValidator";
 import {CompressionType} from "../type/compression-type";
 
 declare function require(value:String):any;
+declare var process:{platform:string};
 
 export class ProcessExportImage {
 
+	public errorMessage:string;
+	
 	private temporaryCompressPath:string;
 	private temporaryPath:string;
 	private temporaryLastPath:string;
@@ -15,11 +18,13 @@ export class ProcessExportImage {
 	private selectedDirectory:string;
 	private selectedBaseName:string;
 	private itemList:ImageData[];
+	private exeExt:string;
 
 	private animationOptionData:AnimationImageOptions;
 
 	constructor() {
-
+		//	platformで実行先の拡張子を変える
+		this.exeExt = process.platform == 'win32' ? ".exe" : "";
 	}
 
 	public  exec(filePath:string, itemList:ImageData[], animationOptionData:AnimationImageOptions):Promise<any> {
@@ -36,7 +41,7 @@ export class ProcessExportImage {
 		const extName = path.extname(this.selectedPath);
 		this.selectedBaseName = path.basename(this.selectedPath, extName);
 		this.selectedDirectory = path.dirname(this.selectedPath);
-
+		this.errorMessage = "エラーが発生しました。";	//	デフォルトのエラーメッセージ
 		return new Promise((resolve:Function, reject:Function) => {
 
 			this._cleanTemporary()
@@ -44,7 +49,8 @@ export class ProcessExportImage {
 					return this._copyTemporaryDirectory();
 				})
 				.then(() => {
-					if (this.animationOptionData.enabledPngCompress == true) {
+					if (this.animationOptionData.enabledPngCompress == true
+						&& this.animationOptionData.enabledExportApng) {	// APNGを生成しない場合はPNG圧縮の処理をしない。
 						//	最終的なテンポラリパスを設定する
 						this.temporaryLastPath = this.temporaryCompressPath;
 						return this._pngCompress();
@@ -185,7 +191,7 @@ export class ProcessExportImage {
 				compressOptions,
 				loopOption];
 
-			exec(path.join(appPath, "/bin/apngasm"), options, (err:any, stdout:any, stderr:any) => {
+			exec(path.join(appPath, `/bin/apngasm${this.exeExt}`), options, (err:any, stdout:any, stderr:any) => {
 
 				if (!err) {
 					// TODO 書きだしたフォルダーを対応ブラウザーで開く (OSで分岐)
@@ -201,6 +207,8 @@ export class ProcessExportImage {
 					console.log("generateAPNG:success");
 					resolve();
 				} else {
+					this.errorMessage = "APNGの生成に失敗しました。";
+
 					console.error("generateAPNG:error\n→" + stderr);
 					reject();
 				}
@@ -243,7 +251,7 @@ export class ProcessExportImage {
 				// ループ回数が0だと無限ループになる
 				// ループ回数が1だと2ループになる
 				// 一回きりの再生ができない・・・！
-				if(loopNum == 0){
+				if (loopNum == 0) {
 					loopNum = 1; // バグ
 				}
 
@@ -254,7 +262,7 @@ export class ProcessExportImage {
 			options.push(path.join(this.selectedDirectory, `${this.selectedBaseName}.webp`));
 
 			this._convertPng2Webps(pngFiles).then(()=> {
-				execFile(`${appPath}/bin/webpmux`, options, (err:string, stdout:string, stderr:string) => {
+				execFile(`${appPath}/bin/webpmux${this.exeExt}`, options, (err:string, stdout:string, stderr:string) => {
 					if (!err) {
 						resolve();
 					} else {
@@ -263,6 +271,7 @@ export class ProcessExportImage {
 					}
 				});
 			}).catch(()=> {
+				this.errorMessage = "WebPの生成に失敗しました。";
 				reject();
 			});
 		}));
@@ -294,18 +303,17 @@ export class ProcessExportImage {
 		options.push(`${filePath}.webp`);
 		options.push(filePath);
 
-		if(this.animationOptionData.enabledWebpCompress === true){
+		if (this.animationOptionData.enabledWebpCompress === true) {
 			options.push(`-preset`, `drawing`);
-		}else{
+		} else {
 			options.push(`-lossless`);
 			// 超低容量設定
 			// options.push(`-q`, `100`);
 			// options.push(`-m`, `6`);
 		}
 
-
 		return new Promise(((resolve:Function, reject:Function)=> {
-			execFile(`${appPath}/bin/cwebp`, options,
+			execFile(`${appPath}/bin/cwebp${this.exeExt}`, options,
 				(err:any, stdout:any, stderr:any) => {
 					if (!err) {
 						resolve();
@@ -378,6 +386,8 @@ export class ProcessExportImage {
 	private _pngCompress() {
 		return new Promise((resolve, reject) => {
 
+			this.errorMessage = "PNGの事前圧縮に失敗しました。";
+
 			const remote = require('electron').remote;
 			const app = remote.app;
 			const path = require('path');
@@ -395,6 +405,8 @@ export class ProcessExportImage {
 				console.log(files);
 				resolve();
 				//=> [{data: <Buffer 89 50 4e …>, path: 'build/images/foo.jpg'}, …]
+			}).catch(()=> {
+				this.errorMessage = "PNG画像事前圧縮に失敗しました。";
 			});
 		});
 
