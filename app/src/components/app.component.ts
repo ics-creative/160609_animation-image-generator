@@ -331,18 +331,10 @@ export class AppComponent {
 	private setItems(items:ImageData[]):void {
 		this.items = items;
 		if (items.length >= 1) {
-			// this.imagePath = this.items[0].imagePath;
-			// this.currentFrame = 0;
-			// this.currentLoopCount = 0;
-			// this.playing = true;
-
-			// this.checkImageSize(this.imagePath);
-
+			this.checkImageSize(items[0].imagePath);
 			this.animationOptionData.imageInfo.length = items.length;
 		}
-
 		this.imageSelected = this.items.length >= 1;
-		//this.imageUpdateEvent.emit(null);
 	}
 
 

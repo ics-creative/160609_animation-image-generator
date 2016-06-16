@@ -13,13 +13,14 @@ declare function require(value:String):any;
 		<div class="text-xs-center">
 			<h4>ここに連番画像(PNG)ファイルをドロップ</h4>
 			<div><small>または</small></div>
-			<button class="btn btn-primary m-t-1" [ngClass]="{disabled: openingDirectories == true}" (click)="openDirectories()">ファイルを選択</button>
+			<button class="btn btn-primary m-t-1"
+			        [ngClass]="{disabled: openingDirectories == true}"
+			        (click)="openDirectories()">ファイルを選択</button>
 		</div>
 	</div>
 
 	<div class="anim-preview p-a-1" *ngIf="items.length > 0">
 		<p>
-		
 			フレームサイズ <span class="label label-success">W {{animationOptionData.imageInfo.width}} × H {{animationOptionData.imageInfo.height}} px</span> 
 			/ 総フレーム数 <span class="label label-success">{{items.length}}</span>
 			<span *ngIf="animationOptionData.noLoop == false">
@@ -33,8 +34,16 @@ declare function require(value:String):any;
 			</div>
 		
 			<div class="m-t-1">
-				<button class="btn btn-secondary-outline btn-sm" [ngClass]="{disabled: playing == true}" (click)="resume();"><i class="fa fa-play"></i></button>
-				<button class="btn btn-secondary-outline btn-sm" [ngClass]="{disabled: playing == false}" (click)="pause();"><i class="fa fa-stop"></i></button>
+				<button class="btn btn-secondary-outline btn-sm"
+				        [ngClass]="{disabled: playing == true}"
+				        (click)="resume();">
+					<i class="fa fa-play"></i>
+				</button>
+				<button class="btn btn-secondary-outline btn-sm"
+				        [ngClass]="{disabled: playing == false}"
+				        (click)="pause();">
+					<i class="fa fa-stop"></i>
+				</button>
 				<button class="btn btn-secondary-outline btn-sm"
 				 				[ngClass]="{disabled: currentFrame == 0 && currentLoopCount == 0 }"
 				 				(click)="gotoAndStop(0);">
@@ -43,7 +52,9 @@ declare function require(value:String):any;
 				
 				<span class="m-l-1">表示倍率</span>
 				<!-- 拡大率 -->
-				<select class="c-select mod-zoom-select" #selectScale (change)="selectScaleValue(selectScale.value)">
+				<select class="c-select mod-zoom-select"
+				        #selectScale
+				        (change)="selectScaleValue(selectScale.value)">
 					<option value="0.25">25%</option>
 					<option value="0.5">50%</option>
 					<option value="1.0" selected>100%</option>
@@ -59,7 +70,9 @@ declare function require(value:String):any;
 		<p class="m-t-1">コマ画像プレビュー</p>
 		<div>			
 			<div *ngIf="items.length >= 1" >
-				<div *ngFor="let item of items; let i = index" class="frame-image-container" [ngClass]="{active: currentFrame == i}">
+				<div *ngFor="let item of items; let i = index"
+				     class="frame-image-container"
+				     [ngClass]="{active: currentFrame == i}">
 					<img data-src="{{item.imagePath}}" class="frame-image img-fluid" />
 				</div>
 			</div>
