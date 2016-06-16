@@ -28,7 +28,7 @@ declare function require(value:String):any;
 						       class="form-control"
 						       [(ngModel)]="animationOptionData.fps"
 						       min="5" max="20"
-						       data-toggle="tooltip" data-placement="bottom" title="1秒あたりのコマ数です。5〜20FPSで設定ください"
+						       data-toggle="tooltip" data-placement="right" title="1秒あたりのコマ数です。5〜20FPSで設定ください"
 						       *ngIf="animationOptionData.preset == 0">
 						<input type="number"
 						       class="form-control"
@@ -56,7 +56,7 @@ declare function require(value:String):any;
 						       class="form-control"
 						       [(ngModel)]="animationOptionData.loop"
 						       min="1" max="4" 
-						       data-toggle="tooltip" data-placement="bottom" title="1〜4回で設定ください"
+						       data-toggle="tooltip" data-placement="right" title="1〜4回で設定ください"
 						       *ngIf="animationOptionData.preset == 0">
 						<input type="number"
 						       class="form-control"
