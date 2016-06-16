@@ -19,21 +19,22 @@ export class Menu {
 		const {Menu, MenuItem} = remote;
 		const app = remote.app;
 		const version = this.appConfig.version;
-
+		const name = this.appConfig.name;
+		// const name = app.getName();
 		const template:any[] = [];
 
-		const name = app.getName();
+
 		if (process.platform == "darwin") {
 			template.push({
 				label: name,
 				submenu: [{
 					label: `${this.appConfig.name}について`,
 					click() {
-						alert("version " + version);
+						alert(`お使いの「${name}」のバージョンは ${version} です。`);
 					}
 				},
 					{
-						label: "Quit", accelerator: "Command+Q",
+						label: `${this.appConfig.name}を終了する`, accelerator: "Command+Q",
 						click()
 						{
 							app.quit();
@@ -44,7 +45,7 @@ export class Menu {
 
 		const helpMenu:any[] = [
 			{
-				label: "ヘルプ",
+				label: "オンラインヘルプ",
 				click() {
 					shell.openExternal("https://github.com/ics-creative/160609_animation-image-generator/tree/master/help");
 				}
