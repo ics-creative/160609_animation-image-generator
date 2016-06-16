@@ -2,6 +2,9 @@ import {CompressionType} from "../type/compression-type";
 import {AnimationImageOptions} from "../data/animation-image-options";
 import {PresetType} from "../type/preset-type";
 
+/**
+ * LINEアニメーションスタンプのプリセット設定です。
+ */
 export class PresetLine {
 
 	static setPreset(data:AnimationImageOptions) {

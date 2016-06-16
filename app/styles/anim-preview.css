@@ -25,16 +25,22 @@
   display: inline-flex; /* 2 */
   justify-content: center; /* 3 */
   align-items: center; /* 4 */
+
+  cursor: pointer;
+}
+
+.frame-image-container:hover {
+  border: 3px solid lightyellow;
 }
 
 .frame-image-container.active {
   border: 3px solid yellowgreen;
+  cursor: default;
 }
 
 .frame-image {
   background: url(./imgs/opacity.png) repeat;
 }
-
 
 .mod-zoom-select {
   zoom: 0.75;
