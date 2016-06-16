@@ -24,8 +24,17 @@ declare function require(value:String):any;
 				<div class="form-group row">
 					<label class="col-sm-6 form-control-label">フレームレート<br>(FPS)</label>
 					<div class="col-sm-6">
-						<input type="number" class="form-control" [(ngModel)]="animationOptionData.fps" min="5" max="20" *ngIf="animationOptionData.preset == 0">
-						<input type="number" class="form-control" [(ngModel)]="animationOptionData.fps" min="1" max="60" *ngIf="animationOptionData.preset == 1">
+						<input type="number" 
+						       class="form-control"
+						       [(ngModel)]="animationOptionData.fps"
+						       min="5" max="20"
+						       data-toggle="tooltip" data-placement="bottom" title="1秒あたりのコマ数です。5〜20FPSで設定ください"
+						       *ngIf="animationOptionData.preset == 0">
+						<input type="number"
+						       class="form-control"
+						       [(ngModel)]="animationOptionData.fps"
+						       min="1" max="60"
+						       *ngIf="animationOptionData.preset == 1">
 					</div>
 				</div>
 				
@@ -42,9 +51,18 @@ declare function require(value:String):any;
 				
 				<div class="form-group row" *ngIf="animationOptionData.noLoop == false">
 					<label for="inputPassword" class="col-sm-6 form-control-label">ループ回数</label>
-					<div class="col-sm-6" data-toggle="tooltip" data-placement="bottom" title="Tooltip on bottom">
-						<input type="number" class="form-control" [(ngModel)]="animationOptionData.loop" min="1" max="4" *ngIf="animationOptionData.preset == 0">
-						<input type="number" class="form-control" [(ngModel)]="animationOptionData.loop" min="1" *ngIf="animationOptionData.preset == 1">
+					<div class="col-sm-6">
+						<input type="number" 
+						       class="form-control"
+						       [(ngModel)]="animationOptionData.loop"
+						       min="1" max="4" 
+						       data-toggle="tooltip" data-placement="bottom" title="1〜4回で設定ください"
+						       *ngIf="animationOptionData.preset == 0">
+						<input type="number"
+						       class="form-control"
+						       [(ngModel)]="animationOptionData.loop"
+						       min="1"
+						       *ngIf="animationOptionData.preset == 1">
 					</div>
 				</div>
 			
@@ -52,55 +70,55 @@ declare function require(value:String):any;
 			<div class="tab-pane" id="tab2">
 							
 				<div class="checkbox" *ngIf="animationOptionData.preset == 1">
-					<label>
+					<label data-toggle="tooltip" data-placement="right" title="APNGはFirefoxやSafari用のアニメ画像形式です">
 						<input type="checkbox" [(ngModel)]="animationOptionData.enabledExportApng"> APNGファイル出力
 					</label>
 				</div>
 			
 				<div *ngIf="animationOptionData.enabledExportApng == true" class="card card-block">
 					<div class="checkbox">
-						<label>
+						<label data-toggle="tooltip" data-placement="right" title="画質を下げることで、容量を小さくします">
 							<input type="checkbox" [(ngModel)]="animationOptionData.enabledPngCompress"> 容量最適化
 						</label>
 					</div>
 				
 					<h6>圧縮方式</h6>
 					<div class="c-inputs-stacked">
-						<label class="c-input c-radio">
+						<label class="c-input c-radio" data-toggle="tooltip" data-placement="right" title="容量が最も小さくなりますが、ファイル作成に最も時間がかかります">
 							<input id="radioStacked2" name="radio-stacked" type="radio" (click)="animationOptionData.compression=3" [checked]="animationOptionData.compression==3">
 							<span class="c-indicator"></span>
-							zopfli (容量:小)
+							zopfli
 						</label>
-						<label class="c-input c-radio">
+						<label class="c-input c-radio" data-toggle="tooltip" data-placement="right" title="容量が小さくなりますが、ファイル作成に時間がかかります">
 							<input id="radioStacked2" name="radio-stacked" type="radio" (click)="animationOptionData.compression=2" [checked]="animationOptionData.compression==2">
 							<span class="c-indicator"></span>
-							7zip (容量:中)
+							7zip
 						</label>
-						<label class="c-input c-radio">
+						<label class="c-input c-radio" data-toggle="tooltip" data-placement="right" title="容量が大きくなりますが、すぐにファイルが作成されます">
 							<input id="radioStacked1" name="radio-stacked" type="radio" (click)="animationOptionData.compression=1" [checked]="animationOptionData.compression==1">
 							<span class="c-indicator"></span>
-							zlib (容量:大)
+							zlib
 						</label>
 					</div>
 				</div>
 				
 				<div *ngIf="animationOptionData.preset == 1">
 					<div class="checkbox">
-						<label>
+						<label data-toggle="tooltip" data-placement="right" title="WebPはChromeブラウザ用のアニメ画像形式です">
 							<input type="checkbox" [(ngModel)]="animationOptionData.enabledExportWebp"> WebPファイル出力
 						</label>
 					</div>
 					
 					<div *ngIf="animationOptionData.enabledExportWebp == true" class="card card-block">
 					<div class="checkbox">
-						<label>
+						<label data-toggle="tooltip" data-placement="right" title="画質を下げることで、容量を小さくします">
 							<input type="checkbox" [(ngModel)]="animationOptionData.enabledWebpCompress"> 容量最適化
 						</label>
 					</div>
 				</div>
 					
 					<div class="checkbox">
-						<label>
+						<label data-toggle="tooltip" data-placement="right" title="アニメ画像を表示するためのHTMLを作成します">
 							<input type="checkbox" [(ngModel)]="animationOptionData.enabledExportHtml"> HTMLファイル出力
 						</label>
 					</div>
