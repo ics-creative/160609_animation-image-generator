@@ -17,7 +17,7 @@ export class Menu {
 		const app = remote.app;
 		const version = this.appConfig.version;
 
-		const template = [];
+		const template:any[] = [];
 
 		const name = app.getName();
 		template.push({
