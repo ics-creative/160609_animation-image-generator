@@ -20,7 +20,7 @@
   width: 64px;
   height: 64px;
 
-  border: 3px solid rgba(0, 0, 0, 0);
+  border: 2px solid rgba(0, 0, 0, 0);
 
   display: inline-flex; /* 2 */
   justify-content: center; /* 3 */
@@ -30,11 +30,11 @@
 }
 
 .frame-image-container:hover {
-  border: 3px solid lightyellow;
+  border: 2px solid lightgray;
 }
 
 .frame-image-container.active {
-  border: 3px solid yellowgreen;
+  border: 2px solid #0275d8;
   cursor: default;
 }
 

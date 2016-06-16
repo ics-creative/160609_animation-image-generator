@@ -30,7 +30,7 @@
       </div>
 
       <div class="form-group row" *ngIf="animationOptionData.preset == 1">
-        <label for="inputPassword" class="col-sm-6 form-control-label">ループ設定</label>
+        <label class="col-sm-6 form-control-label">ループ設定</label>
         <div class="col-sm-6">
           <div class="checkbox">
             <label>
@@ -41,7 +41,7 @@
       </div>
 
       <div class="form-group row" *ngIf="animationOptionData.noLoop == false">
-        <label for="inputPassword" class="col-sm-6 form-control-label">ループ回数</label>
+        <label class="col-sm-6 form-control-label">ループ回数</label>
         <div class="col-sm-6">
           <input type="number"
                  class="form-control"
@@ -75,23 +75,35 @@
 
         <h6>圧縮方式</h6>
         <div class="c-inputs-stacked">
-          <label class="c-input c-radio" data-toggle="tooltip" data-placement="right"
+          <label class="c-input c-radio"
+                 data-toggle="tooltip"
+                 data-placement="right"
                  title="容量が最も小さくなりますが、ファイル作成に最も時間がかかります">
-            <input id="radioStacked2" name="radio-stacked" type="radio" (click)="animationOptionData.compression=3"
+            <input name="radio-stacked"
+                   type="radio"
+                   (click)="animationOptionData.compression=3"
                    [checked]="animationOptionData.compression==3">
             <span class="c-indicator"></span>
             zopfli
           </label>
-          <label class="c-input c-radio" data-toggle="tooltip" data-placement="right"
+          <label class="c-input c-radio"
+                 data-toggle="tooltip"
+                 data-placement="right"
                  title="容量が小さくなりますが、ファイル作成に時間がかかります">
-            <input id="radioStacked2" name="radio-stacked" type="radio" (click)="animationOptionData.compression=2"
+            <input name="radio-stacked"
+                   type="radio"
+                   (click)="animationOptionData.compression=2"
                    [checked]="animationOptionData.compression==2">
             <span class="c-indicator"></span>
             7zip
           </label>
-          <label class="c-input c-radio" data-toggle="tooltip" data-placement="right"
+          <label class="c-input c-radio"
+                 data-toggle="tooltip"
+                 data-placement="right"
                  title="容量が大きくなりますが、すぐにファイルが作成されます">
-            <input id="radioStacked1" name="radio-stacked" type="radio" (click)="animationOptionData.compression=1"
+            <input name="radio-stacked"
+                   type="radio"
+                   (click)="animationOptionData.compression=1"
                    [checked]="animationOptionData.compression==1">
             <span class="c-indicator"></span>
             zlib

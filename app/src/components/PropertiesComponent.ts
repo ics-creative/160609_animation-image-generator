@@ -1,6 +1,5 @@
-import {Component, ViewChild, Input} from '@angular/core';
+import {Component, Input} from "@angular/core";
 import {AnimationImageOptions} from "../data/AnimationImageOptions";
-import {CompressionType} from "../type/CompressionType";
 
 declare function require(value:String):any;
 
@@ -9,6 +8,8 @@ declare function require(value:String):any;
 	templateUrl: "./src/components-html/PropertiesComponent.html",
 	styleUrls: ['./styles/component-property.css']
 })
-export class PropertiesComponent {
+
+export class PropertiesComponent  {
 	@Input() animationOptionData:AnimationImageOptions;
 }
+
