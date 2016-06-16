@@ -1,4 +1,5 @@
 ///	<reference path="../../libs/createjs/createjs.d.ts" />
+///	<reference path="../../libs/jquery/jquery.d.ts" />
 
 import {Component, ViewChild, Input, ElementRef} from "@angular/core";
 import {AnimPreviewComponent} from "./anim-preview.component";
@@ -32,12 +33,13 @@ declare function require(value:String):any;
 					</select>
 				</div>
 			</div>
-
+			
 			<properties [animationOptionData]="animationOptionData"></properties>
 			<hr />
 			<button (click)="generateAnimImage()" 
 				      class="btn btn-primary-outline center-block"
-				      [ngClass]="{disabled: !isImageSelected}" >
+				      [ngClass]="{disabled: !isImageSelected}"
+				      >
 					        アニメ画像を保存する
 			</button>
 		</div>
@@ -55,9 +57,9 @@ declare function require(value:String):any;
 			<div class="col-sm-6 text-sm-left">バージョン {{appConfig.version}}</div>
 			<div class="col-sm-6 text-sm-right">
 				<a href="https://ics.media/" target="_blank">開発会社について</a>
-				<a href="https://www.facebook.com/icswebjp" target="_blank"><i class="fa fa-facebook"></i></a>
-				<a href="https://twitter.com/icsweb" target="_blank"><i class="fa fa-twitter"></i></a>
-				<a href="http://goo.gl/forms/5DUI1UnTUXR6AmCw2" target="_blank"><i class="fa fa-smile-o"></i></a>
+				<a href="https://www.facebook.com/icswebjp" target="_blank"><i class="fa fa-facebook" data-toggle="tooltip" data-placement="top" title="Facebook"></i></a>
+				<a href="https://twitter.com/icsweb" target="_blank"><i class="fa fa-twitter" data-toggle="tooltip" data-placement="top" title="Twitter"></i></a>
+				<a href="http://goo.gl/forms/5DUI1UnTUXR6AmCw2" target="_blank" data-toggle="tooltip" data-placement="left" title="不具合報告＆機能要望"><i class="fa fa-smile-o"></i></a>
 			</div>
 		</div>
 	</div>
@@ -137,6 +139,8 @@ export class AppComponent {
 			this._isDragover = false;
 			this.handleDrop(event);
 		});
+
+		jQuery('[data-toggle="tooltip"]').tooltip()
 	}
 
 	private openDirectories() {

@@ -31,7 +31,7 @@ declare function require(value:String):any;
 				
 				<div class="form-group row" *ngIf="animationOptionData.preset == 1">
 					<label for="inputPassword" class="col-sm-6 form-control-label">ループ設定</label>
-					<div class="col-sm-6">
+					<div class="col-sm-6" >
 						<div class="checkbox">
 							<label>
 								<input type="checkbox" [(ngModel)]="animationOptionData.noLoop"> 無限ループ
@@ -42,7 +42,7 @@ declare function require(value:String):any;
 				
 				<div class="form-group row" *ngIf="animationOptionData.noLoop == false">
 					<label for="inputPassword" class="col-sm-6 form-control-label">ループ回数</label>
-					<div class="col-sm-6">
+					<div class="col-sm-6" data-toggle="tooltip" data-placement="bottom" title="Tooltip on bottom">
 						<input type="number" class="form-control" [(ngModel)]="animationOptionData.loop" min="1" max="4" *ngIf="animationOptionData.preset == 0">
 						<input type="number" class="form-control" [(ngModel)]="animationOptionData.loop" min="1" *ngIf="animationOptionData.preset == 1">
 					</div>
