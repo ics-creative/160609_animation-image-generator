@@ -1,4 +1,4 @@
-import {AnimationImageOptions} from "../data/animation-image-options";
+import {AnimationImageOptions} from "../data/AnimationImageOptions";
 
 declare function require(value:String):any;
 

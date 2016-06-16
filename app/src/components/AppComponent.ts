@@ -2,22 +2,22 @@
 ///	<reference path="../../libs/jquery/jquery.d.ts" />
 
 import {Component, ViewChild, Input, ElementRef} from "@angular/core";
-import {AnimPreviewComponent} from "./anim-preview.component";
-import {PropertiesComponent} from "./property.component";
-import {AnimationImageOptions} from "../data/animation-image-options";
-import {PresetType} from "../type/preset-type";
-import {PresetWeb} from "../preset/preset-web";
-import {PresetLine} from "../preset/preset-line";
-import {ProcessExportImage} from "../process/process-export-images";
-import {AppConfig} from "../config/app-config";
-import {ImageData} from "../data/image-data";
-import {Menu} from "../menu/menu";
+import {AnimPreviewComponent} from "./AnimPreviewComponent";
+import {PropertiesComponent} from "./PropertiesComponent";
+import {AnimationImageOptions} from "../data/AnimationImageOptions";
+import {PresetType} from "../type/PresetType";
+import {PresetWeb} from "../preset/PresetWeb";
+import {PresetLine} from "../preset/PresetLine";
+import {ProcessExportImage} from "../process/ProcessExportImage";
+import {AppConfig} from "../config/AppConfig";
+import {ImageData} from "../data/ImageData";
+import {Menu} from "../menu/Menu";
 
 declare function require(value:String):any;
 
 @Component({
 	selector: 'my-app',
-	templateUrl: "./src/components-html/app.component.html",
+	templateUrl: "./src/components-html/AppComponent.html",
 	directives: [AnimPreviewComponent, PropertiesComponent],
 	styleUrls: ['./styles/component-app.css']
 })

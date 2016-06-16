@@ -1,14 +1,14 @@
 ///<reference path="../../libs/createjs/createjs.d.ts" />
 
 import {Component, Input, EventEmitter, OnChanges} from "@angular/core";
-import {AnimationImageOptions} from "../data/animation-image-options";
-import {ImageData} from "../data/image-data";
+import {AnimationImageOptions} from "../data/AnimationImageOptions";
+import {ImageData} from "../data/ImageData";
 
 declare function require(value:String):any;
 
 @Component({
 	selector: 'anim-preview',
-	templateUrl: "./src/components-html/anim-preview.component.html",
+	templateUrl: "./src/components-html/AnimPreviewComponent.html",
 	events: ["clickFileSelectButtonEvent"],
 	styleUrls: ['./styles/component-anim-preview.css'],
 })

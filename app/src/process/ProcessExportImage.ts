@@ -1,8 +1,8 @@
-import {AnimationImageOptions} from "../data/animation-image-options";
-import {ImageData} from "../data/image-data";
-import {PresetType} from "../type/preset-type";
+import {AnimationImageOptions} from "../data/AnimationImageOptions";
+import {ImageData} from "../data/ImageData";
+import {PresetType} from "../type/PresetType";
 import {LineStampValidator} from "../validators/LineStampValidator";
-import {CompressionType} from "../type/compression-type";
+import {CompressionType} from "../type/CompressionType";
 
 declare function require(value:String):any;
 declare var process:{platform:string};
@@ -19,7 +19,7 @@ export class ProcessExportImage {
 	private selectedBaseName:string;
 	private itemList:ImageData[];
 	private exeExt:string;
-
+	
 	private animationOptionData:AnimationImageOptions;
 
 	constructor() {

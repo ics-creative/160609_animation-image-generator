@@ -1,12 +1,12 @@
 import {Component, ViewChild, Input} from '@angular/core';
-import {AnimationImageOptions} from "../data/animation-image-options";
-import {CompressionType} from "../type/compression-type";
+import {AnimationImageOptions} from "../data/AnimationImageOptions";
+import {CompressionType} from "../type/CompressionType";
 
 declare function require(value:String):any;
 
 @Component({
 	selector: 'properties',
-	templateUrl: "./src/components-html/property.component.html",
+	templateUrl: "./src/components-html/PropertiesComponent.html",
 	styleUrls: ['./styles/component-property.css']
 })
 export class PropertiesComponent {

@@ -1,4 +1,4 @@
-import {AppConfig} from "../config/app-config";
+import {AppConfig} from "../config/AppConfig";
 declare function require(value:String):any;
 declare var process:{platform:string};
 
@@ -10,7 +10,7 @@ export class Menu {
 	constructor(private appConfig:AppConfig) {
 	}
 
-	createMenu() {
+	public createMenu():void {
 
 		const {remote, shell} = require("electron");
 		const {Menu, MenuItem} = remote;

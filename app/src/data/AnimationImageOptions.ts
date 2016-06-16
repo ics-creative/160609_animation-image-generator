@@ -1,5 +1,5 @@
-import {CompressionType} from "../type/compression-type";
-import {PresetType} from "../type/preset-type";
+import {CompressionType} from "../type/CompressionType";
+import {PresetType} from "../type/PresetType";
 
 export class AnimationImageOptions {
 

@@ -3,7 +3,7 @@ import 'rxjs/Rx';
 import 'zone.js/dist/zone';
 
 import {bootstrap} from '@angular/platform-browser-dynamic';
-import {AppComponent} from './components/app.component'
+import {AppComponent} from './components/AppComponent'
 import {enableProdMode} from "@angular/platform-browser/src/facade/lang";
 
 enableProdMode();
