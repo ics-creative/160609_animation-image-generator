@@ -10,10 +10,11 @@ declare function require(value:String):any;
     <div>
 		<ul class="nav nav-tabs">
 		  <li class="nav-item">
-			<a class="nav-link active" href="#tab1" data-toggle="tab">アニメ−ション設定</a>
+		    <!-- ホントは a 要素を使うべきだが、ドラッグできる不都合があったので span 要素で回避。href 属性はご愛嬌で・・・ -->
+			  <span class="nav-link active" href="#tab1" data-toggle="tab">アニメ−ション設定</span>
 		  </li>
 		  <li class="nav-item">
-			<a class="nav-link" href="#tab2" data-toggle="tab">画質設定</a>
+			  <span class="nav-link" href="#tab2" data-toggle="tab">画質設定</span>
 		  </li>
 		</ul>
 		
@@ -108,7 +109,8 @@ declare function require(value:String):any;
 			</div>
 		</div>
 	</div>
-  `
+  `,
+	styleUrls: ['./styles/component-property.css']
 })
 export class PropertiesComponent {
 	@Input() animationOptionData:AnimationImageOptions;
