@@ -34,6 +34,12 @@ function createWindow() {
 		event.preventDefault();
 	});
 
+	//	windowのクラッシュ時の処理
+	win.webContents.on('crashed', function() { app.quit() });
+
+	//	応答しない時の処理
+	win.on('unresponsive', function () { console.log("アプリケーションが応答しません"); })
+
 	// Connect to server process
 	if (client) {
 		client.create(win);
@@ -113,3 +119,6 @@ app.on('ready', createWindow);
 app.on('window-all-closed', ()=> {
 	app.quit();
 });
+
+// よくわからないエラーが発生した時の処理
+process.on('uncaughtException', function () { console.log("不明なエラーが発生しました。") });
