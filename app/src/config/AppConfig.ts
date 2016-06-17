@@ -7,11 +7,11 @@ export class AppConfig {
 	 * アプリケーションのバージョン番号を示します。
 	 * @type {string}
 	 */
-	public version:string = "0.1.0";
+	public version:string = "0.2.0";
 
 	/**
 	 * アプリケーションの名称を示します。
 	 * @type {string}
 	 */
-	public name:string = "アプリ画像に変換する君";
+	public name:string = "アニメ画像に変換する君";
 }
