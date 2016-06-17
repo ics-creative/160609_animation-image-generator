@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build:app": "cd app && npm run build",
     "clean:app": "del tmp-release-* アニメ画像に変換する君*",
-    "copy:release:app": "copyfiles  -u 1 ./app/bundle.js ./app/index.html ./app/main.js ./app/styles/**/*.css ./app/imgs/**/*.* ./resources/package.json ./app/js/**/*.js ./app/styles/**/*.*js ./app/node_modules/bootstrap/dist/js/bootstrap.js ./app/node_modules/bootstrap/dist/css/bootstrap.css ./app/resources/font-awesome-4.6.3/css/*.css ./app/resources/font-awesome-4.6.3/fonts/*.* tmp-release",
+    "copy:release:app": "copyfiles  -u 1 ./app/bundle.js ./app/index.html ./app/main.js ./app/styles/**/*.css ./app/src/**/*.html ./app/imgs/**/*.* ./resources/package.json ./app/js/**/*.js ./app/styles/**/*.*js ./app/node_modules/bootstrap/dist/js/bootstrap.js ./app/node_modules/bootstrap/dist/css/bootstrap.css ./app/resources/font-awesome-4.6.3/css/*.css ./app/resources/font-awesome-4.6.3/fonts/*.* tmp-release",
 
     "copy:release:app-mac": "npm run copy:release:app && node-mv tmp-release tmp-release-mac ",
     "copy:release:apngasm-mac": " cp -P ./resources/apngasm-2.9-bin-macosx/apngasm tmp-release-mac/bin/apngasm",
