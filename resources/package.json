@@ -18,7 +18,7 @@
   },
   "homepage": "https://github.com/ics-creative/160609_animation-image-generator#readme",
   "devDependencies": {
-    "electron-prebuilt": "^1.2.2"
+    "electron-prebuilt": "^1.2.3"
   },
 
   "dependencies": {
