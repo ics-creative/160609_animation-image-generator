@@ -28,6 +28,15 @@ h1, h2, h3, h4, h5, h6, p {
   align-items: center; /* 4 */
 }
 
+/* アクセス解析用のiframe要素のレイアウト */
+.tracking-ga {
+  position: absolute;
+  top: 0;
+  left: 0;
+  border: none;
+  visibility: hidden;
+}
+
 /* dialogの見た目 */
 dialog {
   width: 100px;
