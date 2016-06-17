@@ -27,12 +27,19 @@
 
 ### ダウンロードURL
 
-- [OS Xはこちらから](https://github.com/ics-creative/160609_animation-image-generator/releases/download/release-0.1.0/Software-Mac.zip)
-- Windowsは準備中
+- [Windowsはこちらから](https://github.com/ics-creative/160609_animation-image-generator/releases/download/release-0.2.0/Software-Win.zip)
+- [OS Xはこちらから](https://github.com/ics-creative/160609_animation-image-generator/releases/download/release-0.2.0/Software-Mac.zip)
+
+
+#### Windowsユーザーの方へ
+
+アプリケーションの起動を行うと「WindowsによってPCが保護されました」という余計なエラーが表示されます。大変お手数ですが次のサイトを参考に、起動ください。
+
+- [Windows8で「WindowsによってPCが保護されました」と表示されてソフトウェアをインストールできない場合 | 西沢直木のIT講座](http://www.nishi2002.com/4577.html)
 
 #### OS Xユーザーの方へ
 
-アプリケーションの起動またはインストールを行うと「開発元が未確認のため開けません」エラーが表示されます。お手数ですが次のサイトを参考に、起動ください。
+アプリケーションの起動を行うと「開発元が未確認のため開けません」という余計なエラーが表示されます。大変お手数ですが次のサイトを参考に、起動ください。
 
 - [Macの開発元が未確認で開けないアプリはControlキーで幸せになれる | あなたのスイッチを押すブログ](http://bamka.info/mac-app-security)
 
