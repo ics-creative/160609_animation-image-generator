@@ -14,7 +14,14 @@ if (process.env.NODE_ENV === 'production') {
 
 function createWindow() {
 	// メインウィンドウを作成します
-	win = new BrowserWindow({width: 1024, height: 640, minWidth: 800, minHeight: 400, icon: 'imgs/icon.png'});
+	win = new BrowserWindow({
+		width: 1024,
+		height: 640,
+		minWidth: 800,
+		minHeight: 400,
+		title: "アニメ画像に変換する君",
+		icon: __dirname + `/imgs/icon.png`
+	});
 
 	// メインウィンドウに表示するURLを指定します
 	// （今回はmain.jsと同じディレクトリのindex.html）
@@ -35,10 +42,14 @@ function createWindow() {
 	});
 
 	//	windowのクラッシュ時の処理
-	win.webContents.on('crashed', function() { app.quit() });
+	win.webContents.on('crashed', function () {
+		app.quit()
+	});
 
 	//	応答しない時の処理
-	win.on('unresponsive', function () { console.log("アプリケーションが応答しません"); })
+	win.on('unresponsive', function () {
+		console.log("アプリケーションが応答しません");
+	})
 
 	// Connect to server process
 	if (client) {
@@ -121,4 +132,6 @@ app.on('window-all-closed', ()=> {
 });
 
 // よくわからないエラーが発生した時の処理
-process.on('uncaughtException', function () { console.log("不明なエラーが発生しました。") });
+process.on('uncaughtException', function () {
+	console.log("不明なエラーが発生しました。")
+});
