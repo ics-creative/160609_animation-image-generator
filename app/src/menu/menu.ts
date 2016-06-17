@@ -12,6 +12,11 @@ export class Menu {
 
 	public createMenu():void {
 
+		//	Macの場合のみメニューを生成する。
+		if (process.platform != "darwin") {
+			return ;
+		}
+
 		const {remote, shell} = require("electron");
 		const {Menu, MenuItem} = remote;
 		const app = remote.app;
@@ -21,7 +26,6 @@ export class Menu {
 		const template:any[] = [];
 
 
-		if (process.platform == "darwin") {
 			template.push({
 				label: name,
 				submenu: [{
@@ -38,7 +42,6 @@ export class Menu {
 						}
 					}]
 			});
-		}
 
 		const helpMenu:any[] = [
 			{
