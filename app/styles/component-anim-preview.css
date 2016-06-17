@@ -8,7 +8,7 @@
 
 .anim-preview {
   height: 100%;
-  overflow: scroll;
+  overflow: auto;
 }
 
 .preview-area img {
@@ -18,6 +18,7 @@
 .label {
   font-size: 90%;
 }
+
 .frame-image-container {
 
   width: 64px;
