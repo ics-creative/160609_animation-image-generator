@@ -3,6 +3,7 @@ import {ImageData} from "../data/ImageData";
 import {PresetType} from "../type/PresetType";
 import {LineStampValidator} from "../validators/LineStampValidator";
 import {CompressionType} from "../type/CompressionType";
+import {AppConfig} from "../config/AppConfig";
 
 declare function require(value:String):any;
 declare var process:{platform:string};
@@ -22,7 +23,7 @@ export class ProcessExportImage {
 	
 	private animationOptionData:AnimationImageOptions;
 
-	constructor() {
+	constructor(private appConfig:AppConfig) {
 		//	platformで実行先の拡張子を変える
 		this.exeExt = process.platform == 'win32' ? ".exe" : "";
 	}
@@ -206,7 +207,20 @@ export class ProcessExportImage {
 						const validateArr = LineStampValidator.validate(exportFilePath, this.animationOptionData);
 
 						if (validateArr.length > 0) {
-							alert("APNGファイルを作成しましたが、LINEアニメーションスタンプのガイドラインに適しない箇所がありました。次の項目を再確認ください。\n\n・" + validateArr.join("\n\n・"));
+							const {dialog} = require('electron').remote;
+							const win = require('electron').remote.getCurrentWindow();
+							const message = "APNGファイルを作成しましたが、LINEアニメーションスタンプのガイドラインに適しない箇所がありました。次の項目を再確認ください。";
+							const detailMessage =  "・" + validateArr.join("\n\n・");
+
+							var options = {
+								type: "info",
+								buttons: ["OK"],
+								title: this.appConfig.name,
+								//message: message,
+								detail: message + "\n\n" + detailMessage
+							};
+							dialog.showMessageBox(win,options);
+
 						}
 					}
 					console.log("generateAPNG:success");

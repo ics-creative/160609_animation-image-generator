@@ -50,7 +50,7 @@ export class AppComponent {
 		this.animationOptionData = new AnimationImageOptions();
 
 		this.isImageSelected = false;
-		this.exportImagesProcess = new ProcessExportImage();
+		this.exportImagesProcess = new ProcessExportImage(this.appConfig);
 
 		// 初回プリセットの設定
 		this.presetMode = Number(localStorage.getItem(this.PRESET_ID));
