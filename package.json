@@ -1,6 +1,6 @@
 {
-  "name": "160609_animation-image-generator",
-  "version": "0.1.0",
+  "name": "animation-image-converter",
+  "version": "0.2.0",
   "description": "",
   "main": "index.js",
   "scripts": {
