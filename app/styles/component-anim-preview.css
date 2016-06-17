@@ -15,6 +15,9 @@
   background: url(./imgs/opacity.png) repeat;
 }
 
+.label {
+  font-size: 90%;
+}
 .frame-image-container {
 
   width: 64px;

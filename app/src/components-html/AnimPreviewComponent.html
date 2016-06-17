@@ -13,7 +13,7 @@
 
 <div class="anim-preview p-a-1" *ngIf="items.length > 0">
   <p>
-    フレームサイズ <span class="label" [ngClass]="{'label-success' : isValidFrameSize, 'label-danger' : !isValidFrameSize}">W {{animationOptionData.imageInfo.width}} × H {{animationOptionData.imageInfo.height}} px</span>
+    フレームサイズ <span class="label" [ngClass]="{'label-success' : isValidFrameSize, 'label-danger' : !isValidFrameSize}">W{{animationOptionData.imageInfo.width}}×H{{animationOptionData.imageInfo.height}}px</span>
     / 総フレーム数 <span class="label" [ngClass]="{'label-success' : isValidFrameLength, 'label-danger' : !isValidFrameLength}">{{items.length}}</span>
 			<span *ngIf="animationOptionData.noLoop == false">
 				/ 再生時間 <span
