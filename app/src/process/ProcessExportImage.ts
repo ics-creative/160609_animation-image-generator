@@ -340,7 +340,9 @@ export class ProcessExportImage {
 		const path = require('path');
 		const fileName:string = this.selectedBaseName;
 
-		let imageElement:string;
+		let imageElement:string = ``;
+		let scriptElement1:string = ``;
+		let scriptElement2:string = ``;
 
 		if (this.animationOptionData.enabledExportApng && this.animationOptionData.enabledExportWebp) {
 			imageElement = `
@@ -349,16 +351,44 @@ export class ProcessExportImage {
 	  <!-- Chrome 用 -->
       <source type="image/webp" srcset="${fileName}.webp" />
       <!-- Firefox, Safari 用 -->
-      <img src="${fileName}.png" width="${this.animationOptionData.imageInfo.width}" height="${this.animationOptionData.imageInfo.height}" alt="" />
+      <img src="${fileName}.png" width="${this.animationOptionData.imageInfo.width}" height="${this.animationOptionData.imageInfo.height}" alt="" class="apng-image" />
     </picture>`;
+
+			scriptElement1 = `<script src="https://cdnjs.cloudflare.com/ajax/libs/apng-canvas/2.1.1/apng-canvas.min.js"></script>`;
+			scriptElement2 = `
+    <script>
+      if(window.navigator.userAgent.indexOf('Chrome') >= 0 && window.navigator.userAgent.indexOf('Edge') == -1){
+        // Chrome の場合は WebP ファイルが表示される
+      }else{
+        // Chrome 以外の場合は APNG 利用可否を判定する
+        APNG.ifNeeded().then(function () {
+          // APNG に未対応のブラウザ(例：IE, Edge)では、JSライブラリ「apng-canvas」により表示可能にする
+          var images = document.querySelectorAll(".apng-image");
+          for (var i = 0; i < images.length; i++){ APNG.animateImage(images[i]); }
+        });
+      }
+    </script>`;
 		} else if (this.animationOptionData.enabledExportApng) {
+
 			imageElement = `
-	<!-- Firefox と Safari で再生可能 (Chrome, IE, Edge ではアニメは再生できません) -->
-    <img src="${fileName}.png" width="${this.animationOptionData.imageInfo.width}" height="${this.animationOptionData.imageInfo.height}" alt="" />`;
+    <!-- Firefox と Safari で再生可能 (Chrome, IE, Edge ではアニメは再生できません) -->
+    <img src="${fileName}.png" width="${this.animationOptionData.imageInfo.width}" height="${this.animationOptionData.imageInfo.height}" alt="" class="apng-image" />`;
+			scriptElement1 = `<script src="https://cdnjs.cloudflare.com/ajax/libs/apng-canvas/2.1.1/apng-canvas.min.js"></script>`;
+			scriptElement2 = `
+    <script>
+      // APNG に未対応のブラウザ(例：IE, Edge, Chrome)では、JSライブラリ「apng-canvas」により表示可能にする
+      APNG.ifNeeded().then(function () {
+        var images = document.querySelectorAll(".apng-image");
+        for (var i = 0; i < images.length; i++){ APNG.animateImage(images[i]); }
+      });
+    </script>`;
+
 		} else if (this.animationOptionData.enabledExportWebp) {
+
 			imageElement = `
-	<!-- Chrome で再生可能 (IE, Edge, Firefox, Safari では表示できません) -->
+    <!-- Chrome で再生可能 (IE, Edge, Firefox, Safari では表示できません) -->
     <img src="${fileName}.webp" width="${this.animationOptionData.imageInfo.width}" height="${this.animationOptionData.imageInfo.height}" alt="" />`;
+
 		} else {
 			return;
 		}
@@ -370,12 +400,13 @@ export class ProcessExportImage {
     <style>
       /* 確認用のCSS */
       body { background: #444; }
-      picture img { background: url(https://raw.githubusercontent.com/ics-creative/160609_animation-image-generator/master/app/imgs/opacity.png); }
+      picture img, .apng-image { background: url(https://raw.githubusercontent.com/ics-creative/160609_animation-image-generator/master/app/imgs/opacity.png); }
     </style>
+    ${scriptElement1}
   </head>
   <body>
   	${imageElement}
-  	
+  	${scriptElement2}
   </body>
 </html>`;
 
