@@ -25,7 +25,7 @@
     "copy:release:webp-win32": "cp -P ./resources/libwebp-0.5.0-windows-x86/bin/cwebp.exe tmp-release-win32/bin/cwebp.exe & cp -P ./resources/libwebp-0.5.0-windows-x86/bin/webpmux.exe tmp-release-win32/bin/webpmux.exe",
     "copy:release:pngquant-win32": "cp -P ./resources/pngquant-win/pngquant.exe tmp-release-win32/bin/pngquant.exe",
     "copy:release:bin-win32": "mkdir tmp-release-win32/bin/ && npm run copy:release:webp-win32 && npm run copy:release:apngasm-win32 & npm run copy:release:pngquant-win32",
-    "package-win32": "electron-packager ./tmp-release-win32 anim-image-gen --platform=win32 --arch=x64 --overwrite --asar --icon=resources/app.ico",
+    "package-win32": "electron-packager ./tmp-release-win32 animation-image-converter --platform=win32 --arch=x64 --overwrite --asar --icon=resources/app.ico",
     "release-win32": "npm run clean:app && npm run build:app && npm run copy:release:app-win32 && npm run copy:release:bin-win32 && npm run package-win32"
 
   },
