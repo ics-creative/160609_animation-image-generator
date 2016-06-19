@@ -20,7 +20,7 @@ export class ProcessExportImage {
 	private selectedBaseName:string;
 	private itemList:ImageData[];
 	private exeExt:string;
-	
+
 	private animationOptionData:AnimationImageOptions;
 
 	constructor(private appConfig:AppConfig) {
@@ -147,25 +147,27 @@ export class ProcessExportImage {
 	private _copyTemporaryImage(item:any):Promise < any > {
 		return new Promise((resolve:Function, reject:Function) => {
 
-			const fs = require('fs');
-			const path = require('path');
-			const src = item.imagePath;
+			setImmediate(() => {
+				const fs = require('fs');
+				const path = require('path');
+				const src = item.imagePath;
 
-			const destination:string = path.join(this.temporaryPath, `frame${item.frameNumber}.png`);
+				const destination:string = path.join(this.temporaryPath, `frame${item.frameNumber}.png`);
 
-			const r = fs.createReadStream(src);
-			const w = fs.createWriteStream(destination);
+				const r = fs.createReadStream(src);
+				const w = fs.createWriteStream(destination);
 
-			r.on("error", (err:any) => {
-				reject(err);
+				r.on("error", (err:any) => {
+					reject(err);
+				});
+				w.on("error", (err:any) => {
+					reject(err);
+				});
+				w.on("close", (ex:any) => {
+					resolve();
+				});
+				r.pipe(w);
 			});
-			w.on("error", (err:any) => {
-				reject(err);
-			});
-			w.on("close", (ex:any) => {
-				resolve();
-			});
-			r.pipe(w);
 		});
 	}
 
@@ -197,41 +199,43 @@ export class ProcessExportImage {
 				compressOptions,
 				loopOption];
 
-			exec(path.join(appPath, `/bin/apngasm${this.exeExt}`), options, (err:any, stdout:any, stderr:any) => {
+			setImmediate(() => {
+				exec(path.join(appPath, `/bin/apngasm${this.exeExt}`), options, (err:any, stdout:any, stderr:any) => {
 
-				if (!err) {
-					// TODO 書きだしたフォルダーを対応ブラウザーで開く (OSで分岐)
-					//exec(`/Applications/Safari.app`, [this.apngPath]);
+					if (!err) {
+						// TODO 書きだしたフォルダーを対応ブラウザーで開く (OSで分岐)
+						//exec(`/Applications/Safari.app`, [this.apngPath]);
 
-					if (this.animationOptionData.preset == PresetType.LINE) {
-						const validateArr = LineStampValidator.validate(exportFilePath, this.animationOptionData);
+						if (this.animationOptionData.preset == PresetType.LINE) {
+							const validateArr = LineStampValidator.validate(exportFilePath, this.animationOptionData);
 
-						if (validateArr.length > 0) {
-							const {dialog} = require('electron').remote;
-							const win = require('electron').remote.getCurrentWindow();
-							const message = "APNGファイルを作成しましたが、LINEアニメーションスタンプのガイドラインに適しない箇所がありました。次の項目を再確認ください。";
-							const detailMessage =  "・" + validateArr.join("\n\n・");
+							if (validateArr.length > 0) {
+								const {dialog} = require('electron').remote;
+								const win = require('electron').remote.getCurrentWindow();
+								const message = "APNGファイルを作成しましたが、LINEアニメーションスタンプのガイドラインに適しない箇所がありました。次の項目を再確認ください。";
+								const detailMessage = "・" + validateArr.join("\n\n・");
 
-							var options = {
-								type: "info",
-								buttons: ["OK"],
-								title: this.appConfig.name,
-								//message: message,
-								detail: message + "\n\n" + detailMessage
-							};
-							dialog.showMessageBox(win,options);
+								var options = {
+									type: "info",
+									buttons: ["OK"],
+									title: this.appConfig.name,
+									//message: message,
+									detail: message + "\n\n" + detailMessage
+								};
+								dialog.showMessageBox(win, options);
 
+							}
 						}
-					}
-					console.log("generateAPNG:success");
-					resolve();
-				} else {
-					this.errorMessage = "APNGの生成に失敗しました。";
+						resolve();
+					} else {
+						this.errorMessage = "APNGの生成に失敗しました。";
 
-					console.error("generateAPNG:error\n→" + stderr);
-					reject();
-				}
+						console.error("generateAPNG:error\n→" + stderr);
+						reject();
+					}
+				});
 			});
+
 		}));
 
 	}
@@ -281,13 +285,15 @@ export class ProcessExportImage {
 			options.push(path.join(this.selectedDirectory, `${this.selectedBaseName}.webp`));
 
 			this._convertPng2Webps(pngFiles).then(()=> {
-				execFile(`${appPath}/bin/webpmux${this.exeExt}`, options, (err:string, stdout:string, stderr:string) => {
-					if (!err) {
-						resolve();
-					} else {
-						console.error(stderr);
-						reject();
-					}
+				setImmediate(() => {
+					execFile(`${appPath}/bin/webpmux${this.exeExt}`, options, (err:string, stdout:string, stderr:string) => {
+						if (!err) {
+							resolve();
+						} else {
+							console.error(stderr);
+							reject();
+						}
+					});
 				});
 			}).catch(()=> {
 				this.errorMessage = "WebPの生成に失敗しました。";
@@ -332,15 +338,17 @@ export class ProcessExportImage {
 		}
 
 		return new Promise(((resolve:Function, reject:Function)=> {
-			execFile(`${appPath}/bin/cwebp${this.exeExt}`, options,
-				(err:any, stdout:any, stderr:any) => {
-					if (!err) {
-						resolve();
-					} else {
-						reject();
-						console.error(stderr);
-					}
-				});
+			setImmediate(()=> {
+				execFile(`${appPath}/bin/cwebp${this.exeExt}`, options,
+					(err:any, stdout:any, stderr:any) => {
+						if (!err) {
+							resolve();
+						} else {
+							reject();
+							console.error(stderr);
+						}
+					});
+			});
 		}));
 	}
 
