@@ -102,7 +102,7 @@ export class AnimPreviewComponent implements OnChanges {
 			this.playing = false;
 		}
 
-		if (this.playing == true) {
+		if (this.playing == true && createjs.Ticker.paused === false) {
 			this.updateAnimation();
 		}
 	}
