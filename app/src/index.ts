@@ -6,29 +6,18 @@ import {bootstrap} from '@angular/platform-browser-dynamic';
 import {AppComponent} from './components/AppComponent'
 import {enableProdMode} from "@angular/platform-browser/src/facade/lang";
 
-enableProdMode();
-bootstrap(AppComponent);
+// 起動コード
+window.addEventListener("DOMContentLoaded", ()=> {
+	// ドラッグ&ドロップの動作を阻止します。
+	document.addEventListener("dragover", (event:DragEvent) => {
+		event.preventDefault();
+	});
+	document.addEventListener("drop", (event:DragEvent) => {
+		event.preventDefault();
+	});
 
-
-window.addEventListener("load", onLoad);
-
-function onLoad(){
-	_cancelDragAndDrop();
-}
-
-/**
- * ドラッグ&ドロップの動作を阻止します。
- */
-function _cancelDragAndDrop() {
-	document.addEventListener("dragover", _handleDragOver);
-	document.addEventListener("drop", _handleDrop);
-}
-
-function _handleDragOver(event:DragEvent) {
-	event.preventDefault();
-}
-
-
-function _handleDrop(event:DragEvent) {
-	event.preventDefault();
-}
+	setImmediate(()=> {
+		enableProdMode();
+		bootstrap(AppComponent);
+	});
+});
