@@ -88,7 +88,7 @@ export class AnimPreviewComponent implements OnChanges {
 
 		// ここでバリデートするのは間違っていると思うが・・・・
 		if (this.animationOptionData.preset == PresetType.LINE) {
-			this.isValidFrameSize = LineStampValidator.validateFrameSize(this.animationOptionData);
+			this.isValidFrameSize = LineStampValidator.validateFrameMaxSize(this.animationOptionData) && LineStampValidator.validateFrameMinSize(this.animationOptionData);
 			this.isValidFrameLength = LineStampValidator.validateFrameLength(this.animationOptionData);
 			this.isValidTime = LineStampValidator.validateTime(this.animationOptionData);
 		} else {

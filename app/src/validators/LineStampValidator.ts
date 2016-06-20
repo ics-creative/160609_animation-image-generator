@@ -26,16 +26,30 @@ export class LineStampValidator {
 			}
 		}
 
-		if (LineStampValidator.validateFrameSize(options) === false) {
+		if (LineStampValidator.validateFrameMaxSize(options) === false) {
 			validateArr.push(`画像サイズはW320×H270px以内で制作ください。現在の画像サイズはW${options.imageInfo.width}×H${options.imageInfo.height}pxです。`);
+		}
+
+		if (LineStampValidator.validateFrameMinSize(options) === false) {
+			validateArr.push(`幅、高さ共に長辺どちらか270px以上にしてください。現在の画像サイズはW${options.imageInfo.width}×H${options.imageInfo.height}pxです。`);
 		}
 
 
 		return validateArr;
 	}
 
-	static validateFrameSize(options:AnimationImageOptions):boolean {
+	static validateFrameMaxSize(options:AnimationImageOptions):boolean {
 		return !(options.imageInfo.width > 320 || options.imageInfo.height > 270);
+	}
+
+	static validateFrameMinSize(options:AnimationImageOptions):boolean {
+		let flag = true;
+
+		if (options.imageInfo.width < 270 && options.imageInfo.height < 270) {
+			flag = false;
+		}
+
+		return flag;
 	}
 
 	static validateTime(options:AnimationImageOptions):boolean {
@@ -46,4 +60,6 @@ export class LineStampValidator {
 	static validateFrameLength(options:AnimationImageOptions):boolean {
 		return !(options.imageInfo.length < 5 || 20 < options.imageInfo.length);
 	}
+
+
 }
