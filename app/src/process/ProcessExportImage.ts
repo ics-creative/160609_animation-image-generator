@@ -4,13 +4,18 @@ import {PresetType} from "../type/PresetType";
 import {LineStampValidator} from "../validators/LineStampValidator";
 import {CompressionType} from "../type/CompressionType";
 import {AppConfig} from "../config/AppConfig";
+import {ErrorCode} from "../error/ErrorCode";
 
 declare function require(value:String):any;
 declare var process:{platform:string};
 
+module Error {
+	export const ENOENT_ERROR:string = "ENOENT";
+}
 export class ProcessExportImage {
 
-	public errorMessage:string;
+	public errorDetail:string;
+	public errorCode:ErrorCode;
 
 	private temporaryCompressPath:string;
 	private temporaryPath:string;
@@ -42,7 +47,8 @@ export class ProcessExportImage {
 		const extName = path.extname(this.selectedPath);
 		this.selectedBaseName = path.basename(this.selectedPath, extName);
 		this.selectedDirectory = path.dirname(this.selectedPath);
-		this.errorMessage = "エラーが発生しました。";	//	デフォルトのエラーメッセージ
+		this.errorCode = ErrorCode.UNKNOWN;	//	デフォルトのエラーメッセージ
+		this.errorDetail = "";	//	追加のエラーメッセージ
 
 		// PNG事前圧縮&APNGファイルを生成する
 		const compressPNG = (this.animationOptionData.enabledPngCompress && this.animationOptionData.enabledExportApng);
@@ -56,18 +62,23 @@ export class ProcessExportImage {
 
 		return new Promise((resolve:Function, reject:Function) => {
 
+			this.errorCode = ErrorCode.TEMPORARY_CLEAN_ERROR;
 			this._cleanTemporary()
 				.then(() => {
+					this.errorCode = ErrorCode.MAKE_TEMPORARY_ERROR;
 					return this._copyTemporaryDirectory();
 				})
 				.then(() => {
 					if (compressPNG) {
+						this.errorCode = ErrorCode.PNG_COMPRESS_ERROR;
 						return this._pngCompressAll();
 					}
 				})
 				.then(() => {
 					// APNG書き出しが有効になっている場合
 					if (this.animationOptionData.enabledExportApng == true) {
+						// ひとまず謎エラーとしとく
+						this.errorCode = ErrorCode.APNG_OTHER_ERORR;
 						return this._generateApng();
 					}
 				})
@@ -78,9 +89,9 @@ export class ProcessExportImage {
 					}
 				})
 				.then(()=> {
-					console.log("copyTemporaryDirectory3:success");
 					// APNGとWebP画像の両方書き出しが有効になっている場合
 					if (this.animationOptionData.enabledExportHtml == true) {
+						this.errorCode = ErrorCode.HTML_ERROR;
 						this._generateHtml();
 					}
 				})
@@ -228,9 +239,14 @@ export class ProcessExportImage {
 						}
 						resolve();
 					} else {
-						this.errorMessage = "APNGの生成に失敗しました。";
+						this.setErrorDetail(stdout);
 
-						console.error("generateAPNG:error\n→" + stderr);
+						if (err.code == Error.ENOENT_ERROR) {
+							this.errorCode = ErrorCode.APNG_ERORR;
+						} else {
+							this.errorCode = ErrorCode.APNG_ACCESS_ERORR;
+						}
+
 						reject();
 					}
 				});
@@ -238,6 +254,18 @@ export class ProcessExportImage {
 
 		}));
 
+	}
+
+	private setErrorDetail(stdout:string) {
+		if (stdout != "") {
+			const errorMesageList = stdout.split("\n").filter(function (e:string) {
+				return e !== "";
+			});
+
+			const errorMessage = errorMesageList.pop();
+
+			this.errorDetail = errorMessage ? errorMessage : "";
+		}
 	}
 
 	/**
@@ -284,19 +312,26 @@ export class ProcessExportImage {
 			options.push(`-o`);
 			options.push(path.join(this.selectedDirectory, `${this.selectedBaseName}.webp`));
 
+			this.errorCode = ErrorCode.CWEBP_OTHER_ERROR;
+
 			this._convertPng2Webps(pngFiles).then(()=> {
 				setImmediate(() => {
-					execFile(`${appPath}/bin/webpmux${this.exeExt}`, options, (err:string, stdout:string, stderr:string) => {
+					this.errorCode = ErrorCode.WEBPMUX_OTHER_ERROR;
+					execFile(`${appPath}/bin/webpmux${this.exeExt}`, options, (err:any, stdout:string, stderr:string) => {
 						if (!err) {
 							resolve();
 						} else {
 							console.error(stderr);
+							if (err.code == Error.ENOENT_ERROR) {
+								this.errorCode = ErrorCode.WEBPMUX_ACCESS_ERROR;
+							} else {
+								this.errorCode = ErrorCode.WEBPMUX_ERROR;
+							}
 							reject();
 						}
 					});
 				});
 			}).catch(()=> {
-				this.errorMessage = "WebPの生成に失敗しました。";
 				reject();
 			});
 		}));
@@ -344,7 +379,17 @@ export class ProcessExportImage {
 						if (!err) {
 							resolve();
 						} else {
+
+							this.setErrorDetail(stdout);
+
+							if (err.code == Error.ENOENT_ERROR) {
+								this.errorCode = ErrorCode.CWEBP_ACCESS_ERROR;
+							} else {
+								this.errorCode = ErrorCode.CWEBP_ERROR;
+							}
+
 							reject();
+
 							console.error(stderr);
 						}
 					});
@@ -450,8 +495,6 @@ export class ProcessExportImage {
 
 		return new Promise((resolve, reject) => {
 
-			this.errorMessage = "PNGの事前圧縮に失敗しました。";
-
 			const remote = require('electron').remote;
 			const app = remote.app;
 			const path = require('path');
@@ -470,7 +513,6 @@ export class ProcessExportImage {
 					if (!err) {
 						resolve();
 					} else {
-						this.errorMessage = "PNG画像事前圧縮に失敗しました。";
 						console.error(err);
 						console.error(stderr);
 						reject();

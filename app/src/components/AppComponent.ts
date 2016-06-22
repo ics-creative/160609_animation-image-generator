@@ -12,6 +12,7 @@ import {ProcessExportImage} from "../process/ProcessExportImage";
 import {AppConfig} from "../config/AppConfig";
 import {ImageData} from "../data/ImageData";
 import {Menu} from "../menu/Menu";
+import {ErrorMessage} from "../error/ErrorMessage";
 
 declare function require(value:String):any;
 
@@ -109,7 +110,6 @@ export class AppComponent {
 		this.setFilePathList(filePathList);
 	}
 
-
 	private handleDrop(event:DragEvent) {
 		var path = require('path');
 
@@ -140,7 +140,6 @@ export class AppComponent {
 
 		event.preventDefault();
 	}
-
 
 	private handlePresetChange(presetMode:string) {
 
@@ -174,7 +173,6 @@ export class AppComponent {
 			return;
 		}
 
-
 		let type = (this.animationOptionData.enabledExportWebp && !this.animationOptionData.enabledExportApng)
 			? "web"
 			: "line";
@@ -190,7 +188,11 @@ export class AppComponent {
 				this._hideLockDialog();
 			}).catch(() => {
 			this._hideLockDialog();
-			alert(this.exportImagesProcess.errorMessage);
+
+			ErrorMessage.showErrorMessage(
+				this.exportImagesProcess.errorCode,
+				this.exportImagesProcess.errorDetail,
+				this.appConfig);
 		});
 
 	}
@@ -221,7 +223,6 @@ export class AppComponent {
 		createjs.Ticker.setPaused(false); // 効かない…
 	}
 
-
 	private handleClickFileSelectButton():void {
 		if (this.openingDirectories === true) {
 			return;
@@ -230,7 +231,6 @@ export class AppComponent {
 		const ipc = require('electron').ipcRenderer;
 		ipc.send('open-file-dialog');
 	}
-
 
 	private setFilePathList(filePathList:string[]):void {
 
@@ -292,7 +292,6 @@ export class AppComponent {
 		}
 		this.isImageSelected = this.items.length >= 1;
 	}
-
 
 	private checkImageSize(path:string):void {
 		let image = new Image();
