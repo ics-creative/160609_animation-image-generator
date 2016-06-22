@@ -35,8 +35,7 @@
 
 - [Windows8で「WindowsによってPCが保護されました」と表示されてソフトウェアをインストールできない場合 | 西沢直木のIT講座](http://www.nishi2002.com/4577.html)
 
-② Windows 7以上のバージョンでのみ動作します。Windows XPでは起動できません。Windows Vistaは未確認です。
-
+② Windows 7以上のバージョンでのみ動作します。Windows XPやVistaでは起動できません。
 
 #### OS Xユーザーの方へ
 
