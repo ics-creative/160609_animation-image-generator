@@ -136,7 +136,7 @@ export class AppComponent {
 
 		this.numbering();
 
-		this.setItems(this.items);
+		this.changeImageItems(this.items);
 
 		event.preventDefault();
 	}
@@ -223,6 +223,9 @@ export class AppComponent {
 		createjs.Ticker.setPaused(false); // 効かない…
 	}
 
+	/**
+	 * ファイル選択ボタンが押された時のハンドラーです。
+	 */
 	private handleClickFileSelectButton():void {
 		if (this.openingDirectories === true) {
 			return;
@@ -232,6 +235,10 @@ export class AppComponent {
 		ipc.send('open-file-dialog');
 	}
 
+	/**
+	 * ファイルがセットされたときの処理です。
+	 * @param filePathList
+	 */
 	private setFilePathList(filePathList:string[]):void {
 
 		var path = require('path');
@@ -257,12 +264,11 @@ export class AppComponent {
 		}
 		this.numbering();
 
-		this.setItems(this.items);
-
+		this.changeImageItems(this.items);
 	}
 
 	/**
-	 * 再ナンバリングする。
+	 * 再ナンバリングします。
 	 */
 	private numbering():void {
 
@@ -284,23 +290,61 @@ export class AppComponent {
 		}
 	}
 
-	private setItems(items:ImageData[]):void {
+	private changeImageItems(items:ImageData[]):void {
 		this.items = items;
 		if (items.length >= 1) {
-			this.checkImageSize(items[0].imagePath);
+			this.checkImageSize(items);
 			this.animationOptionData.imageInfo.length = items.length;
 		}
 		this.isImageSelected = this.items.length >= 1;
 	}
 
-	private checkImageSize(path:string):void {
-		let image = new Image();
-		image.onload = ()=> {
-			// 情報の更新
-			this.animationOptionData.imageInfo.width = image.width;
-			this.animationOptionData.imageInfo.height = image.height;
-		};
-		image.src = path;
+	private checkImageSize(items:ImageData[]):void {
+
+		new Promise((resolve:Function, reject:Function) => {
+
+			let image = new Image();
+			image.onload = (event:Event) => {
+				this.animationOptionData.imageInfo.width = image.width;
+				this.animationOptionData.imageInfo.height = image.height;
+				resolve();
+			};
+			image.onerror = (event:Event) => {
+				reject();
+			};
+			image.src = items[0].imagePath;
+		}).then( () => {
+
+			const promiseArr:Promise<any>[] = [];
+
+			if (items.length <= 1) {
+				return;
+			}
+			for (let i = 1; i < items.length; i++) {
+				let promise = new Promise((resolve:Function, reject:Function) => {
+					const path = items[i].imagePath;
+					let image = new Image();
+					image.onload = (event:Event) => {
+						let errorFlag = false;
+						if (this.animationOptionData.imageInfo.width === image.width
+							&& this.animationOptionData.imageInfo.height === image.height) {
+							// 何もしない
+						} else {
+							// 画像サイズが異なっていることを通知する
+							alert(`${items[i].imageBaseName} の幅・高さが他の画像と異なっています。連番画像のサイズが統一されているか確認ください。`);
+							errorFlag = true;
+						}
+						errorFlag ? reject() : resolve();
+					};
+					image.onerror = (event:Event) => {
+						reject();
+					};
+					image.src = path;
+				});
+				promiseArr.push(promise);
+			}
+			Promise.all(promiseArr);
+		});
 	}
 }
 

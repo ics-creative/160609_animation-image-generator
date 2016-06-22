@@ -43,16 +43,12 @@ export class AnimPreviewComponent implements OnChanges {
 
 	/** 値の変更時を監視するライフサイクルイベント */
 	ngOnChanges() {
-		console.log("AnimPreviewComponent : ngOnChanges()");
-
 		// 要素が存在すれば、初期値を設定する
 		if (this.items && this.items.length > 0) {
 			this.imagePath = this.items[0].imagePath;
 			this.currentFrame = 0;
 			this.currentLoopCount = 0;
 			this.playing = true;
-
-
 		}
 	}
 
