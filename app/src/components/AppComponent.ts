@@ -270,8 +270,8 @@ export class AppComponent {
 			const aRes = a.imageBaseName.match(/\d+/g);
 			const bRes = b.imageBaseName.match(/\d+/g);
 
-			const aNum = aRes.length >= 1 ? parseInt(aRes.pop()) : 0;
-			const bNum = bRes.length >= 1 ? parseInt(bRes.pop()) : 0;
+			const aNum = aRes ? ( aRes.length >= 1 ? parseInt(aRes.pop()) : 0 ) : 0;
+			const bNum = bRes ? ( bRes.length >= 1 ? parseInt(bRes.pop()) : 0 ) : 0;
 
 			if (aNum < bNum) return -1;
 			if (aNum > bNum) return 1;
