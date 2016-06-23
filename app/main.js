@@ -28,7 +28,7 @@ function createWindow() {
 	win.loadURL(`file://${__dirname}/index.html`);
 
 	// デベロッパーツールの起動
-	//win.webContents.openDevTools();
+	win.webContents.openDevTools();
 
 	// メインウィンドウが閉じられたときの処理
 	win.on('closed', ()=> {
