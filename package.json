@@ -19,7 +19,9 @@
     "package-mac": "electron-packager ./tmp-release-mac 'アニメ画像に変換する君' --platform=darwin --arch=x64 --overwrite --asar --icon='resources/app.icns' ",
     "release-mac": "npm run clean:app && npm run build:app && npm run copy:release:app-mac && npm run copy:release:bin-mac && npm run install:package-mac && npm run package-mac",
 
-    "package-mas" : "electron-packager ./tmp-release-mac 'アニメ画像に変換する君' --platform=mas --arch=x64 --version=1.2.3 --app-bundle-id='media.ics.AnimationImageConverter' --app-version='1.0.0' --build-version='1.0.100' --osx-sign",
+    "package-mas" : "electron-packager ./tmp-release-mac 'アニメ画像に変換する君' --platform=mas --overwrite  --arch=x64 --app-bundle-id='media.ics.AnimationImageConverter' --app-version='1.0.0' --build-version='1.0.100' --icon='resources/app.icns' --overwrite ",
+    "sign-mas":"electron-osx-sign 'アニメ画像に変換する君-mas-x64/アニメ画像に変換する君.app' --entitlements='dev/parent.plist' --entitlements-inherit='dev/child.plist'",
+    "package-sign-mas" : "npm run package-mas && npm run sign-mas",
     "release-mas": "npm run clean:app && npm run build:app && npm run copy:release:app-mac && npm run copy:release:bin-mac && npm run install:package-mac && npm run package-mas",
 
     "copy:release:app-win32": "npm run copy:release:app && node-mv tmp-release tmp-release-win32 ",
