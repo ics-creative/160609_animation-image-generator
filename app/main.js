@@ -67,7 +67,7 @@ function openFileDialog(event) {
 		properties: ['openFile', 'multiSelections'],
 		filters: [{name: 'Images', extensions: ["png"]}]
 	};
-	dialog.showOpenDialog(dialogOption, function (files) {
+	dialog.showOpenDialog(win,dialogOption, function (files) {
 
 		if (files) {
 			event.sender.send('selected-open-images', files)
@@ -107,7 +107,7 @@ function openSaveDialog(event, imageType) {
 	defaultPath = path.join(lastSelectSaveDirectories, defaultPathName);
 
 	const dialog = require('electron').dialog;
-	dialog.showSaveDialog({
+	dialog.showSaveDialog(win,{
 		title: title,
 		defaultPath: defaultPath,
 		filters: [{name: 'Images', extensions: [extention]}],
