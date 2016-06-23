@@ -28,7 +28,7 @@ function createWindow() {
 	win.loadURL(`file://${__dirname}/index.html`);
 
 	// デベロッパーツールの起動
-	win.webContents.openDevTools();
+	//win.webContents.openDevTools();
 
 	// メインウィンドウが閉じられたときの処理
 	win.on('closed', ()=> {
@@ -42,9 +42,9 @@ function createWindow() {
 	});
 
 	//	windowのクラッシュ時の処理
-	win.webContents.on('crashed', function () {
-		app.quit()
-	});
+//win.webContents.on('crashed', function () {
+	//	app.quit()
+	//});
 
 	//	応答しない時の処理
 	win.on('unresponsive', function () {
