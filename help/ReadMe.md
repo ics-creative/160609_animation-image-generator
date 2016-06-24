@@ -25,8 +25,8 @@
 
 ### ダウンロードURL
 
-- [Windowsはこちらから](https://github.com/ics-creative/160609_animation-image-generator/releases/download/release-0.2.0/Software-Win.zip)
-- [OS Xはこちらから](https://github.com/ics-creative/160609_animation-image-generator/releases/download/release-0.2.0/Software-Mac.zip)
+- [Windowsはこちらから](https://github.com/ics-creative/160609_animation-image-generator/releases/download/release-0.3.0/Software-Win.zip)
+- [OS Xはこちらから](https://github.com/ics-creative/160609_animation-image-generator/releases/download/release-0.3.0/Software-Mac.zip)
 
 
 #### Windowsユーザーの方へ
@@ -46,6 +46,14 @@
 ② OS X 10.9 Mavericks以上のバージョンでのみ動作します。
 
 ### バージョンアップの履歴
+
+#### バージョン 0.3.0 (2016年6月24日 金)
+
+- 連番PNG画像のフレームサイズが統一されているか検証する機能を搭載
+- アイコンを変更
+- ファイル生成失敗時に、エラー情報が表示されるよう変更
+- LINEスタンプのガイドラインチェックの追加 (長辺サイズのチェック)
+
 
 #### バージョン 0.2.0 (2016年6月17日 金)
 
