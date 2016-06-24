@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build:app": "cd app && npm run build",
-    "clean:app": "del tmp-release-* アニメ画像に変換する君*",
+    "clean:app": "del tmp-release-* アニメ画像に変換する君* AnimationImageConverter*",
     "copy:release:app": "copyfiles  -u 1 ./app/bundle.js ./app/index.html ./app/main.js ./app/styles/**/*.css ./app/src/**/*.html ./app/imgs/**/*.* ./resources/package.json ./app/js/**/*.js ./app/styles/**/*.*js ./app/node_modules/bootstrap/dist/js/bootstrap.js ./app/node_modules/bootstrap/dist/css/bootstrap.css ./app/resources/font-awesome-4.6.3/css/*.css ./app/resources/font-awesome-4.6.3/fonts/*.* tmp-release",
 
     "copy:release:app-mac": "npm run copy:release:app && node-mv tmp-release tmp-release-mac ",
@@ -23,7 +23,7 @@
     "sign-mas":"electron-osx-sign 'AnimationImageConverter-mas-x64/AnimationImageConverter.app' --entitlements='dev/parent.plist' --entitlements-inherit='dev/child.plist'",
     "package-sign-mas" : "npm run package-mas && npm run sign-mas",
     "flat" : "electron-osx-flat 'AnimationImageConverter-mas-x64/AnimationImageConverter.app' --verbose --pkg AnimationImageConverter.pkg",
-    "release-mas": "npm run clean:app && npm run build:app && npm run copy:release:app-mac && npm run copy:release:bin-mac && npm run install:package-mac && npm run package-mas",
+    "release-mas": "npm run clean:app && npm run build:app && npm run copy:release:app-mac && npm run copy:release:bin-mac && npm run install:package-mac && npm run package-sign-mas",
 
     "copy:release:app-win32": "npm run copy:release:app && node-mv tmp-release tmp-release-win32 ",
     "copy:release:apngasm-win32": " cp -P ./resources/apngasm-2.9-bin-win32/apngasm.exe tmp-release-win32/bin/apngasm.exe",
