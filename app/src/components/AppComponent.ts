@@ -37,6 +37,7 @@ export class AppComponent {
 
 	private appConfig:AppConfig = new AppConfig();
 	private _isDragover:boolean = false;
+	private apngFileSizeError:boolean = false;
 
 	@Input() animationOptionData:AnimationImageOptions;
 
@@ -167,11 +168,18 @@ export class AppComponent {
 			return;
 		}
 
-		this._showLockDialog();
 		this._exportImages();
 	}
 
 	private _exportImages() {
+
+		if (this.apngFileSizeError && this.animationOptionData.enabledExportApng) {
+			ErrorMessage.showFileSizeErrorMessage();
+			return;
+		}
+
+		this._showLockDialog();
+
 		this.exportImagesProcess.exec(this.items, this.animationOptionData)
 			.then(() => {
 				this._hideLockDialog();
@@ -292,6 +300,7 @@ export class AppComponent {
 
 		new Promise((resolve:Function, reject:Function) => {
 
+			this.apngFileSizeError = false;
 			let image = new Image();
 			image.onload = (event:Event) => {
 				this.animationOptionData.imageInfo.width = image.width;
@@ -302,7 +311,7 @@ export class AppComponent {
 				reject();
 			};
 			image.src = items[0].imagePath;
-		}).then( () => {
+		}).then(() => {
 
 			const promiseArr:Promise<any>[] = [];
 
@@ -323,6 +332,7 @@ export class AppComponent {
 							alert(`${items[i].imageBaseName} の幅・高さが他の画像と異なっています。連番画像のサイズが統一されているか確認ください。`);
 							errorFlag = true;
 						}
+						this.apngFileSizeError = errorFlag;
 						errorFlag ? reject() : resolve();
 					};
 					image.onerror = (event:Event) => {

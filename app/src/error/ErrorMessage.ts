@@ -7,7 +7,7 @@ export class ErrorMessage {
 
 	public static showErrorMessage(errorCode:ErrorCode, errorDetail:string, appConfig:AppConfig):void {
 
-		const {dialog,shell} = require('electron').remote;
+		const {dialog, shell} = require('electron').remote;
 		const win = require('electron').remote.getCurrentWindow();
 		const errorMessage:string = ErrorMessage.getErrorMessage(errorCode, errorDetail);
 
@@ -22,6 +22,10 @@ export class ErrorMessage {
 
 何度も同じエラーが発生する場合は、お手数ですがサポートページまでお問い合わせください。
 		`;
+	}
+
+	public static showFileSizeErrorMessage():void {
+		alert("連番PNGの画像の幅・高さが異なるため、APNG画像の保存ができません。");
 	}
 
 	public static getErrorPhaseMessage(errorCode:ErrorCode):string {
