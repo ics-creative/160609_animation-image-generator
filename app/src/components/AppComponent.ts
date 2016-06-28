@@ -59,12 +59,6 @@ export class AppComponent {
 
 		//	保存先の指定返却
 		const ipc = require('electron').ipcRenderer;
-		ipc.on('selected-save-image', (event:any, path:string) => {
-			this._exportImages(path);
-		});
-		ipc.on('unlock-ui', (event:any) => {
-			this._hideLockDialog();
-		});
 
 		ipc.on('selected-open-images', (event:any, filePathList:string[]) => {
 			this._selectedImages(filePathList);
@@ -173,17 +167,12 @@ export class AppComponent {
 			return;
 		}
 
-		let type = (this.animationOptionData.enabledExportWebp && !this.animationOptionData.enabledExportApng)
-			? "web"
-			: "line";
-
-		const ipc = require('electron').ipcRenderer;
-		ipc.send('open-save-dialog', type);
 		this._showLockDialog();
+		this._exportImages();
 	}
 
-	private _exportImages(path:string) {
-		this.exportImagesProcess.exec(path, this.items, this.animationOptionData)
+	private _exportImages() {
+		this.exportImagesProcess.exec(this.items, this.animationOptionData)
 			.then(() => {
 				this._hideLockDialog();
 			}).catch(() => {
