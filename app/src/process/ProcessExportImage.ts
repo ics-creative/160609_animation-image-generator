@@ -93,7 +93,7 @@ export class ProcessExportImage {
 						return this.openSaveDialog("png")
 							.then((fileName:string) => {
 								if (fileName) {
-									this._generateApng(fileName);
+									return this._generateApng(fileName);
 								} else {
 									this.generateCancelPNG = true;
 								}
@@ -106,7 +106,7 @@ export class ProcessExportImage {
 						return this.openSaveDialog("webp")
 							.then((fileName:string) => {
 								if (fileName) {
-									this._generateWebp(fileName);
+									return this._generateWebp(fileName);
 								} else {
 									this.generateCancelWebP = true;
 								}
@@ -128,7 +128,7 @@ export class ProcessExportImage {
 						return this.openSaveDialog("html")
 							.then((fileName:string) => {
 								if (fileName) {
-									this._generateHtml(fileName);
+									return this._generateHtml(fileName);
 								} else {
 									this.generateCancelHTML = true;
 								}
@@ -136,7 +136,6 @@ export class ProcessExportImage {
 					}
 				})
 				.then(()=> {
-
 					if (!(
 							(this.animationOptionData.enabledExportHtml && !this.generateCancelHTML) ||
 							this._enableExportApng() ||
