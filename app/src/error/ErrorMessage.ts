@@ -25,7 +25,7 @@ export class ErrorMessage {
 	}
 
 	public static showFileSizeErrorMessage():void {
-		alert("連番PNGの画像の幅・高さが異なるため、APNG画像の保存ができません。");
+		alert("連番PNGの画像の幅・高さが異なるため、APNG画像の保存ができません。連番画像のサイズが統一されているか確認ください。");
 	}
 
 	public static getErrorPhaseMessage(errorCode:ErrorCode):string {
