@@ -23,6 +23,7 @@ export class ProcessExportImage {
 
 	private selectedWebPPath:string;
 	private selectedPNGPath:string;
+	private selectedHTMLPath:string;
 	private selectedHTMLDirectoryPath:string;
 
 	private lastSelectSaveDirectories:string;
@@ -148,7 +149,14 @@ export class ProcessExportImage {
 
 					// エクスプローラーで開くでも、まだいいかも
 					const {shell} = require('electron');
-					shell.showItemInFolder(this.lastSelectSaveDirectories);
+					if (this._enableExportHTML()) {
+						shell.showItemInFolder(this.selectedHTMLPath);
+					} else if (this._enableExportApng()) {
+						shell.showItemInFolder(this.selectedPNGPath);
+					} else if (this._enableExportWebp()) {
+						//	ここにこない可能性は高い
+						shell.showItemInFolder(this.selectedWebPPath);
+					}
 
 					resolve();
 				})
@@ -457,6 +465,10 @@ export class ProcessExportImage {
 		}));
 	}
 
+	private _enableExportHTML():boolean {
+		return this.animationOptionData.enabledExportHtml && !this.generateCancelHTML;
+	}
+
 	private _enableExportApng():boolean {
 		return this.animationOptionData.enabledExportApng && !this.generateCancelPNG;
 	}
@@ -665,7 +677,7 @@ export class ProcessExportImage {
 					title: title,
 					defaultPath: defaultPath,
 					filters: [{name: imageType == "html" ? "html" : "Images", extensions: [extention]}],
-					properties: ['openFile', 'openDirectory']
+					properties: ['openFile']
 				},
 				(fileName:string) => {
 					if (fileName) {
@@ -682,6 +694,7 @@ export class ProcessExportImage {
 								this.selectedWebPPath = `${fileName}`;
 								break;
 							case "html":
+								this.selectedHTMLPath = `${fileName}`;
 								this.selectedHTMLDirectoryPath = this.lastSelectSaveDirectories;
 								break;
 						}
