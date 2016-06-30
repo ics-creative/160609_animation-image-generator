@@ -20,20 +20,31 @@ export class ProcessExportImage {
 	private temporaryCompressPath:string;
 	private temporaryPath:string;
 	private temporaryLastPath:string;
-	private selectedPath:string;
-	private selectedDirectory:string;
-	private selectedBaseName:string;
+
+	private selectedWebPPath:string;
+	private selectedPNGPath:string;
+	private selectedHTMLPath:string;
+	private selectedHTMLDirectoryPath:string;
+
+	private lastSelectSaveDirectories:string;
+	private lastSelectBaseName:string;
+
 	private itemList:ImageData[];
 	private exeExt:string;
 
 	private animationOptionData:AnimationImageOptions;
 
+	private generateCancelPNG:boolean;
+	private generateCancelHTML:boolean;
+	private generateCancelWebP:boolean;
+
 	constructor(private appConfig:AppConfig) {
 		//	platformで実行先の拡張子を変える
 		this.exeExt = process.platform == 'win32' ? ".exe" : "";
+		this.lastSelectBaseName = "名称未設定";
 	}
 
-	public  exec(filePath:string, itemList:ImageData[], animationOptionData:AnimationImageOptions):Promise<any> {
+	public  exec(itemList:ImageData[], animationOptionData:AnimationImageOptions):Promise<any> {
 
 		//	テンポラリパス生成
 		const remote = require('electron').remote;
@@ -43,10 +54,11 @@ export class ProcessExportImage {
 		this.temporaryPath = path.join(app.getPath('temp'), "a-img-generator");
 		this.temporaryCompressPath = path.join(app.getPath('temp'), "a-img-generator-compress");
 		this.animationOptionData = animationOptionData;
-		this.selectedPath = filePath;
-		const extName = path.extname(this.selectedPath);
-		this.selectedBaseName = path.basename(this.selectedPath, extName);
-		this.selectedDirectory = path.dirname(this.selectedPath);
+
+		this.generateCancelPNG = false;
+		this.generateCancelHTML = false;
+		this.generateCancelWebP = false;
+
 		this.errorCode = ErrorCode.UNKNOWN;	//	デフォルトのエラーメッセージ
 		this.errorDetail = "";	//	追加のエラーメッセージ
 
@@ -79,26 +91,72 @@ export class ProcessExportImage {
 					if (this.animationOptionData.enabledExportApng == true) {
 						// ひとまず謎エラーとしとく
 						this.errorCode = ErrorCode.APNG_OTHER_ERORR;
-						return this._generateApng();
+						return this.openSaveDialog("png")
+							.then((fileName:string) => {
+								if (fileName) {
+									return this._generateApng(fileName);
+								} else {
+									this.generateCancelPNG = true;
+								}
+							});
 					}
 				})
 				.then(() => {
 					// WebP書き出しが有効になっている場合
 					if (this.animationOptionData.enabledExportWebp == true) {
-						return this._generateWebp();
+						return this.openSaveDialog("webp")
+							.then((fileName:string) => {
+								if (fileName) {
+									return this._generateWebp(fileName);
+								} else {
+									this.generateCancelWebP = true;
+								}
+							});
 					}
 				})
 				.then(()=> {
 					// APNGとWebP画像の両方書き出しが有効になっている場合
+
 					if (this.animationOptionData.enabledExportHtml == true) {
+
+						//	画像ファイルが保存されているか。
+						if (!this._imageFileSaved()) {
+							this.generateCancelHTML = true;
+							alert("画像ファイルが保存されなかったため、HTMLの保存を行いませんでした。");
+							return;
+						}
 						this.errorCode = ErrorCode.HTML_ERROR;
-						this._generateHtml();
+						return this.openSaveDialog("html")
+							.then((fileName:string) => {
+								if (fileName) {
+									return this._generateHtml(fileName);
+								} else {
+									this.generateCancelHTML = true;
+								}
+							});
 					}
 				})
 				.then(()=> {
+					if (!(
+							(this.animationOptionData.enabledExportHtml && !this.generateCancelHTML) ||
+							this._enableExportApng() ||
+							this._enableExportWebp()
+						)) {
+						console.log("ファイルが一つも保存されませんでした");
+						resolve();
+						return;
+					}
+
 					// エクスプローラーで開くでも、まだいいかも
 					const {shell} = require('electron');
-					shell.showItemInFolder(this.selectedPath);
+					if (this._enableExportHTML()) {
+						shell.showItemInFolder(this.selectedHTMLPath);
+					} else if (this._enableExportApng()) {
+						shell.showItemInFolder(this.selectedPNGPath);
+					} else if (this._enableExportWebp()) {
+						//	ここにこない可能性は高い
+						shell.showItemInFolder(this.selectedWebPPath);
+					}
 
 					resolve();
 				})
@@ -108,6 +166,17 @@ export class ProcessExportImage {
 
 		});
 
+	}
+
+	/**
+	 * ファイルが保存されているかを調べます。
+	 * @returns {any}
+	 */
+	private _imageFileSaved():boolean {
+		return (
+			(this.animationOptionData.enabledExportWebp && !this.generateCancelWebP) ||
+			(this.animationOptionData.enabledExportApng && !this.generateCancelPNG)
+		)
 	}
 
 	/**
@@ -187,7 +256,7 @@ export class ProcessExportImage {
 	 * @returns {Promise<T>}
 	 * @private
 	 */
-	private _generateApng():Promise<any> {
+	private _generateApng(exportFilePath:string):Promise<any> {
 		return new Promise(((resolve:Function, reject:Function) => {
 			const remote = require('electron').remote;
 			const path = require('path');
@@ -198,7 +267,6 @@ export class ProcessExportImage {
 			const pngPath = path.join(this.temporaryLastPath, "frame*.png");
 
 			const compressOptions = this.getCompressOption(this.animationOptionData.compression);
-			const exportFilePath = path.join(this.selectedDirectory, `${this.selectedBaseName}.png`);
 			console.log("this.animationOptionData.loop : " + this.animationOptionData.loop);
 			const loopOption = "-l" + ( this.animationOptionData.noLoop ? 0 : this.animationOptionData.loop );
 			console.log("loopOption : " + loopOption);
@@ -273,7 +341,7 @@ export class ProcessExportImage {
 	 * @returns {Promise<T>}
 	 * @private
 	 */
-	private _generateWebp():Promise < any > {
+	private _generateWebp(exportFilePath:string):Promise < any > {
 		return new Promise(((resolve:Function, reject:Function) => {
 			const remote = require('electron').remote;
 			const path = require('path');
@@ -310,7 +378,7 @@ export class ProcessExportImage {
 			}
 
 			options.push(`-o`);
-			options.push(path.join(this.selectedDirectory, `${this.selectedBaseName}.webp`));
+			options.push(exportFilePath);
 
 			this.errorCode = ErrorCode.CWEBP_OTHER_ERROR;
 
@@ -397,15 +465,46 @@ export class ProcessExportImage {
 		}));
 	}
 
+	private _enableExportHTML():boolean {
+		return this.animationOptionData.enabledExportHtml && !this.generateCancelHTML;
+	}
+
+	private _enableExportApng():boolean {
+		return this.animationOptionData.enabledExportApng && !this.generateCancelPNG;
+	}
+
+	private _getApngPathRelativeHTML():string {
+		if (this._enableExportApng()) {
+			return require('path').relative(this.selectedHTMLDirectoryPath, this.selectedPNGPath);
+		}
+		return undefined;
+	}
+
+	private _enableExportWebp():boolean {
+		return this.animationOptionData.enabledExportWebp && !this.generateCancelWebP;
+	}
+
 	/**
 	 * HTMLファイルを作成します。
 	 * @private
 	 */
-	private _generateHtml():void {
+	private _getWebpPathReleativeHTML():string {
+		if (this._enableExportWebp()) {
+			return require('path').relative(this.selectedHTMLDirectoryPath, this.selectedWebPPath);
+		}
+		return undefined;
+	}
+
+	/**
+	 * HTMLファイルを作成します。
+	 * @private
+	 */
+	private _generateHtml(exportFilePath:string):void {
 
 		const fs = require('fs');
 		const path = require('path');
-		const fileName:string = this.selectedBaseName;
+		const filePNGName:string = this._getApngPathRelativeHTML();
+		const fileWebPName:string = this._getWebpPathReleativeHTML();
 
 		let imageElement:string = ``;
 		let scriptElement1:string = ``;
@@ -416,9 +515,9 @@ export class ProcessExportImage {
     <!-- Chrome と Firefox と Safari で再生可能 (IE, Edge ではアニメは再生できません) -->	
     <picture>
 	  <!-- Chrome 用 -->
-      <source type="image/webp" srcset="${fileName}.webp" />
+      <source type="image/webp" srcset="${fileWebPName}" />
       <!-- Firefox, Safari 用 -->
-      <img src="${fileName}.png" width="${this.animationOptionData.imageInfo.width}" height="${this.animationOptionData.imageInfo.height}" alt="" class="apng-image" />
+      <img src="${filePNGName}" width="${this.animationOptionData.imageInfo.width}" height="${this.animationOptionData.imageInfo.height}" alt="" class="apng-image" />
     </picture>`;
 
 			scriptElement1 = `<script src="https://cdnjs.cloudflare.com/ajax/libs/apng-canvas/2.1.1/apng-canvas.min.js"></script>`;
@@ -439,7 +538,7 @@ export class ProcessExportImage {
 
 			imageElement = `
     <!-- Firefox と Safari で再生可能 (Chrome, IE, Edge ではアニメは再生できません) -->
-    <img src="${fileName}.png" width="${this.animationOptionData.imageInfo.width}" height="${this.animationOptionData.imageInfo.height}" alt="" class="apng-image" />`;
+    <img src="${filePNGName}" width="${this.animationOptionData.imageInfo.width}" height="${this.animationOptionData.imageInfo.height}" alt="" class="apng-image" />`;
 			scriptElement1 = `<script src="https://cdnjs.cloudflare.com/ajax/libs/apng-canvas/2.1.1/apng-canvas.min.js"></script>`;
 			scriptElement2 = `
     <script>
@@ -454,7 +553,7 @@ export class ProcessExportImage {
 
 			imageElement = `
     <!-- Chrome で再生可能 (IE, Edge, Firefox, Safari では表示できません) -->
-    <img src="${fileName}.webp" width="${this.animationOptionData.imageInfo.width}" height="${this.animationOptionData.imageInfo.height}" alt="" />`;
+    <img src="${fileWebPName}" width="${this.animationOptionData.imageInfo.width}" height="${this.animationOptionData.imageInfo.height}" alt="" />`;
 
 		} else {
 			return;
@@ -477,7 +576,7 @@ export class ProcessExportImage {
   </body>
 </html>`;
 
-		fs.writeFileSync(path.join(`${this.selectedDirectory}`, `${this.selectedBaseName}.html`), data);
+		fs.writeFileSync(exportFilePath, data);
 	}
 
 	private getCompressOption(type:CompressionType) {
@@ -530,4 +629,80 @@ export class ProcessExportImage {
 		return Promise.all(promises);
 	}
 
+	private openSaveDialog(imageType:string) {
+
+		return new Promise((resolve:Function, reject:Function) => {
+
+			let title = "";
+			let defaultPathName = "";
+			let defaultPath = "";
+			let extention = "";
+
+			const lastBaseName = this.lastSelectBaseName;
+			console.log(lastBaseName);
+			switch (imageType) {
+				case "png":
+					title = "ファイルの保存先を選択";
+					defaultPathName = `${lastBaseName}.png`;
+					extention = "png";
+					break;
+				case "webp":
+					title = "ファイルの保存先を選択";
+					defaultPathName = `${lastBaseName}.webp`;
+					extention = "webp";
+					break;
+				case "html":
+					title = "ファイルの保存先を選択";
+					defaultPathName = `${lastBaseName}.html`;
+					extention = "html";
+					break;
+			}
+			const remote = require('electron').remote;
+			const {dialog} = require('electron').remote;
+			const win = remote.getCurrentWindow();
+			const app = remote.app;
+			const fs = require('fs');
+
+			try {
+				fs.statSync(this.lastSelectSaveDirectories);
+			} catch (e) {
+				console.log("catch!");
+				//	失敗したらパス修正
+				this.lastSelectSaveDirectories = app.getPath("desktop");
+			}
+			const path = require('path');
+			defaultPath = path.join(this.lastSelectSaveDirectories, defaultPathName);
+
+			dialog.showSaveDialog(win, {
+					title: title,
+					defaultPath: defaultPath,
+					filters: [{name: imageType == "html" ? "html" : "Images", extensions: [extention]}],
+					properties: ['openFile']
+				},
+				(fileName:string) => {
+					if (fileName) {
+						const path = require("path");
+						this.lastSelectSaveDirectories = path.dirname(fileName);
+						this.lastSelectBaseName = path.basename(fileName, `.${imageType}`);
+						console.log(this.lastSelectBaseName);
+
+						switch (imageType) {
+							case "png":
+								this.selectedPNGPath = `${fileName}`;
+								break;
+							case "webp":
+								this.selectedWebPPath = `${fileName}`;
+								break;
+							case "html":
+								this.selectedHTMLPath = `${fileName}`;
+								this.selectedHTMLDirectoryPath = this.lastSelectSaveDirectories;
+								break;
+						}
+						resolve(fileName);
+					} else {
+						resolve(null);
+					}
+				});
+		});
+	}
 }

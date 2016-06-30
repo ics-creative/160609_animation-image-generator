@@ -27,8 +27,10 @@ function createWindow() {
 	// （今回はmain.jsと同じディレクトリのindex.html）
 	win.loadURL(`file://${__dirname}/index.html`);
 
-	// デベロッパーツールの起動
-	//win.webContents.openDevTools();
+	if (process.env.NODE_ENV === 'production') {
+		// デベロッパーツールの起動
+		win.webContents.openDevTools();
+	}
 
 	// メインウィンドウが閉じられたときの処理
 	win.on('closed', ()=> {
@@ -58,7 +60,6 @@ function createWindow() {
 
 	const ipc = require('electron').ipcMain;
 	ipc.on('open-file-dialog', openFileDialog);
-	ipc.on('open-save-dialog', openSaveDialog);
 }
 
 function openFileDialog(event) {
@@ -75,52 +76,6 @@ function openFileDialog(event) {
 			event.sender.send('unlock-select-ui');
 		}
 	})
-}
-
-function openSaveDialog(event, imageType) {
-	let title = "";
-	let defaultPathName = "";
-	let defaultPath = "";
-	let extention = "";
-	switch (imageType) {
-		case "line":
-			title = "ファイルの保存先を選択";
-			defaultPathName = "名称未設定.png";
-			extention = "png";
-			break;
-		case "web":
-			title = "ファイルの保存先を選択";
-			defaultPath = "名称未設定.webp";
-			extention = "webp";
-			break;
-	}
-
-	const fs = require('fs');
-	try {
-		fs.statSync(lastSelectSaveDirectories);
-	} catch (e) {
-		console.log("catch!");
-		//	失敗したらパス修正
-		lastSelectSaveDirectories = app.getPath("desktop");
-	}
-	const path = require('path');
-	defaultPath = path.join(lastSelectSaveDirectories, defaultPathName);
-
-	const dialog = require('electron').dialog;
-	dialog.showSaveDialog(win, {
-		title: title,
-		defaultPath: defaultPath,
-		filters: [{name: 'Images', extensions: [extention]}],
-		properties: ['openFile', 'openDirectory']
-	}, function (fileName) {
-		if (fileName) {
-			const path = require("path");
-			lastSelectSaveDirectories = path.dirname(fileName);
-			event.sender.send('selected-save-image', fileName);
-		} else {
-			event.sender.send('unlock-ui');
-		}
-	});
 }
 
 //  初期化が完了した時の処理
