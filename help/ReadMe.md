@@ -26,7 +26,7 @@
 ### ダウンロードURL
 
 - [Windowsはこちらから](https://github.com/ics-creative/160609_animation-image-generator/releases/download/release-0.3.0/Software-Win.zip)
-- [OS Xはこちらから](https://github.com/ics-creative/160609_animation-image-generator/releases/download/release-0.3.0/Software-Mac.zip)
+- [macOSはこちらから](https://github.com/ics-creative/160609_animation-image-generator/releases/download/release-0.3.0/Software-Mac.zip)
 
 
 #### Windowsユーザーの方へ
@@ -37,7 +37,7 @@
 
 ② Windows 7以上のバージョンでのみ動作します。Windows XPやVistaでは起動できません。
 
-#### OS Xユーザーの方へ
+#### macOSユーザーの方へ
 
 ① アプリケーションの起動を行うと「開発元が未確認のため開けません」という余計なエラーが表示されます。大変お手数ですが次のサイトを参考に、起動ください。
 
@@ -48,7 +48,7 @@
 ### バージョンアップの履歴
 
 #### バージョン 0.3.0 (2016年6月24日 金)
-
+z
 - 連番PNG画像のフレームサイズが統一されているか検証する機能を搭載
 - アイコンを変更
 - ファイル生成失敗時に、エラー情報が表示されるよう変更
