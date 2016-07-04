@@ -6,7 +6,7 @@ Windows版はベータ（開発途中）のため、インストールするに�
 
 ### ダウンロードURL
 
-- [Windowsはこちらから](https://github.com/ics-creative/160609_animation-image-generator/releases/download/release-1.0.0/Software-Win.zip)
+- [Windowsはこちらから](https://github.com/ics-creative/160609_animation-image-generator/releases/download/release-1.0.1/Software-Win.zip)
 
 
 #### Windowsユーザーの方へ
@@ -16,3 +16,14 @@ Windows版はベータ（開発途中）のため、インストールするに�
 - [Windows 8で「WindowsによってPCが保護されました」と表示されてソフトウェアをインストールできない場合 | 西沢直木のIT講座](http://www.nishi2002.com/4577.html)
 
 ② Windows 7以上のバージョンでのみ動作します。Windows XPやVistaでは起動できません。
+
+
+#### 更新履歴
+
+バージョン 1.0.1 β (2016年7月4日)
+
+- 32bit版のWindowsにも対応させました
+
+バージョン 1.0.0 β (2016年6月30日)
+
+- 公開しました
