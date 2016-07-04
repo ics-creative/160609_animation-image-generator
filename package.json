@@ -1,6 +1,6 @@
 {
   "name": "animation-image-converter",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -16,7 +16,7 @@
     "install:package-mac": "cd tmp-release-mac && npm install --production",
     "package-mac": "electron-packager ./tmp-release-mac 'アニメ画像に変換する君' --platform=darwin --arch=x64 --overwrite --asar --icon='resources/app.icns'  --version='1.2.3'",
     "release-mac": "npm run clean:app && npm run build:app && npm run copy:release:app-mac && npm run copy:release:bin-mac && npm run install:package-mac && npm run package-mac",
-    "package-mas": "electron-packager ./tmp-release-mac 'アニメ画像に変換する君' --platform=mas --overwrite --asar  --arch=x64 --app-bundle-id='media.ics.AnimationImageConverter'  --extend-info=dev/Info.plist  --version='1.2.3'  --app-version='1.0.0' --build-version='1.0.208' --icon='resources/app.icns' --overwrite ",
+    "package-mas": "electron-packager ./tmp-release-mac 'アニメ画像に変換する君' --platform=mas --overwrite --asar  --arch=x64 --app-bundle-id='media.ics.AnimationImageConverter'  --extend-info=dev/Info.plist  --version='1.2.3'  --app-version='1.0.1' --build-version='1.0.208' --icon='resources/app.icns' --overwrite ",
     "sign-mas": "electron-osx-sign 'アニメ画像に変換する君-mas-x64/アニメ画像に変換する君.app' --entitlements='dev/parent.plist' --entitlements-inherit='dev/child.plist'",
     "package-sign-mas": "npm run package-mas && npm run sign-mas",
     "flat": "electron-osx-flat 'アニメ画像に変換する君-mas-x64/アニメ画像に変換する君.app' --identity '3rd Party Mac Developer Installer: ICS INC. (53YCXL8YSM)' --verbose --pkg AnimationImageConverter.pkg",
