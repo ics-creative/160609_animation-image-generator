@@ -31,9 +31,8 @@ export class LineStampValidator {
 		}
 
 		if (LineStampValidator.validateFrameMinSize(options) === false) {
-			validateArr.push(`幅、高さ共に長辺どちらか270px以上にしてください。現在の画像サイズはW${options.imageInfo.width}×H${options.imageInfo.height}pxです。`);
+			validateArr.push(`アニメーションスタンプ画像は幅、高さ共に長辺どちらか270px以上にしてください。メイン画像の場合は幅、高さを240pxにしてください。現在の画像サイズはW${options.imageInfo.width}×H${options.imageInfo.height}pxです。`);
 		}
-
 
 		return validateArr;
 	}
@@ -46,7 +45,12 @@ export class LineStampValidator {
 		let flag = true;
 
 		if (options.imageInfo.width < 270 && options.imageInfo.height < 270) {
-			flag = false;
+			// メイン画像判定
+			if(options.imageInfo.width == 240 && options.imageInfo.height == 240){
+				// メイン画像のため無視する
+			}else{
+				flag = false;
+			}
 		}
 
 		return flag;
