@@ -19,7 +19,7 @@ function createWindow() {
 		height: 640,
 		minWidth: 800,
 		minHeight: 400,
-		title: "アニメ画像に変換する君",
+		title: " ",
 		icon: __dirname + `/imgs/icon.png`
 	});
 

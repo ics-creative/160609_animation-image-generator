@@ -2,6 +2,9 @@ import {LocaleData} from "./locale-data";
 "use strict";
 
 export class LocaleEnData extends LocaleData {
+
+	APP_NAME:string = "Animation Image Converter";
+
 	PROP_use:string = "Type";
 	PROP_useItemLine:string = "LINE Animation Stamp";
 	PROP_useItemWeb:string = "Animation Image for Website";

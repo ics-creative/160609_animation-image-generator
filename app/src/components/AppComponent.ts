@@ -51,6 +51,10 @@ export class AppComponent {
 	constructor(private localeData:LocaleData, sanitizer:DomSanitizationService) {
 		this.gaUrl = sanitizer.bypassSecurityTrustResourceUrl('http://ics-web.jp/projects/animation-image-tool/?v=' + this.appConfig.version);
 		new LocaleManager().applyClientLocale(localeData);
+
+		const {dialog} = require('electron').remote;
+		const win = require('electron').remote.getCurrentWindow();
+		win.setTitle(localeData.APP_NAME);
 	}
 
 	ngOnInit() {
@@ -61,7 +65,7 @@ export class AppComponent {
 		this.animationOptionData = new AnimationImageOptions();
 
 		this.isImageSelected = false;
-		this.exportImagesProcess = new ProcessExportImage(this.appConfig, this.localeData);
+		this.exportImagesProcess = new ProcessExportImage(this.localeData);
 
 		// 初回プリセットの設定
 		this.presetMode = Number(localStorage.getItem(this.PRESET_ID));

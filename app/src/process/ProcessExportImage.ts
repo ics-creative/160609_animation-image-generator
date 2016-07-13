@@ -3,7 +3,6 @@ import {ImageData} from "../data/ImageData";
 import {PresetType} from "../type/PresetType";
 import {LineStampValidator} from "../validators/LineStampValidator";
 import {CompressionType} from "../type/CompressionType";
-import {AppConfig} from "../config/AppConfig";
 import {ErrorCode} from "../error/ErrorCode";
 import {LocaleData} from "../i18n/locale-data";
 
@@ -39,7 +38,7 @@ export class ProcessExportImage {
 	private generateCancelHTML:boolean;
 	private generateCancelWebP:boolean;
 
-	constructor(private appConfig:AppConfig, private localeData:LocaleData) {
+	constructor(private localeData:LocaleData) {
 		//	platformで実行先の拡張子を変える
 		this.exeExt = process.platform == 'win32' ? ".exe" : "";
 		this.lastSelectBaseName = this.localeData.defaultFileName;
@@ -298,7 +297,7 @@ export class ProcessExportImage {
 								var options = {
 									type: "info",
 									buttons: ["OK"],
-									title: this.appConfig.name,
+									title: this.localeData.APP_NAME,
 									//message: message,
 									detail: message + "\n\n" + detailMessage
 								};

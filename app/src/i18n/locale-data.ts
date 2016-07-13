@@ -3,6 +3,9 @@ import {Injectable} from "@angular/core";
 
 @Injectable()
 export class LocaleData {
+
+	APP_NAME:string = null;
+
 	PROP_use:string = null;
 	PROP_useItemLine:string = null;
 	PROP_useItemWeb:string = null;

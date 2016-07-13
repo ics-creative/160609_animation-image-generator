@@ -2,6 +2,9 @@ import {LocaleData} from "./locale-data";
 "use strict";
 
 export class LocaleJaData extends LocaleData {
+
+	APP_NAME:string = "アニメ画像に変換する君";
+
 	PROP_use:string = "用途";
 	PROP_useItemLine:string = "LINEアニメーションスタンプ";
 	PROP_useItemWeb:string = "webページ用アニメーション";
