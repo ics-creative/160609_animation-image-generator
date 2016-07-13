@@ -15,6 +15,7 @@ import {Menu} from "../menu/Menu";
 import {ErrorMessage} from "../error/ErrorMessage";
 import {LocaleData} from "../i18n/locale-data";
 import {LocaleManager} from "../i18n/locale-manager";
+import {SafeResourceUrl, DomSanitizationService} from '@angular/platform-browser';
 
 declare function require(value:String):any;
 
@@ -40,13 +41,15 @@ export class AppComponent {
 	private appConfig:AppConfig = new AppConfig();
 	private _isDragover:boolean = false;
 	private apngFileSizeError:boolean = false;
+	private gaUrl:SafeResourceUrl;
 
 	@Input() animationOptionData:AnimationImageOptions;
 
 	@ViewChild("myComponent") myComponent:ElementRef;
 	@ViewChild("optionSelecter") optionSelecterComponent:ElementRef;
 
-	constructor(private localeData:LocaleData){
+	constructor(private localeData:LocaleData, sanitizer:DomSanitizationService) {
+		this.gaUrl = sanitizer.bypassSecurityTrustResourceUrl('http://ics-web.jp/projects/animation-image-tool/?v=' + this.appConfig.version);
 		new LocaleManager().applyClientLocale(localeData);
 	}
 
