@@ -1,4 +1,5 @@
 import {AppConfig} from "../config/AppConfig";
+import {LocaleData} from "../i18n/locale-data";
 declare function require(value:String):any;
 declare var process:{platform:string};
 
@@ -7,7 +8,7 @@ declare var process:{platform:string};
  */
 export class Menu {
 
-	constructor(private appConfig:AppConfig) {
+	constructor(private appConfig:AppConfig, private localeData:LocaleData) {
 	}
 
 	public createMenu():void {
@@ -29,13 +30,13 @@ export class Menu {
 			template.push({
 				label: name,
 				submenu: [{
-					label: `${this.appConfig.name}について`,
+					label: this.localeData.MENU_about,
 					click() {
-						alert(`お使いの「${name}」のバージョンは ${version} です。`);
+						alert(`お使いの「${name}」のバージョンは ${version} です。` + "\n" + `You use version ${version}.`);
 					}
 				},
 					{
-						label: `${this.appConfig.name}を終了する`, accelerator: "Command+Q",
+						label: this.localeData.MENU_quit, accelerator: "Command+Q",
 						click()
 						{
 							app.quit();
@@ -45,20 +46,20 @@ export class Menu {
 
 		const helpMenu:any[] = [
 			{
-				label: "オンラインヘルプ",
+				label: this.localeData.MENU_helpOnline,
 				click() {
 					shell.openExternal("https://github.com/ics-creative/160609_animation-image-generator/tree/master/help");
 				}
 			},
 			{
-				label: "不具合報告＆機能要望",
+				label: this.localeData.MENU_helpQuestion,
 				click() {
 					shell.openExternal("http://goo.gl/forms/5DUI1UnTUXR6AmCw2");
 				}
 			}
 		];
 		template.push({
-			label: "ヘルプ",
+			label: this.localeData.MENU_help,
 			submenu: helpMenu
 		});
 		const menu = Menu.buildFromTemplate(template);

@@ -52,7 +52,7 @@ export class AppComponent {
 
 	ngOnInit() {
 
-		const menu:Menu = new Menu(this.appConfig);
+		const menu:Menu = new Menu(this.appConfig, this.localeData);
 		menu.createMenu();
 
 		this.animationOptionData = new AnimationImageOptions();

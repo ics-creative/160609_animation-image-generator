@@ -9,10 +9,10 @@ export class LocaleEnData extends LocaleData {
 	PROP_tabAnim:string = "Animation";
 	PROP_tabQuality:string = "Quality";
 
-	PROP_tabAnimFps:string = "Framerate";
+	PROP_tabAnimFps:string = "Frame Rate";
 	PROP_tabAnimLoop:string = "Playback";
 	PROP_tabAnimLoopNum:string = "Loop";
-	PROP_tabAnimLoopInitiny:string = "Inifinity";
+	PROP_tabAnimLoopInitiny:string = "Infinity";
 
 	PROP_tabAnimFpsTooltip:string = "";
 	PROP_tabAnimLoopTooltip:string = "1 to 4 Loops";

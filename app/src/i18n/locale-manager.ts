@@ -43,7 +43,7 @@ export class LocaleManager {
   public changeLocale(master:LocaleData, selectedLocale:LocaleData):void {
     for (let key in selectedLocale) {
       if (Reflect.has(selectedLocale, key) == true) {
-        let val = <any> selectedLocale[key];
+        let val:any = <any> Reflect.get(selectedLocale, key);
         Reflect.set(master, key, val);
       }
     }
