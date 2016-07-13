@@ -1,5 +1,6 @@
 import {Component, Input} from "@angular/core";
 import {AnimationImageOptions} from "../data/AnimationImageOptions";
+import {LocaleData} from "../i18n/locale-data";
 
 declare function require(value:String):any;
 
@@ -11,5 +12,8 @@ declare function require(value:String):any;
 
 export class PropertiesComponent  {
 	@Input() animationOptionData:AnimationImageOptions;
+
+	constructor(private localeData:LocaleData){
+	}
 }
 

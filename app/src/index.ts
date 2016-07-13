@@ -5,6 +5,7 @@ import 'zone.js/dist/zone';
 import {bootstrap} from '@angular/platform-browser-dynamic';
 import {AppComponent} from './components/AppComponent'
 import {enableProdMode} from "@angular/platform-browser/src/facade/lang";
+import {LocaleData} from "./i18n/locale-data";
 
 // 起動コード
 window.addEventListener("DOMContentLoaded", ()=> {
@@ -18,6 +19,6 @@ window.addEventListener("DOMContentLoaded", ()=> {
 
 	setImmediate(()=> {
 		enableProdMode();
-		bootstrap(AppComponent);
+		bootstrap(AppComponent, [LocaleData]);
 	});
 });

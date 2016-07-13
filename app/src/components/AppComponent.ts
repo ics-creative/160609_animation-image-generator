@@ -13,6 +13,8 @@ import {AppConfig} from "../config/AppConfig";
 import {ImageData} from "../data/ImageData";
 import {Menu} from "../menu/Menu";
 import {ErrorMessage} from "../error/ErrorMessage";
+import {LocaleData} from "../i18n/locale-data";
+import {LocaleManager} from "../i18n/locale-manager";
 
 declare function require(value:String):any;
 
@@ -43,6 +45,10 @@ export class AppComponent {
 
 	@ViewChild("myComponent") myComponent:ElementRef;
 	@ViewChild("optionSelecter") optionSelecterComponent:ElementRef;
+
+	constructor(private localeData:LocaleData){
+		new LocaleManager().applyClientLocale(localeData);
+	}
 
 	ngOnInit() {
 

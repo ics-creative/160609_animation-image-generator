@@ -5,6 +5,7 @@ import {AnimationImageOptions} from "../data/AnimationImageOptions";
 import {ImageData} from "../data/ImageData";
 import {LineStampValidator} from "../validators/LineStampValidator";
 import {PresetType} from "../type/PresetType";
+import {LocaleData} from "../i18n/locale-data";
 
 declare function require(value:String):any;
 
@@ -32,6 +33,9 @@ export class AnimPreviewComponent implements OnChanges {
 	private isValidFrameLength:boolean = true;
 	private isValidTime:boolean = true;
 
+	constructor(private localeData:LocaleData){
+	}
+	
 	private selectScaleValue(scaleValue:number):void {
 		this.scaleValue = scaleValue;
 	}

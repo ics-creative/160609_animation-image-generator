@@ -1,23 +1,23 @@
 <div class="please-drag-here" *ngIf="items.length == 0">
   <div class="text-xs-center">
-    <h4>ここに連番画像(PNG)ファイルをドロップ</h4>
+    <h4>{{localeData.PREV_selectDrop}}</h4>
     <div>
-      <small>または</small>
+      <small>{{localeData.PREV_selectOr}}</small>
     </div>
     <button class="btn btn-primary m-t-1"
             [ngClass]="{disabled: openingDirectories == true}"
-            (click)="openDirectories()">ファイルを選択
+            (click)="openDirectories()">{{localeData.PREV_btnSelect}}
     </button>
   </div>
 </div>
 
 <div class="anim-preview p-a-1" *ngIf="items.length > 0">
   <p>
-    フレームサイズ <span class="label" [ngClass]="{'label-success' : isValidFrameSize, 'label-danger' : !isValidFrameSize}">W{{animationOptionData.imageInfo.width}}×H{{animationOptionData.imageInfo.height}}px</span>
-    / 総フレーム数 <span class="label" [ngClass]="{'label-success' : isValidFrameLength, 'label-danger' : !isValidFrameLength}">{{items.length}}</span>
+    {{localeData.PREV_infoFrameSize}} <span class="label" [ngClass]="{'label-success' : isValidFrameSize, 'label-danger' : !isValidFrameSize}">W{{animationOptionData.imageInfo.width}}×H{{animationOptionData.imageInfo.height}}px</span>
+    / {{localeData.PREV_infoFrameNum}} <span class="label" [ngClass]="{'label-success' : isValidFrameLength, 'label-danger' : !isValidFrameLength}">{{items.length}}</span>
 			<span *ngIf="animationOptionData.noLoop == false">
-				/ 再生時間 <span
-              class="label label-success" [ngClass]="{'label-success' : isValidTime, 'label-danger' : !isValidTime}">{{items.length * animationOptionData.loop / animationOptionData.fps}}秒</span>
+				/ {{localeData.PREV_infoTime}} <span
+              class="label label-success" [ngClass]="{'label-success' : isValidTime, 'label-danger' : !isValidTime}">{{items.length * animationOptionData.loop / animationOptionData.fps}}{{localeData.PREV_infoTimeUnit}}</span>
 			</span>
   </p>
 
@@ -43,7 +43,7 @@
         <i class="fa fa-step-backward"></i>
       </button>
 
-      <span class="m-l-1">表示倍率</span>
+      <span class="m-l-1">{{localeData.PREV_zoom}}</span>
       <!-- 拡大率 -->
       <select class="c-select mod-zoom-select"
               #selectScale
@@ -56,12 +56,12 @@
 
       <button class="btn btn-secondary-outline btn-sm m-l-1"
               [ngClass]="{disabled: openingDirectories == true}"
-              (click)="openDirectories()">ファイルを再選択
+              (click)="openDirectories()">{{localeData.PREV_btnSelectRe}}
       </button>
     </div>
   </div>
 
-  <p class="m-t-1">コマ画像プレビュー</p>
+  <p class="m-t-1">{{localeData.PREV_preview}}</p>
   <div>
     <div *ngIf="items.length >= 1">
       <div *ngFor="let item of items; let i = index"
