@@ -1,37 +1,60 @@
 import {AnimationImageOptions} from "../data/AnimationImageOptions";
+import {LocaleData} from "../i18n/locale-data";
 
 declare function require(value:String):any;
 
 export class LineStampValidator {
-	static validate(output:string, options:AnimationImageOptions):string[] {
+	static validate(output:string, options:AnimationImageOptions, localeData:LocaleData):string[] {
 		const validateArr:string[] = [];
 
 		const fs = require('fs');
 		const stat:{size:number} = fs.statSync(output);
 
 		if (stat.size > 300 * 1024) {
-			validateArr.push(`出力した画像の容量が300KBを超えました(現在は${Math.round(stat.size / 1000)}KBです)。`);
+			let val = Math.round(stat.size / 1000);
+
+			validateArr.push(localeData.VALIDATE_size.split("${1}").join(val + ""));
 		}
 
 		if (LineStampValidator.validateFrameLength(options) === false) {
-			validateArr.push(`イラストは最低5~最大20枚で設定ください(現在は${options.imageInfo.length}枚です)。`);
+			let val = options.imageInfo.length;
+
+			validateArr.push(localeData.VALIDATE_amount.split("${1}").join(val + ""));
 		}
 
 		if (options.noLoop == true) {
-			validateArr.push(`ループ回数が無限になっています。再生時間に合わせてループの数を指定ください。`);
+
+
+			validateArr.push(localeData.VALIDATE_noLoop);
 		} else {
 			let playTime = options.imageInfo.length * options.loop / options.fps;
 			if (LineStampValidator.validateTime(options) === false) {
-				validateArr.push(`再生時間は1、2、3、4秒のいずれかで設定ください。現在の${Math.round(playTime * 100) / 100}秒は設定できません。`);
+
+				let val = Math.round(playTime * 100) / 100;
+				validateArr.push(localeData.VALIDATE_time.split("${1}").join(val + ""));
 			}
 		}
 
 		if (LineStampValidator.validateFrameMaxSize(options) === false) {
-			validateArr.push(`画像サイズはW320×H270px以内で制作ください。現在の画像サイズはW${options.imageInfo.width}×H${options.imageInfo.height}pxです。`);
+
+			let val1 = options.imageInfo.width;
+			let val2 = options.imageInfo.height;
+
+			validateArr.push(localeData.VALIDATE_maxSize
+				.split("${1}").join(val1 + "")
+				.split("${2}").join(val2 + "")
+			);
 		}
 
 		if (LineStampValidator.validateFrameMinSize(options) === false) {
-			validateArr.push(`アニメーションスタンプ画像は幅、高さ共に長辺どちらか270px以上にしてください。メイン画像の場合は幅、高さを240pxにしてください。現在の画像サイズはW${options.imageInfo.width}×H${options.imageInfo.height}pxです。`);
+
+			let val1 = options.imageInfo.width;
+			let val2 = options.imageInfo.height;
+
+			validateArr.push(localeData.VALIDATE_minSize
+				.split("${1}").join(val1 + "")
+				.split("${2}").join(val2 + "")
+			);
 		}
 
 		return validateArr;
@@ -46,9 +69,9 @@ export class LineStampValidator {
 
 		if (options.imageInfo.width < 270 && options.imageInfo.height < 270) {
 			// メイン画像判定
-			if(options.imageInfo.width == 240 && options.imageInfo.height == 240){
+			if (options.imageInfo.width == 240 && options.imageInfo.height == 240) {
 				// メイン画像のため無視する
-			}else{
+			} else {
 				flag = false;
 			}
 		}

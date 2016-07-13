@@ -52,4 +52,15 @@ export class LocaleData {
 	MENU_helpOnline:string = null;
 	MENU_helpQuestion:string = null;
 
+	VALIDATE_ImportImageSize:string = null;
+	VALIDATE_title:string = null;
+	VALIDATE_size:string = null;
+	VALIDATE_amount:string = null;
+	VALIDATE_noLoop:string = null;
+	VALIDATE_time:string = null;
+	VALIDATE_maxSize:string = null;
+	VALIDATE_minSize:string = null;
+
+	defaultFileName:string = null;
+
 }

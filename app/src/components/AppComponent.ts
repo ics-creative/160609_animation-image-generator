@@ -58,7 +58,7 @@ export class AppComponent {
 		this.animationOptionData = new AnimationImageOptions();
 
 		this.isImageSelected = false;
-		this.exportImagesProcess = new ProcessExportImage(this.appConfig);
+		this.exportImagesProcess = new ProcessExportImage(this.appConfig, this.localeData);
 
 		// 初回プリセットの設定
 		this.presetMode = Number(localStorage.getItem(this.PRESET_ID));
@@ -335,7 +335,7 @@ export class AppComponent {
 							// 何もしない
 						} else {
 							// 画像サイズが異なっていることを通知する
-							alert(`${items[i].imageBaseName} の幅・高さが他の画像と異なっています。連番画像のサイズが統一されているか確認ください。`);
+							alert(`${items[i].imageBaseName} ${this.localeData.VALIDATE_ImportImageSize}`);
 							errorFlag = true;
 						}
 						this.apngFileSizeError = errorFlag;

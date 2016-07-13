@@ -5,6 +5,7 @@ import {LineStampValidator} from "../validators/LineStampValidator";
 import {CompressionType} from "../type/CompressionType";
 import {AppConfig} from "../config/AppConfig";
 import {ErrorCode} from "../error/ErrorCode";
+import {LocaleData} from "../i18n/locale-data";
 
 declare function require(value:String):any;
 declare var process:{platform:string};
@@ -38,13 +39,13 @@ export class ProcessExportImage {
 	private generateCancelHTML:boolean;
 	private generateCancelWebP:boolean;
 
-	constructor(private appConfig:AppConfig) {
+	constructor(private appConfig:AppConfig, private localeData:LocaleData) {
 		//	platformで実行先の拡張子を変える
 		this.exeExt = process.platform == 'win32' ? ".exe" : "";
-		this.lastSelectBaseName = "名称未設定";
+		this.lastSelectBaseName = this.localeData.defaultFileName;
 	}
 
-	public  exec(itemList:ImageData[], animationOptionData:AnimationImageOptions):Promise<any> {
+	public exec(itemList:ImageData[], animationOptionData:AnimationImageOptions):Promise<any> {
 
 		//	テンポラリパス生成
 		const remote = require('electron').remote;
@@ -286,12 +287,12 @@ export class ProcessExportImage {
 						//exec(`/Applications/Safari.app`, [this.apngPath]);
 
 						if (this.animationOptionData.preset == PresetType.LINE) {
-							const validateArr = LineStampValidator.validate(exportFilePath, this.animationOptionData);
+							const validateArr = LineStampValidator.validate(exportFilePath, this.animationOptionData, this.localeData);
 
 							if (validateArr.length > 0) {
 								const {dialog} = require('electron').remote;
 								const win = require('electron').remote.getCurrentWindow();
-								const message = "APNGファイルを作成しましたが、LINEアニメーションスタンプのガイドラインに適しない箇所がありました。次の項目を再確認ください。";
+								const message = this.localeData.VALIDATE_title;
 								const detailMessage = "・" + validateArr.join("\n\n・");
 
 								var options = {
