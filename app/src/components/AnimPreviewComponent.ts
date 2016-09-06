@@ -33,6 +33,8 @@ export class AnimPreviewComponent implements OnChanges {
 	private isValidFrameLength:boolean = true;
 	private isValidTime:boolean = true;
 
+	private cacheClearStamp:string = "";
+
 	constructor(private localeData:LocaleData){
 	}
 	
@@ -54,6 +56,8 @@ export class AnimPreviewComponent implements OnChanges {
 			this.currentLoopCount = 0;
 			this.playing = true;
 		}
+		
+		this.cacheClearStamp = Date.now() + "";
 	}
 
 
