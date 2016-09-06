@@ -6,7 +6,7 @@ Windows版はベータ（開発途中）のため、インストールするに�
 
 ### ダウンロードURL
 
-- [Windowsはこちらから](https://github.com/ics-creative/160609_animation-image-generator/releases/download/release-1.0.1/Software-Win.zip)
+- [Windowsはこちらから](https://github.com/ics-creative/160609_animation-image-generator/releases/download/release-1.1.0/Software-Win.zip)
 
 
 #### Windowsユーザーの方へ
@@ -19,6 +19,11 @@ Windows版はベータ（開発途中）のため、インストールするに�
 
 
 #### 更新履歴
+
+バージョン 1.1.0 β (2016年7月13日)
+
+- 英語のUIに対応しました
+- LINEスタンプのメイン画像を書き出すときのエラーチェックを調整しました
 
 バージョン 1.0.1 β (2016年7月4日)
 

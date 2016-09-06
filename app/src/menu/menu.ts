@@ -22,8 +22,8 @@ export class Menu {
 		const {Menu, MenuItem} = remote;
 		const app = remote.app;
 		const version = this.appConfig.version;
-		const name = this.appConfig.name;
-		// const name = app.getName();
+		const name = this.localeData.APP_NAME;
+
 		const template:any[] = [];
 
 
