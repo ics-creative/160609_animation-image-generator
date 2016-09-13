@@ -69,7 +69,7 @@
            [ngClass]="{active: currentFrame == i}"
            (click)="gotoAndStop(i);"
       >
-        <img data-src="{{item.imagePath + '?cc=' + cacheClearStamp}}" class="frame-image"/>
+        <img data-src="file:///{{item.imagePath + '?cc=' + cacheClearStamp}}" class="frame-image"/>
       </div>
     </div>
   </div>
