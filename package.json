@@ -47,8 +47,9 @@
     "copyfiles": "^0.2.1",
     "del": "^2.2.0",
     "del-cli": "^0.2.0",
-    "electron-osx-sign": "^0.4.0-beta4",
-    "electron-packager": "^7.0.3",
-    "node-mv": "^0.1.3"
+    "electron-osx-sign": "0.4.0-beta4",
+    "electron-packager": "7.0.3",
+    "node-mv": "^0.1.3",
+    "typescript": "^1.6.2"
   }
 }
