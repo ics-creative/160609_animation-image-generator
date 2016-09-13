@@ -135,7 +135,7 @@ export class AppComponent {
 
 				const item:ImageData = new ImageData();
 				item.imageBaseName = path.basename(filePath);
-				item.imagePath = filePath;
+                item.imagePath = "file:///" + filePath;
 				item.frameNumber = this.items.length;
 
 				this.items.push(item);
