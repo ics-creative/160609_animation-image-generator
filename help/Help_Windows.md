@@ -6,7 +6,7 @@ Windows版はベータ（開発途中）のため、インストールするに�
 
 ### ダウンロードURL
 
-- [Windowsはこちらから](https://github.com/ics-creative/160609_animation-image-generator/releases/download/release-1.1.0/Software-Win.zip)
+- [Windowsはこちらから](https://github.com/ics-creative/160609_animation-image-generator/releases/download/release-1.2.0/Software-Win.zip)
 
 
 #### Windowsユーザーの方へ
@@ -17,9 +17,13 @@ Windows版はベータ（開発途中）のため、インストールするに�
 
 ② Windows 7以上のバージョンでのみ動作します。Windows XPやVistaでは起動できません。
 
-③ PNG画像を読み込んだときに画像が表示されない場合があります。別ドライブ(例： `D:\` )だと表示できないため、お手数ですがデスクトップ等に素材のPNG画像を配置してから、読み込むようお願いします。
-
 #### 更新履歴
+
+バージョン 1.2.0 β (2016年9月14日)
+
+- Windowsでプレビュー画像が表示されない不具合を修正しました
+- APNGへの保存時にカラーモードがグレースケールに変換される不具合を修正しました
+- 取り込んだ画像と同じ画像を読み込んだときにプレビュー画像がリフレッシュされるように修正しました
 
 バージョン 1.1.0 β (2016年7月13日)
 
