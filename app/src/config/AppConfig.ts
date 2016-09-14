@@ -7,5 +7,5 @@ export class AppConfig {
 	 * アプリケーションのバージョン番号を示します。
 	 * @type {string}
 	 */
-	public version:string = "1.1.0";
+	public version:string = "1.2.0";
 }
