@@ -4,7 +4,7 @@
   "description": "animation-image-converter",
   "main": "main.js",
   "scripts": {
-    "start": "NODE_ENV=production gulp serve",
+    "start": "NODE_ENV=develop gulp serve",
     "test": "echo \"Hoge Moja Piyo\" && exit 1",
     "build:typescript": "tsc -p src/ -w",
     "build": "tsc -p src/ && gulp webpack",

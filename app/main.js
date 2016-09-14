@@ -27,7 +27,7 @@ function createWindow() {
 	// （今回はmain.jsと同じディレクトリのindex.html）
 	win.loadURL(`file://${__dirname}/index.html`);
 
-	if (process.env.NODE_ENV === 'production') {
+	if (process.env.NODE_ENV === 'develop') {
 		// デベロッパーツールの起動
 		win.webContents.openDevTools();
 	}
