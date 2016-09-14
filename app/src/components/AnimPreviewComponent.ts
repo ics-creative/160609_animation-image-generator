@@ -84,7 +84,7 @@ export class AnimPreviewComponent implements OnChanges {
 				this.currentFrame = 0;
 			}
 		}
-		this.imagePath = "file:///" + this.items[this.currentFrame].imagePath;
+		this.imagePath = this.items[this.currentFrame].imagePath;
 	}
 
 	private loop():void {
@@ -136,7 +136,7 @@ export class AnimPreviewComponent implements OnChanges {
 			this.currentFrame = frame;
 			this.currentLoopCount = 0;
 
-			this.imagePath = "file:///" + this.items[this.currentFrame].imagePath;
+			this.imagePath = this.items[this.currentFrame].imagePath;
 		}
 	}
 
