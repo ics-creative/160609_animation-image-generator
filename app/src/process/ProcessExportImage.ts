@@ -276,7 +276,9 @@ export class ProcessExportImage {
 				"1",
 				this.animationOptionData.fps,
 				compressOptions,
-				loopOption];
+				loopOption,
+				"-kc"
+			];
 
 			setImmediate(() => {
 				exec(path.join(appPath, `/bin/apngasm${this.exeExt}`), options, (err:any, stdout:any, stderr:any) => {
@@ -363,7 +365,7 @@ export class ProcessExportImage {
 				pngFiles.push(`${pngPath}/frame${i}.png`);
 			}
 
-			if (this.animationOptionData.noLoop == false) {
+			if (this.animationOptionData.noLoop == false ) {
 				options.push(`-loop`);
 				let loopNum = this.animationOptionData.loop - 1;
 
@@ -373,7 +375,6 @@ export class ProcessExportImage {
 				if (loopNum == 0) {
 					loopNum = 1; // バグ
 				}
-
 				options.push(loopNum + "");
 			}
 
