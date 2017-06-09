@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<data>
+  <result>
+    <user_id>136786</user_id>
+    <token>0555a3e0d5ba26ca6e9bbf7e95331594</token>
+    <user_status>3</user_status>
+    <top_img_url>top.jpg?vr=12</top_img_url>
+    <maintenance>false</maintenance>
+    <config>
+      <encrypt_enabled>true</encrypt_enabled>
+      <!-- Encript Flag -->
+      <root_url>http://onmjpcmbgadev.ha-mo.jp/webhome_mbga/</root_url>
+      <!-- path to php -->
+      <asset_url>http://onmjpcmbgadev.ha-mo.jp/webhome_mbga/</asset_url>
+      <!-- path to material -->
+      <sound_version>14</sound_version>
+      <image_version>12</image_version>
+    </config>
+    <event_list>
+      <event_emblem>
+        <start_flag>0</start_flag>
+      </event_emblem>
+      <event_raid_battle>
+        <start_flag>2</start_flag>
+        <banner_img_url>images/event/event_raid_battle/mbga/34/top/button.png?ver=12</banner_img_url>
+        <op_message/>
+      </event_raid_battle>
+      <event_team_battle>
+        <start_flag>1</start_flag>
+        <banner_img_url>images/event/event_team_battle/mbga/56/entrance/button.png?ver=12</banner_img_url>
+        <op_message/>
+      </event_team_battle>
+      <event_npc_battle>
+        <start_flag>0</start_flag>
+      </event_npc_battle>
+      <event_tower>
+        <start_flag>0</start_flag>
+      </event_tower>
+      <event_teamtower>
+        <start_flag>0</start_flag>
+      </event_teamtower>
+    </event_list>
+    <timestamp>1497118025</timestamp>
+  </result>
+  <hash>342433d697af8874f9455f33eab06769d278299b2347beb3a6e01cff1d0768ef</hash>
+</data>
