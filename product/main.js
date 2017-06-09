@@ -9,18 +9,23 @@ const url = require('url');
 // メインウィンドウ
 let mainWindow;
 
-function createWindow () {
+function createWindow() {
   // メインウィンドウを作成します
   mainWindow = new BrowserWindow({width: 800, height: 600});
 
+  console.log(process.env.NODE_ENV)
   // メインウィンドウに表示するURLを指定します
-  // 今回はdistディレクトリのindex.html
-  mainWindow.loadURL(url.format({
-    pathname: path.join(__dirname, "dist", 'index.html'),
-    protocol: 'file:',
-    slashes: true
-  }));
+  if (process.env.NODE_ENV == "production") {
 
+    // 今回はdistディレクトリのindex.html
+    mainWindow.loadURL(url.format({
+      pathname: path.join(__dirname, "dist", 'index.html'),
+      protocol: 'file:',
+      slashes: true
+    }));
+  } else {
+    mainWindow.loadURL("http://localhost:4200/");
+  }
   // デベロッパーツールの起動
   mainWindow.webContents.openDevTools();
 
