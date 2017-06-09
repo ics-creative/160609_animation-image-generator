@@ -50,6 +50,6 @@
     "electron-osx-sign": "0.4.0-beta4",
     "electron-packager": "7.0.3",
     "node-mv": "^0.1.3",
-    "typescript": "^1.6.2"
+    "typescript": "1.6.2"
   }
 }
