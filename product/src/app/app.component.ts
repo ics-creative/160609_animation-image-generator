@@ -26,9 +26,12 @@ export class AppComponent implements OnInit {
     menu.append(new MenuItem({type:'separator'}));
     menu.append(new MenuItem({label:'MenuItem2', type:'checkbox', checked:true}));
 
+    console.log((<any>window).createjs);
+
     window.addEventListener('contextmenu', (e) => {
       e.preventDefault();
       menu.popup(remote.getCurrentWindow());
-    }, false)
+    }, false);
+
   }
 }

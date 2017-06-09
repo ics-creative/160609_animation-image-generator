@@ -153,6 +153,27 @@
     magic-string "^0.19.0"
     source-map "^0.5.6"
 
+"@types/createjs-lib@*":
+  version "0.0.29"
+  resolved "https://registry.yarnpkg.com/@types/createjs-lib/-/createjs-lib-0.0.29.tgz#fae82e3ba8606663b190e789cec7d9c728fc41d7"
+
+"@types/createjs@^0.0.29":
+  version "0.0.29"
+  resolved "https://registry.yarnpkg.com/@types/createjs/-/createjs-0.0.29.tgz#4d19b0feaa38252dcd79d78a38a4cc6df3f181fc"
+  dependencies:
+    "@types/createjs-lib" "*"
+    "@types/easeljs" "*"
+    "@types/preloadjs" "*"
+    "@types/soundjs" "*"
+    "@types/tweenjs" "*"
+
+"@types/easeljs@*":
+  version "0.8.36"
+  resolved "https://registry.yarnpkg.com/@types/easeljs/-/easeljs-0.8.36.tgz#be39800953892306ef69f6d639f8d123369754ba"
+  dependencies:
+    "@types/createjs-lib" "*"
+    "@types/tweenjs" "*"
+
 "@types/jasmine@2.5.45":
   version "2.5.45"
   resolved "https://registry.yarnpkg.com/@types/jasmine/-/jasmine-2.5.45.tgz#58928a621d014ce6ab59c5a9c41071f7328b0ca9"
@@ -165,6 +186,12 @@
   version "7.0.29"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-7.0.29.tgz#ccfcec5b7135c7caf6c4ffb8c7f33102340d99df"
 
+"@types/preloadjs@*":
+  version "0.6.32"
+  resolved "https://registry.yarnpkg.com/@types/preloadjs/-/preloadjs-0.6.32.tgz#12cff7c7f92e3838a780d438ce49c8cec981830d"
+  dependencies:
+    "@types/createjs-lib" "*"
+
 "@types/q@^0.0.32":
   version "0.0.32"
   resolved "https://registry.yarnpkg.com/@types/q/-/q-0.0.32.tgz#bd284e57c84f1325da702babfc82a5328190c0c5"
@@ -172,6 +199,19 @@
 "@types/selenium-webdriver@^2.53.35", "@types/selenium-webdriver@~2.53.39":
   version "2.53.42"
   resolved "https://registry.yarnpkg.com/@types/selenium-webdriver/-/selenium-webdriver-2.53.42.tgz#74cb77fb6052edaff2a8984ddafd88d419f25cac"
+
+"@types/soundjs@*":
+  version "0.6.27"
+  resolved "https://registry.yarnpkg.com/@types/soundjs/-/soundjs-0.6.27.tgz#dd2370350eaf7277de5ed55940e3e7d2a016b124"
+  dependencies:
+    "@types/createjs-lib" "*"
+    "@types/preloadjs" "*"
+
+"@types/tweenjs@*":
+  version "0.6.27"
+  resolved "https://registry.yarnpkg.com/@types/tweenjs/-/tweenjs-0.6.27.tgz#8dd8acc7f4abee8f92b7692bae76d9ce8f1dd607"
+  dependencies:
+    "@types/createjs-lib" "*"
 
 abbrev@1:
   version "1.1.0"
@@ -5067,7 +5107,7 @@ webpack-dev-middleware@^1.10.2:
     path-is-absolute "^1.0.0"
     range-parser "^1.0.3"
 
-webpack-dev-server@~2.4.5:
+webpack-dev-server@^2.4.5, webpack-dev-server@~2.4.5:
   version "2.4.5"
   resolved "https://registry.yarnpkg.com/webpack-dev-server/-/webpack-dev-server-2.4.5.tgz#31384ce81136be1080b4b4cde0eb9b90e54ee6cf"
   dependencies:

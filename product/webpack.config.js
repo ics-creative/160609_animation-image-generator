@@ -10,9 +10,10 @@ const {NoEmitOnErrorsPlugin, NamedModulesPlugin} = require('webpack');
 const {GlobCopyWebpackPlugin, BaseHrefWebpackPlugin} = require('@angular/cli/plugins/webpack');
 const {CommonsChunkPlugin} = require('webpack').optimize;
 const {AotPlugin} = require('@ngtools/webpack');
+
 const nodeModules = path.join(process.cwd(), 'node_modules');
 const genDirNodeModules = path.join(process.cwd(), 'src', '$$_gendir', 'node_modules');
-const entryPoints = ["inline", "polyfills", "sw-register", "styles", "vendor", "main"];
+const entryPoints = ["inline", "polyfills", "sw-register", "scripts", "styles", "vendor", "main"];
 const minimizeCss = false;
 const baseHref = "";
 const deployUrl = "";
@@ -76,6 +77,11 @@ module.exports = {
     ],
     "polyfills": [
       "./src/polyfills.ts"
+    ],
+    "scripts": [
+      "script-loader!./src/assets/js/createjs-2015.11.26.min.js",
+      "script-loader!./src/assets/js/jquery.min.js",
+      "script-loader!./src/assets/js/tether.min.js"
     ],
     "styles": [
       "./src/styles.css"
@@ -353,7 +359,7 @@ module.exports = {
         "favicon.ico"
       ],
       "globOptions": {
-        "cwd": "",
+        "cwd": "/Users/admin/git/ics-creative/animation-image-converter/product/src",
         "dot": true,
         "ignore": "**/.gitkeep"
       }

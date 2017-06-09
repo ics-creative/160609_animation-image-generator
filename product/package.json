@@ -24,6 +24,7 @@
     "@angular/platform-browser": "^4.0.0",
     "@angular/platform-browser-dynamic": "^4.0.0",
     "@angular/router": "^4.0.0",
+    "@types/createjs": "^0.0.29",
     "core-js": "^2.4.1",
     "electron": "^1.6.10",
     "rxjs": "^5.1.0",
@@ -66,6 +67,6 @@
     "typescript": "~2.3.3",
     "url-loader": "^0.5.7",
     "webpack": "~2.4.0",
-    "webpack-dev-server": "^2.4.5"
+    "webpack-dev-server": "~2.4.5"
   }
 }
