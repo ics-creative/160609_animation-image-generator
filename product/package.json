@@ -5,7 +5,7 @@
   "main": "main.js",
   "scripts": {
     "ng": "ng",
-    "start": "webpack-dev-server --port=4200",
+    "start": "npm electron & webpack-dev-server --port=4200",
     "build": "webpack",
     "test": "karma start ./karma.conf.js",
     "lint": "ng lint",
