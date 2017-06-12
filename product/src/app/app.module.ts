@@ -4,6 +4,8 @@ import { NgModule } from '@angular/core';
 import { AppComponent } from './components/AppComponent';
 import { AnimPreviewComponent } from "./components/AnimPreviewComponent";
 import { PropertiesComponent } from "./components/PropertiesComponent";
+import { FormsModule } from "@angular/forms";
+import { LocaleData } from "./i18n/locale-data";
 
 @NgModule({
   declarations: [
@@ -12,9 +14,10 @@ import { PropertiesComponent } from "./components/PropertiesComponent";
     PropertiesComponent
   ],
   imports: [
-    BrowserModule
+    BrowserModule,
+    FormsModule
   ],
-  providers: [],
+  providers: [LocaleData],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
