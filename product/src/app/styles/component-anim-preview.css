@@ -1,0 +1,54 @@
+.please-drag-here {
+  height: 100%;
+
+  display: flex;
+  justify-content: center; /* 3 */
+  align-items: center; /* 4 */
+}
+
+.anim-preview {
+  height: 100%;
+  overflow: auto;
+}
+
+.preview-area img {
+  background: url(../imgs/opacity.png) repeat;
+}
+
+.label {
+  font-size: 90%;
+}
+
+.frame-image-container {
+
+  width: 64px;
+  height: 64px;
+
+  border: 2px solid rgba(0, 0, 0, 0);
+
+  display: inline-flex; /* 2 */
+  justify-content: center; /* 3 */
+  align-items: center; /* 4 */
+
+  cursor: pointer;
+}
+
+.frame-image-container:hover {
+  border: 2px solid lightgray;
+}
+
+.frame-image-container.active {
+  border: 2px solid #0275d8;
+  cursor: default;
+}
+
+.frame-image {
+  background: url(../imgs/opacity.png) repeat;
+
+  max-width: 100%;
+  max-height: 100%;
+}
+
+.mod-zoom-select {
+  zoom: 0.75;
+}

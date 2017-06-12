@@ -1,11 +1,15 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
-import { AppComponent } from './app.component';
+import { AppComponent } from './components/AppComponent';
+import { AnimPreviewComponent } from "./components/AnimPreviewComponent";
+import { PropertiesComponent } from "./components/PropertiesComponent";
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    AnimPreviewComponent,
+    PropertiesComponent
   ],
   imports: [
     BrowserModule
