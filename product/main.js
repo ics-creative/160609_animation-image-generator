@@ -23,16 +23,32 @@ function createWindow() {
       protocol: 'file:',
       slashes: true
     }));
-  } else {
-    mainWindow.loadURL("http://localhost:4200/");
-  }
-  // デベロッパーツールの起動
-  mainWindow.webContents.openDevTools();
 
-  // メインウィンドウが閉じられたときの処理
-  mainWindow.on('closed', function () {
-    mainWindow = null;
-  });
+    // デベロッパーツールの起動
+    mainWindow.webContents.openDevTools();
+
+  } else {
+
+    const chokidar = require("chokidar");
+    // ダミーファイルの生成を検知
+    const watcher = chokidar.watch("./.build_date");
+    watcher.on("change", (path) => {
+      if (mainWindow) {
+
+        mainWindow.loadURL("http://localhost:4200/");
+        //watcher.close();
+
+        // デベロッパーツールの起動
+        mainWindow.webContents.openDevTools();
+      }
+
+    });
+
+    // メインウィンドウが閉じられたときの処理
+    mainWindow.on('closed', function () {
+      mainWindow = null;
+    });
+  }
 }
 
 //  初期化が完了した時の処理

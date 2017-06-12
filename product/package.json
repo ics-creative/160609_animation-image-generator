@@ -5,7 +5,7 @@
   "main": "main.js",
   "scripts": {
     "ng": "ng",
-    "start": "npm run electron & webpack-dev-server --port=4200",
+    "start": "webpack-dev-server --port=4200 & npm run electron",
     "build": "webpack",
     "test": "karma start ./karma.conf.js",
     "lint": "ng lint",
@@ -37,6 +37,7 @@
     "@types/jasmine": "2.5.45",
     "@types/node": "~6.0.60",
     "autoprefixer": "^6.5.3",
+    "chokidar": "^1.7.0",
     "codelyzer": "~3.0.1",
     "css-loader": "^0.28.1",
     "cssnano": "^3.10.0",

@@ -419,7 +419,22 @@ module.exports = {
       "exclude": [],
       "tsConfigPath": "src/tsconfig.app.json",
       "skipCodeGeneration": true
-    })
+    }),
+    function () {
+      this.plugin('after-compile', (watching, callback) => {
+        const fs = require('fs');
+        const data = new Date().toString();
+        fs.writeFile('.build_date', data , function (err) {
+          if( err ) {
+            console.log("\nerror:" + err);
+          } else {
+            console.log("\nexit compile");
+          }
+        });
+
+        callback();
+      })
+    }
   ],
   "node": {
     "fs": "empty",
