@@ -1,5 +1,3 @@
-/// <reference path="../../../node_modules/@types/createjs/index.d.ts" />
-/// <reference path="../../../node_modules/@types/jquery/index.d.ts" />
 
 import { Component, ElementRef, Input, ViewChild } from "@angular/core";
 import { AnimationImageOptions } from "../data/AnimationImageOptions";
@@ -98,9 +96,7 @@ export class AppComponent {
       this.handleDrop(event);
     });
 
-    let anyQuery = <any>jQuery;
-
-    anyQuery('[data-toggle="tooltip"]').tooltip()
+   // (<any>window).$('[data-toggle="tooltip"]').tooltip()
   }
 
   private openDirectories() {

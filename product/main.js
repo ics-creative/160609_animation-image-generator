@@ -26,16 +26,17 @@ function createWindow() {
 
     // デベロッパーツールの起動
     mainWindow.webContents.openDevTools();
-
   } else {
-
     const chokidar = require("chokidar");
     // ダミーファイルの生成を検知
     const watcher = chokidar.watch("./.build_date");
-    watcher.on("change", (path) => {
+    watcher.on("change", (watchPath) => {
       if (mainWindow) {
-
-        mainWindow.loadURL("http://localhost:4200/");
+        mainWindow.loadURL(url.format({
+          pathname: path.join(__dirname, "dist", 'index.html'),
+          protocol: 'file:',
+          slashes: true
+        }));
         //watcher.close();
 
         // デベロッパーツールの起動
@@ -49,7 +50,10 @@ function createWindow() {
       mainWindow = null;
     });
   }
+  const ipc = require('electron').ipcMain;
+  ipc.on('open-file-dialog', openFileDialog);
 }
+
 
 //  初期化が完了した時の処理
 app.on('ready', createWindow);
@@ -68,3 +72,20 @@ app.on('activate', function () {
     createWindow();
   }
 });
+
+
+function openFileDialog(event) {
+  const dialog = require('electron').dialog;
+  const dialogOption = {
+    properties: ['openFile', 'multiSelections'],
+    filters: [{name: 'Images', extensions: ["png"]}]
+  };
+  dialog.showOpenDialog(mainWindow, dialogOption, function (files) {
+
+    if (files) {
+      event.sender.send('selected-open-images', files)
+    } else {
+      event.sender.send('unlock-select-ui');
+    }
+  })
+}

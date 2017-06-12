@@ -11,7 +11,6 @@ declare function require(path:string):any;
 export class AppComponent implements OnInit {
   title = 'app';
 
-
   ngOnInit() {
 
     const {remote} = require("electron");

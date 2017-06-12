@@ -79,9 +79,9 @@ module.exports = {
       "./src/polyfills.ts"
     ],
     "scripts": [
-      "script-loader!./src/assets/js/createjs-2015.11.26.min.js",
-      "script-loader!./src/assets/js/jquery.min.js",
-      "script-loader!./src/assets/js/tether.min.js"
+      "./src/assets/js/createjs-2015.11.26.min.js",
+      "./src/assets/js/jquery.min.js",
+      "./src/assets/js/tether.min.js"
     ],
     "styles": [
       "./src/styles.css"
