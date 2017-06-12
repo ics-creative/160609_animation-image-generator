@@ -261,7 +261,7 @@ export class ProcessExportImage {
 			const remote = require('electron').remote;
 			const path = require('path');
 			const app = remote.app;
-			const appPath:string = app.getAppPath();
+			const appPath:string = path.join( app.getAppPath(), "dist", "assets");
 
 			const exec = require('child_process').execFile;
 			const pngPath = path.join(this.temporaryLastPath, "frame*.png");
@@ -348,7 +348,7 @@ export class ProcessExportImage {
 			const remote = require('electron').remote;
 			const path = require('path');
 			const app = remote.app;
-			const appPath:string = app.getAppPath();
+			const appPath:string = path.join( app.getAppPath(), "dist","assets");
 
 			const execFile = require('child_process').execFile;
 			const pngPath = path.join(this.temporaryPath);
@@ -424,7 +424,8 @@ export class ProcessExportImage {
 
 	private _convertPng2Webp(filePath:string):Promise < any > {
 		const remote = require('electron').remote;
-		const appPath:string = remote.app.getAppPath();
+		const path = require("path");
+		const appPath:string = path.join( remote.app.getAppPath(), "dist","assets");
 		const execFile = require('child_process').execFile;
 		const options:string[] = [];
 		options.push(filePath);
@@ -599,7 +600,7 @@ export class ProcessExportImage {
 			const app = remote.app;
 			const path = require('path');
 			const fs = require('fs');
-			const appPath:string = app.getAppPath();
+			const appPath:string = path.join( app.getAppPath(), "dist","assets");
 			const execFile = require('child_process').execFile;
 
 			const options:string[] = [
