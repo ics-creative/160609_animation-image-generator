@@ -16,7 +16,7 @@ import { DomSanitizer, SafeResourceUrl } from "@angular/platform-browser";
 declare function require(value:String):any;
 
 @Component({
-  selector:'app-root',
+  selector:'my-app',
   templateUrl:"../components-html/AppComponent.html",
   styleUrls:['../../assets/styles/component-app.css']
 })
