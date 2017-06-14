@@ -30,7 +30,6 @@ export class ProcessExportImage {
   private lastSelectBaseName:string;
 
   private itemList:ImageData[];
-  private exeExt:string;
 
   private animationOptionData:AnimationImageOptions;
 
@@ -39,12 +38,19 @@ export class ProcessExportImage {
   private generateCancelWebP:boolean;
 
   constructor(private localeData:LocaleData) {
-    //	platformで実行先の拡張子を変える
-    this.exeExt = process.platform == 'win32' ? ".exe":"";
     this.lastSelectBaseName = this.localeData.defaultFileName;
   }
 
+  public get exeExt() {
+
+    const platform:string = require("os").platform();
+    return platform === "win32" ? ".exe":"";
+  }
+
   public exec(itemList:ImageData[], animationOptionData:AnimationImageOptions):Promise<any> {
+    //	platformで実行先の拡張子を変える
+    console.log(this.exeExt);
+    console.log(process.platform);
 
     //	テンポラリパス生成
     const remote = require('electron').remote;

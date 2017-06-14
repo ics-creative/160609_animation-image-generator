@@ -351,7 +351,7 @@ module.exports = {
     ]
   },
   "plugins": [
-    new webpack.ExternalsPlugin('commonjs', ['electron',"child_process","fs"]),
+    new webpack.ExternalsPlugin('commonjs', ['electron',"child_process","fs", "os"]),
     new NoEmitOnErrorsPlugin(),
     new GlobCopyWebpackPlugin({
       "patterns": [
