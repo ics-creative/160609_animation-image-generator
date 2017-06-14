@@ -8,6 +8,10 @@
 # dependencies
 /node_modules
 
+# temporary
+tmpDarwin
+tmpWin32
+
 # IDEs and editors
 /.idea
 .project

@@ -2,16 +2,33 @@ const conf = require("./conf.js");
 const mkdirp = require('mkdirp');
 const del = require('del');
 const execSync = require('child_process').execSync;
-const binaryDirectory = conf.distPath;
+const path = require("path");
+const cpx = require("cpx");
 
 module.exports = {
-  copyResources: function (resources) {
+  copyProjects: function (outPath) {
+    del.sync([outPath]);
+
+    cpx.copySync(conf.distPath + "/**", path.join(outPath, "/dist/"));
+    cpx.copySync("package.json", outPath);
+    cpx.copySync("main.js", outPath);
+    console.log(conf.distPath, outPath);
+  },
+  copyResources: function (outPath, resources) {
+
+    const binaryDirectory = path.join(outPath, conf.binPath);
+
     del.sync([binaryDirectory]);
+
     mkdirp.sync(binaryDirectory);
-    
+
+    console.log(binaryDirectory);
+
     for (let i = 0; i < resources.length; i++) {
 
-      execSync(`cp -P ./resources/${resources[i].path} ${binaryDirectory}${resources[i].fileName}`, (err, stdout, stderr) => {
+      const dest = path.join(binaryDirectory, resources[i].fileName);
+      // パーミッションも同じままコピーしないといけないので、macのcpコマンドでコピーしている
+      execSync(`cp -P ./resources/${resources[i].path} ${dest}`, (err, stdout, stderr) => {
         if (err) {
           console.log(err);
         }

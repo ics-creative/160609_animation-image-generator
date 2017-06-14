@@ -7,7 +7,13 @@ module.exports = {
     "identity": "3rd Party Mac Developer Installer: ICS INC. (53YCXL8YSM)",
     "bundleId": "media.ics.AnimationImageConverter"
   },
-  "distPath": "./dist/assets/bin/",
+  "distPath": "./dist",
+  "binPath" : "./dist/assets/bin",
+  "packageTmpPath": {
+    "win32": "tmpWin32",
+    "darwin": "tmpDarwin"
+  },
+  "pkg" : "AnimationImageConverter.pkg",
   "resourcesPath": {
     "win32": [
       {"fileName": "webpmux.exe", "path": "libwebp-0.5.0-windows-x86/bin/webpmux.exe"},
