@@ -7,7 +7,7 @@ declare function require(value:String):any;
 @Component({
 	selector: 'properties',
 	templateUrl: "../components-html/PropertiesComponent.html",
-	styleUrls: ['../styles/component-property.css']
+	styleUrls: ['../../assets/styles/component-property.css']
 })
 
 export class PropertiesComponent  {

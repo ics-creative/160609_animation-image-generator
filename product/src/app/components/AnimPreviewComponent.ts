@@ -13,7 +13,7 @@ declare function require(value:String):any;
 @Component({
   selector:'anim-preview',
   templateUrl:"../components-html/AnimPreviewComponent.html",
-  styleUrls:['../styles/component-anim-preview.css']
+  styleUrls:['../../assets/styles/component-anim-preview.css']
 })
 
 export class AnimPreviewComponent implements OnChanges, OnInit{

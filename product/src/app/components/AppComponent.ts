@@ -18,7 +18,7 @@ declare function require(value:String):any;
 @Component({
   selector:'app-root',
   templateUrl:"../components-html/AppComponent.html",
-  styleUrls:['../styles/component-app.css']
+  styleUrls:['../../assets/styles/component-app.css']
 })
 export class AppComponent {
 
