@@ -1,7 +1,12 @@
 module.exports = {
   "JP_NAME": "アニメ画像に変換する君",
-  "VERSION": "1.3.0",
-  "sign": "3rd Party Mac Developer Installer: ICS INC. (53YCXL8YSM)",
+  "APP_VERSION": "1.3.0",
+  "BUILD_VERSION": "1.3.000",
+  "ELECTRON_VERSION": "1.6.10",
+  "sign": {
+    "identity": "3rd Party Mac Developer Installer: ICS INC. (53YCXL8YSM)",
+    "bundleId": "media.ics.AnimationImageConverter"
+  },
   "distPath": "./dist/assets/bin/",
   "resourcesPath": {
     "win32": [

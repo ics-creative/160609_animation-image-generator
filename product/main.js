@@ -15,7 +15,7 @@ function createWindow() {
 
   console.log(process.env.NODE_ENV)
   // メインウィンドウに表示するURLを指定します
-  if (process.env.NODE_ENV == "production") {
+  if (process.env.NODE_ENV !== "develop") {
 
     // 今回はdistディレクトリのindex.html
     mainWindow.loadURL(url.format({

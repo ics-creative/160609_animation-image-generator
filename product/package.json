@@ -6,7 +6,7 @@
   "scripts": {
     "ng": "ng",
     "start": "webpack-dev-server --content-base dist/ & npm run electron",
-    "build": "webpack",
+    "build": "NODE_ENV=product webpack ",
     "test": "karma start ./karma.conf.js",
     "lint": "ng lint",
     "e2e": "protractor ./protractor.conf.js",
@@ -26,7 +26,7 @@
     "@angular/router": "^4.0.0",
     "@types/createjs": "^0.0.29",
     "core-js": "^2.4.1",
-    "electron": "^1.6.10",
+    "electron": "1.6.10",
     "rxjs": "^5.1.0",
     "zone.js": "^0.8.4"
   },
@@ -43,6 +43,7 @@
     "css-loader": "^0.28.1",
     "cssnano": "^3.10.0",
     "del": "^3.0.0",
+    "electron-packager": "^8.7.1",
     "exports-loader": "^0.6.3",
     "file-loader": "^0.10.0",
     "istanbul-instrumenter-loader": "^2.0.0",
