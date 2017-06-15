@@ -23,9 +23,6 @@ function createWindow() {
       protocol: 'file:',
       slashes: true
     }));
-
-    // デベロッパーツールの起動
-    mainWindow.webContents.openDevTools();
   } else {
     const chokidar = require("chokidar");
     // ダミーファイルの生成を検知
