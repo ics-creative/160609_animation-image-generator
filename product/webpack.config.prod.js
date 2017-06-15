@@ -431,16 +431,6 @@ module.exports = {
       "hashDigest": "base64",
       "hashDigestLength": 4
     }),
-    new UglifyJsPlugin({
-      "mangle": {
-        "screw_ie8": true
-      },
-      "compress": {
-        "screw_ie8": true,
-        "warnings": false
-      },
-      "sourceMap": false
-    }),
     new AotPlugin({
       "mainPath": "main.ts",
       "hostReplacementPaths": {
