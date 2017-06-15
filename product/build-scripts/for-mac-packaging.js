@@ -3,41 +3,43 @@
 
 const electronPackager = require("electron-packager");
 const conf = require("./conf.js");
+const execSync = require('child_process').execSync;
 
 electronPackager({
   "name": conf.JP_NAME,
   "dir": conf.packageTmpPath.darwin,
-  "out": "../",
+  "out": "./",
   "icon": "./resources/app.icons",
   "platform": "mas",
   "arch": "x64",
   "electronVersion": conf.ELECTRON_VERSION,
   "overwrite": true,
   "asar": false,
+  "extendInfo": "resources/dev/Info.plist",
   "appBundleId": conf.sign.bundleId,
   "appVersion": conf.APP_VERSION,
   "appCopyright": "Copyright (C) 2017 ICS INC."
 }, function (err, appPaths) {// 完了時のコールバック
   if (err) console.log(err);
-  console.log("Done: " + appPaths);
+  console.log("package done!  " + appPaths);
 
-
-  //electron-osx-sign '日本語アプリ名-x64-mas/日本語アプリ名.app' --entitlements='dev/parent.plist' --entitlements-inherit='dev/child.plist'
-
-  const execSync = require('child_process').execSync;
-
-  execSync(`electron-osx-sign ../${conf.JP_NAME}-mas-x64/${conf.JP_NAME}.app --entitlements='resources/dev/parent.plist' --entitlements-inherit='resources/dev/child.plist'`, (err, stdout, stderr) => {
+  const execSign = `export DEBUG=electron-osx-sign && electron-osx-sign "${conf.JP_NAME}-mas-x64/${conf.JP_NAME}.app" --entitlements='resources/dev/parent.plist' --entitlements-inherit='resources/dev/child.plist' --platform=mas`;
+  console.log(execSign);
+  execSync(execSign, (err, stdout, stderr) => {
     if (err) {
       console.log(err);
     }
     console.log(stdout);
   });
+  console.log("sign done!");
 
-
-  execSync(`electron-osx-flat ../${conf.JP_NAME}-mas-x64/${conf.JP_NAME}.app --identity '${conf.sign.identity}' --verbose --pkg '../${conf.pkg}'`, (err, stdout, stderr) => {
+  const execFlat = `electron-osx-flat "${conf.JP_NAME}-mas-x64/${conf.JP_NAME}.app" --identity '${conf.sign.identity}' --verbose --pkg '../${conf.pkg}'`;
+  console.log(execFlat);
+  execSync(execFlat, (err, stdout, stderr) => {
     if (err) {
       console.log(err);
     }
     console.log(stdout);
   });
+  console.log("flat done!");
 });

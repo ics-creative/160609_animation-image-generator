@@ -12,7 +12,7 @@
     "e2e": "protractor ./protractor.conf.js",
     "electron": "NODE_ENV=develop electron .",
     "pree2e": "webdriver-manager update --standalone false --gecko false --quiet",
-    "release-darwin": "node build-scripts/for-mac-prebuild.js && cd tmpDarwin && npm install --prod && cd ../ && node build-scripts/for-mac-packaging.js",
+    "release-darwin": "rm -rf アニメ画像に変換する君-mas-x64 && node build-scripts/for-mac-prebuild.js && cd tmpDarwin && npm install --prod && cd ../ && node build-scripts/for-mac-packaging.js",
     "prebuild-win32": "node build-scripts/for-windows-prebuild.js",
     "package-win32": "cd tmpWin32 && npm install --prod && cd ../ && node build-scripts/for-windows-packaging.js"
   },
@@ -46,7 +46,8 @@
     "css-loader": "^0.28.1",
     "cssnano": "^3.10.0",
     "del": "^3.0.0",
-    "electron-osx-sign": "^0.4.6",
+    "del": "^3.0.0",
+    "electron-osx-sign": "0.4.0-beta4",
     "electron-packager": "^8.7.1",
     "exports-loader": "^0.6.3",
     "file-loader": "^0.10.0",
