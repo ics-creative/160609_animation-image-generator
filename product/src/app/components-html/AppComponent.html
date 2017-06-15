@@ -36,15 +36,14 @@
   <div class="container-fluid p-l-0 p-r-0">
     <div class="col-sm-6 text-sm-left">{{localeData.TOP_version}} {{appConfig.version}}</div>
     <div class="col-sm-6 text-sm-right">
-      <a href="https://ics.media/"
+      <a (click)="openExternalBrowser('https://ics.media/')"
          data-toggle="tooltip"
          data-placement="left"
          title="{{localeData.TOP_icsTooltip}}"
          target="_blank">
         <img src="assets/imgs/ics_logo_icon_white.svg" width="16" height="16" style="vertical-align:sub;"/>
       </a>
-      <a href="http://goo.gl/forms/5DUI1UnTUXR6AmCw2"
-         target="_blank"
+      <a (click)="openExternalBrowser('http://goo.gl/forms/5DUI1UnTUXR6AmCw2')"
          data-toggle="tooltip"
          data-placement="left"
          title="{{localeData.TOP_onlineHelpTooltip}}">

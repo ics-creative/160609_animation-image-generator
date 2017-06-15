@@ -79,6 +79,12 @@ export class AppComponent {
     });
   }
 
+  openExternalBrowser(url) {
+    const {shell} = require('electron');
+    shell.openExternal(url);
+    console.log(url);
+  }
+
   ngAfterViewInit() {
 
     const component = this.myComponent.nativeElement;
