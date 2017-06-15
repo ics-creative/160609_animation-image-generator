@@ -27,23 +27,23 @@ export class AppComponent {
   }
 
   private exportImagesProcess:ProcessExportImage;
-  private isImageSelected:boolean;
-  private presetMode:number;
+  public isImageSelected:boolean;
+  public presetMode:number;
 
   private openingDirectories:boolean;
-  private items:ImageData[] = [];
+  public items:ImageData[] = [];
 
-  private appConfig:AppConfig = new AppConfig();
-  private _isDragover:boolean = false;
+  public appConfig:AppConfig = new AppConfig();
+  public _isDragover:boolean = false;
   private apngFileSizeError:boolean = false;
-  private gaUrl:SafeResourceUrl;
+  public gaUrl:SafeResourceUrl;
 
   @Input() animationOptionData:AnimationImageOptions;
 
   @ViewChild("myComponent") myComponent:ElementRef;
   @ViewChild("optionSelecter") optionSelecterComponent:ElementRef;
 
-  constructor(private localeData:LocaleData, sanitizer:DomSanitizer) {
+  constructor(public localeData:LocaleData, sanitizer:DomSanitizer) {
     this.gaUrl = sanitizer.bypassSecurityTrustResourceUrl('http://ics-web.jp/projects/animation-image-tool/?v=' + this.appConfig.version);
     new LocaleManager().applyClientLocale(localeData);
 
@@ -105,7 +105,7 @@ export class AppComponent {
    // (<any>window).$('[data-toggle="tooltip"]').tooltip()
   }
 
-  private openDirectories() {
+  public openDirectories() {
     if (this.openingDirectories) {
       return;
     }
@@ -114,12 +114,12 @@ export class AppComponent {
     ipc.send('open-file-dialog');
   }
 
-  private _selectedImages(filePathList:string[]) {
+  public _selectedImages(filePathList:string[]) {
     this.openingDirectories = false;
     this.setFilePathList(filePathList);
   }
 
-  private handleDrop(event:DragEvent) {
+  public handleDrop(event:DragEvent) {
     var path = require('path');
 
     const length = event.dataTransfer.files ? event.dataTransfer.files.length:0;
@@ -150,7 +150,7 @@ export class AppComponent {
     event.preventDefault();
   }
 
-  private handlePresetChange(presetMode:string) {
+  public handlePresetChange(presetMode:string) {
 
     localStorage.setItem(this.PRESET_ID, presetMode);
     this.presetMode = Number(presetMode);
@@ -158,7 +158,7 @@ export class AppComponent {
     this.changePreset(this.presetMode);
   }
 
-  private changePreset(presetMode:number) {
+  public changePreset(presetMode:number) {
     switch (presetMode) {
       case PresetType.LINE:
         PresetLine.setPreset(this.animationOptionData);
@@ -169,7 +169,7 @@ export class AppComponent {
     }
   }
 
-  private generateAnimImage() {
+  public generateAnimImage() {
 
     //	画像が選択されていないので保存しない。
     if (!this.isImageSelected) {
@@ -185,7 +185,7 @@ export class AppComponent {
     this._exportImages();
   }
 
-  private _exportImages() {
+  public _exportImages() {
 
     if (this.apngFileSizeError && this.animationOptionData.enabledExportApng) {
       ErrorMessage.showFileSizeErrorMessage();
@@ -212,7 +212,7 @@ export class AppComponent {
    * モダールダイアログを開きます。
    * @private
    */
-  private _showLockDialog() {
+  public _showLockDialog() {
     const dialog:any = document.querySelector('dialog');
     dialog.showModal();
     dialog.style["display"] = "flex"; // こんな書き方をする必要があるのか…
@@ -225,7 +225,7 @@ export class AppComponent {
    * モダールダイアログを閉じます。
    * @private
    */
-  private _hideLockDialog() {
+  public _hideLockDialog() {
     const dialog:any = document.querySelector('dialog');
     dialog.close();
     dialog.style["display"] = "none"; // こんな書き方をする必要があるのか…
@@ -237,7 +237,7 @@ export class AppComponent {
   /**
    * ファイル選択ボタンが押された時のハンドラーです。
    */
-  private handleClickFileSelectButton():void {
+  public handleClickFileSelectButton():void {
     if (this.openingDirectories === true) {
       return;
     }
@@ -250,7 +250,7 @@ export class AppComponent {
    * ファイルがセットされたときの処理です。
    * @param filePathList
    */
-  private setFilePathList(filePathList:string[]):void {
+  public setFilePathList(filePathList:string[]):void {
 
     var path = require('path');
 
@@ -281,7 +281,7 @@ export class AppComponent {
   /**
    * 再ナンバリングします。
    */
-  private numbering():void {
+  public numbering():void {
 
     this.items.sort(function (a, b) {
       const aRes = a.imageBaseName.match(/\d+/g);
@@ -301,7 +301,7 @@ export class AppComponent {
     }
   }
 
-  private changeImageItems(items:ImageData[]):void {
+  public changeImageItems(items:ImageData[]):void {
     this.items = items;
     if (items.length >= 1) {
       this.checkImageSize(items);
@@ -310,7 +310,7 @@ export class AppComponent {
     this.isImageSelected = this.items.length >= 1;
   }
 
-  private checkImageSize(items:ImageData[]):void {
+  public checkImageSize(items:ImageData[]):void {
 
     new Promise((resolve:Function, reject:Function) => {
 

@@ -13,6 +13,6 @@ declare function require(value:String):any;
 export class PropertiesComponent  {
 	@Input() animationOptionData:AnimationImageOptions;
 
-	constructor(private localeData:LocaleData){
+	constructor(public localeData:LocaleData){
 	}
 }
