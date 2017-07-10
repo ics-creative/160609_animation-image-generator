@@ -185,6 +185,18 @@ export class ProcessExportImage {
     )
   }
 
+  private removeDir(folderPath:string) {
+    const fs = require('fs');
+    const path = require('path');
+    const targetRemoveFiles = fs.readdirSync(folderPath);
+    for (let file in targetRemoveFiles) {
+      const filePath = path.join(folderPath, targetRemoveFiles[file]);
+      if (fs.statSync(filePath).isFile()) {
+        fs.unlinkSync(filePath);
+      }
+    }
+  }
+
   /**
    * 作業用フォルダーのクリーンアップ
    * @returns {Promise<any>}
@@ -193,35 +205,33 @@ export class ProcessExportImage {
   private _cleanTemporary():Promise<any> {
     return new Promise(((resolve:Function, reject:Function) => {
 
-        const del = require('del');
-        const path = require('path');
-        const pngTemporary = path.join(this.temporaryPath, "*.*");
-        const pngCompressTemporary = path.join(this.temporaryCompressPath, "*.*");
+      const del = require('del');
+      const path = require('path');
 
-        del([pngTemporary, pngCompressTemporary], {force:true}).then((paths:string[]) => {
-          const fs = require('fs');
+      this.removeDir(this.temporaryPath);
+      this.removeDir(this.temporaryCompressPath);
 
-          // フォルダーを作成
-          try {
-            fs.mkdirSync(this.temporaryPath);
-          } catch (e) {
-            console.log("フォルダーの作成に失敗しました。:" + this.temporaryPath);
-          }
+      const fs = require('fs');
 
-          try {
-            // フォルダーを作成
-            fs.mkdirSync(this.temporaryCompressPath);
-          } catch (e) {
-            console.log("フォルダーの作成に失敗しました。:" + this.temporaryCompressPath);
-          }
-
-          console.log("clean-temporary:success");
-          resolve();
-        });
+      // フォルダーを作成
+      try {
+        fs.mkdirSync(this.temporaryPath);
+      } catch (e) {
+        console.log('フォルダーの作成に失敗しました。:' + this.temporaryPath);
       }
 
-    ));
+      try {
+        // フォルダーを作成
+        fs.mkdirSync(this.temporaryCompressPath);
+      } catch (e) {
+        console.log('フォルダーの作成に失敗しました。:' + this.temporaryCompressPath);
+      }
+
+      console.log('clean-temporary:success');
+      resolve();
+    }));
   }
+
 
   private _copyTemporaryDirectory() {
     const promises:Promise<any>[] = this.itemList.map((item:any) => {
