@@ -31,6 +31,7 @@
     "core-js": "^2.4.1",
     "electron": "1.6.10",
     "rxjs": "^5.1.0",
+    "del": "2.2.0",
     "zone.js": "^0.8.4"
   },
   "devDependencies": {
@@ -45,8 +46,6 @@
     "codelyzer": "~3.0.1",
     "css-loader": "^0.28.1",
     "cssnano": "^3.10.0",
-    "del": "^3.0.0",
-    "del": "^3.0.0",
     "electron-osx-sign": "0.4.0-beta4",
     "electron-packager": "^8.7.1",
     "exports-loader": "^0.6.3",

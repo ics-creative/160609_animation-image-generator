@@ -360,7 +360,7 @@ module.exports = {
     ]
   },
   "plugins": [
-    new webpack.ExternalsPlugin('commonjs', ['electron', "child_process", "fs", "os"]),
+    new webpack.ExternalsPlugin('commonjs', ['electron',"child_process","fs", "os", 'path']),
     new NoEmitOnErrorsPlugin(),
     new GlobCopyWebpackPlugin({
       "patterns": [
