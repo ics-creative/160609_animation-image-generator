@@ -615,6 +615,9 @@ export class ProcessExportImage {
 					} else {
 						console.error(err);
 						console.error(stderr);
+
+						this.setErrorDetail(stdout);
+
 						reject();
 					}
 				});
