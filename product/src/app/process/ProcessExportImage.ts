@@ -5,6 +5,7 @@ import { LineStampValidator } from "../validators/LineStampValidator";
 import { CompressionType } from "../type/CompressionType";
 import { ErrorCode } from "../error/ErrorCode";
 import { LocaleData } from "../i18n/locale-data";
+import { SendError } from "../error/SendError";
 
 declare function require(value:String):any;
 declare var process:{ platform:string };
@@ -31,6 +32,8 @@ export class ProcessExportImage {
 
   private itemList:ImageData[];
 
+  private _version:string;
+
   private animationOptionData:AnimationImageOptions;
 
   private generateCancelPNG:boolean;
@@ -47,7 +50,9 @@ export class ProcessExportImage {
     return platform === "win32" ? ".exe":"";
   }
 
-  public exec(itemList:ImageData[], animationOptionData:AnimationImageOptions):Promise<any> {
+  public exec(version:string, itemList:ImageData[], animationOptionData:AnimationImageOptions):Promise<any> {
+
+    this._version = version;
     //	platformで実行先の拡張子を変える
     console.log(this.exeExt);
     console.log(process.platform);
@@ -166,7 +171,10 @@ export class ProcessExportImage {
 
           resolve();
         })
-        .catch(() => {
+        .catch((message) => {
+          // エラー内容の送信
+          const error  = new SendError(this._version, "ERROR", this.errorCode ,message.stack);
+
           reject();
         });
 
@@ -320,6 +328,8 @@ export class ProcessExportImage {
             } else {
               this.errorCode = ErrorCode.APNG_ACCESS_ERORR;
             }
+            // エラー内容の送信
+            new SendError(this._version, "ERROR", this.errorCode + "", err.code + " : " + stdout + ", message:" + err.message);
 
             reject();
           }
@@ -398,6 +408,9 @@ export class ProcessExportImage {
               } else {
                 this.errorCode = ErrorCode.WEBPMUX_ERROR;
               }
+              // エラー内容の送信
+              new SendError(this._version, "ERROR", this.errorCode + "", err.code + " : " + stdout + ", message:" + err.message);
+
               reject();
             }
           });
@@ -459,6 +472,9 @@ export class ProcessExportImage {
               } else {
                 this.errorCode = ErrorCode.CWEBP_ERROR;
               }
+
+              // エラー内容の送信
+              new SendError(this._version, "ERROR", this.errorCode + "", err.code + " : " + stdout + ", message:" + err.message);
 
               reject();
 
@@ -618,6 +634,10 @@ export class ProcessExportImage {
           } else {
             console.error(err);
             console.error(stderr);
+
+            // エラー内容の送信
+            new SendError(this._version, "ERROR", this.errorCode + "", err.code + " : " + stdout + ", message:" + err.message);
+
             reject();
           }
         });
@@ -628,7 +648,7 @@ export class ProcessExportImage {
   private _pngCompressAll() {
 
     const promises:Promise<any>[] = this.itemList.map((item:any) => {
-      return this._pngCompress(item);
+      return this._pngCompress(item)
     });
     return Promise.all(promises);
   }

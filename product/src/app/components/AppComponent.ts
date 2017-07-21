@@ -1,4 +1,3 @@
-
 import { Component, ElementRef, Input, ViewChild } from "@angular/core";
 import { AnimationImageOptions } from "../data/AnimationImageOptions";
 import { PresetType } from "../type/PresetType";
@@ -102,7 +101,7 @@ export class AppComponent {
       this.handleDrop(event);
     });
 
-   // (<any>window).$('[data-toggle="tooltip"]').tooltip()
+    // (<any>window).$('[data-toggle="tooltip"]').tooltip()
   }
 
   public openDirectories() {
@@ -193,8 +192,8 @@ export class AppComponent {
     }
 
     this._showLockDialog();
-
-    this.exportImagesProcess.exec(this.items, this.animationOptionData)
+    
+    this.exportImagesProcess.exec(this.appConfig.version, this.items, this.animationOptionData)
       .then(() => {
         this._hideLockDialog();
       }).catch(() => {
