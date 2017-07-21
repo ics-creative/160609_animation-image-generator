@@ -17,6 +17,7 @@ export class ProcessExportImage {
 
   public errorDetail:string;
   public errorCode:ErrorCode;
+  public errorStack:string;
 
   private temporaryCompressPath:string;
   private temporaryPath:string;
@@ -173,7 +174,8 @@ export class ProcessExportImage {
         })
         .catch((message) => {
           // エラー内容の送信
-          const error  = new SendError(this._version, "ERROR", this.errorCode ,message.stack);
+          this.errorStack = message.stack;
+          const error  = new SendError(this._version, "ERROR", this.errorCode.toString() , message.stack);
 
           reject();
         });

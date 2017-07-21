@@ -202,7 +202,8 @@ export class AppComponent {
       ErrorMessage.showErrorMessage(
         this.exportImagesProcess.errorCode,
         this.exportImagesProcess.errorDetail,
-        this.appConfig);
+        this.exportImagesProcess.errorStack,
+        this.localeData.APP_NAME);
     });
 
   }

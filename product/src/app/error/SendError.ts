@@ -17,12 +17,8 @@ export class SendError {
       const READYSTATE_COMPLETED = 4;
       const HTTP_STATUS_OK = 200;
 
-      //alert("piyo!!!" + ",state:" + this.readyState + ",status:" + this.status );
       if (this.readyState === READYSTATE_COMPLETED
         && this.status === HTTP_STATUS_OK) {
-
-        //alert("piyo!!!");
-        console.log("error send!");
         console.log(this.responseText);
       }
     }
