@@ -6,7 +6,7 @@
   "scripts": {
     "ng": "ng",
     "start": "webpack-dev-server --content-base dist/ & npm run electron",
-    "build": "webpack --config webpack.config.prod.js",
+    "build": "webpack --config webpack.config.prod.js & node build-scripts/copy-build-assets",
     "test": "karma start ./karma.conf.js",
     "lint": "ng lint",
     "e2e": "protractor ./protractor.conf.js",
