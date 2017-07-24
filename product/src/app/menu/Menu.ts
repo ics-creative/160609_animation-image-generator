@@ -1,30 +1,30 @@
-import {AppConfig} from "../config/AppConfig";
-import {LocaleData} from "../i18n/locale-data";
-declare function require(value:String):any;
-declare var process:{platform:string};
+import {AppConfig} from '../config/AppConfig';
+import {LocaleData} from '../i18n/locale-data';
+declare function require(value: String): any;
+declare var process: {platform: string};
 
 /**
  * アプリケーションメニューの制御クラスです。
  */
 export class Menu {
 
-	constructor(private appConfig:AppConfig, private localeData:LocaleData) {
+	constructor(private appConfig: AppConfig, private localeData: LocaleData) {
 	}
 
-	public createMenu():void {
+	public createMenu(): void {
 
 		//	Macの場合のみメニューを生成する。
-		if (process.platform != "darwin") {
+		if (process.platform != 'darwin') {
 			return ;
 		}
 
-		const {remote, shell} = require("electron");
+		const {remote, shell} = require('electron');
 		const {Menu, MenuItem} = remote;
 		const app = remote.app;
 		const version = this.appConfig.version;
 		const name = this.localeData.APP_NAME;
 
-		const template:any[] = [];
+		const template: any[] = [];
 
 
 			template.push({
@@ -32,11 +32,11 @@ export class Menu {
 				submenu: [{
 					label: this.localeData.MENU_about,
 					click() {
-						alert(`お使いの「${name}」のバージョンは ${version} です。` + "\n" + `You use version ${version}.`);
+						alert(`お使いの「${name}」のバージョンは ${version} です。` + '\n' + `You use version ${version}.`);
 					}
 				},
 					{
-						label: this.localeData.MENU_quit, accelerator: "Command+Q",
+						label: this.localeData.MENU_quit, accelerator: 'Command+Q',
 						click()
 						{
 							app.quit();
@@ -44,17 +44,17 @@ export class Menu {
 					}]
 			});
 
-		const helpMenu:any[] = [
+		const helpMenu: any[] = [
 			{
 				label: this.localeData.MENU_helpOnline,
 				click() {
-					shell.openExternal("https://github.com/ics-creative/160609_animation-image-generator/tree/master/help");
+					shell.openExternal('https://github.com/ics-creative/160609_animation-image-generator/tree/master/help');
 				}
 			},
 			{
 				label: this.localeData.MENU_helpQuestion,
 				click() {
-					shell.openExternal("http://goo.gl/forms/5DUI1UnTUXR6AmCw2");
+					shell.openExternal('http://goo.gl/forms/5DUI1UnTUXR6AmCw2');
 				}
 			}
 		];

@@ -1,16 +1,16 @@
-declare function require(value:String):any;
+declare function require(value: String): any;
 export class SendError {
-  constructor(version:string, category:string, title:string, detail:string) {
+  constructor(version: string, category: string, title: string, detail: string) {
 
     const saveData = {
-      "OS":require("os").platform(),
-      "version":version,
-      "category":category,
-      "title":title,
-      "detail":detail
+      'OS': require('os').platform(),
+      'version': version,
+      'category': category,
+      'title': title,
+      'detail': detail
     };
 
-    const data = {saveData:JSON.stringify(saveData), action:'append', 'sheetName':'s0', 'actionParam':0}; // POSTメソッドで送信するデータ
+    const data = {saveData: JSON.stringify(saveData), action: 'append', 'sheetName': 's0', 'actionParam': 0}; // POSTメソッドで送信するデータ
     const xmlHttpRequest = new XMLHttpRequest();
 
     xmlHttpRequest.onreadystatechange = function () {
@@ -28,7 +28,7 @@ export class SendError {
     xmlHttpRequest.send(this.encodeHTMLForm(data));
   }
 
-  encodeHTMLForm(data:any) {
+  encodeHTMLForm(data: any) {
     const params = [];
 
     for (const name in data) {

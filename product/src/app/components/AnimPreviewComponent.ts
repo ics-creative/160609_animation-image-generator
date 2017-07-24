@@ -1,50 +1,50 @@
 /// <reference path="../../../node_modules/@types/createjs/index.d.ts" />
 /// <reference path="../../../node_modules/@types/jquery/index.d.ts" />
 
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from "@angular/core";
-import { AnimationImageOptions } from "../data/AnimationImageOptions";
-import { ImageData } from "../data/ImageData";
-import { LineStampValidator } from "../validators/LineStampValidator";
-import { PresetType } from "../type/PresetType";
-import { LocaleData } from "../i18n/locale-data";
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
+import { AnimationImageOptions } from '../data/AnimationImageOptions';
+import { ImageData } from '../data/ImageData';
+import { LineStampValidator } from '../validators/LineStampValidator';
+import { PresetType } from '../type/PresetType';
+import { LocaleData } from '../i18n/locale-data';
 
-declare function require(value:String):any;
+declare function require(value: String): any;
 
 @Component({
-  selector:'anim-preview',
-  templateUrl:"../components-html/AnimPreviewComponent.html",
-  styleUrls:['../../assets/styles/component-anim-preview.css']
+  selector: 'anim-preview',
+  templateUrl: '../components-html/AnimPreviewComponent.html',
+  styleUrls: ['../../assets/styles/component-anim-preview.css']
 })
 
 export class AnimPreviewComponent implements OnChanges, OnInit{
-  @Input() imagePath:string;
-  @Input() animationOptionData:AnimationImageOptions;
-  @Input() items:ImageData[];
+  @Input() imagePath: string;
+  @Input() animationOptionData: AnimationImageOptions;
+  @Input() items: ImageData[];
 
   /** ファイル選択ダイアログのイベントです。 */
   @Output() private clickFileSelectButtonEvent = new EventEmitter();
 
-  private playing:boolean = false;
-  private currentFrame:number = 0;
-  private currentLoopCount:number = 0;
-  private scaleValue:number = 1.0;
+  private playing = false;
+  private currentFrame = 0;
+  private currentLoopCount = 0;
+  private scaleValue = 1.0;
 
-  private isValidFrameSize:boolean = true;
-  private isValidFrameLength:boolean = true;
-  private isValidTime:boolean = true;
+  private isValidFrameSize = true;
+  private isValidFrameLength = true;
+  private isValidTime = true;
 
-  private cacheClearStamp:string = "";
+  private cacheClearStamp = '';
 
-  constructor(private localeData:LocaleData) {
+  constructor(private localeData: LocaleData) {
   }
 
-  private selectScaleValue(scaleValue:number):void {
+  private selectScaleValue(scaleValue: number): void {
     this.scaleValue = scaleValue;
   }
 
   ngOnInit() {
     createjs.Ticker.framerate = this.animationOptionData.fps;
-    createjs.Ticker.on("tick", this.loop, this);
+    createjs.Ticker.on('tick', this.loop, this);
   }
 
   /** 値の変更時を監視するライフサイクルイベント */
@@ -57,15 +57,15 @@ export class AnimPreviewComponent implements OnChanges, OnInit{
       this.playing = true;
     }
 
-    this.cacheClearStamp = Date.now() + "";
+    this.cacheClearStamp = Date.now() + '';
   }
 
 
-  private openDirectories():void {
+  private openDirectories(): void {
     this.clickFileSelectButtonEvent.emit(null);
   }
 
-  private updateAnimation():void {
+  private updateAnimation(): void {
     this.currentFrame++;
     if (this.items.length <= this.currentFrame) {
 
@@ -87,7 +87,7 @@ export class AnimPreviewComponent implements OnChanges, OnInit{
     this.imagePath = this.items[this.currentFrame].imagePath;
   }
 
-  private loop():void {
+  private loop(): void {
     createjs.Ticker.framerate = this.animationOptionData.fps;
 
     // ここでバリデートするのは間違っていると思うが・・・・
@@ -111,7 +111,7 @@ export class AnimPreviewComponent implements OnChanges, OnInit{
     }
   }
 
-  private resume():void {
+  private resume(): void {
     if (this.items) {
       this.playing = true;
 
@@ -120,7 +120,7 @@ export class AnimPreviewComponent implements OnChanges, OnInit{
     }
   }
 
-  private pause():void {
+  private pause(): void {
     if (this.items) {
       this.playing = false;
     }
@@ -130,7 +130,7 @@ export class AnimPreviewComponent implements OnChanges, OnInit{
    * 指定したフレームにタイムラインを移動し、停止します。
    * @param frame
    */
-  private gotoAndStop(frame:number):void {
+  private gotoAndStop(frame: number): void {
     if (this.items) {
       this.playing = false;
       this.currentFrame = frame;
@@ -140,7 +140,7 @@ export class AnimPreviewComponent implements OnChanges, OnInit{
     }
   }
 
-  private check():boolean {
+  private check(): boolean {
     return false;
   }
 }

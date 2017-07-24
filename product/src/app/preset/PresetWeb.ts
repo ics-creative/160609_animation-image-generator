@@ -1,13 +1,13 @@
-import {CompressionType} from "../type/CompressionType";
-import {AnimationImageOptions} from "../data/AnimationImageOptions";
-import {PresetType} from "../type/PresetType";
+import {CompressionType} from '../type/CompressionType';
+import {AnimationImageOptions} from '../data/AnimationImageOptions';
+import {PresetType} from '../type/PresetType';
 
 /**
  * Webページ用アニメーションのプリセット設定です。
  */
 export class PresetWeb {
 
-	static setPreset(data:AnimationImageOptions) {
+	static setPreset(data: AnimationImageOptions) {
 		data.noLoop = true;
 		data.loop = 4;
 		data.fps = 30;
