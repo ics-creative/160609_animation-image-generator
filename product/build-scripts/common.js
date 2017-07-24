@@ -14,7 +14,7 @@ module.exports = {
     cpx.copySync("main.js", outPath);
     console.log(conf.distPath, outPath);
   },
-  copyResources: function (outPath, resources) {
+  copyResources: function (resources, outPath) {
 
     const binaryDirectory = path.join(outPath);
 
