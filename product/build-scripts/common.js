@@ -16,7 +16,7 @@ module.exports = {
   },
   copyResources: function (outPath, resources) {
 
-    const binaryDirectory = path.join(outPath, conf.binPath);
+    const binaryDirectory = path.join(outPath);
 
     del.sync([binaryDirectory]);
 
