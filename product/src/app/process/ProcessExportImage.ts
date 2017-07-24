@@ -174,9 +174,10 @@ export class ProcessExportImage {
         })
         .catch((message) => {
           // エラー内容の送信
-          this.errorStack = message.stack;
-          const error  = new SendError(this._version, 'ERROR', this.errorCode.toString() , message.stack);
-
+          if (message) {
+            this.errorStack = message.stack;
+            new SendError(this._version, 'ERROR', this.errorCode.toString(), message.stack);
+          }
           reject();
         });
 
