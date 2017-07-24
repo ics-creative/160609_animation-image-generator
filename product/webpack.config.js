@@ -79,9 +79,9 @@ module.exports = {
       "./src/polyfills.ts"
     ],
     "scripts": [
-      "script-loader!./src/assets/js/createjs-2015.11.26.min.js",
-      "script-loader!./src/assets/js/jquery.min.js",
-      "script-loader!./src/assets/js/tether.min.js"
+      "./src/assets/js/createjs-2015.11.26.min.js",
+      "./src/assets/js/jquery.min.js",
+      "./src/assets/js/tether.min.js"
     ],
     "styles": [
       "./src/styles.css"
@@ -351,7 +351,7 @@ module.exports = {
     ]
   },
   "plugins": [
-    new webpack.ExternalsPlugin('commonjs', ['electron']),
+    new webpack.ExternalsPlugin('commonjs', ['electron',"child_process","fs", "os", 'path']),
     new NoEmitOnErrorsPlugin(),
     new GlobCopyWebpackPlugin({
       "patterns": [
@@ -419,7 +419,22 @@ module.exports = {
       "exclude": [],
       "tsConfigPath": "src/tsconfig.app.json",
       "skipCodeGeneration": true
-    })
+    }),
+    function () {
+      this.plugin('after-compile', (watching, callback) => {
+        const fs = require('fs');
+        const data = new Date().toString();
+        fs.writeFile('.build_date', data , function (err) {
+          if( err ) {
+            console.log("\nerror:" + err);
+          } else {
+            console.log("\nexit compile");
+          }
+        });
+
+        callback();
+      })
+    }
   ],
   "node": {
     "fs": "empty",

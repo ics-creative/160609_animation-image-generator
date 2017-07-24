@@ -2,13 +2,34 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>Product</title>
+
+  <title>AnimImageConverter</title>
   <base href="./">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
+
+  <link rel="stylesheet" href="assets/bootstrap/dist/css/bootstrap.css"/>
+  <link rel="stylesheet" href="assets/styles/main.css"/>
+  <link rel="stylesheet" href="assets/font-awesome-4.6.3/css/font-awesome.min.css">
+  <link rel="stylesheet" href="assets/styles/tether.min.css">
 </head>
 <body>
-  <app-root></app-root>
+
+<my-app>
+  <div class="center-area"><img src="assets/imgs/preloader.webp" width="52" height="52"/></div>
+</my-app>
+
+<script type="text/javascript" src="./assets/js/jquery.min.js"></script>
+<script type="text/javascript" src="./assets/js/createjs-2015.11.26.min.js"></script>
+<script>
+  if (typeof module === "object" && module.exports) {
+    window.$ = window.jQuery = module.exports;
+    module.exports = {};
+  }
+</script>
+<script type="text/javascript" src="./assets/js/tether.min.js"></script>
+<script type="text/javascript"  src="./assets/bootstrap/dist/js/bootstrap.js"></script>
+
 </body>
 </html>

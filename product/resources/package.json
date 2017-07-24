@@ -1,0 +1,26 @@
+{
+  "name": "animation-image-converter",
+  "version": "1.1.1",
+  "description": "",
+  "main": "main.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ics-creative/160609_animation-image-generator.git"
+  },
+  "author": "Nozomi Nohara <nozomi.nohara@ics-web.jp> (http://twitter.com/nyamogera)",
+  "contributor" : [
+    "Nozomi Nohara <nozomi.nohara@ics-web.jp> (http://twitter.com/nyamogera)",
+    "Yasunobu Ikeda <ikeda@ics-web.jp> (http://twitter.com/clockmaker)"
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ics-creative/160609_animation-image-generator/issues"
+  },
+  "homepage": "https://github.com/ics-creative/160609_animation-image-generator#readme",
+  "devDependencies": {
+    "electron-prebuilt": "1.2.3"
+  },
+
+  "dependencies": {
+  }
+}

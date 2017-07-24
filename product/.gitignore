@@ -8,6 +8,10 @@
 # dependencies
 /node_modules
 
+# temporary
+tmpDarwin
+tmpWin32
+
 # IDEs and editors
 /.idea
 .project
@@ -16,6 +20,8 @@
 *.launch
 .settings/
 *.sublime-workspace
+
+.build_date
 
 # IDE - VSCode
 .vscode/*

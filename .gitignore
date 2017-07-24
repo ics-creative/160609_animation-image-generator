@@ -2,6 +2,7 @@ tmp-release*/
 animation-image-generator*
 anim-image-gen-*
 アニメ画像に変換する君*
+animation-image-converter*
 .idea
 node_modules
 .DS_Store

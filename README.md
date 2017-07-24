@@ -5,5 +5,4 @@
 
 
 ## 開発者向け
-- [ソースからの実行方法](for_build.md)
-- [リリースファイルの作成方法](for_release.md)
+- [ビルド方法](product/README.md)

@@ -8,4 +8,6 @@ if (environment.production) {
   enableProdMode();
 }
 
-platformBrowserDynamic().bootstrapModule(AppModule);
+window.onload = function () {
+  platformBrowserDynamic().bootstrapModule(AppModule);
+}
