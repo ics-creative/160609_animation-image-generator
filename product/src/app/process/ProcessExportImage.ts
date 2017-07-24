@@ -18,6 +18,7 @@ export class ProcessExportImage {
   public errorDetail: string;
   public errorCode: ErrorCode;
   public errorStack: string;
+  public inquiryCode: string; // お問い合わせ用コード
 
   private temporaryCompressPath: string;
   private temporaryPath: string;
@@ -57,6 +58,14 @@ export class ProcessExportImage {
     //	platformで実行先の拡張子を変える
     console.log(this.exeExt);
     console.log(process.platform);
+
+    const SHA256 = require('crypto-js/sha256');
+
+    // お問い合わせコード生成
+    this.inquiryCode = SHA256( require('os').platform + '/' +  new Date().toString()).toString().slice(0,8);
+
+
+    console.log(this.inquiryCode);
 
     //	テンポラリパス生成
     const remote = require('electron').remote;
@@ -176,7 +185,7 @@ export class ProcessExportImage {
           // エラー内容の送信
           if (message) {
             this.errorStack = message.stack;
-            new SendError(this._version, 'ERROR', this.errorCode.toString(), message.stack);
+            new SendError(this._version, this.inquiryCode , 'ERROR', this.errorCode.toString(), message.stack);
           }
           reject();
         });
@@ -332,7 +341,7 @@ export class ProcessExportImage {
               this.errorCode = ErrorCode.APNG_ACCESS_ERORR;
             }
             // エラー内容の送信
-            new SendError(this._version, 'ERROR', this.errorCode + '', err.code + ' : ' + stdout + ', message:' + err.message);
+            new SendError(this._version, this.inquiryCode , 'ERROR', this.errorCode + '', err.code + ' : ' + stdout + ', message:' + err.message);
 
             reject();
           }
@@ -412,7 +421,7 @@ export class ProcessExportImage {
                 this.errorCode = ErrorCode.WEBPMUX_ERROR;
               }
               // エラー内容の送信
-              new SendError(this._version, 'ERROR', this.errorCode + '', err.code + ' : ' + stdout + ', message:' + err.message);
+              new SendError(this._version, this.inquiryCode , 'ERROR', this.errorCode + '', err.code + ' : ' + stdout + ', message:' + err.message);
 
               reject();
             }
@@ -477,7 +486,7 @@ export class ProcessExportImage {
               }
 
               // エラー内容の送信
-              new SendError(this._version, 'ERROR', this.errorCode + '', err.code + ' : ' + stdout + ', message:' + err.message);
+              new SendError(this._version, this.inquiryCode , 'ERROR', this.errorCode + '', err.code + ' : ' + stdout + ', message:' + err.message);
 
               reject();
 
@@ -639,7 +648,7 @@ export class ProcessExportImage {
             console.error(stderr);
 
             // エラー内容の送信
-            new SendError(this._version, 'ERROR', this.errorCode + '', err.code + ' : ' + stdout + ', message:' + err.message);
+            new SendError(this._version, this.inquiryCode , 'ERROR', this.errorCode + '', err.code + ' : ' + stdout + ', message:' + err.message);
 
             reject();
           }

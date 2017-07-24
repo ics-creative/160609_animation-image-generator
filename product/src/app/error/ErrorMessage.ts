@@ -4,11 +4,11 @@ declare function require(value: String): any;
 
 export class ErrorMessage {
 
-  public static showErrorMessage(errorCode: ErrorCode, errorDetail: string, errorStack: string, appName: string): void {
+  public static showErrorMessage(errorCode: ErrorCode, inquiryCode:string, errorDetail: string, errorStack: string, appName: string): void {
 
     const {dialog, shell} = require('electron').remote;
     const win = require('electron').remote.getCurrentWindow();
-    const errorMessage = ErrorMessage.getErrorMessage(errorCode, errorDetail);
+    const errorMessage = ErrorMessage.getErrorMessage(errorCode, inquiryCode, errorDetail);
 
     const options = {
       type: 'info',
@@ -19,13 +19,15 @@ export class ErrorMessage {
     dialog.showMessageBox(win, options);
   }
 
-  public static getErrorMessage(errorCode: ErrorCode, errorDetail: string): string {
+  public static getErrorMessage(errorCode: ErrorCode, inquiryCode:string, errorDetail: string): string {
 
     const errorPhaseMessage = ErrorMessage.getErrorPhaseMessage(errorCode);
     const errorDetailMessage = errorDetail ? '\n\nエラー詳細：' + errorDetail : '';
     return `${errorPhaseMessage}${errorDetailMessage}
 
 何度も同じエラーが発生する場合は、お手数ですがサポートページまでお問い合わせください。
+
+お問い合わせコード:${inquiryCode}
 		`;
   }
 

@@ -6,7 +6,7 @@
   "scripts": {
     "ng": "ng",
     "start": "webpack-dev-server --content-base dist/ & npm run electron",
-    "build": "webpack --config webpack.config.prod.js & node build-scripts/copy-build-assets",
+    "build": "webpack --config webpack.config.prod.js",
     "test": "karma start ./karma.conf.js",
     "lint": "ng lint",
     "e2e": "protractor ./protractor.conf.js",
@@ -30,9 +30,10 @@
     "@angular/router": "^4.0.0",
     "@types/createjs": "^0.0.29",
     "core-js": "^2.4.1",
+    "crypto-js": "^3.1.9-1",
+    "del": "2.2.0",
     "electron": "1.6.10",
     "rxjs": "^5.1.0",
-    "del": "2.2.0",
     "zone.js": "^0.8.4"
   },
   "devDependencies": {

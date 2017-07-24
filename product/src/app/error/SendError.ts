@@ -1,10 +1,11 @@
 declare function require(value: String): any;
 export class SendError {
-  constructor(version: string, category: string, title: string, detail: string) {
+  constructor(version: string, code: string, category: string, title: string, detail: string) {
 
     const saveData = {
       'OS': require('os').platform(),
       'version': version,
+      'code': code,
       'category': category,
       'title': title,
       'detail': detail
