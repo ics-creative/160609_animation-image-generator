@@ -6,7 +6,7 @@ Windows版はベータ（開発途中）のため、インストールするに�
 
 ### ダウンロードURL
 
-- [Windowsはこちらから](https://github.com/ics-creative/160609_animation-image-generator/releases/download/release-1.2.0/Software-Win.zip)
+- [Windowsはこちらから](https://github.com/ics-creative/160609_animation-image-generator/releases/download/release-2.0.0-alpha/Software-Win.zip)
 
 
 #### Windowsユーザーの方へ
