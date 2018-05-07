@@ -20,12 +20,12 @@ module.exports = {
     "win32": [
       {"fileName": "webpmux.exe", "path": "libwebp-0.5.0-windows-x86/bin/webpmux.exe"},
       {"fileName": "cwebp.exe", "path": "libwebp-0.5.0-windows-x86/bin/cwebp.exe"},
-      {"fileName": "apngasm.exe", "path": "apngasm-2.9-bin-win32/apngasm.exe"},
+      {"fileName": "apngasm.exe", "path": "apngasm-2.91-bin-win32/apngasm.exe"},
       {"fileName": "pngquant.exe", "path": "pngquant-win/pngquant.exe"}],
     "darwin": [
       {"fileName": "webpmux", "path": "libwebp-0.5.0-mac-10.9/bin/webpmux"},
       {"fileName": "cwebp", "path": "libwebp-0.5.0-mac-10.9/bin/cwebp"},
-      {"fileName": "apngasm", "path": "apngasm-2.9-bin-macosx/apngasm"},
+      {"fileName": "apngasm", "path": "apngasm-2.91-bin-macos/apngasm"},
       {"fileName": "pngquant", "path": "pngquant-mac/pngquant"}
     ]
   }

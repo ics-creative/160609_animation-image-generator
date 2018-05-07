@@ -1,16 +1,23 @@
-  APNG Assembler 2.9
+  APNG Assembler 2.91
 
   Creates APNG animation from PNG/TGA image sequence.
 
   http://apngasm.sourceforge.net/
 
-  Copyright (c) 2010-2014 Max Stepin
+  Copyright (c) 2010-2016 Max Stepin
   maxst@users.sourceforge.net
 
   License: zlib license
 
 --------------------------------
 
+
+  Changes in version 2.91:
+
+- Code refactoring, some small optimizations
+- CLI: Support for image strips as input
+- GUI for Windows: progress bar bug fixed
+- 64 bit biraries for Windows
 
   Changes in version 2.9:
 
@@ -51,6 +58,8 @@ Options :
 1 10    : frame delay is 1/10 sec. (default)
 -l2     : 2 loops (default is 0, forever)
 -f      : skip the first frame
+-hs##   : input is horizontal strip of ## frames (example: -hs12)
+-vs##   : input is vertical strip of ## frames   (example: -vs12)
 -kp     : keep palette
 -kc     : keep color type
 -z0     : zlib compression
@@ -92,12 +101,7 @@ apngasm output.png frame00.png 3 4 /f
 
 That way APNG supported browsers and image viewers
 will show frame01-frame02-frame03 animation,
-while IE and Chrome will display static frame00.png image.
-
-Some people like to put "your browser sucks" message in that
-frame00.png but keep in mind that you will see that message
-in thumbnails when you are browsing image folders,
-or using google image search. So be careful.
+while IE will display static frame00.png image.
 
 ----------------------------------------------------------------
 Example 3:
@@ -105,6 +109,16 @@ Example 3:
 apngasm output.png frame01.png
 
 That way you'll get 1/10 sec delay.
+
+----------------------------------------------------------------
+Example 4:
+
+Using this 2900x100 "filmstrip" image as input:
+https://abs.twimg.com/a/1470716385/img/animations/web_heart_animation.png
+
+apngasm output.png web_heart_animation.png -hs29
+
+Switch -hs29 specifies that input is horizontal strip of 29 frames
 
 ----------------------------------------------------------------
 Some optimizations used in APNG Assembler might re-sort the

@@ -30,6 +30,7 @@
     "@angular/router": "^4.0.0",
     "@types/createjs": "^0.0.29",
     "core-js": "^2.4.1",
+    "cpx": "^1.5.0",
     "crypto-js": "^3.1.9-1",
     "del": "2.2.0",
     "electron": "1.6.10",
