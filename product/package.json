@@ -17,6 +17,12 @@
     "package-win32": "cd tmpWin32 && npm install --prod && cd ../ && node build-scripts/for-windows-packaging.js",
     "copy-debug-asssets": "node build-scripts/copy-debug-assets.js"
   },
+  "lint-staged": {
+    "*.{js,json,css,md}": [
+      "prettier --write 'src/app/**/*.ts'",
+      "git add"
+    ]
+  },
   "private": true,
   "dependencies": {
     "@angular/animations": "^6.0.0",
