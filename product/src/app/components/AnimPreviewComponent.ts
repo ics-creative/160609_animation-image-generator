@@ -1,22 +1,28 @@
 /// <reference path="../../../node_modules/@types/createjs/index.d.ts" />
 /// <reference path="../../../node_modules/@types/jquery/index.d.ts" />
 
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
-import { AnimationImageOptions } from '../data/AnimationImageOptions';
-import { ImageData } from '../data/ImageData';
-import { LineStampValidator } from '../validators/LineStampValidator';
-import { PresetType } from '../type/PresetType';
-import { LocaleData } from '../i18n/locale-data';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  OnInit,
+  Output
+} from "@angular/core";
+import { AnimationImageOptions } from "../data/AnimationImageOptions";
+import { ImageData } from "../data/ImageData";
+import { LineStampValidator } from "../validators/LineStampValidator";
+import { PresetType } from "../type/PresetType";
+import { LocaleData } from "../i18n/locale-data";
 
 declare function require(value: String): any;
 
 @Component({
-  selector: 'anim-preview',
-  templateUrl: '../components-html/AnimPreviewComponent.html',
-  styleUrls: ['../../assets/styles/component-anim-preview.css']
+  selector: "anim-preview",
+  templateUrl: "../components-html/AnimPreviewComponent.html",
+  styleUrls: ["../../assets/styles/component-anim-preview.css"]
 })
-
-export class AnimPreviewComponent implements OnChanges, OnInit{
+export class AnimPreviewComponent implements OnChanges, OnInit {
   @Input() imagePath: string;
   @Input() animationOptionData: AnimationImageOptions;
   @Input() items: ImageData[];
@@ -33,10 +39,9 @@ export class AnimPreviewComponent implements OnChanges, OnInit{
   private isValidFrameLength = true;
   private isValidTime = true;
 
-  private cacheClearStamp = '';
+  private cacheClearStamp = "";
 
-  constructor(private localeData: LocaleData) {
-  }
+  constructor(private localeData: LocaleData) {}
 
   private selectScaleValue(scaleValue: number): void {
     this.scaleValue = scaleValue;
@@ -44,7 +49,7 @@ export class AnimPreviewComponent implements OnChanges, OnInit{
 
   ngOnInit() {
     createjs.Ticker.framerate = this.animationOptionData.fps;
-    createjs.Ticker.on('tick', this.loop, this);
+    createjs.Ticker.on("tick", this.loop, this);
   }
 
   /** 値の変更時を監視するライフサイクルイベント */
@@ -57,9 +62,8 @@ export class AnimPreviewComponent implements OnChanges, OnInit{
       this.playing = true;
     }
 
-    this.cacheClearStamp = Date.now() + '';
+    this.cacheClearStamp = Date.now() + "";
   }
-
 
   private openDirectories(): void {
     this.clickFileSelectButtonEvent.emit(null);
@@ -68,12 +72,10 @@ export class AnimPreviewComponent implements OnChanges, OnInit{
   private updateAnimation(): void {
     this.currentFrame++;
     if (this.items.length <= this.currentFrame) {
-
       this.currentLoopCount += 1;
 
       // 再生ループ回数を超えたら
       if (this.currentLoopCount >= this.animationOptionData.loop) {
-
         if (this.animationOptionData.noLoop == false) {
           this.playing = false;
           this.currentFrame = this.items.length - 1;
@@ -92,15 +94,20 @@ export class AnimPreviewComponent implements OnChanges, OnInit{
 
     // ここでバリデートするのは間違っていると思うが・・・・
     if (this.animationOptionData.preset == PresetType.LINE) {
-      this.isValidFrameSize = LineStampValidator.validateFrameMaxSize(this.animationOptionData) && LineStampValidator.validateFrameMinSize(this.animationOptionData);
-      this.isValidFrameLength = LineStampValidator.validateFrameLength(this.animationOptionData);
-      this.isValidTime = LineStampValidator.validateTime(this.animationOptionData);
+      this.isValidFrameSize =
+        LineStampValidator.validateFrameMaxSize(this.animationOptionData) &&
+        LineStampValidator.validateFrameMinSize(this.animationOptionData);
+      this.isValidFrameLength = LineStampValidator.validateFrameLength(
+        this.animationOptionData
+      );
+      this.isValidTime = LineStampValidator.validateTime(
+        this.animationOptionData
+      );
     } else {
       this.isValidFrameSize = true;
       this.isValidFrameLength = true;
       this.isValidTime = true;
     }
-
 
     if (!this.items || !this.playing) {
       this.playing = false;

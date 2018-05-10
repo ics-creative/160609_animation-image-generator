@@ -1,20 +1,19 @@
-import { AnimationImageOptions } from '../data/AnimationImageOptions';
-import { ImageData } from '../data/ImageData';
-import { PresetType } from '../type/PresetType';
-import { LineStampValidator } from '../validators/LineStampValidator';
-import { CompressionType } from '../type/CompressionType';
-import { ErrorCode } from '../error/ErrorCode';
-import { LocaleData } from '../i18n/locale-data';
-import { SendError } from '../error/SendError';
+import { AnimationImageOptions } from "../data/AnimationImageOptions";
+import { ImageData } from "../data/ImageData";
+import { PresetType } from "../type/PresetType";
+import { LineStampValidator } from "../validators/LineStampValidator";
+import { CompressionType } from "../type/CompressionType";
+import { ErrorCode } from "../error/ErrorCode";
+import { LocaleData } from "../i18n/locale-data";
+import { SendError } from "../error/SendError";
 
 declare function require(value: String): any;
 declare var process: { platform: string };
 
-module Error {
-  export const ENOENT_ERROR = 'ENOENT';
+namespace Error {
+  export const ENOENT_ERROR = "ENOENT";
 }
 export class ProcessExportImage {
-
   public errorDetail: string;
   public errorCode: ErrorCode;
   public errorStack: string;
@@ -47,44 +46,54 @@ export class ProcessExportImage {
   }
 
   public get exeExt() {
-
-    const platform: string = require('os').platform();
-    return platform === 'win32' ? '.exe' : '';
+    const platform: string = require("os").platform();
+    return platform === "win32" ? ".exe" : "";
   }
 
-  public exec(version: string, itemList: ImageData[], animationOptionData: AnimationImageOptions): Promise<any> {
-
+  public exec(
+    version: string,
+    itemList: ImageData[],
+    animationOptionData: AnimationImageOptions
+  ): Promise<any> {
     this._version = version;
     //	platformで実行先の拡張子を変える
     console.log(this.exeExt);
     console.log(process.platform);
 
-    const SHA256 = require('crypto-js/sha256');
+    const SHA256 = require("crypto-js/sha256");
 
     // お問い合わせコード生成
-    this.inquiryCode = SHA256( require('os').platform + '/' +  new Date().toString()).toString().slice(0,8);
-
+    this.inquiryCode = SHA256(
+      require("os").platform + "/" + new Date().toString()
+    )
+      .toString()
+      .slice(0, 8);
 
     console.log(this.inquiryCode);
 
     //	テンポラリパス生成
-    const remote = require('electron').remote;
+    const remote = require("electron").remote;
     const app = remote.app;
-    const path = require('path');
+    const path = require("path");
     this.itemList = itemList;
-    this.temporaryPath = path.join(app.getPath('temp'), 'a-img-generator');
-    this.temporaryCompressPath = path.join(app.getPath('temp'), 'a-img-generator-compress');
+    this.temporaryPath = path.join(app.getPath("temp"), "a-img-generator");
+    this.temporaryCompressPath = path.join(
+      app.getPath("temp"),
+      "a-img-generator-compress"
+    );
     this.animationOptionData = animationOptionData;
 
     this.generateCancelPNG = false;
     this.generateCancelHTML = false;
     this.generateCancelWebP = false;
 
-    this.errorCode = ErrorCode.UNKNOWN;	//	デフォルトのエラーメッセージ
-    this.errorDetail = '';	//	追加のエラーメッセージ
+    this.errorCode = ErrorCode.UNKNOWN; //	デフォルトのエラーメッセージ
+    this.errorDetail = ""; //	追加のエラーメッセージ
 
     // PNG事前圧縮&APNGファイルを生成する
-    const compressPNG = (this.animationOptionData.enabledPngCompress && this.animationOptionData.enabledExportApng);
+    const compressPNG =
+      this.animationOptionData.enabledPngCompress &&
+      this.animationOptionData.enabledExportApng;
 
     //	最終的なテンポラリパスを設定する
     if (compressPNG) {
@@ -94,7 +103,6 @@ export class ProcessExportImage {
     }
 
     return new Promise((resolve: Function, reject: Function) => {
-
       this.errorCode = ErrorCode.TEMPORARY_CLEAN_ERROR;
       this._cleanTemporary()
         .then(() => {
@@ -109,67 +117,68 @@ export class ProcessExportImage {
         })
         .then(() => {
           // APNG書き出しが有効になっている場合
-          if (this.animationOptionData.enabledExportApng == true) {
+          if (this.animationOptionData.enabledExportApng === true) {
             // ひとまず謎エラーとしとく
             this.errorCode = ErrorCode.APNG_OTHER_ERORR;
-            return this.openSaveDialog('png')
-              .then((fileName: string) => {
-                if (fileName) {
-                  return this._generateApng(fileName);
-                } else {
-                  this.generateCancelPNG = true;
-                }
-              });
+            return this.openSaveDialog("png").then((fileName: string) => {
+              if (fileName) {
+                return this._generateApng(fileName);
+              } else {
+                this.generateCancelPNG = true;
+              }
+            });
           }
         })
         .then(() => {
           // WebP書き出しが有効になっている場合
-          if (this.animationOptionData.enabledExportWebp == true) {
-            return this.openSaveDialog('webp')
-              .then((fileName: string) => {
-                if (fileName) {
-                  return this._generateWebp(fileName);
-                } else {
-                  this.generateCancelWebP = true;
-                }
-              });
+          if (this.animationOptionData.enabledExportWebp === true) {
+            return this.openSaveDialog("webp").then((fileName: string) => {
+              if (fileName) {
+                return this._generateWebp(fileName);
+              } else {
+                this.generateCancelWebP = true;
+              }
+            });
           }
         })
         .then(() => {
           // APNGとWebP画像の両方書き出しが有効になっている場合
 
-          if (this.animationOptionData.enabledExportHtml == true) {
-
+          if (this.animationOptionData.enabledExportHtml === true) {
             //	画像ファイルが保存されているか。
             if (!this._imageFileSaved()) {
               this.generateCancelHTML = true;
-              alert('画像ファイルが保存されなかったため、HTMLの保存を行いませんでした。');
+              alert(
+                "画像ファイルが保存されなかったため、HTMLの保存を行いませんでした。"
+              );
               return;
             }
             this.errorCode = ErrorCode.HTML_ERROR;
-            return this.openSaveDialog('html')
-              .then((fileName: string) => {
-                if (fileName) {
-                  return this._generateHtml(fileName);
-                } else {
-                  this.generateCancelHTML = true;
-                }
-              });
+            return this.openSaveDialog("html").then((fileName: string) => {
+              if (fileName) {
+                return this._generateHtml(fileName);
+              } else {
+                this.generateCancelHTML = true;
+              }
+            });
           }
         })
         .then(() => {
-          if (!(
-              (this.animationOptionData.enabledExportHtml && !this.generateCancelHTML) ||
+          if (
+            !(
+              (this.animationOptionData.enabledExportHtml &&
+                !this.generateCancelHTML) ||
               this._enableExportApng() ||
               this._enableExportWebp()
-            )) {
-            console.log('ファイルが一つも保存されませんでした');
+            )
+          ) {
+            console.log("ファイルが一つも保存されませんでした");
             resolve();
             return;
           }
 
           // エクスプローラーで開くでも、まだいいかも
-          const {shell} = require('electron');
+          const { shell } = require("electron");
           if (this._enableExportHTML()) {
             shell.showItemInFolder(this.selectedHTMLPath);
           } else if (this._enableExportApng()) {
@@ -181,17 +190,21 @@ export class ProcessExportImage {
 
           resolve();
         })
-        .catch((message) => {
+        .catch(message => {
           // エラー内容の送信
           if (message) {
             this.errorStack = message.stack;
-            new SendError(this._version, this.inquiryCode , 'ERROR', this.errorCode.toString(), message.stack);
+            new SendError(
+              this._version,
+              this.inquiryCode,
+              "ERROR",
+              this.errorCode.toString(),
+              message.stack
+            );
           }
           reject();
         });
-
     });
-
   }
 
   /**
@@ -200,9 +213,10 @@ export class ProcessExportImage {
    */
   private _imageFileSaved(): boolean {
     return (
-      (this.animationOptionData.enabledExportWebp && !this.generateCancelWebP) ||
+      (this.animationOptionData.enabledExportWebp &&
+        !this.generateCancelWebP) ||
       (this.animationOptionData.enabledExportApng && !this.generateCancelPNG)
-    )
+    );
   }
 
   /**
@@ -211,36 +225,39 @@ export class ProcessExportImage {
    * @private
    */
   private _cleanTemporary(): Promise<any> {
-    return new Promise(((resolve: Function, reject: Function) => {
+    return new Promise((resolve: Function, reject: Function) => {
+      const del = require("del");
+      const path = require("path");
+      const pngTemporary = path.join(this.temporaryPath, "*.*");
+      const pngCompressTemporary = path.join(this.temporaryCompressPath, "*.*");
 
-        const del = require('del');
-        const path = require('path');
-        const pngTemporary = path.join(this.temporaryPath, '*.*');
-        const pngCompressTemporary = path.join(this.temporaryCompressPath, '*.*');
-
-        del([pngTemporary, pngCompressTemporary], {force: true}).then((paths: string[]) => {
-          const fs = require('fs');
+      del([pngTemporary, pngCompressTemporary], { force: true }).then(
+        (paths: string[]) => {
+          const fs = require("fs");
 
           // フォルダーを作成
           try {
             fs.mkdirSync(this.temporaryPath);
           } catch (e) {
-            console.log('フォルダーの作成に失敗しました。:' + this.temporaryPath);
+            console.log(
+              "フォルダーの作成に失敗しました。:" + this.temporaryPath
+            );
           }
 
           try {
             // フォルダーを作成
             fs.mkdirSync(this.temporaryCompressPath);
           } catch (e) {
-            console.log('フォルダーの作成に失敗しました。:' + this.temporaryCompressPath);
+            console.log(
+              "フォルダーの作成に失敗しました。:" + this.temporaryCompressPath
+            );
           }
 
-          console.log('clean-temporary:success');
+          console.log("clean-temporary:success");
           resolve();
-        });
-      }
-
-    ));
+        }
+      );
+    });
   }
 
   private _copyTemporaryDirectory() {
@@ -252,24 +269,26 @@ export class ProcessExportImage {
 
   private _copyTemporaryImage(item: any): Promise<any> {
     return new Promise((resolve: Function, reject: Function) => {
-
       setImmediate(() => {
-        const fs = require('fs');
-        const path = require('path');
+        const fs = require("fs");
+        const path = require("path");
         const src = item.imagePath;
 
-        const destination: string = path.join(this.temporaryPath, `frame${item.frameNumber}.png`);
+        const destination: string = path.join(
+          this.temporaryPath,
+          `frame${item.frameNumber}.png`
+        );
 
         const r = fs.createReadStream(src);
         const w = fs.createWriteStream(destination);
 
-        r.on('error', (err: any) => {
+        r.on("error", (err: any) => {
           reject(err);
         });
-        w.on('error', (err: any) => {
+        w.on("error", (err: any) => {
           reject(err);
         });
-        w.on('close', (ex: any) => {
+        w.on("close", (ex: any) => {
           resolve();
         });
         r.pipe(w);
@@ -283,84 +302,100 @@ export class ProcessExportImage {
    * @private
    */
   private _generateApng(exportFilePath: string): Promise<any> {
-    return new Promise(((resolve: Function, reject: Function) => {
-      const path = require('path');
+    return new Promise((resolve: Function, reject: Function) => {
+      const path = require("path");
       const appPath: string = this.getAppPath();
 
-      const exec = require('child_process').execFile;
-      const pngPath = path.join(this.temporaryLastPath, 'frame*.png');
+      const exec = require("child_process").execFile;
+      const pngPath = path.join(this.temporaryLastPath, "frame*.png");
 
-      const compressOptions = this.getCompressOption(this.animationOptionData.compression);
-      console.log('this.animationOptionData.loop : ' + this.animationOptionData.loop);
-      const loopOption = '-l' + ( this.animationOptionData.noLoop ? 0 : this.animationOptionData.loop );
-      console.log('loopOption : ' + loopOption);
+      const compressOptions = this.getCompressOption(
+        this.animationOptionData.compression
+      );
+      console.log(
+        "this.animationOptionData.loop : " + this.animationOptionData.loop
+      );
+      const loopOption =
+        "-l" +
+        (this.animationOptionData.noLoop ? 0 : this.animationOptionData.loop);
+      console.log("loopOption : " + loopOption);
       const options = [
         exportFilePath,
         pngPath,
-        '1',
+        "1",
         this.animationOptionData.fps,
         compressOptions,
         loopOption,
-        '-kc'
+        "-kc"
       ];
 
       setImmediate(() => {
-        exec(path.join(appPath, `/bin/apngasm${this.exeExt}`), options, (err: any, stdout: any, stderr: any) => {
+        exec(
+          path.join(appPath, `/bin/apngasm${this.exeExt}`),
+          options,
+          (err: any, stdout: any, stderr: any) => {
+            if (!err) {
+              // TODO 書きだしたフォルダーを対応ブラウザーで開く (OSで分岐)
+              //exec(`/Applications/Safari.app`, [this.apngPath]);
 
-          if (!err) {
-            // TODO 書きだしたフォルダーを対応ブラウザーで開く (OSで分岐)
-            //exec(`/Applications/Safari.app`, [this.apngPath]);
+              if (this.animationOptionData.preset === PresetType.LINE) {
+                const validateArr = LineStampValidator.validate(
+                  exportFilePath,
+                  this.animationOptionData,
+                  this.localeData
+                );
 
-            if (this.animationOptionData.preset == PresetType.LINE) {
-              const validateArr = LineStampValidator.validate(exportFilePath, this.animationOptionData, this.localeData);
+                if (validateArr.length > 0) {
+                  const { dialog } = require("electron").remote;
+                  const win = require("electron").remote.getCurrentWindow();
+                  const message = this.localeData.VALIDATE_title;
+                  const detailMessage = "・" + validateArr.join("\n\n・");
 
-              if (validateArr.length > 0) {
-                const {dialog} = require('electron').remote;
-                const win = require('electron').remote.getCurrentWindow();
-                const message = this.localeData.VALIDATE_title;
-                const detailMessage = '・' + validateArr.join('\n\n・');
-
-                const options = {
-                  type: 'info',
-                  buttons: ['OK'],
-                  title: this.localeData.APP_NAME,
-                  //message: message,
-                  detail: message + '\n\n' + detailMessage
-                };
-                dialog.showMessageBox(win, options);
-
+                  const options = {
+                    type: "info",
+                    buttons: ["OK"],
+                    title: this.localeData.APP_NAME,
+                    //message: message,
+                    detail: message + "\n\n" + detailMessage
+                  };
+                  dialog.showMessageBox(win, options);
+                }
               }
-            }
-            resolve();
-          } else {
-            this.setErrorDetail(stdout);
-
-            if (err.code == Error.ENOENT_ERROR) {
-              this.errorCode = ErrorCode.APNG_ERORR;
+              resolve();
             } else {
-              this.errorCode = ErrorCode.APNG_ACCESS_ERORR;
+              this.setErrorDetail(stdout);
+
+              if (err.code === Error.ENOENT_ERROR) {
+                this.errorCode = ErrorCode.APNG_ERORR;
+              } else {
+                this.errorCode = ErrorCode.APNG_ACCESS_ERORR;
+              }
+              // エラー内容の送信
+              new SendError(
+                this._version,
+                this.inquiryCode,
+                "ERROR",
+                this.errorCode + "",
+                err.code + " : " + stdout + ", message:" + err.message
+              );
+
+              reject();
             }
-            // エラー内容の送信
-            new SendError(this._version, this.inquiryCode , 'ERROR', this.errorCode + '', err.code + ' : ' + stdout + ', message:' + err.message);
-
-            reject();
           }
-        });
+        );
       });
-
-    }));
-
+    });
   }
 
   private setErrorDetail(stdout: string) {
-    if (stdout != '') {
-      const errorMesageList = stdout.split('\n').filter(function (e: string) {
-        return e !== '';
+    if (stdout != "") {
+      const errorMesageList = stdout.split("\n").filter(function(e: string) {
+        return e !== "";
       });
 
       const errorMessage = errorMesageList.pop();
 
-      this.errorDetail = errorMessage ? errorMessage : '';
+      this.errorDetail = errorMessage ? errorMessage : "";
     }
   }
 
@@ -370,11 +405,11 @@ export class ProcessExportImage {
    * @private
    */
   private _generateWebp(exportFilePath: string): Promise<any> {
-    return new Promise(((resolve: Function, reject: Function) => {
-      const path = require('path');
+    return new Promise((resolve: Function, reject: Function) => {
+      const path = require("path");
       const appPath: string = this.getAppPath();
 
-      const execFile = require('child_process').execFile;
+      const execFile = require("child_process").execFile;
       const pngPath = path.join(this.temporaryPath);
 
       const options: string[] = [];
@@ -396,10 +431,10 @@ export class ProcessExportImage {
         // ループ回数が0だと無限ループになる
         // ループ回数が1だと2ループになる
         // 一回きりの再生ができない・・・！
-        if (loopNum == 0) {
+        if (loopNum === 0) {
           loopNum = 1; // バグ
         }
-        options.push(loopNum + '');
+        options.push(loopNum + "");
       }
 
       options.push(`-o`);
@@ -407,53 +442,66 @@ export class ProcessExportImage {
 
       this.errorCode = ErrorCode.CWEBP_OTHER_ERROR;
 
-      this._convertPng2Webps(pngFiles).then(() => {
-        setImmediate(() => {
-          this.errorCode = ErrorCode.WEBPMUX_OTHER_ERROR;
-          execFile(`${appPath}/bin/webpmux${this.exeExt}`, options, (err: any, stdout: string, stderr: string) => {
-            if (!err) {
-              resolve();
-            } else {
-              console.error(stderr);
-              if (err.code == Error.ENOENT_ERROR) {
-                this.errorCode = ErrorCode.WEBPMUX_ACCESS_ERROR;
-              } else {
-                this.errorCode = ErrorCode.WEBPMUX_ERROR;
+      this._convertPng2Webps(pngFiles)
+        .then(() => {
+          setImmediate(() => {
+            this.errorCode = ErrorCode.WEBPMUX_OTHER_ERROR;
+            execFile(
+              `${appPath}/bin/webpmux${this.exeExt}`,
+              options,
+              (err: any, stdout: string, stderr: string) => {
+                if (!err) {
+                  resolve();
+                } else {
+                  console.error(stderr);
+                  if (err.code === Error.ENOENT_ERROR) {
+                    this.errorCode = ErrorCode.WEBPMUX_ACCESS_ERROR;
+                  } else {
+                    this.errorCode = ErrorCode.WEBPMUX_ERROR;
+                  }
+                  // エラー内容の送信
+                  new SendError(
+                    this._version,
+                    this.inquiryCode,
+                    "ERROR",
+                    this.errorCode + "",
+                    err.code + " : " + stdout + ", message:" + err.message
+                  );
+
+                  reject();
+                }
               }
-              // エラー内容の送信
-              new SendError(this._version, this.inquiryCode , 'ERROR', this.errorCode + '', err.code + ' : ' + stdout + ', message:' + err.message);
-
-              reject();
-            }
+            );
           });
+        })
+        .catch(() => {
+          reject();
         });
-      }).catch(() => {
-        reject();
-      });
-    }));
-
+    });
   }
 
-  private  _convertPng2Webps(pngPaths: string[]): Promise<any> {
-    const promises: Promise<any> [] = [];
+  private _convertPng2Webps(pngPaths: string[]): Promise<any> {
+    const promises: Promise<any>[] = [];
     for (let i = 0; i < pngPaths.length; i++) {
       promises.push(this._convertPng2Webp(pngPaths[i]));
     }
 
-    return new Promise(((resolve: Function, reject: Function) => {
-      Promise.all(promises).then(() => {
-        resolve();
-      }).catch(() => {
-        reject();
-      })
-    }));
+    return new Promise((resolve: Function, reject: Function) => {
+      Promise.all(promises)
+        .then(() => {
+          resolve();
+        })
+        .catch(() => {
+          reject();
+        });
+    });
   }
 
   private _convertPng2Webp(filePath: string): Promise<any> {
-    const remote = require('electron').remote;
-    const path = require('path');
+    const remote = require("electron").remote;
+    const path = require("path");
     const appPath: string = this.getAppPath();
-    const execFile = require('child_process').execFile;
+    const execFile = require("child_process").execFile;
     const options: string[] = [];
     options.push(filePath);
     options.push(`-o`);
@@ -469,51 +517,68 @@ export class ProcessExportImage {
       // options.push(`-m`, `6`);
     }
 
-    return new Promise(((resolve: Function, reject: Function) => {
+    return new Promise((resolve: Function, reject: Function) => {
       setImmediate(() => {
-        execFile(`${appPath}/bin/cwebp${this.exeExt}`, options,
+        execFile(
+          `${appPath}/bin/cwebp${this.exeExt}`,
+          options,
           (err: any, stdout: any, stderr: any) => {
             if (!err) {
               resolve();
             } else {
-
               this.setErrorDetail(stdout);
 
-              if (err.code == Error.ENOENT_ERROR) {
+              if (err.code === Error.ENOENT_ERROR) {
                 this.errorCode = ErrorCode.CWEBP_ACCESS_ERROR;
               } else {
                 this.errorCode = ErrorCode.CWEBP_ERROR;
               }
 
               // エラー内容の送信
-              new SendError(this._version, this.inquiryCode , 'ERROR', this.errorCode + '', err.code + ' : ' + stdout + ', message:' + err.message);
+              new SendError(
+                this._version,
+                this.inquiryCode,
+                "ERROR",
+                this.errorCode + "",
+                err.code + " : " + stdout + ", message:" + err.message
+              );
 
               reject();
 
               console.error(stderr);
             }
-          });
+          }
+        );
       });
-    }));
+    });
   }
 
   private _enableExportHTML(): boolean {
-    return this.animationOptionData.enabledExportHtml && !this.generateCancelHTML;
+    return (
+      this.animationOptionData.enabledExportHtml && !this.generateCancelHTML
+    );
   }
 
   private _enableExportApng(): boolean {
-    return this.animationOptionData.enabledExportApng && !this.generateCancelPNG;
+    return (
+      this.animationOptionData.enabledExportApng && !this.generateCancelPNG
+    );
   }
 
   private _getApngPathRelativeHTML(): string {
     if (this._enableExportApng()) {
-      return require('path').relative(this.selectedHTMLDirectoryPath, this.selectedPNGPath);
+      return require("path").relative(
+        this.selectedHTMLDirectoryPath,
+        this.selectedPNGPath
+      );
     }
     return undefined;
   }
 
   private _enableExportWebp(): boolean {
-    return this.animationOptionData.enabledExportWebp && !this.generateCancelWebP;
+    return (
+      this.animationOptionData.enabledExportWebp && !this.generateCancelWebP
+    );
   }
 
   /**
@@ -522,7 +587,10 @@ export class ProcessExportImage {
    */
   private _getWebpPathReleativeHTML(): string {
     if (this._enableExportWebp()) {
-      return require('path').relative(this.selectedHTMLDirectoryPath, this.selectedWebPPath);
+      return require("path").relative(
+        this.selectedHTMLDirectoryPath,
+        this.selectedWebPPath
+      );
     }
     return undefined;
   }
@@ -532,9 +600,8 @@ export class ProcessExportImage {
    * @private
    */
   private _generateHtml(exportFilePath: string): void {
-
-    const fs = require('fs');
-    const path = require('path');
+    const fs = require("fs");
+    const path = require("path");
     const filePNGName: string = this._getApngPathRelativeHTML();
     const fileWebPName: string = this._getWebpPathReleativeHTML();
 
@@ -542,14 +609,21 @@ export class ProcessExportImage {
     let scriptElement1 = ``;
     let scriptElement2 = ``;
 
-    if (this.animationOptionData.enabledExportApng && this.animationOptionData.enabledExportWebp) {
+    if (
+      this.animationOptionData.enabledExportApng &&
+      this.animationOptionData.enabledExportWebp
+    ) {
       imageElement = `
     <!-- Chrome と Firefox と Safari で再生可能 (IE, Edge ではアニメは再生できません) -->
     <picture>
 	  <!-- Chrome 用 -->
       <source type="image/webp" srcset="${fileWebPName}" />
       <!-- Firefox, Safari 用 -->
-      <img src="${filePNGName}" width="${this.animationOptionData.imageInfo.width}" height="${this.animationOptionData.imageInfo.height}" alt="" class="apng-image" />
+      <img src="${filePNGName}" width="${
+        this.animationOptionData.imageInfo.width
+      }" height="${
+        this.animationOptionData.imageInfo.height
+      }" alt="" class="apng-image" />
     </picture>`;
 
       scriptElement1 = `<script src="https://cdnjs.cloudflare.com/ajax/libs/apng-canvas/2.1.1/apng-canvas.min.js"></script>`;
@@ -567,10 +641,13 @@ export class ProcessExportImage {
       }
     </script>`;
     } else if (this.animationOptionData.enabledExportApng) {
-
       imageElement = `
     <!-- Firefox と Safari で再生可能 (Chrome, IE, Edge ではアニメは再生できません) -->
-    <img src="${filePNGName}" width="${this.animationOptionData.imageInfo.width}" height="${this.animationOptionData.imageInfo.height}" alt="" class="apng-image" />`;
+    <img src="${filePNGName}" width="${
+        this.animationOptionData.imageInfo.width
+      }" height="${
+        this.animationOptionData.imageInfo.height
+      }" alt="" class="apng-image" />`;
       scriptElement1 = `<script src="https://cdnjs.cloudflare.com/ajax/libs/apng-canvas/2.1.1/apng-canvas.min.js"></script>`;
       scriptElement2 = `
     <script>
@@ -580,13 +657,12 @@ export class ProcessExportImage {
         for (var i = 0; i < images.length; i++){ APNG.animateImage(images[i]); }
       });
     </script>`;
-
     } else if (this.animationOptionData.enabledExportWebp) {
-
       imageElement = `
     <!-- Chrome で再生可能 (IE, Edge, Firefox, Safari では表示できません) -->
-    <img src="${fileWebPName}" width="${this.animationOptionData.imageInfo.width}" height="${this.animationOptionData.imageInfo.height}" alt="" />`;
-
+    <img src="${fileWebPName}" width="${
+        this.animationOptionData.imageInfo.width
+      }" height="${this.animationOptionData.imageInfo.height}" alt="" />`;
     } else {
       return;
     }
@@ -614,32 +690,39 @@ export class ProcessExportImage {
   private getCompressOption(type: CompressionType) {
     switch (type) {
       case CompressionType.zlib:
-        return '-z0';
+        return "-z0";
       case CompressionType.zip7:
-        return '-z1';
+        return "-z1";
       case CompressionType.Zopfli:
-        return '-z2';
+        return "-z2";
     }
   }
 
   private _pngCompress(item: ImageData) {
-
     return new Promise((resolve, reject) => {
-
-      const remote = require('electron').remote;
+      const remote = require("electron").remote;
       const app = remote.app;
-      const path = require('path');
-      const fs = require('fs');
+      const path = require("path");
+      const fs = require("fs");
       const appPath: string = this.getAppPath();
-      const execFile = require('child_process').execFile;
+      const execFile = require("child_process").execFile;
 
       const options: string[] = [
-        '--quality=65-80', '--speed', '1',
-        '--output', path.join(`${this.temporaryCompressPath}`, `frame${item.frameNumber}.png`),
-        '--', path.join(`${this.temporaryPath}`, `frame${item.frameNumber}.png`)
+        "--quality=65-80",
+        "--speed",
+        "1",
+        "--output",
+        path.join(
+          `${this.temporaryCompressPath}`,
+          `frame${item.frameNumber}.png`
+        ),
+        "--",
+        path.join(`${this.temporaryPath}`, `frame${item.frameNumber}.png`)
       ];
 
-      execFile(`${appPath}/bin/pngquant${this.exeExt}`, options,
+      execFile(
+        `${appPath}/bin/pngquant${this.exeExt}`,
+        options,
         (err: any, stdout: any, stderr: any) => {
           if (!err) {
             resolve();
@@ -648,88 +731,98 @@ export class ProcessExportImage {
             console.error(stderr);
 
             // エラー内容の送信
-            new SendError(this._version, this.inquiryCode , 'ERROR', this.errorCode + '', err.code + ' : ' + stdout + ', message:' + err.message);
+            new SendError(
+              this._version,
+              this.inquiryCode,
+              "ERROR",
+              this.errorCode + "",
+              err.code + " : " + stdout + ", message:" + err.message
+            );
 
             reject();
           }
-        });
+        }
+      );
     });
-
   }
 
   private _pngCompressAll() {
-
     const promises: Promise<any>[] = this.itemList.map((item: any) => {
-      return this._pngCompress(item)
+      return this._pngCompress(item);
     });
     return Promise.all(promises);
   }
 
   private openSaveDialog(imageType: string) {
-
     return new Promise((resolve: Function, reject: Function) => {
-
-      let title = '';
-      let defaultPathName = '';
-      let defaultPath = '';
-      let extention = '';
+      let title = "";
+      let defaultPathName = "";
+      let defaultPath = "";
+      let extention = "";
 
       const lastBaseName = this.lastSelectBaseName;
       console.log(lastBaseName);
       switch (imageType) {
-        case 'png':
-          title = 'ファイルの保存先を選択';
+        case "png":
+          title = "ファイルの保存先を選択";
           defaultPathName = `${lastBaseName}.png`;
-          extention = 'png';
+          extention = "png";
           break;
-        case 'webp':
-          title = 'ファイルの保存先を選択';
+        case "webp":
+          title = "ファイルの保存先を選択";
           defaultPathName = `${lastBaseName}.webp`;
-          extention = 'webp';
+          extention = "webp";
           break;
-        case 'html':
-          title = 'ファイルの保存先を選択';
+        case "html":
+          title = "ファイルの保存先を選択";
           defaultPathName = `${lastBaseName}.html`;
-          extention = 'html';
+          extention = "html";
           break;
       }
-      const remote = require('electron').remote;
-      const {dialog} = require('electron').remote;
+      const remote = require("electron").remote;
+      const { dialog } = require("electron").remote;
       const win = remote.getCurrentWindow();
       const app = remote.app;
-      const fs = require('fs');
+      const fs = require("fs");
 
       try {
         fs.statSync(this.lastSelectSaveDirectories);
       } catch (e) {
-        console.log('catch!');
+        console.log("catch!");
         //	失敗したらパス修正
-        this.lastSelectSaveDirectories = app.getPath('desktop');
+        this.lastSelectSaveDirectories = app.getPath("desktop");
       }
-      const path = require('path');
+      const path = require("path");
       defaultPath = path.join(this.lastSelectSaveDirectories, defaultPathName);
 
-      dialog.showSaveDialog(win, {
+      dialog.showSaveDialog(
+        win,
+        {
           title: title,
           defaultPath: defaultPath,
-          filters: [{name: imageType == 'html' ? 'html' : 'Images', extensions: [extention]}],
-          properties: ['openFile']
+          filters: [
+            {
+              name: imageType === "html" ? "html" : "Images",
+              extensions: [extention]
+            }
+          ],
+          properties: ["openFile"]
         },
         (fileName: string) => {
           if (fileName) {
-            const path = require('path');
+            const path = require("path");
             this.lastSelectSaveDirectories = path.dirname(fileName);
             this.lastSelectBaseName = path.basename(fileName, `.${imageType}`);
             console.log(this.lastSelectBaseName);
 
             switch (imageType) {
-              case 'png':
+              case "png":
                 this.selectedPNGPath = `${fileName}`;
                 break;
-              case 'webp':
+              case "webp":
                 this.selectedWebPPath = `${fileName}`;
                 break;
-              case 'html':
+              case "html":
                 this.selectedHTMLPath = `${fileName}`;
                 this.selectedHTMLDirectoryPath = this.lastSelectSaveDirectories;
                 break;
@@ -738,15 +831,15 @@ export class ProcessExportImage {
           } else {
             resolve(null);
           }
-        });
+        }
+      );
     });
-
   }
 
   private getAppPath() {
-    const remote = require('electron').remote;
-    const path = require('path');
+    const remote = require("electron").remote;
+    const path = require("path");
     const app = remote.app;
-    return path.join(app.getAppPath(), 'dist', 'assets');
+    return path.join(app.getAppPath(), "dist", "assets");
   }
 }

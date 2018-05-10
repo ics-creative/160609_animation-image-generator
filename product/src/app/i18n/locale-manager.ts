@@ -1,20 +1,19 @@
-import {LocaleData} from './locale-data';
-import {LocaleJaData} from './locale-ja';
-import {LocaleEnData} from './locale-en';
+import { LocaleData } from "./locale-data";
+import { LocaleJaData } from "./locale-ja";
+import { LocaleEnData } from "./locale-en";
 
-'use strict';
+"use strict";
 
 export class LocaleManager {
-
   public applyClientLocale(localeData: LocaleData): void {
     const locale = this.checkLocale();
     let lData: LocaleData;
 
     switch (locale) {
-      case 'ja':
+      case "ja":
         lData = new LocaleJaData();
         break;
-      case 'en':
+      case "en":
       default:
         lData = new LocaleEnData();
         break;
@@ -27,27 +26,30 @@ export class LocaleManager {
     const nav = <any>navigator;
     try {
       // chrome
-      if (ua.indexOf('chrome') != -1) {
-        return ( nav.browserLanguage || nav.language || nav.userLanguage).substr(0, 2);
+      if (ua.indexOf("chrome") != -1) {
+        return (nav.browserLanguage || nav.language || nav.userLanguage).substr(
+          0,
+          2
+        );
       }
       // それ以外
       else {
-        return ( nav.browserLanguage || nav.language || nav.userLanguage).substr(0, 2);
+        return (nav.browserLanguage || nav.language || nav.userLanguage).substr(
+          0,
+          2
+        );
       }
-    }
-    catch (e) {
+    } catch (e) {
       return undefined;
     }
   }
 
-
   public changeLocale(master: LocaleData, selectedLocale: LocaleData): void {
     for (const key in selectedLocale) {
       if (Reflect.has(selectedLocale, key) === true) {
-        const val: any = <any> Reflect.get(selectedLocale, key);
+        const val: any = <any>Reflect.get(selectedLocale, key);
         Reflect.set(master, key, val);
       }
     }
   }
 }
-

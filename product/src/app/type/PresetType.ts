@@ -1,4 +1,4 @@
 export enum PresetType {
-	LINE = 0,
-	WEB = 1
+  LINE = 0,
+  WEB = 1
 }
