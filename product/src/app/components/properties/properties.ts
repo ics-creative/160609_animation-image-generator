@@ -7,7 +7,7 @@ declare function require(value: String): any;
 @Component({
   selector: 'properties',
   templateUrl: './properties.html',
-  styleUrls: ['./properties.css']
+  styleUrls: ['./properties.scss']
 })
 export class PropertiesComponent {
   @Input() animationOptionData: AnimationImageOptions;
