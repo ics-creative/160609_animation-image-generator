@@ -194,7 +194,7 @@ export class ProcessExportImage {
           // エラー内容の送信
           if (message) {
             this.errorStack = message.stack;
-            new SendError(
+            SendError.exec(
               this._version,
               this.inquiryCode,
               'ERROR',
@@ -371,7 +371,7 @@ export class ProcessExportImage {
                 this.errorCode = ErrorCode.APNG_ACCESS_ERORR;
               }
               // エラー内容の送信
-              new SendError(
+              SendError.exec(
                 this._version,
                 this.inquiryCode,
                 'ERROR',
@@ -460,7 +460,7 @@ export class ProcessExportImage {
                     this.errorCode = ErrorCode.WEBPMUX_ERROR;
                   }
                   // エラー内容の送信
-                  new SendError(
+                  SendError.exec(
                     this._version,
                     this.inquiryCode,
                     'ERROR',
@@ -535,7 +535,7 @@ export class ProcessExportImage {
               }
 
               // エラー内容の送信
-              new SendError(
+              SendError.exec(
                 this._version,
                 this.inquiryCode,
                 'ERROR',
@@ -736,7 +736,7 @@ export class ProcessExportImage {
             console.error(stderr);
 
             // エラー内容の送信
-            new SendError(
+            SendError.exec(
               this._version,
               this.inquiryCode,
               'ERROR',

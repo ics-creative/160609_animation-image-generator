@@ -1,6 +1,6 @@
 declare function require(value: String): any;
 export class SendError {
-  constructor(
+  static exec(
     version: string,
     code: string,
     category: string,
@@ -47,7 +47,7 @@ export class SendError {
     xmlHttpRequest.send(this.encodeHTMLForm(data));
   }
 
-  encodeHTMLForm(data: any) {
+  static encodeHTMLForm(data: any) {
     const params = [];
 
     for (const name in data) {
