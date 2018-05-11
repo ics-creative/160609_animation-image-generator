@@ -1,4 +1,11 @@
-import { Component, ElementRef, Input, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  Input,
+  OnInit,
+  ViewChild
+} from '@angular/core';
 import { AnimationImageOptions } from '../../data/animation-image-option';
 import { PresetType } from '../../type/PresetType';
 import { PresetWeb } from '../../preset/preset-web';
@@ -19,7 +26,7 @@ declare function require(value: String): any;
   templateUrl: './app.html',
   styleUrls: ['./app.scss']
 })
-export class AppComponent {
+export class AppComponent implements OnInit, AfterViewInit {
   private get PRESET_ID(): string {
     return 'preset_id';
   }
@@ -135,7 +142,7 @@ export class AppComponent {
       const file: any = event.dataTransfer.files[i];
       const filePath = file.path;
 
-      if (path.extname(filePath) == '.png') {
+      if (path.extname(filePath) === '.png') {
         path.dirname(filePath);
 
         const item: ImageData = new ImageData();
@@ -179,8 +186,8 @@ export class AppComponent {
     }
 
     if (
-      this.animationOptionData.enabledExportApng == false &&
-      this.animationOptionData.enabledExportWebp == false
+      this.animationOptionData.enabledExportApng === false &&
+      this.animationOptionData.enabledExportWebp === false
     ) {
       alert('出力画像の形式を選択ください。');
       return;
@@ -225,7 +232,7 @@ export class AppComponent {
     dialog.style['display'] = 'flex'; // こんな書き方をする必要があるのか…
     document.body.style.cursor = 'progress';
 
-    createjs.Ticker.setPaused(true); // 効かない…
+    createjs.Ticker.paused = false; // 効かない…
   }
 
   /**
@@ -238,7 +245,7 @@ export class AppComponent {
     dialog.style['display'] = 'none'; // こんな書き方をする必要があるのか…
     document.body.style.cursor = 'auto';
 
-    createjs.Ticker.setPaused(false); // 効かない…
+    createjs.Ticker.paused = false; // 効かない…
   }
 
   /**
@@ -268,7 +275,7 @@ export class AppComponent {
     for (let i = 0; i < length; i++) {
       const filePath = filePathList[i];
 
-      if (path.extname(filePath) == '.png') {
+      if (path.extname(filePath) === '.png') {
         path.dirname(filePath);
 
         const item: ImageData = new ImageData();
@@ -292,8 +299,8 @@ export class AppComponent {
       const aRes = a.imageBaseName.match(/\d+/g);
       const bRes = b.imageBaseName.match(/\d+/g);
 
-      const aNum = aRes ? (aRes.length >= 1 ? parseInt(aRes.pop()) : 0) : 0;
-      const bNum = bRes ? (bRes.length >= 1 ? parseInt(bRes.pop()) : 0) : 0;
+      const aNum = aRes ? (aRes.length >= 1 ? parseInt(aRes.pop(), 10) : 0) : 0;
+      const bNum = bRes ? (bRes.length >= 1 ? parseInt(bRes.pop(), 10) : 0) : 0;
 
       if (aNum < bNum) {
         return -1;

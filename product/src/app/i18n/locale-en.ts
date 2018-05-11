@@ -1,5 +1,6 @@
-import { LocaleData } from './locale-data';
 'use strict';
+
+import { LocaleData } from './locale-data';
 
 export class LocaleEnData extends LocaleData {
   APP_NAME = 'Animation Image Converter';
@@ -59,14 +60,15 @@ export class LocaleEnData extends LocaleData {
   MENU_helpOnline = 'Online Help';
   MENU_helpQuestion = 'Report Issues';
 
-  VALIDATE_ImportImageSize = '\'s width and height is different from other image.';
+  VALIDATE_ImportImageSize = `'s width and height is different from other image.`;
   VALIDATE_title = 'Warning for LINE Stamp';
   VALIDATE_size = 'File size is over 300KB. This file is ${1}KB.';
   VALIDATE_amount = 'Please set 5 to 20 illustrations. This file contains ${1} illustrations.';
   VALIDATE_noLoop = '';
   VALIDATE_time = 'Please set in any of the 1, 2, 3, 4 seconds playback time. This file is ${1}sec.';
   VALIDATE_maxSize = 'Please set image size in W320×H270px. This file is W${1}×H${2}px.';
-  VALIDATE_minSize = 'Please be equal to or greater than the long side either 270px for Animation stamp image. Width & Height in the case of the main image, please to 240px. This file is W${1}×H${2}px.';
+  VALIDATE_minSize = 'Please be equal to or greater than the long side either 270px for Animation stamp image.' +
+  ' Width & Height in the case of the main image, please to 240px. This file is W${1}×H${2}px.';
 
   defaultFileName = 'Untitled';
 }

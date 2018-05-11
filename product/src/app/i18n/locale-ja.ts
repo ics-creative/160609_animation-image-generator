@@ -1,5 +1,5 @@
-import { LocaleData } from './locale-data';
 'use strict';
+import { LocaleData } from './locale-data';
 
 export class LocaleJaData extends LocaleData {
   APP_NAME = 'アニメ画像に変換する君';
@@ -66,7 +66,8 @@ export class LocaleJaData extends LocaleData {
   VALIDATE_noLoop = 'ループ回数が無限になっています。再生時間に合わせてループの数を指定ください。';
   VALIDATE_time = '再生時間は1、2、3、4秒のいずれかで設定ください。現在の${1}秒は設定できません。';
   VALIDATE_maxSize = '画像サイズはW320×H270px以内で制作ください。現在の画像サイズはW${1}×H${2}pxです。';
-  VALIDATE_minSize = 'アニメーションスタンプ画像は幅、高さ共に長辺どちらか270px以上にしてください。メイン画像の場合は幅、高さを240pxにしてください。現在の画像サイズはW${1}×H${2}pxです。';
+  VALIDATE_minSize = 'アニメーションスタンプ画像は幅、高さ共に長辺どちらか270px以上にしてください。' +
+  'メイン画像の場合は幅、高さを240pxにしてください。現在の画像サイズはW${1}×H${2}pxです。';
 
   defaultFileName = '名称未設定';
 }

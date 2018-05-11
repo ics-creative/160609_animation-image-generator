@@ -51,6 +51,9 @@ export class SendError {
     const params = [];
 
     for (const name in data) {
+      if (!name.hasOwnProperty(name)) {
+        continue;
+      }
       const value = data[name];
       const param = encodeURIComponent(name) + '=' + encodeURIComponent(value);
 

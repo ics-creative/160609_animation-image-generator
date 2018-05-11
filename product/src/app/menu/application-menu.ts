@@ -11,7 +11,7 @@ export class ApplicationMenu {
 
   public createMenu(): void {
     // 	Macの場合のみメニューを生成する。
-    if (process.platform != 'darwin') {
+    if (process.platform !== 'darwin') {
       return;
     }
 

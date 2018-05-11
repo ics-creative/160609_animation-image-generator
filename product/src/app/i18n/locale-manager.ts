@@ -1,8 +1,7 @@
+'use strict';
 import { LocaleData } from './locale-data';
 import { LocaleJaData } from './locale-ja';
 import { LocaleEnData } from './locale-en';
-
-'use strict';
 
 export class LocaleManager {
   public applyClientLocale(localeData: LocaleData): void {
@@ -26,7 +25,7 @@ export class LocaleManager {
     const nav = <any>navigator;
     try {
       // chrome
-      if (ua.indexOf('chrome') != -1) {
+      if (ua.indexOf('chrome') !== -1) {
         return (nav.browserLanguage || nav.language || nav.userLanguage).substr(
           0,
           2

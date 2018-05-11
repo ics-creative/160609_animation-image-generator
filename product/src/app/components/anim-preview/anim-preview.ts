@@ -76,7 +76,7 @@ export class AnimPreviewComponent implements OnChanges, OnInit {
 
       // 再生ループ回数を超えたら
       if (this.currentLoopCount >= this.animationOptionData.loop) {
-        if (this.animationOptionData.noLoop == false) {
+        if (this.animationOptionData.noLoop === false) {
           this.playing = false;
           this.currentFrame = this.items.length - 1;
         } else {
@@ -93,7 +93,7 @@ export class AnimPreviewComponent implements OnChanges, OnInit {
     createjs.Ticker.framerate = this.animationOptionData.fps;
 
     // ここでバリデートするのは間違っていると思うが・・・・
-    if (this.animationOptionData.preset == PresetType.LINE) {
+    if (this.animationOptionData.preset === PresetType.LINE) {
       this.isValidFrameSize =
         LineStampValidator.validateFrameMaxSize(this.animationOptionData) &&
         LineStampValidator.validateFrameMinSize(this.animationOptionData);
@@ -113,7 +113,7 @@ export class AnimPreviewComponent implements OnChanges, OnInit {
       this.playing = false;
     }
 
-    if (this.playing == true && createjs.Ticker.paused === false) {
+    if (this.playing === true && createjs.Ticker.paused === false) {
       this.updateAnimation();
     }
   }

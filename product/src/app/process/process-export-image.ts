@@ -351,14 +351,14 @@ export class ProcessExportImage {
                   const message = this.localeData.VALIDATE_title;
                   const detailMessage = '・' + validateArr.join('\n\n・');
 
-                  const options = {
+                  const dialogOption = {
                     type: 'info',
                     buttons: ['OK'],
                     title: this.localeData.APP_NAME,
                     // message: message,
                     detail: message + '\n\n' + detailMessage
                   };
-                  dialog.showMessageBox(win, options);
+                  dialog.showMessageBox(win, dialogOption);
                 }
               }
               resolve();
@@ -388,7 +388,7 @@ export class ProcessExportImage {
   }
 
   private setErrorDetail(stdout: string) {
-    if (stdout != '') {
+    if (stdout !== '') {
       const errorMesageList = stdout.split('\n').filter(function(e: string) {
         return e !== '';
       });
@@ -424,7 +424,7 @@ export class ProcessExportImage {
         pngFiles.push(`${pngPath}/frame${i}.png`);
       }
 
-      if (this.animationOptionData.noLoop == false) {
+      if (this.animationOptionData.noLoop === false) {
         options.push(`-loop`);
         let loopNum = this.animationOptionData.loop - 1;
 
@@ -667,6 +667,8 @@ export class ProcessExportImage {
       return;
     }
 
+    const backgroundImageUrl =
+      'https://raw.githubusercontent.com/ics-creative/160609_animation-image-generator/master/app/imgs/opacity.png';
     const data = `<!DOCTYPE html>
 <html>
   <head>
@@ -674,7 +676,10 @@ export class ProcessExportImage {
     <style>
       /* 確認用のCSS */
       body { background: #444; }
-      picture img, .apng-image { background: url(https://raw.githubusercontent.com/ics-creative/160609_animation-image-generator/master/app/imgs/opacity.png); }
+      picture img, .apng-image
+      {
+        background: url(${backgroundImageUrl});
+      }
     </style>
     ${scriptElement1}
   </head>
@@ -810,7 +815,6 @@ export class ProcessExportImage {
         },
         (fileName: string) => {
           if (fileName) {
-            const path = require('path');
             this.lastSelectSaveDirectories = path.dirname(fileName);
             this.lastSelectBaseName = path.basename(fileName, `.${imageType}`);
             console.log(this.lastSelectBaseName);

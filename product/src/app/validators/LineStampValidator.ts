@@ -26,7 +26,7 @@ export class LineStampValidator {
       validateArr.push(localeData.VALIDATE_amount.split('${1}').join(val + ''));
     }
 
-    if (options.noLoop == true) {
+    if (options.noLoop === true) {
       validateArr.push(localeData.VALIDATE_noLoop);
     } else {
       const playTime = options.imageInfo.length * options.loop / options.fps;
@@ -72,7 +72,7 @@ export class LineStampValidator {
 
     if (options.imageInfo.width < 270 && options.imageInfo.height < 270) {
       // メイン画像判定
-      if (options.imageInfo.width == 240 && options.imageInfo.height == 240) {
+      if (options.imageInfo.width === 240 && options.imageInfo.height === 240) {
         // メイン画像のため無視する
       } else {
         flag = false;
