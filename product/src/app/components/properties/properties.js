@@ -9,8 +9,8 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 var core_1 = require("@angular/core");
-var AnimationImageOptions_1 = require("../data/AnimationImageOptions");
-var locale_data_1 = require("../i18n/locale-data");
+var AnimationImageOptions_1 = require("../../data/animation-image-option");
+var locale_data_1 = require("../../i18n/locale-data");
 var PropertiesComponent = (function () {
     function PropertiesComponent(localeData) {
         this.localeData = localeData;

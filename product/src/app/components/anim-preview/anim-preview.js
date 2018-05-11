@@ -10,10 +10,10 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 var core_1 = require("@angular/core");
-var AnimationImageOptions_1 = require("../data/AnimationImageOptions");
-var LineStampValidator_1 = require("../validators/LineStampValidator");
-var PresetType_1 = require("../type/PresetType");
-var locale_data_1 = require("../i18n/locale-data");
+var AnimationImageOptions_1 = require("../../data/animation-image-option");
+var LineStampValidator_1 = require("../../validators/LineStampValidator");
+var PresetType_1 = require("../../type/PresetType");
+var locale_data_1 = require("../../i18n/locale-data");
 var AnimPreviewComponent = (function () {
     function AnimPreviewComponent(localeData) {
         this.localeData = localeData;

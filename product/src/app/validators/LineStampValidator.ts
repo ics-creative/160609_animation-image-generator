@@ -1,4 +1,4 @@
-import { AnimationImageOptions } from '../data/AnimationImageOptions';
+import { AnimationImageOptions } from '../data/animation-image-option';
 import { LocaleData } from '../i18n/locale-data';
 
 declare function require(value: String): any;

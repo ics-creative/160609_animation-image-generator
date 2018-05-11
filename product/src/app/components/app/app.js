@@ -12,18 +12,18 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 var core_1 = require("@angular/core");
 var AnimPreviewComponent_1 = require("./AnimPreviewComponent");
-var PropertiesComponent_1 = require("./PropertiesComponent");
-var AnimationImageOptions_1 = require("../data/AnimationImageOptions");
-var PresetType_1 = require("../type/PresetType");
-var PresetWeb_1 = require("../preset/PresetWeb");
-var PresetLine_1 = require("../preset/PresetLine");
+var PropertiesComponent_1 = require("../properties/properties");
+var AnimationImageOptions_1 = require("../../data/animation-image-option");
+var PresetType_1 = require("../../type/PresetType");
+var PresetWeb_1 = require("../../preset/preset-web");
+var PresetLine_1 = require("../../preset/preset-line");
 var ProcessExportImage_1 = require("../process/ProcessExportImage");
-var AppConfig_1 = require("../config/AppConfig");
-var ImageData_1 = require("../data/ImageData");
-var Menu_1 = require("../menu/Menu");
-var ErrorMessage_1 = require("../error/ErrorMessage");
-var locale_data_1 = require("../i18n/locale-data");
-var locale_manager_1 = require("../i18n/locale-manager");
+var AppConfig_1 = require("../../config/app-config");
+var ImageData_1 = require("../../data/image-data");
+var Menu_1 = require("../../menu/application-menu");
+var ErrorMessage_1 = require("../../error/error-message");
+var locale_data_1 = require("../../i18n/locale-data");
+var locale_manager_1 = require("../../i18n/locale-manager");
 var platform_browser_1 = require("@angular/platform-browser");
 var AppComponent = (function () {
     function AppComponent(localeData, sanitizer) {
@@ -47,7 +47,7 @@ var AppComponent = (function () {
     });
     AppComponent.prototype.ngOnInit = function () {
         var _this = this;
-        var menu = new Menu_1.Menu(this.appConfig, this.localeData);
+        var menu = new Menu_1.ApplicationMenu(this.appConfig, this.localeData);
         menu.createMenu();
         this.animationOptionData = new AnimationImageOptions_1.AnimationImageOptions();
         this.isImageSelected = false;

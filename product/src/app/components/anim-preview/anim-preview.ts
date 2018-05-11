@@ -1,5 +1,5 @@
-/// <reference path="../../../node_modules/@types/createjs/index.d.ts" />
-/// <reference path="../../../node_modules/@types/jquery/index.d.ts" />
+/// <reference path="../../../../node_modules/@types/createjs/index.d.ts" />
+/// <reference path="../../../../node_modules/@types/jquery/index.d.ts" />
 
 import {
   Component,
@@ -9,18 +9,18 @@ import {
   OnInit,
   Output
 } from '@angular/core';
-import { AnimationImageOptions } from '../data/AnimationImageOptions';
-import { ImageData } from '../data/ImageData';
-import { LineStampValidator } from '../validators/LineStampValidator';
-import { PresetType } from '../type/PresetType';
-import { LocaleData } from '../i18n/locale-data';
+import { AnimationImageOptions } from '../../data/animation-image-option';
+import { ImageData } from '../../data/image-data';
+import { LineStampValidator } from '../../validators/LineStampValidator';
+import { PresetType } from '../../type/PresetType';
+import { LocaleData } from '../../i18n/locale-data';
 
 declare function require(value: String): any;
 
 @Component({
   selector: 'anim-preview',
-  templateUrl: '../components-html/AnimPreviewComponent.html',
-  styleUrls: ['../../assets/styles/component-anim-preview.css']
+  templateUrl: './anim-preview.html',
+  styleUrls: ['../anim-preview.css']
 })
 export class AnimPreviewComponent implements OnChanges, OnInit {
   @Input() imagePath: string;

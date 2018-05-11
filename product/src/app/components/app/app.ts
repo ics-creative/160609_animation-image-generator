@@ -1,23 +1,23 @@
 import { Component, ElementRef, Input, ViewChild } from '@angular/core';
-import { AnimationImageOptions } from '../data/AnimationImageOptions';
-import { PresetType } from '../type/PresetType';
-import { PresetWeb } from '../preset/PresetWeb';
-import { PresetLine } from '../preset/PresetLine';
-import { ProcessExportImage } from '../process/ProcessExportImage';
-import { AppConfig } from '../config/AppConfig';
-import { ImageData } from '../data/ImageData';
-import { Menu } from '../menu/Menu';
-import { ErrorMessage } from '../error/ErrorMessage';
-import { LocaleData } from '../i18n/locale-data';
-import { LocaleManager } from '../i18n/locale-manager';
+import { AnimationImageOptions } from '../../data/animation-image-option';
+import { PresetType } from '../../type/PresetType';
+import { PresetWeb } from '../../preset/preset-web';
+import { PresetLine } from '../../preset/preset-line';
+import { ProcessExportImage } from '../../process/process-eexport-image';
+import { AppConfig } from '../../config/app-config';
+import { ImageData } from '../../data/image-data';
+import { ApplicationMenu } from '../../menu/application-menu';
+import { ErrorMessage } from '../../error/error-message';
+import { LocaleData } from '../../i18n/locale-data';
+import { LocaleManager } from '../../i18n/locale-manager';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
 declare function require(value: String): any;
 
 @Component({
   selector: 'my-app',
-  templateUrl: '../components-html/AppComponent.html',
-  styleUrls: ['../../assets/styles/component-app.css']
+  templateUrl: './app.html',
+  styleUrls: ['./app.css']
 })
 export class AppComponent {
   private get PRESET_ID(): string {
@@ -54,7 +54,7 @@ export class AppComponent {
   }
 
   ngOnInit() {
-    const menu: Menu = new Menu(this.appConfig, this.localeData);
+    const menu: ApplicationMenu = new ApplicationMenu(this.appConfig, this.localeData);
     menu.createMenu();
 
     this.animationOptionData = new AnimationImageOptions();

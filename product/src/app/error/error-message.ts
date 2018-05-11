@@ -1,4 +1,4 @@
-import { ErrorCode } from './ErrorCode';
+import { ErrorCode } from './error-code';
 
 declare function require(value: String): any;
 

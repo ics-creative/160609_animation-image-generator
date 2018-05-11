@@ -1,5 +1,5 @@
 import { CompressionType } from '../type/CompressionType';
-import { AnimationImageOptions } from '../data/AnimationImageOptions';
+import { AnimationImageOptions } from '../data/animation-image-option';
 import { PresetType } from '../type/PresetType';
 
 /**

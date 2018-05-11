@@ -1,4 +1,4 @@
-import { AppConfig } from '../config/AppConfig';
+import { AppConfig } from '../config/app-config';
 import { LocaleData } from '../i18n/locale-data';
 declare function require(value: String): any;
 declare var process: { platform: string };
@@ -6,7 +6,7 @@ declare var process: { platform: string };
 /**
  * アプリケーションメニューの制御クラスです。
  */
-export class Menu {
+export class ApplicationMenu {
   constructor(private appConfig: AppConfig, private localeData: LocaleData) {}
 
   public createMenu(): void {

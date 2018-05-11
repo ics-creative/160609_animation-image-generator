@@ -1,11 +1,11 @@
-import { AnimationImageOptions } from '../data/AnimationImageOptions';
-import { ImageData } from '../data/ImageData';
+import { AnimationImageOptions } from '../data/animation-image-option';
+import { ImageData } from '../data/image-data';
 import { PresetType } from '../type/PresetType';
 import { LineStampValidator } from '../validators/LineStampValidator';
 import { CompressionType } from '../type/CompressionType';
-import { ErrorCode } from '../error/ErrorCode';
+import { ErrorCode } from '../error/error-code';
 import { LocaleData } from '../i18n/locale-data';
-import { SendError } from '../error/SendError';
+import { SendError } from '../error/send-error';
 
 declare function require(value: String): any;
 declare var process: { platform: string };

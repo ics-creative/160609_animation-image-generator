@@ -1,3 +1,4 @@
+
 .please-drag-here {
   height: 100%;
 
@@ -12,7 +13,7 @@
 }
 
 .preview-area img {
-  background: url(../imgs/opacity.png) repeat;
+  background: url(../../imgs/opacity.png) repeat;
 }
 
 .label {
@@ -43,7 +44,7 @@
 }
 
 .frame-image {
-  background: url(../imgs/opacity.png) repeat;
+  background: url(../../imgs/opacity.png) repeat;
 
   max-width: 100%;
   max-height: 100%;
