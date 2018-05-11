@@ -20,7 +20,7 @@ declare function require(value: String): any;
 @Component({
   selector: 'anim-preview',
   templateUrl: './anim-preview.html',
-  styleUrls: ['../anim-preview.css']
+  styleUrls: ['./anim-preview.scss']
 })
 export class AnimPreviewComponent implements OnChanges, OnInit {
   @Input() imagePath: string;
