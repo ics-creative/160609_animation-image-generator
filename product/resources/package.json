@@ -1,6 +1,6 @@
 {
   "name": "animation-image-converter",
-  "version": "1.1.1",
+  "version": "2.0.0",
   "description": "",
   "main": "main.js",
   "repository": {
@@ -17,10 +17,7 @@
     "url": "https://github.com/ics-creative/160609_animation-image-generator/issues"
   },
   "homepage": "https://github.com/ics-creative/160609_animation-image-generator#readme",
-  "devDependencies": {
-    "electron-prebuilt": "1.2.3"
-  },
-
   "dependencies": {
+    "electron": "2.0.0"
   }
 }
