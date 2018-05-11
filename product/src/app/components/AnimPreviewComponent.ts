@@ -8,19 +8,19 @@ import {
   OnChanges,
   OnInit,
   Output
-} from "@angular/core";
-import { AnimationImageOptions } from "../data/AnimationImageOptions";
-import { ImageData } from "../data/ImageData";
-import { LineStampValidator } from "../validators/LineStampValidator";
-import { PresetType } from "../type/PresetType";
-import { LocaleData } from "../i18n/locale-data";
+} from '@angular/core';
+import { AnimationImageOptions } from '../data/AnimationImageOptions';
+import { ImageData } from '../data/ImageData';
+import { LineStampValidator } from '../validators/LineStampValidator';
+import { PresetType } from '../type/PresetType';
+import { LocaleData } from '../i18n/locale-data';
 
 declare function require(value: String): any;
 
 @Component({
-  selector: "anim-preview",
-  templateUrl: "../components-html/AnimPreviewComponent.html",
-  styleUrls: ["../../assets/styles/component-anim-preview.css"]
+  selector: 'anim-preview',
+  templateUrl: '../components-html/AnimPreviewComponent.html',
+  styleUrls: ['../../assets/styles/component-anim-preview.css']
 })
 export class AnimPreviewComponent implements OnChanges, OnInit {
   @Input() imagePath: string;
@@ -39,7 +39,7 @@ export class AnimPreviewComponent implements OnChanges, OnInit {
   private isValidFrameLength = true;
   private isValidTime = true;
 
-  private cacheClearStamp = "";
+  private cacheClearStamp = '';
 
   constructor(private localeData: LocaleData) {}
 
@@ -49,7 +49,7 @@ export class AnimPreviewComponent implements OnChanges, OnInit {
 
   ngOnInit() {
     createjs.Ticker.framerate = this.animationOptionData.fps;
-    createjs.Ticker.on("tick", this.loop, this);
+    createjs.Ticker.on('tick', this.loop, this);
   }
 
   /** 値の変更時を監視するライフサイクルイベント */
@@ -62,7 +62,7 @@ export class AnimPreviewComponent implements OnChanges, OnInit {
       this.playing = true;
     }
 
-    this.cacheClearStamp = Date.now() + "";
+    this.cacheClearStamp = Date.now() + '';
   }
 
   private openDirectories(): void {

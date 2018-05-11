@@ -1,6 +1,6 @@
-import { CompressionType } from "../type/CompressionType";
-import { AnimationImageOptions } from "../data/AnimationImageOptions";
-import { PresetType } from "../type/PresetType";
+import { CompressionType } from '../type/CompressionType';
+import { AnimationImageOptions } from '../data/AnimationImageOptions';
+import { PresetType } from '../type/PresetType';
 
 /**
  * LINEアニメーションスタンプのプリセット設定です。
@@ -9,7 +9,7 @@ export class PresetLine {
   static setPreset(data: AnimationImageOptions) {
     data.noLoop = false;
     data.loop = 4;
-    //data.iterations = 15;
+    // data.iterations = 15;
     data.fps = 20;
     data.compression = CompressionType.zlib;
     data.enabledPngCompress = true;

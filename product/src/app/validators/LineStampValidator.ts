@@ -1,5 +1,5 @@
-import { AnimationImageOptions } from "../data/AnimationImageOptions";
-import { LocaleData } from "../i18n/locale-data";
+import { AnimationImageOptions } from '../data/AnimationImageOptions';
+import { LocaleData } from '../i18n/locale-data';
 
 declare function require(value: String): any;
 
@@ -11,19 +11,19 @@ export class LineStampValidator {
   ): string[] {
     const validateArr: string[] = [];
 
-    const fs = require("fs");
+    const fs = require('fs');
     const stat: { size: number } = fs.statSync(output);
 
     if (stat.size > 300 * 1024) {
       const val = Math.round(stat.size / 1000);
 
-      validateArr.push(localeData.VALIDATE_size.split("${1}").join(val + ""));
+      validateArr.push(localeData.VALIDATE_size.split('${1}').join(val + ''));
     }
 
     if (LineStampValidator.validateFrameLength(options) === false) {
       const val = options.imageInfo.length;
 
-      validateArr.push(localeData.VALIDATE_amount.split("${1}").join(val + ""));
+      validateArr.push(localeData.VALIDATE_amount.split('${1}').join(val + ''));
     }
 
     if (options.noLoop == true) {
@@ -32,7 +32,7 @@ export class LineStampValidator {
       const playTime = options.imageInfo.length * options.loop / options.fps;
       if (LineStampValidator.validateTime(options) === false) {
         const val = Math.round(playTime * 100) / 100;
-        validateArr.push(localeData.VALIDATE_time.split("${1}").join(val + ""));
+        validateArr.push(localeData.VALIDATE_time.split('${1}').join(val + ''));
       }
     }
 
@@ -41,10 +41,10 @@ export class LineStampValidator {
       const val2 = options.imageInfo.height;
 
       validateArr.push(
-        localeData.VALIDATE_maxSize.split("${1}")
-          .join(val1 + "")
-          .split("${2}")
-          .join(val2 + "")
+        localeData.VALIDATE_maxSize.split('${1}')
+          .join(val1 + '')
+          .split('${2}')
+          .join(val2 + '')
       );
     }
 
@@ -53,10 +53,10 @@ export class LineStampValidator {
       const val2 = options.imageInfo.height;
 
       validateArr.push(
-        localeData.VALIDATE_minSize.split("${1}")
-          .join(val1 + "")
-          .split("${2}")
-          .join(val2 + "")
+        localeData.VALIDATE_minSize.split('${1}')
+          .join(val1 + '')
+          .split('${2}')
+          .join(val2 + '')
       );
     }
 

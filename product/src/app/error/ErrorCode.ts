@@ -1,17 +1,17 @@
 export enum ErrorCode {
   UNKNOWN = 0,
 
-  APNG_ACCESS_ERORR = 10, //実行ファイルのアクセスに失敗
+  APNG_ACCESS_ERORR = 10, // 実行ファイルのアクセスに失敗
   APNG_OTHER_ERORR,
   APNG_ERORR,
 
   WEBP_ERROR = 20,
 
-  CWEBP_ACCESS_ERROR = 30, //実行ファイルのアクセスに失敗
+  CWEBP_ACCESS_ERROR = 30, // 実行ファイルのアクセスに失敗
   CWEBP_OTHER_ERROR,
   CWEBP_ERROR,
 
-  WEBPMUX_ACCESS_ERROR = 40, //実行ファイルのアクセスに失敗
+  WEBPMUX_ACCESS_ERROR = 40, // 実行ファイルのアクセスに失敗
   WEBPMUX_OTHER_ERROR,
   WEBPMUX_ERROR,
 
@@ -21,6 +21,6 @@ export enum ErrorCode {
   TEMPORARY_CLEAN_ERROR,
 
   PNG_COMPRESS_ERROR = 70,
-  PNG_COMPRESS_ACCESS_ERROR, //実行ファイルのアクセスに失敗
+  PNG_COMPRESS_ACCESS_ERROR, // 実行ファイルのアクセスに失敗
   PNG_COMPRESS_OTHER_ERROR
 }

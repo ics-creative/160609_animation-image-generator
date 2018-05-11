@@ -1,8 +1,8 @@
-import { LocaleData } from "./locale-data";
-import { LocaleJaData } from "./locale-ja";
-import { LocaleEnData } from "./locale-en";
+import { LocaleData } from './locale-data';
+import { LocaleJaData } from './locale-ja';
+import { LocaleEnData } from './locale-en';
 
-"use strict";
+'use strict';
 
 export class LocaleManager {
   public applyClientLocale(localeData: LocaleData): void {
@@ -10,10 +10,10 @@ export class LocaleManager {
     let lData: LocaleData;
 
     switch (locale) {
-      case "ja":
+      case 'ja':
         lData = new LocaleJaData();
         break;
-      case "en":
+      case 'en':
       default:
         lData = new LocaleEnData();
         break;
@@ -26,14 +26,12 @@ export class LocaleManager {
     const nav = <any>navigator;
     try {
       // chrome
-      if (ua.indexOf("chrome") != -1) {
+      if (ua.indexOf('chrome') != -1) {
         return (nav.browserLanguage || nav.language || nav.userLanguage).substr(
           0,
           2
         );
-      }
-      // それ以外
-      else {
+      } else {
         return (nav.browserLanguage || nav.language || nav.userLanguage).substr(
           0,
           2

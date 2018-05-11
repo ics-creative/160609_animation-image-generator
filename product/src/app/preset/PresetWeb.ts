@@ -1,6 +1,6 @@
-import { CompressionType } from "../type/CompressionType";
-import { AnimationImageOptions } from "../data/AnimationImageOptions";
-import { PresetType } from "../type/PresetType";
+import { CompressionType } from '../type/CompressionType';
+import { AnimationImageOptions } from '../data/AnimationImageOptions';
+import { PresetType } from '../type/PresetType';
 
 /**
  * Webページ用アニメーションのプリセット設定です。

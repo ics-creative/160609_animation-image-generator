@@ -1,27 +1,27 @@
-import { Component, ElementRef, Input, ViewChild } from "@angular/core";
-import { AnimationImageOptions } from "../data/AnimationImageOptions";
-import { PresetType } from "../type/PresetType";
-import { PresetWeb } from "../preset/PresetWeb";
-import { PresetLine } from "../preset/PresetLine";
-import { ProcessExportImage } from "../process/ProcessExportImage";
-import { AppConfig } from "../config/AppConfig";
-import { ImageData } from "../data/ImageData";
-import { Menu } from "../menu/Menu";
-import { ErrorMessage } from "../error/ErrorMessage";
-import { LocaleData } from "../i18n/locale-data";
-import { LocaleManager } from "../i18n/locale-manager";
-import { DomSanitizer, SafeResourceUrl } from "@angular/platform-browser";
+import { Component, ElementRef, Input, ViewChild } from '@angular/core';
+import { AnimationImageOptions } from '../data/AnimationImageOptions';
+import { PresetType } from '../type/PresetType';
+import { PresetWeb } from '../preset/PresetWeb';
+import { PresetLine } from '../preset/PresetLine';
+import { ProcessExportImage } from '../process/ProcessExportImage';
+import { AppConfig } from '../config/AppConfig';
+import { ImageData } from '../data/ImageData';
+import { Menu } from '../menu/Menu';
+import { ErrorMessage } from '../error/ErrorMessage';
+import { LocaleData } from '../i18n/locale-data';
+import { LocaleManager } from '../i18n/locale-manager';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
 declare function require(value: String): any;
 
 @Component({
-  selector: "my-app",
-  templateUrl: "../components-html/AppComponent.html",
-  styleUrls: ["../../assets/styles/component-app.css"]
+  selector: 'my-app',
+  templateUrl: '../components-html/AppComponent.html',
+  styleUrls: ['../../assets/styles/component-app.css']
 })
 export class AppComponent {
   private get PRESET_ID(): string {
-    return "preset_id";
+    return 'preset_id';
   }
 
   private exportImagesProcess: ProcessExportImage;
@@ -38,18 +38,18 @@ export class AppComponent {
 
   @Input() animationOptionData: AnimationImageOptions;
 
-  @ViewChild("myComponent") myComponent: ElementRef;
-  @ViewChild("optionSelecter") optionSelecterComponent: ElementRef;
+  @ViewChild('myComponent') myComponent: ElementRef;
+  @ViewChild('optionSelecter') optionSelecterComponent: ElementRef;
 
   constructor(public localeData: LocaleData, sanitizer: DomSanitizer) {
     this.gaUrl = sanitizer.bypassSecurityTrustResourceUrl(
-      "http://ics-web.jp/projects/animation-image-tool/?v=" +
+      'http://ics-web.jp/projects/animation-image-tool/?v=' +
         this.appConfig.version
     );
     new LocaleManager().applyClientLocale(localeData);
 
-    const { dialog } = require("electron").remote;
-    const win = require("electron").remote.getCurrentWindow();
+    const { dialog } = require('electron').remote;
+    const win = require('electron').remote.getCurrentWindow();
     win.setTitle(localeData.APP_NAME);
   }
 
@@ -66,37 +66,37 @@ export class AppComponent {
     this.presetMode = Number(localStorage.getItem(this.PRESET_ID));
     this.changePreset(this.presetMode);
 
-    //	保存先の指定返却
-    const ipc = require("electron").ipcRenderer;
+    // 	保存先の指定返却
+    const ipc = require('electron').ipcRenderer;
 
-    ipc.on("selected-open-images", (event: any, filePathList: string[]) => {
+    ipc.on('selected-open-images', (event: any, filePathList: string[]) => {
       this._selectedImages(filePathList);
     });
 
-    ipc.on("unlock-select-ui", (event: any, filePathList: string[]) => {
-      console.log("unlockUI");
+    ipc.on('unlock-select-ui', (event: any, filePathList: string[]) => {
+      console.log('unlockUI');
       this.openingDirectories = false;
     });
   }
 
   openExternalBrowser(url) {
-    const { shell } = require("electron");
+    const { shell } = require('electron');
     shell.openExternal(url);
     console.log(url);
   }
 
   ngAfterViewInit() {
     const component = this.myComponent.nativeElement;
-    component.addEventListener("dragover", (event: DragEvent) => {
+    component.addEventListener('dragover', (event: DragEvent) => {
       this._isDragover = true;
       event.preventDefault();
     });
 
-    component.addEventListener("dragout", (event: DragEvent) => {
+    component.addEventListener('dragout', (event: DragEvent) => {
       this._isDragover = false;
     });
 
-    component.addEventListener("drop", (event: DragEvent) => {
+    component.addEventListener('drop', (event: DragEvent) => {
       this._isDragover = false;
       this.handleDrop(event);
     });
@@ -109,8 +109,8 @@ export class AppComponent {
       return;
     }
     this.openingDirectories = true;
-    const ipc = require("electron").ipcRenderer;
-    ipc.send("open-file-dialog");
+    const ipc = require('electron').ipcRenderer;
+    ipc.send('open-file-dialog');
   }
 
   public _selectedImages(filePathList: string[]) {
@@ -119,20 +119,20 @@ export class AppComponent {
   }
 
   public handleDrop(event: DragEvent) {
-    const path = require("path");
+    const path = require('path');
 
     const length = event.dataTransfer.files
       ? event.dataTransfer.files.length
       : 0;
 
-    //	再度アイテムがドロップされたらリセットするように調整
+    // 	再度アイテムがドロップされたらリセットするように調整
     this.items = [];
 
     for (let i = 0; i < length; i++) {
       const file: any = event.dataTransfer.files[i];
       const filePath = file.path;
 
-      if (path.extname(filePath) == ".png") {
+      if (path.extname(filePath) == '.png') {
         path.dirname(filePath);
 
         const item: ImageData = new ImageData();
@@ -170,7 +170,7 @@ export class AppComponent {
   }
 
   public generateAnimImage() {
-    //	画像が選択されていないので保存しない。
+    // 	画像が選択されていないので保存しない。
     if (!this.isImageSelected) {
       return;
     }
@@ -179,7 +179,7 @@ export class AppComponent {
       this.animationOptionData.enabledExportApng == false &&
       this.animationOptionData.enabledExportWebp == false
     ) {
-      alert("出力画像の形式を選択ください。");
+      alert('出力画像の形式を選択ください。');
       return;
     }
 
@@ -217,10 +217,10 @@ export class AppComponent {
    * @private
    */
   public _showLockDialog() {
-    const dialog: any = document.querySelector("dialog");
+    const dialog: any = document.querySelector('dialog');
     dialog.showModal();
-    dialog.style["display"] = "flex"; // こんな書き方をする必要があるのか…
-    document.body.style.cursor = "progress";
+    dialog.style['display'] = 'flex'; // こんな書き方をする必要があるのか…
+    document.body.style.cursor = 'progress';
 
     createjs.Ticker.setPaused(true); // 効かない…
   }
@@ -230,10 +230,10 @@ export class AppComponent {
    * @private
    */
   public _hideLockDialog() {
-    const dialog: any = document.querySelector("dialog");
+    const dialog: any = document.querySelector('dialog');
     dialog.close();
-    dialog.style["display"] = "none"; // こんな書き方をする必要があるのか…
-    document.body.style.cursor = "auto";
+    dialog.style['display'] = 'none'; // こんな書き方をする必要があるのか…
+    document.body.style.cursor = 'auto';
 
     createjs.Ticker.setPaused(false); // 効かない…
   }
@@ -246,8 +246,8 @@ export class AppComponent {
       return;
     }
     this.openingDirectories = true;
-    const ipc = require("electron").ipcRenderer;
-    ipc.send("open-file-dialog");
+    const ipc = require('electron').ipcRenderer;
+    ipc.send('open-file-dialog');
   }
 
   /**
@@ -255,17 +255,17 @@ export class AppComponent {
    * @param filePathList
    */
   public setFilePathList(filePathList: string[]): void {
-    const path = require("path");
+    const path = require('path');
 
     const length = filePathList ? filePathList.length : 0;
 
-    //	再度アイテムがドロップされたらリセットするように調整
+    // 	再度アイテムがドロップされたらリセットするように調整
     this.items = [];
 
     for (let i = 0; i < length; i++) {
       const filePath = filePathList[i];
 
-      if (path.extname(filePath) == ".png") {
+      if (path.extname(filePath) == '.png') {
         path.dirname(filePath);
 
         const item: ImageData = new ImageData();
@@ -292,8 +292,8 @@ export class AppComponent {
       const aNum = aRes ? (aRes.length >= 1 ? parseInt(aRes.pop()) : 0) : 0;
       const bNum = bRes ? (bRes.length >= 1 ? parseInt(bRes.pop()) : 0) : 0;
 
-      if (aNum < bNum) return -1;
-      if (aNum > bNum) return 1;
+      if (aNum < bNum) { return -1; }
+      if (aNum > bNum) { return 1; }
       return 0;
     });
 

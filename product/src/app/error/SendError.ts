@@ -8,7 +8,7 @@ export class SendError {
     detail: string
   ) {
     const saveData = {
-      OS: require("os").platform(),
+      OS: require('os').platform(),
       version: version,
       code: code,
       category: category,
@@ -18,8 +18,8 @@ export class SendError {
 
     const data = {
       saveData: JSON.stringify(saveData),
-      action: "append",
-      sheetName: "s0",
+      action: 'append',
+      sheetName: 's0',
       actionParam: 0
     }; // POSTメソッドで送信するデータ
     const xmlHttpRequest = new XMLHttpRequest();
@@ -37,12 +37,12 @@ export class SendError {
     };
 
     xmlHttpRequest.open(
-      "POST",
-      "https://script.google.com/macros/s/AKfycbxt8g9KxiD1hp_W1XQzw4tzmsIF1qVigRLF-v87ngWtqqU31JXu/exec"
+      'POST',
+      'https://script.google.com/macros/s/AKfycbxt8g9KxiD1hp_W1XQzw4tzmsIF1qVigRLF-v87ngWtqqU31JXu/exec'
     );
     xmlHttpRequest.setRequestHeader(
-      "Content-Type",
-      "application/x-www-form-urlencoded"
+      'Content-Type',
+      'application/x-www-form-urlencoded'
     );
     xmlHttpRequest.send(this.encodeHTMLForm(data));
   }
@@ -52,11 +52,11 @@ export class SendError {
 
     for (const name in data) {
       const value = data[name];
-      const param = encodeURIComponent(name) + "=" + encodeURIComponent(value);
+      const param = encodeURIComponent(name) + '=' + encodeURIComponent(value);
 
       params.push(param);
     }
 
-    return params.join("&").replace(/%20/g, "+");
+    return params.join('&').replace(/%20/g, '+');
   }
 }
