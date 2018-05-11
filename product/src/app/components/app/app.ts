@@ -3,7 +3,7 @@ import { AnimationImageOptions } from '../../data/animation-image-option';
 import { PresetType } from '../../type/PresetType';
 import { PresetWeb } from '../../preset/preset-web';
 import { PresetLine } from '../../preset/preset-line';
-import { ProcessExportImage } from '../../process/process-eexport-image';
+import { ProcessExportImage } from '../../process/process-export-image';
 import { AppConfig } from '../../config/app-config';
 import { ImageData } from '../../data/image-data';
 import { ApplicationMenu } from '../../menu/application-menu';
@@ -17,7 +17,7 @@ declare function require(value: String): any;
 @Component({
   selector: 'my-app',
   templateUrl: './app.html',
-  styleUrls: ['./app.css']
+  styleUrls: ['./app.scss']
 })
 export class AppComponent {
   private get PRESET_ID(): string {
@@ -54,7 +54,10 @@ export class AppComponent {
   }
 
   ngOnInit() {
-    const menu: ApplicationMenu = new ApplicationMenu(this.appConfig, this.localeData);
+    const menu: ApplicationMenu = new ApplicationMenu(
+      this.appConfig,
+      this.localeData
+    );
     menu.createMenu();
 
     this.animationOptionData = new AnimationImageOptions();
@@ -292,8 +295,12 @@ export class AppComponent {
       const aNum = aRes ? (aRes.length >= 1 ? parseInt(aRes.pop()) : 0) : 0;
       const bNum = bRes ? (bRes.length >= 1 ? parseInt(bRes.pop()) : 0) : 0;
 
-      if (aNum < bNum) { return -1; }
-      if (aNum > bNum) { return 1; }
+      if (aNum < bNum) {
+        return -1;
+      }
+      if (aNum > bNum) {
+        return 1;
+      }
       return 0;
     });
 
