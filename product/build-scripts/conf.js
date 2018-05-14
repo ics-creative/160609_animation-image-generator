@@ -3,7 +3,7 @@ module.exports = {
   "EN_NAME" : "animation-image-converter",
   "APP_VERSION": "2.0.0Alpha",
   "BUILD_VERSION": "2.0.000",
-  "ELECTRON_VERSION": "1.6.10",
+  "ELECTRON_VERSION": "2.0.0",
   "sign": {
     "identity": "3rd Party Mac Developer Installer: ICS INC. (53YCXL8YSM)",
     "bundleId": "media.ics.AnimationImageConverter"
