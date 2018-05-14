@@ -10,6 +10,8 @@
     "precommit": "lint-staged",
     "lint": "tslint --project ./tsconfig.json",
     "lint:fix": "tslint --project ./tsconfig.json --fix",
+    "lintjs": " npx prettier */*.js --single-quote",
+    "lintjs:fix": " npx prettier */*.js --write --single-quote",
     "release-darwin": "rm -rf アニメ画像に変換する君-mas-x64 && node build-scripts/for-mac-prebuild.js && cd tmpDarwin && npm install --prod && cd ../ && node build-scripts/for-mac-packaging.js",
     "prebuild-win32": "node build-scripts/for-windows-prebuild.js",
     "package-win32": "cd tmpWin32 && npm install --prod && cd ../ && node build-scripts/for-windows-packaging.js",
