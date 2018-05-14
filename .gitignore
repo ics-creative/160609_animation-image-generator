@@ -8,4 +8,5 @@ node_modules
 .DS_Store
 npm-debug.log
 AnimationImageConverter*
+!product/src/assets/*.js
 product/src/*.js
