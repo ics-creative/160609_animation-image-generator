@@ -10,8 +10,8 @@ module.exports = {
     del.sync([outPath]);
 
     cpx.copySync(conf.distPath + '/**', path.join(outPath, '/dist/'));
-    cpx.copySync('package.json', outPath);
-    cpx.copySync('main.js', outPath);
+    cpx.copySync('dist-config/package.json', outPath);
+    cpx.copySync('dist-config/main.js', outPath);
     console.log(conf.distPath, outPath);
   },
   copyResources: function(resources, outPath) {
