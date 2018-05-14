@@ -32,7 +32,7 @@ const execPlugin = [
     "sourceMap": true,
     "filename": "scripts.bundle.js",
     "scripts": [
-      "./product/src/assets/js/createjs-2015.11.26.min.js",
+      "./product/src/assets/js/createjs-1.0.0.min.js",
       "./product/src/assets/js/jquery.min.js",
       "./product/src/assets/js/tether.min.js"
     ],
