@@ -223,8 +223,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   }
 
   /**
-   * モダールダイアログを開きます。
-   * @private
+   * 画面を操作できないようにロックするモダールダイアログを開きます。
    */
   public _showLockDialog() {
     const dialog: any = document.querySelector('dialog');
@@ -232,12 +231,11 @@ export class AppComponent implements OnInit, AfterViewInit {
     dialog.style['display'] = 'flex'; // こんな書き方をする必要があるのか…
     document.body.style.cursor = 'progress';
 
-    createjs.Ticker.paused = false; // 効かない…
+    createjs.Ticker.paused = true;
   }
 
   /**
-   * モダールダイアログを閉じます。
-   * @private
+   * 画面を操作できないようにロックするモダールダイアログを閉じます。
    */
   public _hideLockDialog() {
     const dialog: any = document.querySelector('dialog');
@@ -245,7 +243,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     dialog.style['display'] = 'none'; // こんな書き方をする必要があるのか…
     document.body.style.cursor = 'auto';
 
-    createjs.Ticker.paused = false; // 効かない…
+    createjs.Ticker.paused = false;
   }
 
   /**
