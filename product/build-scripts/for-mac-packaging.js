@@ -20,7 +20,11 @@ electronPackager({
   "appVersion": conf.APP_VERSION,
   "appCopyright": "Copyright (C) 2017 ICS INC."
 }, function (err, appPaths) {// 完了時のコールバック
-  if (err) console.log(err);
+  if (err) {
+    console.log(err);
+    console.log("package failure!  " + appPaths);
+    return;
+  }
   console.log("package done!  " + appPaths);
 
   const execSign = `export DEBUG=electron-osx-sign && electron-osx-sign "${conf.JP_NAME}-mas-x64/${conf.JP_NAME}.app" --entitlements='resources/dev/parent.plist' --entitlements-inherit='resources/dev/child.plist' --platform=mas`;
