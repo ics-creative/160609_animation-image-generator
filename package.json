@@ -1,6 +1,0 @@
-{
-  "dependencies": {},
-  "devDependencies": {
-    "@ngtools/webpack": "^6.0.0"
-  }
-}
