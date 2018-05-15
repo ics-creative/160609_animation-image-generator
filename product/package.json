@@ -4,9 +4,8 @@
     "start": "NODE_ENV=develop webpack -w & NODE_ENV=develop electron dist-config",
     "build": "NODE_ENV=prod webpack",
     "precommit": "lint-staged",
-
     "lint": "tslint --project ./tsconfig.json",
-    "format": "tslint --project ./tsconfig.json --fix && prettier */*.js --write --single-quote",
+    "format": "tslint --project ./tsconfig.json --fix && prettier */*.js --write",
     "release-darwin": "rm -rf アニメ画像に変換する君-mas-x64 && node build-scripts/for-mac-prebuild.js && cd tmpDarwin && npm install --prod && cd ../ && node build-scripts/for-mac-packaging.js",
     "prebuild-win32": "node build-scripts/for-windows-prebuild.js",
     "package-win32": "cd tmpWin32 && npm install --prod && cd ../ && node build-scripts/for-windows-packaging.js",
@@ -21,6 +20,9 @@
       "prettier",
       "git add"
     ]
+  },
+  "prettier": {
+    "singleQuote": true
   },
   "private": true,
   "dependencies": {
