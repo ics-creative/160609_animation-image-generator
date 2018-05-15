@@ -29,9 +29,6 @@ function createWindow() {
     // デベロッパーツールの起動
     mainWindow.webContents.openDevTools();
   } else {
-    const chokidar = require('chokidar');
-
-    console.log(process.env.NODE_ENV);
     mainWindow.loadURL(
       url.format({
         pathname: path.join(__dirname, '../dist', 'index.html'),
@@ -39,31 +36,13 @@ function createWindow() {
         slashes: true
       })
     );
-
     mainWindow.webContents.openDevTools();
-
-    // ダミーファイルの生成を検知
-    const watcher = chokidar.watch('./.build_date');
-    watcher.on('change', watchPath => {
-      if (mainWindow) {
-        mainWindow.loadURL(
-          url.format({
-            pathname: path.join(__dirname, '../dist', 'index.html'),
-            protocol: 'file:',
-            slashes: true
-          })
-        );
-        //watcher.close();
-
-        // デベロッパーツールの起動
-        mainWindow.webContents.openDevTools();
-      }
-    });
 
     // メインウィンドウが閉じられたときの処理
     mainWindow.on('closed', function() {
       mainWindow = null;
     });
+
   }
   const ipc = require('electron').ipcMain;
   ipc.on('open-file-dialog', openFileDialog);
