@@ -1,7 +1,10 @@
-import {ElectronService} from 'ngx-electron';
+import { ElectronService } from 'ngx-electron';
 import { AnimationImageOptions } from '../data/animation-image-option';
 import { LocaleData } from '../i18n/locale-data';
 
+/**
+ * LINEスタンプの規約に即しているかを検証するバリデーターです。
+ */
 export class LineStampValidator {
   static validate(
     output: string,

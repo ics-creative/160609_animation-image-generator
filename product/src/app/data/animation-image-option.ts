@@ -1,6 +1,9 @@
 import { CompressionType } from '../type/CompressionType';
 import { PresetType } from '../type/PresetType';
 
+/**
+ * アニメーション画像のオプション指定を指定するクラスです。
+ */
 export class AnimationImageOptions {
   preset: PresetType;
 

@@ -22,6 +22,9 @@ declare function require(value: String): any;
   templateUrl: './anim-preview.html',
   styleUrls: ['./anim-preview.scss']
 })
+/**
+ * アニメーションのプレビュー領域のコンポーネントです。
+ */
 export class AnimPreviewComponent implements OnChanges, OnInit {
   @Input() imagePath: string;
   @Input() animationOptionData: AnimationImageOptions;

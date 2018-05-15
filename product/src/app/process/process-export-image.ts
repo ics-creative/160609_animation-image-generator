@@ -1,4 +1,4 @@
-import {ElectronService} from 'ngx-electron';
+import { ElectronService } from 'ngx-electron';
 import { AnimationImageOptions } from '../data/animation-image-option';
 import { ImageData } from '../data/image-data';
 import { PresetType } from '../type/PresetType';
@@ -8,10 +8,12 @@ import { ErrorCode } from '../error/error-code';
 import { LocaleData } from '../i18n/locale-data';
 import { SendError } from '../error/send-error';
 
-
 namespace Error {
   export const ENOENT_ERROR = 'ENOENT';
 }
+/**
+ * 画像を変換するプロセスを定義したクラスです。
+ */
 export class ProcessExportImage {
   public errorDetail: string;
   public errorCode: ErrorCode;
@@ -40,14 +42,17 @@ export class ProcessExportImage {
   private generateCancelHTML: boolean;
   private generateCancelWebP: boolean;
 
-  constructor(private localeData: LocaleData, private _electronService: ElectronService) {
+  constructor(
+    private localeData: LocaleData,
+    private _electronService: ElectronService
+  ) {
     this.lastSelectBaseName = this.localeData.defaultFileName;
   }
 
   public get exeExt() {
-
-
-    const platform: string = this._electronService.remote.require('os').platform();
+    const platform: string = this._electronService.remote
+      .require('os')
+      .platform();
     return platform === 'win32' ? '.exe' : '';
   }
 
@@ -65,7 +70,9 @@ export class ProcessExportImage {
 
     // お問い合わせコード生成
     this.inquiryCode = SHA256(
-      this._electronService.remote.require('os').platform + '/' + new Date().toString()
+      this._electronService.remote.require('os').platform +
+        '/' +
+        new Date().toString()
     )
       .toString()
       .slice(0, 8);
@@ -194,7 +201,7 @@ export class ProcessExportImage {
         .catch(message => {
           // エラー内容の送信
           if (message) {
-            console.error(message)
+            console.error(message);
             this.errorStack = message.stack;
             SendError.exec(
               this._version,
@@ -310,7 +317,8 @@ export class ProcessExportImage {
       const path = this._electronService.remote.require('path');
       const appPath: string = this.getAppPath();
 
-      const exec = this._electronService.remote.require('child_process').execFile;
+      const exec = this._electronService.remote.require('child_process')
+        .execFile;
       const pngPath = path.join(this.temporaryLastPath, 'frame*.png');
 
       const compressOptions = this.getCompressOption(
@@ -363,7 +371,7 @@ export class ProcessExportImage {
                     // message: message,
                     detail: message + '\n\n' + detailMessage
                   };
-                  dialog.showMessageBox(<any> win, <any> dialogOption);
+                  dialog.showMessageBox(<any>win, <any>dialogOption);
                 }
               }
               resolve();
@@ -415,7 +423,8 @@ export class ProcessExportImage {
       const path = this._electronService.remote.require('path');
       const appPath: string = this.getAppPath();
 
-      const execFile = this._electronService.remote.require('child_process').execFile;
+      const execFile = this._electronService.remote.require('child_process')
+        .execFile;
       const pngPath = path.join(this.temporaryPath);
 
       const options: string[] = [];
@@ -508,7 +517,8 @@ export class ProcessExportImage {
     const remote = this._electronService.remote;
     const path = this._electronService.remote.require('path');
     const appPath: string = this.getAppPath();
-    const execFile = this._electronService.remote.require('child_process').execFile;
+    const execFile = this._electronService.remote.require('child_process')
+      .execFile;
     const options: string[] = [];
     options.push(filePath);
     options.push(`-o`);
@@ -575,10 +585,9 @@ export class ProcessExportImage {
 
   private _getApngPathRelativeHTML(): string {
     if (this._enableExportApng()) {
-      return this._electronService.remote.require('path').relative(
-        this.selectedHTMLDirectoryPath,
-        this.selectedPNGPath
-      );
+      return this._electronService.remote
+        .require('path')
+        .relative(this.selectedHTMLDirectoryPath, this.selectedPNGPath);
     }
     return undefined;
   }
@@ -595,10 +604,9 @@ export class ProcessExportImage {
    */
   private _getWebpPathReleativeHTML(): string {
     if (this._enableExportWebp()) {
-      return this._electronService.remote.require('path').relative(
-        this.selectedHTMLDirectoryPath,
-        this.selectedWebPPath
-      );
+      return this._electronService.remote
+        .require('path')
+        .relative(this.selectedHTMLDirectoryPath, this.selectedWebPPath);
     }
     return undefined;
   }
@@ -715,7 +723,8 @@ export class ProcessExportImage {
     return new Promise((resolve, reject) => {
       const path = this._electronService.remote.require('path');
       const appPath: string = this.getAppPath();
-      const execFile = this._electronService.remote.require('child_process').execFile;
+      const execFile = this._electronService.remote.require('child_process')
+        .execFile;
 
       const options: string[] = [
         '--quality=65-80',
@@ -817,7 +826,7 @@ export class ProcessExportImage {
               name: imageType === 'html' ? 'html' : 'Images',
               extensions: [extention]
             }
-          ],
+          ]
           // 2018-05-15 ビルドを通すため一時的にコメントアウト
           // properties: ['openFile']
         },
@@ -848,7 +857,7 @@ export class ProcessExportImage {
     });
   }
 
-  private getAppPath() :string {
+  private getAppPath(): string {
     const remote = this._electronService.remote;
     const path = this._electronService.remote.require('path');
     const app = remote.app;

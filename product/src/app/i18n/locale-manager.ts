@@ -1,8 +1,10 @@
-'use strict';
 import { LocaleData } from './locale-data';
 import { LocaleJaData } from './locale-ja';
 import { LocaleEnData } from './locale-en';
 
+/**
+ * 言語を切り替える機能を有したクラスです。
+ */
 export class LocaleManager {
   public applyClientLocale(localeData: LocaleData): void {
     const locale = this.checkLocale();

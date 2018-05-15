@@ -6,7 +6,7 @@ import {
   OnInit,
   ViewChild
 } from '@angular/core';
-import {ElectronService} from 'ngx-electron';
+import { ElectronService } from 'ngx-electron';
 import { AnimationImageOptions } from '../../data/animation-image-option';
 import { PresetType } from '../../type/PresetType';
 import { PresetWeb } from '../../preset/preset-web';
@@ -25,6 +25,9 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
   templateUrl: './app.html',
   styleUrls: ['./app.scss']
 })
+/**
+ * アプリケーション全体領域のコンポーネントです。
+ */
 export class AppComponent implements OnInit, AfterViewInit {
   private get PRESET_ID(): string {
     return 'preset_id';
@@ -47,7 +50,11 @@ export class AppComponent implements OnInit, AfterViewInit {
   @ViewChild('myComponent') myComponent: ElementRef;
   @ViewChild('optionSelecter') optionSelecterComponent: ElementRef;
 
-  constructor(public localeData: LocaleData, sanitizer: DomSanitizer, private _electronService: ElectronService) {
+  constructor(
+    public localeData: LocaleData,
+    sanitizer: DomSanitizer,
+    private _electronService: ElectronService
+  ) {
     this.gaUrl = sanitizer.bypassSecurityTrustResourceUrl(
       'http://ics-web.jp/projects/animation-image-tool/?v=' +
         this.appConfig.version
@@ -68,7 +75,10 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.animationOptionData = new AnimationImageOptions();
 
     this.isImageSelected = false;
-    this.exportImagesProcess = new ProcessExportImage(this.localeData, this._electronService);
+    this.exportImagesProcess = new ProcessExportImage(
+      this.localeData,
+      this._electronService
+    );
 
     // 初回プリセットの設定
     this.presetMode = Number(localStorage.getItem(this.PRESET_ID));

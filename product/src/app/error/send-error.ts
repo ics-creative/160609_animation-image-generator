@@ -1,4 +1,4 @@
-import {ElectronService} from 'ngx-electron';
+import { ElectronService } from 'ngx-electron';
 
 export class SendError {
   static exec(
@@ -7,7 +7,7 @@ export class SendError {
     category: string,
     title: string,
     detail: string,
-    _electronService:ElectronService
+    _electronService: ElectronService
   ) {
     const saveData = {
       OS: _electronService.remote.require('os').platform(),

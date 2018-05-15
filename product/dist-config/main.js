@@ -17,7 +17,6 @@ function createWindow() {
 
   // メインウィンドウに表示するURLを指定します
   if (process.env.NODE_ENV !== 'develop') {
-
     // 今回はdistディレクトリのindex.html
     mainWindow.loadURL(
       url.format({
@@ -32,7 +31,7 @@ function createWindow() {
   } else {
     const chokidar = require('chokidar');
 
-    console.log(process.env.NODE_ENV)
+    console.log(process.env.NODE_ENV);
     mainWindow.loadURL(
       url.format({
         pathname: path.join(__dirname, '../dist', 'index.html'),
@@ -42,7 +41,6 @@ function createWindow() {
     );
 
     mainWindow.webContents.openDevTools();
-
 
     // ダミーファイルの生成を検知
     const watcher = chokidar.watch('./.build_date');
