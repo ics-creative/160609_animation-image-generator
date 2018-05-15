@@ -6,6 +6,7 @@ import {
   OnInit,
   ViewChild
 } from '@angular/core';
+import {ElectronService} from 'ngx-electron';
 import { AnimationImageOptions } from '../../data/animation-image-option';
 import { PresetType } from '../../type/PresetType';
 import { PresetWeb } from '../../preset/preset-web';
@@ -18,8 +19,6 @@ import { ErrorMessage } from '../../error/error-message';
 import { LocaleData } from '../../i18n/locale-data';
 import { LocaleManager } from '../../i18n/locale-manager';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
-
-declare function require(value: String): any;
 
 @Component({
   selector: 'my-app',
@@ -48,15 +47,15 @@ export class AppComponent implements OnInit, AfterViewInit {
   @ViewChild('myComponent') myComponent: ElementRef;
   @ViewChild('optionSelecter') optionSelecterComponent: ElementRef;
 
-  constructor(public localeData: LocaleData, sanitizer: DomSanitizer) {
+  constructor(public localeData: LocaleData, sanitizer: DomSanitizer, private _electronService: ElectronService) {
     this.gaUrl = sanitizer.bypassSecurityTrustResourceUrl(
       'http://ics-web.jp/projects/animation-image-tool/?v=' +
         this.appConfig.version
     );
     new LocaleManager().applyClientLocale(localeData);
 
-    const { dialog } = require('electron').remote;
-    const win = require('electron').remote.getCurrentWindow();
+    const { dialog } =  this._electronService.remote.require('electron').remote;
+    const win = this._electronService.remote.require('electron').remote.getCurrentWindow();
     win.setTitle(localeData.APP_NAME);
   }
 
@@ -70,14 +69,14 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.animationOptionData = new AnimationImageOptions();
 
     this.isImageSelected = false;
-    this.exportImagesProcess = new ProcessExportImage(this.localeData);
+    this.exportImagesProcess = new ProcessExportImage(this.localeData, this._electronService);
 
     // 初回プリセットの設定
     this.presetMode = Number(localStorage.getItem(this.PRESET_ID));
     this.changePreset(this.presetMode);
 
     // 	保存先の指定返却
-    const ipc = require('electron').ipcRenderer;
+    const ipc = this._electronService.remote.require('electron').ipcRenderer;
 
     ipc.on('selected-open-images', (event: any, filePathList: string[]) => {
       this._selectedImages(filePathList);
@@ -90,7 +89,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   }
 
   openExternalBrowser(url) {
-    const { shell } = require('electron');
+    const { shell } = this._electronService.remote.require('electron');
     shell.openExternal(url);
     console.log(url);
   }
@@ -119,7 +118,7 @@ export class AppComponent implements OnInit, AfterViewInit {
       return;
     }
     this.openingDirectories = true;
-    const ipc = require('electron').ipcRenderer;
+    const ipc = this._electronService.remote.require('electron').ipcRenderer;
     ipc.send('open-file-dialog');
   }
 
@@ -129,7 +128,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   }
 
   public handleDrop(event: DragEvent) {
-    const path = require('path');
+    const path = this._electronService.remote.require('path');
 
     const length = event.dataTransfer.files
       ? event.dataTransfer.files.length
@@ -254,7 +253,7 @@ export class AppComponent implements OnInit, AfterViewInit {
       return;
     }
     this.openingDirectories = true;
-    const ipc = require('electron').ipcRenderer;
+    const ipc = this._electronService.remote.require('electron').ipcRenderer;
     ipc.send('open-file-dialog');
   }
 
@@ -263,7 +262,7 @@ export class AppComponent implements OnInit, AfterViewInit {
    * @param filePathList
    */
   public setFilePathList(filePathList: string[]): void {
-    const path = require('path');
+    const path = this._electronService.remote.require('path');
 
     const length = filePathList ? filePathList.length : 0;
 

@@ -1,17 +1,17 @@
+import {ElectronService} from 'ngx-electron';
 import { AnimationImageOptions } from '../data/animation-image-option';
 import { LocaleData } from '../i18n/locale-data';
-
-declare function require(value: String): any;
 
 export class LineStampValidator {
   static validate(
     output: string,
     options: AnimationImageOptions,
-    localeData: LocaleData
+    localeData: LocaleData,
+    _electronService: ElectronService
   ): string[] {
     const validateArr: string[] = [];
 
-    const fs = require('fs');
+    const fs = _electronService.remote.require('fs');
     const stat: { size: number } = fs.statSync(output);
 
     if (stat.size > 300 * 1024) {

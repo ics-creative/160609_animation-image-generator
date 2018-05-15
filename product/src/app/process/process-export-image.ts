@@ -1,3 +1,4 @@
+import {ElectronService} from 'ngx-electron';
 import { AnimationImageOptions } from '../data/animation-image-option';
 import { ImageData } from '../data/image-data';
 import { PresetType } from '../type/PresetType';
@@ -7,8 +8,6 @@ import { ErrorCode } from '../error/error-code';
 import { LocaleData } from '../i18n/locale-data';
 import { SendError } from '../error/send-error';
 
-declare function require(value: String): any;
-declare var process: { platform: string };
 
 namespace Error {
   export const ENOENT_ERROR = 'ENOENT';
@@ -41,12 +40,14 @@ export class ProcessExportImage {
   private generateCancelHTML: boolean;
   private generateCancelWebP: boolean;
 
-  constructor(private localeData: LocaleData) {
+  constructor(private localeData: LocaleData, private _electronService: ElectronService) {
     this.lastSelectBaseName = this.localeData.defaultFileName;
   }
 
   public get exeExt() {
-    const platform: string = require('os').platform();
+
+
+    const platform: string = this._electronService.remote.require('os').platform();
     return platform === 'win32' ? '.exe' : '';
   }
 
@@ -60,11 +61,11 @@ export class ProcessExportImage {
     console.log(this.exeExt);
     console.log(process.platform);
 
-    const SHA256 = require('crypto-js/sha256');
+    const SHA256 = this._electronService.remote.require('crypto-js/sha256');
 
     // お問い合わせコード生成
     this.inquiryCode = SHA256(
-      require('os').platform + '/' + new Date().toString()
+      this._electronService.remote.require('os').platform + '/' + new Date().toString()
     )
       .toString()
       .slice(0, 8);
@@ -72,9 +73,9 @@ export class ProcessExportImage {
     console.log(this.inquiryCode);
 
     // 	テンポラリパス生成
-    const remote = require('electron').remote;
+    const remote = this._electronService.remote.require('electron').remote;
     const app = remote.app;
-    const path = require('path');
+    const path = this._electronService.remote.require('path');
     this.itemList = itemList;
     this.temporaryPath = path.join(app.getPath('temp'), 'a-img-generator');
     this.temporaryCompressPath = path.join(
@@ -178,7 +179,7 @@ export class ProcessExportImage {
           }
 
           // エクスプローラーで開くでも、まだいいかも
-          const { shell } = require('electron');
+          const { shell } = this._electronService.remote.require('electron');
           if (this._enableExportHTML()) {
             shell.showItemInFolder(this.selectedHTMLPath);
           } else if (this._enableExportApng()) {
@@ -199,7 +200,8 @@ export class ProcessExportImage {
               this.inquiryCode,
               'ERROR',
               this.errorCode.toString(),
-              message.stack
+              message.stack,
+              this._electronService
             );
           }
           reject();
@@ -226,14 +228,14 @@ export class ProcessExportImage {
    */
   private _cleanTemporary(): Promise<any> {
     return new Promise((resolve: Function, reject: Function) => {
-      const del = require('del');
-      const path = require('path');
+      const del = this._electronService.remote.require('del');
+      const path = this._electronService.remote.require('path');
       const pngTemporary = path.join(this.temporaryPath, '*.*');
       const pngCompressTemporary = path.join(this.temporaryCompressPath, '*.*');
 
       del([pngTemporary, pngCompressTemporary], { force: true }).then(
         (paths: string[]) => {
-          const fs = require('fs');
+          const fs = this._electronService.remote.require('fs');
 
           // フォルダーを作成
           try {
@@ -270,8 +272,8 @@ export class ProcessExportImage {
   private _copyTemporaryImage(item: any): Promise<any> {
     return new Promise((resolve: Function, reject: Function) => {
       setImmediate(() => {
-        const fs = require('fs');
-        const path = require('path');
+        const fs = this._electronService.remote.require('fs');
+        const path = this._electronService.remote.require('path');
         const src = item.imagePath;
 
         const destination: string = path.join(
@@ -303,10 +305,10 @@ export class ProcessExportImage {
    */
   private _generateApng(exportFilePath: string): Promise<any> {
     return new Promise((resolve: Function, reject: Function) => {
-      const path = require('path');
+      const path = this._electronService.remote.require('path');
       const appPath: string = this.getAppPath();
 
-      const exec = require('child_process').execFile;
+      const exec = this._electronService.remote.require('child_process').execFile;
       const pngPath = path.join(this.temporaryLastPath, 'frame*.png');
 
       const compressOptions = this.getCompressOption(
@@ -342,12 +344,13 @@ export class ProcessExportImage {
                 const validateArr = LineStampValidator.validate(
                   exportFilePath,
                   this.animationOptionData,
-                  this.localeData
+                  this.localeData,
+                  this._electronService
                 );
 
                 if (validateArr.length > 0) {
-                  const { dialog } = require('electron').remote;
-                  const win = require('electron').remote.getCurrentWindow();
+                  const { dialog } = this._electronService.remote.require('electron').remote;
+                  const win = this._electronService.remote.require('electron').remote.getCurrentWindow();
                   const message = this.localeData.VALIDATE_title;
                   const detailMessage = '・' + validateArr.join('\n\n・');
 
@@ -376,7 +379,8 @@ export class ProcessExportImage {
                 this.inquiryCode,
                 'ERROR',
                 this.errorCode + '',
-                err.code + ' : ' + stdout + ', message:' + err.message
+                err.code + ' : ' + stdout + ', message:' + err.message,
+                this._electronService
               );
 
               reject();
@@ -406,10 +410,10 @@ export class ProcessExportImage {
    */
   private _generateWebp(exportFilePath: string): Promise<any> {
     return new Promise((resolve: Function, reject: Function) => {
-      const path = require('path');
+      const path = this._electronService.remote.require('path');
       const appPath: string = this.getAppPath();
 
-      const execFile = require('child_process').execFile;
+      const execFile = this._electronService.remote.require('child_process').execFile;
       const pngPath = path.join(this.temporaryPath);
 
       const options: string[] = [];
@@ -465,7 +469,8 @@ export class ProcessExportImage {
                     this.inquiryCode,
                     'ERROR',
                     this.errorCode + '',
-                    err.code + ' : ' + stdout + ', message:' + err.message
+                    err.code + ' : ' + stdout + ', message:' + err.message,
+                    this._electronService
                   );
 
                   reject();
@@ -498,10 +503,10 @@ export class ProcessExportImage {
   }
 
   private _convertPng2Webp(filePath: string): Promise<any> {
-    const remote = require('electron').remote;
-    const path = require('path');
+    const remote = this._electronService.remote.require('electron').remote;
+    const path = this._electronService.remote.require('path');
     const appPath: string = this.getAppPath();
-    const execFile = require('child_process').execFile;
+    const execFile = this._electronService.remote.require('child_process').execFile;
     const options: string[] = [];
     options.push(filePath);
     options.push(`-o`);
@@ -540,7 +545,8 @@ export class ProcessExportImage {
                 this.inquiryCode,
                 'ERROR',
                 this.errorCode + '',
-                err.code + ' : ' + stdout + ', message:' + err.message
+                err.code + ' : ' + stdout + ', message:' + err.message,
+                this._electronService
               );
 
               reject();
@@ -567,7 +573,7 @@ export class ProcessExportImage {
 
   private _getApngPathRelativeHTML(): string {
     if (this._enableExportApng()) {
-      return require('path').relative(
+      return this._electronService.remote.require('path').relative(
         this.selectedHTMLDirectoryPath,
         this.selectedPNGPath
       );
@@ -587,7 +593,7 @@ export class ProcessExportImage {
    */
   private _getWebpPathReleativeHTML(): string {
     if (this._enableExportWebp()) {
-      return require('path').relative(
+      return this._electronService.remote.require('path').relative(
         this.selectedHTMLDirectoryPath,
         this.selectedWebPPath
       );
@@ -600,8 +606,8 @@ export class ProcessExportImage {
    * @private
    */
   private _generateHtml(exportFilePath: string): void {
-    const fs = require('fs');
-    const path = require('path');
+    const fs = this._electronService.remote.require('fs');
+    const path = this._electronService.remote.require('path');
     const filePNGName: string = this._getApngPathRelativeHTML();
     const fileWebPName: string = this._getWebpPathReleativeHTML();
 
@@ -705,12 +711,12 @@ export class ProcessExportImage {
 
   private _pngCompress(item: ImageData) {
     return new Promise((resolve, reject) => {
-      const remote = require('electron').remote;
+      const remote = this._electronService.remote.require('electron').remote;
       const app = remote.app;
-      const path = require('path');
-      const fs = require('fs');
+      const path = this._electronService.remote.require('path');
+      const fs = this._electronService.remote.require('fs');
       const appPath: string = this.getAppPath();
-      const execFile = require('child_process').execFile;
+      const execFile = this._electronService.remote.require('child_process').execFile;
 
       const options: string[] = [
         '--quality=65-80',
@@ -741,7 +747,8 @@ export class ProcessExportImage {
               this.inquiryCode,
               'ERROR',
               this.errorCode + '',
-              err.code + ' : ' + stdout + ', message:' + err.message
+              err.code + ' : ' + stdout + ', message:' + err.message,
+              this._electronService
             );
 
             reject();
@@ -784,11 +791,11 @@ export class ProcessExportImage {
           extention = 'html';
           break;
       }
-      const remote = require('electron').remote;
-      const { dialog } = require('electron').remote;
+      const remote = this._electronService.remote.require('electron').remote;
+      const { dialog } = this._electronService.remote.require('electron').remote;
       const win = remote.getCurrentWindow();
       const app = remote.app;
-      const fs = require('fs');
+      const fs = this._electronService.remote.require('fs');
 
       try {
         fs.statSync(this.lastSelectSaveDirectories);
@@ -797,7 +804,7 @@ export class ProcessExportImage {
         // 	失敗したらパス修正
         this.lastSelectSaveDirectories = app.getPath('desktop');
       }
-      const path = require('path');
+      const path = this._electronService.remote.require('path');
       defaultPath = path.join(this.lastSelectSaveDirectories, defaultPathName);
 
       dialog.showSaveDialog(
@@ -841,8 +848,8 @@ export class ProcessExportImage {
   }
 
   private getAppPath() {
-    const remote = require('electron').remote;
-    const path = require('path');
+    const remote = this._electronService.remote.require('electron').remote;
+    const path = this._electronService.remote.require('path');
     const app = remote.app;
     return path.join(app.getAppPath(), 'dist', 'assets');
   }

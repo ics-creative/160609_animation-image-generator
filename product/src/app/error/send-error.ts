@@ -1,14 +1,16 @@
-declare function require(value: String): any;
+import {ElectronService} from 'ngx-electron';
+
 export class SendError {
   static exec(
     version: string,
     code: string,
     category: string,
     title: string,
-    detail: string
+    detail: string,
+    _electronService:ElectronService
   ) {
     const saveData = {
-      OS: require('os').platform(),
+      OS: _electronService.remote.require('os').platform(),
       version: version,
       code: code,
       category: category,
