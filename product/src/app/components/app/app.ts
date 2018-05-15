@@ -14,8 +14,8 @@ import { PresetLine } from '../../preset/preset-line';
 import { ProcessExportImage } from '../../process/process-export-image';
 import { AppConfig } from '../../config/app-config';
 import { ImageData } from '../../data/image-data';
-import { ApplicationMenu } from '../../menu/application-menu';
-import { ErrorMessage } from '../../error/error-message';
+// import { ApplicationMenu } from '../../menu/application-menu';
+// import { ErrorMessage } from '../../error/error-message';
 import { LocaleData } from '../../i18n/locale-data';
 import { LocaleManager } from '../../i18n/locale-manager';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
@@ -54,17 +54,16 @@ export class AppComponent implements OnInit, AfterViewInit {
     );
     new LocaleManager().applyClientLocale(localeData);
 
-    const { dialog } =  this._electronService.remote.require('electron').remote;
-    const win = this._electronService.remote.require('electron').remote.getCurrentWindow();
+    const win = this._electronService.remote.getCurrentWindow();
     win.setTitle(localeData.APP_NAME);
   }
 
   ngOnInit() {
-    const menu: ApplicationMenu = new ApplicationMenu(
-      this.appConfig,
-      this.localeData
-    );
-    menu.createMenu();
+    // const menu: ApplicationMenu = new ApplicationMenu(
+    //   this.appConfig,
+    //   this.localeData
+    // );
+    // menu.createMenu();
 
     this.animationOptionData = new AnimationImageOptions();
 
@@ -76,7 +75,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.changePreset(this.presetMode);
 
     // 	保存先の指定返却
-    const ipc = this._electronService.remote.require('electron').ipcRenderer;
+    const ipc = this._electronService.ipcRenderer;
 
     ipc.on('selected-open-images', (event: any, filePathList: string[]) => {
       this._selectedImages(filePathList);
@@ -118,7 +117,7 @@ export class AppComponent implements OnInit, AfterViewInit {
       return;
     }
     this.openingDirectories = true;
-    const ipc = this._electronService.remote.require('electron').ipcRenderer;
+    const ipc = this._electronService.ipcRenderer;
     ipc.send('open-file-dialog');
   }
 
@@ -196,10 +195,10 @@ export class AppComponent implements OnInit, AfterViewInit {
   }
 
   public _exportImages() {
-    if (this.apngFileSizeError && this.animationOptionData.enabledExportApng) {
-      ErrorMessage.showFileSizeErrorMessage();
-      return;
-    }
+    // if (this.apngFileSizeError && this.animationOptionData.enabledExportApng) {
+    //   ErrorMessage.showFileSizeErrorMessage();
+    //   return;
+    // }
 
     this._showLockDialog();
 
@@ -211,13 +210,13 @@ export class AppComponent implements OnInit, AfterViewInit {
       .catch(() => {
         this._hideLockDialog();
 
-        ErrorMessage.showErrorMessage(
-          this.exportImagesProcess.errorCode,
-          this.exportImagesProcess.inquiryCode,
-          this.exportImagesProcess.errorDetail,
-          this.exportImagesProcess.errorStack,
-          this.localeData.APP_NAME
-        );
+        // ErrorMessage.showErrorMessage(
+        //   this.exportImagesProcess.errorCode,
+        //   this.exportImagesProcess.inquiryCode,
+        //   this.exportImagesProcess.errorDetail,
+        //   this.exportImagesProcess.errorStack,
+        //   this.localeData.APP_NAME
+        // );
       });
   }
 
@@ -253,7 +252,7 @@ export class AppComponent implements OnInit, AfterViewInit {
       return;
     }
     this.openingDirectories = true;
-    const ipc = this._electronService.remote.require('electron').ipcRenderer;
+    const ipc = this._electronService.ipcRenderer;
     ipc.send('open-file-dialog');
   }
 

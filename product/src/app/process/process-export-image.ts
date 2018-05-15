@@ -73,7 +73,7 @@ export class ProcessExportImage {
     console.log(this.inquiryCode);
 
     // 	テンポラリパス生成
-    const remote = this._electronService.remote.require('electron').remote;
+    const remote = this._electronService.remote;
     const app = remote.app;
     const path = this._electronService.remote.require('path');
     this.itemList = itemList;
@@ -194,6 +194,7 @@ export class ProcessExportImage {
         .catch(message => {
           // エラー内容の送信
           if (message) {
+            console.error(message)
             this.errorStack = message.stack;
             SendError.exec(
               this._version,
@@ -239,10 +240,11 @@ export class ProcessExportImage {
 
           // フォルダーを作成
           try {
+            console.log(this.temporaryPath);
             fs.mkdirSync(this.temporaryPath);
           } catch (e) {
-            console.log(
-              'フォルダーの作成に失敗しました。:' + this.temporaryPath
+            console.error(
+              'フォルダーの作成に失敗しました :' + this.temporaryPath
             );
           }
 
@@ -250,12 +252,12 @@ export class ProcessExportImage {
             // フォルダーを作成
             fs.mkdirSync(this.temporaryCompressPath);
           } catch (e) {
-            console.log(
-              'フォルダーの作成に失敗しました。:' + this.temporaryCompressPath
+            console.error(
+              'フォルダーの作成に失敗しました :' + this.temporaryCompressPath
             );
           }
 
-          console.log('clean-temporary:success');
+          console.log('clean-temporary : success');
           resolve();
         }
       );
@@ -349,8 +351,8 @@ export class ProcessExportImage {
                 );
 
                 if (validateArr.length > 0) {
-                  const { dialog } = this._electronService.remote.require('electron').remote;
-                  const win = this._electronService.remote.require('electron').remote.getCurrentWindow();
+                  const { dialog } = this._electronService.remote;
+                  const win = this._electronService.remote.getCurrentWindow();
                   const message = this.localeData.VALIDATE_title;
                   const detailMessage = '・' + validateArr.join('\n\n・');
 
@@ -361,7 +363,7 @@ export class ProcessExportImage {
                     // message: message,
                     detail: message + '\n\n' + detailMessage
                   };
-                  dialog.showMessageBox(win, dialogOption);
+                  dialog.showMessageBox(<any> win, <any> dialogOption);
                 }
               }
               resolve();
@@ -503,7 +505,7 @@ export class ProcessExportImage {
   }
 
   private _convertPng2Webp(filePath: string): Promise<any> {
-    const remote = this._electronService.remote.require('electron').remote;
+    const remote = this._electronService.remote;
     const path = this._electronService.remote.require('path');
     const appPath: string = this.getAppPath();
     const execFile = this._electronService.remote.require('child_process').execFile;
@@ -711,10 +713,7 @@ export class ProcessExportImage {
 
   private _pngCompress(item: ImageData) {
     return new Promise((resolve, reject) => {
-      const remote = this._electronService.remote.require('electron').remote;
-      const app = remote.app;
       const path = this._electronService.remote.require('path');
-      const fs = this._electronService.remote.require('fs');
       const appPath: string = this.getAppPath();
       const execFile = this._electronService.remote.require('child_process').execFile;
 
@@ -732,6 +731,7 @@ export class ProcessExportImage {
       ];
 
       execFile(
+        // 2018-05-15 一時的にファイルパスを変更
         `${appPath}/bin/pngquant${this.exeExt}`,
         options,
         (err: any, stdout: any, stderr: any) => {
@@ -791,8 +791,8 @@ export class ProcessExportImage {
           extention = 'html';
           break;
       }
-      const remote = this._electronService.remote.require('electron').remote;
-      const { dialog } = this._electronService.remote.require('electron').remote;
+      const remote = this._electronService.remote;
+      const { dialog } = this._electronService.remote;
       const win = remote.getCurrentWindow();
       const app = remote.app;
       const fs = this._electronService.remote.require('fs');
@@ -818,7 +818,8 @@ export class ProcessExportImage {
               extensions: [extention]
             }
           ],
-          properties: ['openFile']
+          // 2018-05-15 ビルドを通すため一時的にコメントアウト
+          // properties: ['openFile']
         },
         (fileName: string) => {
           if (fileName) {
@@ -847,10 +848,11 @@ export class ProcessExportImage {
     });
   }
 
-  private getAppPath() {
-    const remote = this._electronService.remote.require('electron').remote;
+  private getAppPath() :string {
+    const remote = this._electronService.remote;
     const path = this._electronService.remote.require('path');
     const app = remote.app;
-    return path.join(app.getAppPath(), 'dist', 'assets');
+    // 2018-05-15 パスが間違っていたので修正 dist/app/ → 無し
+    return path.join(app.getAppPath());
   }
 }

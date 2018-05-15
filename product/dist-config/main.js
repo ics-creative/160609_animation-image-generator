@@ -14,8 +14,10 @@ function createWindow() {
   mainWindow = new BrowserWindow({ width: 800, height: 600 });
 
   console.log(process.env.NODE_ENV);
+
   // メインウィンドウに表示するURLを指定します
   if (process.env.NODE_ENV !== 'develop') {
+
     // 今回はdistディレクトリのindex.html
     mainWindow.loadURL(
       url.format({
@@ -24,8 +26,24 @@ function createWindow() {
         slashes: true
       })
     );
+
+    // デベロッパーツールの起動
+    mainWindow.webContents.openDevTools();
   } else {
     const chokidar = require('chokidar');
+
+    console.log(process.env.NODE_ENV)
+    mainWindow.loadURL(
+      url.format({
+        pathname: path.join(__dirname, '../dist', 'index.html'),
+        protocol: 'file:',
+        slashes: true
+      })
+    );
+
+    mainWindow.webContents.openDevTools();
+
+
     // ダミーファイルの生成を検知
     const watcher = chokidar.watch('./.build_date');
     watcher.on('change', watchPath => {

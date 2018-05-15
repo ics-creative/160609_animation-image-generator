@@ -2,7 +2,7 @@
   "scripts": {
     "ng-build": "ng build",
     "ng-serve": "ng serve",
-    "start": "NODE_ENV=develop electron dist-config",
+    "start": "NODE_ENV=develop electron ./dist-config",
     "build": "NODE_ENV=prod webpack",
     "precommit": "lint-staged",
     "lint": "tslint --project ./tsconfig.json",

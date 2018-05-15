@@ -1,7 +1,5 @@
 import { AppConfig } from '../config/app-config';
 import { LocaleData } from '../i18n/locale-data';
-declare function require(value: String): any;
-declare var process: { platform: string };
 
 /**
  * アプリケーションメニューの制御クラスです。

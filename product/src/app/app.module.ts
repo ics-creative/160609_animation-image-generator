@@ -11,11 +11,14 @@ import {NgxElectronModule} from 'ngx-electron';
 import '../assets/js/createjs-1.0.0.min.js';
 import '../assets/js/jquery.min.js';
 import '../assets/js/tether.min.js';
+import { SubAppComponent } from './components/sub-app/sub-app.component';
 
 @NgModule({
-  declarations: [AppComponent, AnimPreviewComponent, PropertiesComponent],
+  // declarations: [SubAppComponent, AnimPreviewComponent, PropertiesComponent],
+  declarations: [AppComponent, AnimPreviewComponent, PropertiesComponent, SubAppComponent],
   imports: [BrowserModule, FormsModule, NgxElectronModule],
   providers: [LocaleData],
-  // bootstrap: [AppComponent]
+  bootstrap: [AppComponent]
+  // bootstrap: [SubAppComponent]
 })
 export class AppModule {}
