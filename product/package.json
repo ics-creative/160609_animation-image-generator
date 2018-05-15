@@ -13,7 +13,7 @@
     "copy-debug-asssets": "node build-scripts/copy-debug-assets.js"
   },
   "lint-staged": {
-    "*.{ts}": [
+    "*.ts": [
       "tslint",
       "git add"
     ],
