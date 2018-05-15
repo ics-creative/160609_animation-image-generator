@@ -9,8 +9,6 @@ import { PropertiesComponent } from './components/properties/properties';
 import { LocaleData } from './i18n/locale-data';
 
 import '../assets/js/createjs-1.0.0.min.js';
-import '../assets/js/jquery.min.js';
-import '../assets/js/tether.min.js';
 
 @NgModule({
   declarations: [

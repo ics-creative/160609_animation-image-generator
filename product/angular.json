@@ -21,12 +21,13 @@
               "src/favicon.ico"
             ],
             "styles": [
+              "node_modules/bootstrap/dist/css/bootstrap.min.css",
               "src/styles.css"
             ],
             "scripts": [
               "src/assets/js/createjs-1.0.0.min.js",
-              "src/assets/js/jquery.min.js",
-              "src/assets/js/tether.min.js"
+              "node_modules/jquery/dist/jquery.min.js",
+//              "src/assets/js/tether.min.js"
             ]
           },
           "configurations": {
