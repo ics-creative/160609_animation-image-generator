@@ -22,23 +22,23 @@
             ],
             "styles": [
               "node_modules/bootstrap/dist/css/bootstrap.min.css",
-              "src/styles.css"
+              "node_modules/font-awesome/css/font-awesome.css",
+              "src/app/styles/main.css"
             ],
             "scripts": [
               "src/assets/js/createjs-1.0.0.min.js",
-              "node_modules/jquery/dist/jquery.min.js",
-//              "src/assets/js/tether.min.js"
+              "node_modules/jquery/dist/jquery.min.js"
             ]
           },
           "configurations": {
             "production": {
               "optimization": true,
               "outputHashing": "all",
-              "sourceMap": false,
+              "sourceMap": true,
               "extractCss": false,
               "namedChunks": false,
               "aot": true,
-              "extractLicenses": true,
+              "extractLicenses": false,
               "vendorChunk": false,
               "buildOptimizer": true,
               "fileReplacements": [

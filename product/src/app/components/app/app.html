@@ -1,11 +1,11 @@
 <div class="app-component" #myComponent [ngClass]="{isDragOver : _isDragover == true}">
-  <div class="mod-setting p-a-1">
+  <div class="mod-setting p-2">
 
     <!-- 拡大率 -->
-    <div class="form-group row m-b-1">
+    <div class="form-group row mb-1">
       <label class="col-sm-2 form-control-label">{{localeData.PROP_use}}</label>
       <div class="col-sm-10">
-        <select class="c-select m-b-1"
+        <select class="c-select mb-1"
                 style="width:100%"
                 #optionSelecter
                 (change)="handlePresetChange($event.target.value)">
@@ -18,13 +18,13 @@
     <properties [animationOptionData]="animationOptionData"></properties>
     <hr/>
     <button (click)="generateAnimImage()"
-            class="btn btn-primary-outline center-block"
+            class="btn btn-outline-primary mx-auto"
             [ngClass]="{disabled: !isImageSelected}">
       {{localeData.PROP_btnSave}}
     </button>
   </div>
 
-  <div class="mod-preview bg-inverse">
+  <div class="mod-preview bg-dark text-white">
     <anim-preview [animationOptionData]="animationOptionData"
                   [items]="items"
                   (clickFileSelectButtonEvent)="handleClickFileSelectButton();">
@@ -32,10 +32,10 @@
   </div>
 </div>
 
-<div class="mod-statusbar bg-primary">
-  <div class="container-fluid p-l-0 p-r-0">
-    <div class="col-sm-6 text-sm-left">{{localeData.TOP_version}} {{appConfig.version}}</div>
-    <div class="col-sm-6 text-sm-right">
+<div class="mod-statusbar bg-primary text-white">
+  <div class="container-fluid pl-0 pr-0">
+    <div class="col-sm-6 text-left">{{localeData.TOP_version}} {{appConfig.version}}</div>
+    <div class="col-sm-6 text-right">
       <a (click)="openExternalBrowser('https://ics.media/')"
          data-toggle="tooltip"
          data-placement="left"
@@ -59,6 +59,8 @@
 </dialog>
 
 
-<iframe class="tracking-ga" [src]="gaUrl"
-        width="1" height="1"></iframe>
+<iframe class="tracking-ga"
+        [src]="gaUrl"
+        width="1" height="1">
+</iframe>
 
