@@ -1,7 +1,7 @@
 <div class="app-component" #myComponent [ngClass]="{isDragOver : _isDragover == true}">
   <div class="mod-setting p-2">
 
-    <!-- 拡大率 -->
+    <!-- プリセット切り替え -->
     <div class="form-group row mb-1">
       <label class="col-sm-2 form-control-label">{{localeData.PROP_use}}</label>
       <div class="col-sm-10">
@@ -24,6 +24,7 @@
     </button>
   </div>
 
+  <!-- アニメーションプレビュー画面 -->
   <div class="mod-preview bg-dark text-white">
     <anim-preview [animationOptionData]="animationOptionData"
                   [items]="items"
@@ -32,6 +33,7 @@
   </div>
 </div>
 
+<!-- 下部バージョン記載・会社ロゴ等 -->
 <div class="mod-statusbar bg-primary text-white">
   <div class="container-fluid pl-0 pr-0">
     <div class="col-sm-6 text-left">{{localeData.TOP_version}} {{appConfig.version}}</div>
@@ -54,11 +56,12 @@
 </div>
 
 
+<!-- ローディング画面 -->
 <dialog style="display: none;">
   <img src="assets/imgs/preloader.webp" width="52" height="52"/>
 </dialog>
 
-
+<!-- Google Analytics -->
 <iframe class="tracking-ga"
         [src]="gaUrl"
         width="1" height="1">
