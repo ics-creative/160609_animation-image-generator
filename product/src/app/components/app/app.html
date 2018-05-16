@@ -1,13 +1,13 @@
 <div class="app-component" #myComponent [ngClass]="{isDragOver : _isDragover == true}">
-  <div class="mod-setting p-2">
+  <div class="mod-setting p-3">
 
     <!-- プリセット切り替え -->
-    <div class="row mb-4">
+    <div class="row mb-4 align-items-center mod-select-preset">
       <!--用途-->
       <label class="col-sm-2 form-control-label">{{localeData.PROP_use}}</label>
-      <div class="col-sm-10">
-        <select class="form-control select-label"
-                style="width:100%"
+      <div class="col-sm-10 mod-select-preset">
+        <select class="form-control"
+                style="width:100%;"
                 #optionSelecter
                 (change)="handlePresetChange($event.target.value)">
           <option value="0" [selected]="presetMode==0">{{localeData.PROP_useItemLine}}</option>

@@ -15,17 +15,13 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap';
 
 // FontAwesomeを読み込む
-import "font-awesome/css/font-awesome.css";
+import 'font-awesome/css/font-awesome.css';
 
 import '../assets/js/createjs-1.0.0.min.js';
-import "./styles/main.css"
+import './styles/main.css';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    AnimPreviewComponent,
-    PropertiesComponent,
-  ],
+  declarations: [AppComponent, AnimPreviewComponent, PropertiesComponent],
   imports: [BrowserModule, FormsModule, NgxElectronModule],
   providers: [LocaleData],
   bootstrap: [AppComponent]

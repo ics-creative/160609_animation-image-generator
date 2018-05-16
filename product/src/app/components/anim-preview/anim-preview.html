@@ -24,11 +24,15 @@
   </p>
 
   <div class="preview-area mb-3">
+    <!-- 1毎画像プレビュー -->
     <div [ngStyle]="{ 'zoom' : scaleValue }" class="mb-3">
       <img data-src="file:///{{imagePath + '?cc=' + cacheClearStamp}}"/>
     </div>
 
-    <span class="mr-2" role="group">
+    <div class="d-flex align-items-center">
+
+      <!-- 再生・停止・戻るボタン -->
+      <span class="mr-2 button-group" role="group">
       <button type="button" class="btn btn-outline-secondary btn-sm"
               [ngClass]="{disabled: playing == true}"
               (click)="resume();">
@@ -46,22 +50,25 @@
       </button>
     </span>
 
-    <!-- 拡大率 -->
-    <span class="ml-2">{{localeData.PREV_zoom}}</span>
-    <select class="mod-zoom-select mr-2"
-            #selectScale
-            (change)="selectScaleValue(selectScale.value)">
-      <option value="0.25">25%</option>
-      <option value="0.5">50%</option>
-      <option value="1.0" selected>100%</option>
-      <option value="2.0">200%</option>
-    </select>
-    <button class="btn btn-outline-secondary btn-sm ml-1"
-            [ngClass]="{disabled: openingDirectories == true}"
-            (click)="openDirectories()">{{localeData.PREV_btnSelectRe}}
-    </button>
+      <!-- 拡大率 -->
+      <span class="ml-2">{{localeData.PREV_zoom}}</span>
+      <select class="mod-zoom-select ml-1 mr-2 form-control"
+              #selectScale
+              (change)="selectScaleValue(selectScale.value)">
+        <option value="0.25">25%</option>
+        <option value="0.5">50%</option>
+        <option value="1.0" selected>100%</option>
+        <option value="2.0">200%</option>
+      </select>
+      <button class="btn btn-outline-secondary btn-sm ml-1"
+              [ngClass]="{disabled: openingDirectories == true}"
+              (click)="openDirectories()">{{localeData.PREV_btnSelectRe}}
+      </button>
+    </div>
+
   </div>
 
+  <!-- コマ画像プレビュー -->
   <p class="mt-1">{{localeData.PREV_preview}}</p>
   <div>
     <div *ngIf="items.length >= 1">

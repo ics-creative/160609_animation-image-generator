@@ -42,7 +42,6 @@ function createWindow() {
     mainWindow.on('closed', function() {
       mainWindow = null;
     });
-
   }
   const ipc = require('electron').ipcMain;
   ipc.on('open-file-dialog', openFileDialog);
