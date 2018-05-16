@@ -11,41 +11,46 @@
   </div>
 </div>
 
-<div class="anim-preview p-2" *ngIf="items.length > 0">
+<div class="anim-preview p-3" *ngIf="items.length > 0">
   <p>
-    {{localeData.PREV_infoFrameSize}} <span class="badge" [ngClass]="{'badge-success' : isValidFrameSize, 'badge-danger' : !isValidFrameSize}">W{{animationOptionData.imageInfo.width}}×H{{animationOptionData.imageInfo.height}}px</span>
-    / {{localeData.PREV_infoFrameNum}} <span class="badge" [ngClass]="{'badge-success' : isValidFrameLength, 'badge-danger' : !isValidFrameLength}">{{items.length}}</span>
-			<span *ngIf="animationOptionData.noLoop == false">
+    {{localeData.PREV_infoFrameSize}} <span class="badge"
+                                            [ngClass]="{'badge-success' : isValidFrameSize, 'badge-danger' : !isValidFrameSize}">W{{animationOptionData.imageInfo.width}}×H{{animationOptionData.imageInfo.height}}px</span>
+    / {{localeData.PREV_infoFrameNum}} <span class="badge"
+                                             [ngClass]="{'badge-success' : isValidFrameLength, 'badge-danger' : !isValidFrameLength}">{{items.length}}</span>
+    <span *ngIf="animationOptionData.noLoop == false">
 				/ {{localeData.PREV_infoTime}} <span
-              class="badge badge-success" [ngClass]="{'badge-success' : isValidTime, 'badge-danger' : !isValidTime}">{{items.length * animationOptionData.loop / animationOptionData.fps}}{{localeData.PREV_infoTimeUnit}}</span>
+      class="badge badge-success" [ngClass]="{'badge-success' : isValidTime, 'badge-danger' : !isValidTime}">{{items.length * animationOptionData.loop / animationOptionData.fps}}{{localeData.PREV_infoTimeUnit}}</span>
 			</span>
   </p>
 
-  <div class="preview-area mt-1">
+  <div class="preview-area">
     <div [ngStyle]="{ 'zoom' : scaleValue }">
-      <img data-src="file:///{{imagePath + '?cc=' + cacheClearStamp}}" />
+      <img data-src="file:///{{imagePath + '?cc=' + cacheClearStamp}}"/>
     </div>
 
-    <div class="mt-1">
-      <button class="btn btn-outline-secondary btn-sm"
+    <div class="m-2 p-2" role="group">
+      <button type="button" class="btn btn-outline-secondary btn-sm mb-2"
               [ngClass]="{disabled: playing == true}"
               (click)="resume();">
         <i class="fa fa-play"></i>
       </button>
-      <button class="btn btn-outline-secondary btn-sm"
+      <button type="button" class="btn btn-outline-secondary btn-sm　mb-2"
               [ngClass]="{disabled: playing == false}"
               (click)="pause();">
         <i class="fa fa-stop"></i>
       </button>
-      <button class="btn btn-outline-secondary btn-sm"
+      <button type="button" class="btn btn-outline-secondary btn-sm　mb-2"
               [ngClass]="{disabled: currentFrame == 0 && currentLoopCount == 0 }"
               (click)="gotoAndStop(0);">
         <i class="fa fa-step-backward"></i>
       </button>
 
-      <span class="ml-1">{{localeData.PREV_zoom}}</span>
-      <!-- 拡大率 -->
-      <select class="c-select mod-zoom-select"
+    </div>
+
+    <span class="ml-1">{{localeData.PREV_zoom}}</span>
+    <!-- 拡大率 -->
+    <div class="form-inline">
+      <select class="form-control mod-zoom-select" style="width:300px;"
               #selectScale
               (change)="selectScaleValue(selectScale.value)">
         <option value="0.25">25%</option>
@@ -53,12 +58,11 @@
         <option value="1.0" selected>100%</option>
         <option value="2.0">200%</option>
       </select>
-
-      <button class="btn btn-outline-secondary btn-sm ml-1"
-              [ngClass]="{disabled: openingDirectories == true}"
-              (click)="openDirectories()">{{localeData.PREV_btnSelectRe}}
-      </button>
     </div>
+    <button class="btn btn-outline-secondary btn-sm ml-1"
+            [ngClass]="{disabled: openingDirectories == true}"
+            (click)="openDirectories()">{{localeData.PREV_btnSelectRe}}
+    </button>
   </div>
 
   <p class="mt-1">{{localeData.PREV_preview}}</p>

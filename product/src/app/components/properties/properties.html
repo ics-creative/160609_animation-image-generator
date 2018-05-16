@@ -10,6 +10,8 @@
   </ul>
 
   <div id="myTabContent" class="tab-content px-2 mt-1">
+
+    <!-- タブ：アニメーション設定 -->
     <div class="tab-pane active" id="tab1">
 
       <div class="form-group row">
@@ -58,77 +60,105 @@
       </div>
 
     </div>
-    <div class="tab-pane" id="tab2">
+    <!-- タブ：画質設定 -->
+    <div class="tab-pane p-2" id="tab2">
 
+      <!-- APNGファイル出力 -->
       <div class="checkbox" *ngIf="animationOptionData.preset == 1">
         <label data-toggle="tooltip" data-placement="right" title="{{localeData.ROP_tabQualityHApngTooltip}}">
-          <input type="checkbox" [(ngModel)]="animationOptionData.enabledExportApng"> {{localeData.PROP_tabQualityHApng}}
+          <input type="checkbox" [(ngModel)]="animationOptionData.enabledExportApng">
+          {{localeData.PROP_tabQualityHApng}}
         </label>
       </div>
 
-      <div *ngIf="animationOptionData.enabledExportApng == true" class="card card-block">
+      <div *ngIf="animationOptionData.enabledExportApng == true" class="card card-block p-4">
+
+        <!-- APNGファイル出力 -->
         <div class="checkbox">
           <label data-toggle="tooltip" data-placement="right" title="{{localeData.ROP_tabQualityHApngTooltip}}">
-            <input type="checkbox" [(ngModel)]="animationOptionData.enabledPngCompress"> {{localeData.PROP_tabQualityApngOpt}}
+            <input type="checkbox" [(ngModel)]="animationOptionData.enabledPngCompress">
+            {{localeData.PROP_tabQualityApngOpt}}
           </label>
         </div>
 
+        <!-- 圧縮方式 -->
         <h6>{{localeData.PROP_tabQualityOptWay}}</h6>
-        <div class="c-inputs-stacked">
-          <label class="c-input c-radio"
-                 data-toggle="tooltip"
-                 data-placement="right"
-                 title="{{localeData.PROP_tabQualityOptWayZopfli}}">
-            <input name="radio-stacked"
+        <div class="radio">
+          <div class="form-check">
+
+            <input class="form-check-input"
+                   name="radio-stacked"
                    type="radio"
+                   id="radio-zopfli"
                    (click)="animationOptionData.compression=3"
                    [checked]="animationOptionData.compression==3">
-            <span class="c-indicator"></span>
-            zopfli
-          </label>
-          <label class="c-input c-radio"
-                 data-toggle="tooltip"
-                 data-placement="right"
-                 title="{{localeData.PROP_tabQualityOptWay7zip}}">
-            <input name="radio-stacked"
+            <label class="form-check-label"
+                   for="radio-zopfli"
+                   data-toggle="tooltip"
+                   data-placement="right"
+                   title="{{localeData.PROP_tabQualityOptWayZopfli}}">
+              zopfli
+            </label>
+          </div>
+          <div class="form-check">
+
+            <input class="form-check-input"
                    type="radio"
+                   id="radio-7zip"
                    (click)="animationOptionData.compression=2"
                    [checked]="animationOptionData.compression==2">
-            <span class="c-indicator"></span>
-            7zip
-          </label>
-          <label class="c-input c-radio"
-                 data-toggle="tooltip"
-                 data-placement="right"
-                 title="{{localeData.PROP_tabQualityOptWayzlib}}">
-            <input name="radio-stacked"
+            <label class="form-check-label"
+                   for="radio-7zip"
+                   data-toggle="tooltip"
+                   data-placement="right"
+                   title="{{localeData.PROP_tabQualityOptWay7zip}}">
+
+              7zip
+            </label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input"
+                   name="radio-stacked"
                    type="radio"
+                   id="radio-zlib"
                    (click)="animationOptionData.compression=1"
                    [checked]="animationOptionData.compression==1">
-            <span class="c-indicator"></span>
-            zlib
-          </label>
+            <label class="form-check-label"
+                   for="radio-zlib"
+                   data-toggle="tooltip"
+                   data-placement="right"
+                   title="{{localeData.PROP_tabQualityOptWayzlib}}">
+              zlib
+            </label>
+          </div>
         </div>
       </div>
 
       <div *ngIf="animationOptionData.preset == 1">
+
+        <!-- WebPファイル出力 -->
         <div class="checkbox">
           <label data-toggle="tooltip" data-placement="right" title="{{localeData.PROP_tabQualityHWebpTooltip}}">
-            <input type="checkbox" [(ngModel)]="animationOptionData.enabledExportWebp"> {{localeData.PROP_tabQualityHWebp}}
+            <input type="checkbox" [(ngModel)]="animationOptionData.enabledExportWebp">
+            {{localeData.PROP_tabQualityHWebp}}
           </label>
         </div>
 
-        <div *ngIf="animationOptionData.enabledExportWebp == true" class="card card-block">
+        <!-- 容量最適化 -->
+        <div *ngIf="animationOptionData.enabledExportWebp == true" class="card card-block p-4">
           <div class="checkbox">
             <label data-toggle="tooltip" data-placement="right" title="{{localeData.PROP_tabQualityApngOptTooltip}}">
-              <input type="checkbox" [(ngModel)]="animationOptionData.enabledWebpCompress"> {{localeData.PROP_tabQualityApngOpt}}
+              <input type="checkbox" [(ngModel)]="animationOptionData.enabledWebpCompress">
+              {{localeData.PROP_tabQualityApngOpt}}
             </label>
           </div>
         </div>
 
+        <!-- HTMLファイル出力 -->
         <div class="checkbox">
           <label data-toggle="tooltip" data-placement="right" title="{{localeData.PROP_tabQualityHHtmlTooltip}}">
-            <input type="checkbox" [(ngModel)]="animationOptionData.enabledExportHtml"> {{localeData.PROP_tabQualityHHtml}}
+            <input type="checkbox" [(ngModel)]="animationOptionData.enabledExportHtml">
+            {{localeData.PROP_tabQualityHHtml}}
           </label>
         </div>
       </div>

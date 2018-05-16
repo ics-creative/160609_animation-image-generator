@@ -2,10 +2,11 @@
   <div class="mod-setting p-2">
 
     <!-- プリセット切り替え -->
-    <div class="form-group row mb-1">
+    <div class="row mb-4">
+      <!--用途-->
       <label class="col-sm-2 form-control-label">{{localeData.PROP_use}}</label>
       <div class="col-sm-10">
-        <select class="form-control"
+        <select class="form-control select-label"
                 style="width:100%"
                 #optionSelecter
                 (change)="handlePresetChange($event.target.value)">
@@ -15,13 +16,20 @@
       </div>
     </div>
 
+    <!-- プロパティ変更画面 -->
     <properties [animationOptionData]="animationOptionData"></properties>
     <hr/>
-    <button (click)="generateAnimImage()"
-            class="btn btn-outline-primary mx-auto"
-            [ngClass]="{disabled: !isImageSelected}">
-      {{localeData.PROP_btnSave}}
-    </button>
+    <!-- アニメ画像を保存するボタン -->
+
+    <div class="text-center">
+
+      <button (click)="generateAnimImage()"
+              class="btn btn-outline-primary mx-auto"
+              [ngClass]="{disabled: !isImageSelected}">
+        {{localeData.PROP_btnSave}}
+      </button>
+    </div>
+
   </div>
 
   <!-- アニメーションプレビュー画面 -->
