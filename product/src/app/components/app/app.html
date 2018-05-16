@@ -35,22 +35,24 @@
 
 <!-- 下部バージョン記載・会社ロゴ等 -->
 <div class="mod-statusbar bg-primary text-white">
-  <div class="container-fluid pl-0 pr-0">
-    <div class="col-sm-6 text-left">{{localeData.TOP_version}} {{appConfig.version}}</div>
-    <div class="col-sm-6 text-right">
-      <a (click)="openExternalBrowser('https://ics.media/')"
-         data-toggle="tooltip"
-         data-placement="left"
-         title="{{localeData.TOP_icsTooltip}}"
-         target="_blank">
-        <img src="assets/imgs/ics_logo_icon_white.svg" width="16" height="16" style="vertical-align:sub;"/>
-      </a>
-      <a (click)="openExternalBrowser('http://goo.gl/forms/5DUI1UnTUXR6AmCw2')"
-         data-toggle="tooltip"
-         data-placement="left"
-         title="{{localeData.TOP_onlineHelpTooltip}}">
-        <i class="fa fa-smile-o"></i>
-      </a>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-6 text-left">{{localeData.TOP_version}} {{appConfig.version}}</div>
+      <div class="col-6 text-right">
+        <a (click)="openExternalBrowser('https://ics.media/')"
+           data-toggle="tooltip"
+           data-placement="left"
+           title="{{localeData.TOP_icsTooltip}}"
+           target="_blank">
+          <img src="assets/imgs/ics_logo_icon_white.svg" width="16" height="16" style="vertical-align:sub;"/>
+        </a>
+        <a (click)="openExternalBrowser('http://goo.gl/forms/5DUI1UnTUXR6AmCw2')"
+           data-toggle="tooltip"
+           data-placement="left"
+           title="{{localeData.TOP_onlineHelpTooltip}}">
+          <i class="fa fa-smile-o"></i>
+        </a>
+      </div>
     </div>
   </div>
 </div>
