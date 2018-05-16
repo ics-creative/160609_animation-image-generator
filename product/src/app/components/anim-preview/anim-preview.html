@@ -23,42 +23,39 @@
 			</span>
   </p>
 
-  <div class="preview-area">
-    <div [ngStyle]="{ 'zoom' : scaleValue }">
+  <div class="preview-area mb-3">
+    <div [ngStyle]="{ 'zoom' : scaleValue }" class="mb-3">
       <img data-src="file:///{{imagePath + '?cc=' + cacheClearStamp}}"/>
     </div>
 
-    <div class="m-2 p-2" role="group">
-      <button type="button" class="btn btn-outline-secondary btn-sm mb-2"
+    <span class="mr-2" role="group">
+      <button type="button" class="btn btn-outline-secondary btn-sm"
               [ngClass]="{disabled: playing == true}"
               (click)="resume();">
         <i class="fa fa-play"></i>
       </button>
-      <button type="button" class="btn btn-outline-secondary btn-sm　mb-2"
+      <button type="button" class="btn btn-outline-secondary btn-sm　m-1"
               [ngClass]="{disabled: playing == false}"
               (click)="pause();">
         <i class="fa fa-stop"></i>
       </button>
-      <button type="button" class="btn btn-outline-secondary btn-sm　mb-2"
+      <button type="button" class="btn btn-outline-secondary btn-sm"
               [ngClass]="{disabled: currentFrame == 0 && currentLoopCount == 0 }"
               (click)="gotoAndStop(0);">
         <i class="fa fa-step-backward"></i>
       </button>
+    </span>
 
-    </div>
-
-    <span class="ml-1">{{localeData.PREV_zoom}}</span>
     <!-- 拡大率 -->
-    <div class="form-inline">
-      <select class="form-control mod-zoom-select" style="width:300px;"
-              #selectScale
-              (change)="selectScaleValue(selectScale.value)">
-        <option value="0.25">25%</option>
-        <option value="0.5">50%</option>
-        <option value="1.0" selected>100%</option>
-        <option value="2.0">200%</option>
-      </select>
-    </div>
+    <span class="ml-2">{{localeData.PREV_zoom}}</span>
+    <select class="mod-zoom-select mr-2"
+            #selectScale
+            (change)="selectScaleValue(selectScale.value)">
+      <option value="0.25">25%</option>
+      <option value="0.5">50%</option>
+      <option value="1.0" selected>100%</option>
+      <option value="2.0">200%</option>
+    </select>
     <button class="btn btn-outline-secondary btn-sm ml-1"
             [ngClass]="{disabled: openingDirectories == true}"
             (click)="openDirectories()">{{localeData.PREV_btnSelectRe}}
