@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "ng-build": "ng build --aot",
+    "ng-build": "ng build --prod",
     "ng-serve": "ng build --watch",
     "start": "concurrently \"npm run start-electron\" \"npm run ng-serve\"",
     "start-electron": "NODE_ENV=develop electron ./dist-config",
