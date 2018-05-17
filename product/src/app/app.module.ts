@@ -7,13 +7,12 @@ import { AppComponent } from './components/app/app';
 import { AnimPreviewComponent } from './components/anim-preview/anim-preview';
 import { PropertiesComponent } from './components/properties/properties';
 import { LocaleData } from './i18n/locale-data';
-
+import { ErrorMessage } from './error/error-message';
+import { SendError } from './error/send-error';
 // Bootstrapのスタイルシート側の機能を読み込む
 import 'bootstrap/dist/css/bootstrap.min.css';
-
 // BootstrapのJavaScript側の機能を読み込む
 import 'bootstrap';
-
 // FontAwesomeを読み込む
 import 'font-awesome/css/font-awesome.css';
 
@@ -23,7 +22,7 @@ import './styles/main.css';
 @NgModule({
   declarations: [AppComponent, AnimPreviewComponent, PropertiesComponent],
   imports: [BrowserModule, FormsModule, NgxElectronModule],
-  providers: [LocaleData],
+  providers: [LocaleData, ErrorMessage, SendError],
   bootstrap: [AppComponent]
 })
 /**

@@ -19,6 +19,8 @@ import { ApplicationMenu } from '../../menu/application-menu';
 import { LocaleData } from '../../i18n/locale-data';
 import { LocaleManager } from '../../i18n/locale-manager';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { ErrorMessage } from '../../error/error-message';
+import { SendError } from '../../error/send-error';
 
 @Component({
   selector: 'my-app',
@@ -53,7 +55,9 @@ export class AppComponent implements OnInit, AfterViewInit {
   constructor(
     public localeData: LocaleData,
     sanitizer: DomSanitizer,
-    private _electronService: ElectronService
+    private electronService: ElectronService,
+    private sendError: SendError,
+    private errorMessage: ErrorMessage
   ) {
     this.gaUrl = sanitizer.bypassSecurityTrustResourceUrl(
       'http://ics-web.jp/projects/animation-image-tool/?v=' +
@@ -61,7 +65,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     );
     new LocaleManager().applyClientLocale(localeData);
 
-    const win = this._electronService.remote.getCurrentWindow();
+    const win = this.electronService.remote.getCurrentWindow();
     win.setTitle(localeData.APP_NAME);
   }
 
@@ -69,7 +73,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     const menu: ApplicationMenu = new ApplicationMenu(
       this.appConfig,
       this.localeData,
-      this._electronService
+      this.electronService
     );
     menu.createMenu();
 
@@ -78,7 +82,8 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.isImageSelected = false;
     this.exportImagesProcess = new ProcessExportImage(
       this.localeData,
-      this._electronService
+      this.electronService,
+      this.sendError
     );
 
     // 初回プリセットの設定
@@ -86,7 +91,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.changePreset(this.presetMode);
 
     // 	保存先の指定返却
-    const ipc = this._electronService.ipcRenderer;
+    const ipc = this.electronService.ipcRenderer;
 
     ipc.on('selected-open-images', (event: any, filePathList: string[]) => {
       this._selectedImages(filePathList);
@@ -99,7 +104,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   }
 
   openExternalBrowser(url) {
-    const { shell } = this._electronService.remote.require('electron');
+    const { shell } = this.electronService.remote.require('electron');
     shell.openExternal(url);
     console.log(url);
   }
@@ -128,7 +133,7 @@ export class AppComponent implements OnInit, AfterViewInit {
       return;
     }
     this.openingDirectories = true;
-    const ipc = this._electronService.ipcRenderer;
+    const ipc = this.electronService.ipcRenderer;
     ipc.send('open-file-dialog');
   }
 
@@ -138,7 +143,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   }
 
   public handleDrop(event: DragEvent) {
-    const path = this._electronService.remote.require('path');
+    const path = this.electronService.remote.require('path');
 
     const length = event.dataTransfer.files
       ? event.dataTransfer.files.length
@@ -206,10 +211,10 @@ export class AppComponent implements OnInit, AfterViewInit {
   }
 
   public _exportImages() {
-    // if (this.apngFileSizeError && this.animationOptionData.enabledExportApng) {
-    //   ErrorMessage.showFileSizeErrorMessage();
-    //   return;
-    // }
+    if (this.apngFileSizeError && this.animationOptionData.enabledExportApng) {
+      this.errorMessage.showFileSizeErrorMessage();
+      return;
+    }
 
     this._showLockDialog();
 
@@ -221,13 +226,13 @@ export class AppComponent implements OnInit, AfterViewInit {
       .catch(() => {
         this._hideLockDialog();
 
-        // ErrorMessage.showErrorMessage(
-        //   this.exportImagesProcess.errorCode,
-        //   this.exportImagesProcess.inquiryCode,
-        //   this.exportImagesProcess.errorDetail,
-        //   this.exportImagesProcess.errorStack,
-        //   this.localeData.APP_NAME
-        // );
+        this.errorMessage.showErrorMessage(
+          this.exportImagesProcess.errorCode,
+          this.exportImagesProcess.inquiryCode,
+          this.exportImagesProcess.errorDetail,
+          this.exportImagesProcess.errorStack,
+          this.localeData.APP_NAME
+        );
       });
   }
 
@@ -263,7 +268,7 @@ export class AppComponent implements OnInit, AfterViewInit {
       return;
     }
     this.openingDirectories = true;
-    const ipc = this._electronService.ipcRenderer;
+    const ipc = this.electronService.ipcRenderer;
     ipc.send('open-file-dialog');
   }
 
@@ -272,7 +277,7 @@ export class AppComponent implements OnInit, AfterViewInit {
    * @param filePathList
    */
   public setFilePathList(filePathList: string[]): void {
-    const path = this._electronService.remote.require('path');
+    const path = this.electronService.remote.require('path');
 
     const length = filePathList ? filePathList.length : 0;
 

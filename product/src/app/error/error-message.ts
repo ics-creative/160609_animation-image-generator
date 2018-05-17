@@ -1,18 +1,22 @@
 import { ErrorCode } from './error-code';
+import { ElectronService } from 'ngx-electron';
+import { Injectable } from '@angular/core';
 
 declare function require(value: String): any;
 
+@Injectable()
 export class ErrorMessage {
-  public static showErrorMessage(
+  constructor(private electronService: ElectronService) {}
+  public showErrorMessage(
     errorCode: ErrorCode,
     inquiryCode: string,
     errorDetail: string,
     errorStack: string,
     appName: string
   ): void {
-    const { dialog, shell } = require('electron').remote;
-    const win = require('electron').remote.getCurrentWindow();
-    const errorMessage = ErrorMessage.getErrorMessage(
+    const { dialog, shell } = this.electronService.remote;
+    const win = this.electronService.remote.getCurrentWindow();
+    const errorMessage = this.getErrorMessage(
       errorCode,
       inquiryCode,
       errorDetail
@@ -27,12 +31,12 @@ export class ErrorMessage {
     dialog.showMessageBox(win, options);
   }
 
-  public static getErrorMessage(
+  public getErrorMessage(
     errorCode: ErrorCode,
     inquiryCode: string,
     errorDetail: string
   ): string {
-    const errorPhaseMessage = ErrorMessage.getErrorPhaseMessage(errorCode);
+    const errorPhaseMessage = this.getErrorPhaseMessage(errorCode);
     const errorDetailMessage = errorDetail
       ? '\n\nエラー詳細：' + errorDetail
       : '';
@@ -44,13 +48,13 @@ export class ErrorMessage {
 		`;
   }
 
-  public static showFileSizeErrorMessage(): void {
+  public showFileSizeErrorMessage(): void {
     alert(
       '連番画像のサイズが異なるため、APNGファイルの保存ができません。連番画像のサイズが統一されているか確認ください。'
     );
   }
 
-  public static getErrorPhaseMessage(errorCode: ErrorCode): string {
+  public getErrorPhaseMessage(errorCode: ErrorCode): string {
     switch (errorCode) {
       // 	APNG
       case ErrorCode.APNG_ACCESS_ERORR:

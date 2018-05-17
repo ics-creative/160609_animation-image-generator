@@ -1,16 +1,18 @@
 import { ElectronService } from 'ngx-electron';
+import { Injectable } from '@angular/core';
 
+@Injectable()
 export class SendError {
-  static exec(
+  constructor(private _electronService: ElectronService) {}
+  public exec(
     version: string,
     code: string,
     category: string,
     title: string,
-    detail: string,
-    _electronService: ElectronService
-  ) {
+    detail: string
+  ): void {
     const saveData = {
-      OS: _electronService.remote.require('os').platform(),
+      OS: this._electronService.remote.require('os').platform(),
       version: version,
       code: code,
       category: category,
@@ -49,7 +51,7 @@ export class SendError {
     xmlHttpRequest.send(this.encodeHTMLForm(data));
   }
 
-  static encodeHTMLForm(data: any) {
+  private encodeHTMLForm(data: any) {
     const params = [];
 
     for (const name in data) {
