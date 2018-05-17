@@ -73,9 +73,9 @@
         </label>
       </div>
 
-      <div *ngIf="animationOptionData.enabledExportApng == true" class="card card-block p-4">
+      <div *ngIf="animationOptionData.enabledExportApng == true" class="card card-block p-4 mb-4">
 
-        <!-- APNGファイル出力 -->
+        <!-- 圧縮方法 -->
         <div class="checkbox">
           <label data-toggle="tooltip" data-placement="right" title="{{localeData.ROP_tabQualityHApngTooltip}}">
             <input type="checkbox" [(ngModel)]="animationOptionData.enabledPngCompress">
@@ -142,7 +142,7 @@
       <div *ngIf="animationOptionData.preset == 1">
 
         <!-- WebPファイル出力 -->
-        <div class="checkbox pt-4">
+        <div class="checkbox">
           <label data-toggle="tooltip" data-placement="right" title="{{localeData.PROP_tabQualityHWebpTooltip}}">
             <input type="checkbox" [(ngModel)]="animationOptionData.enabledExportWebp">
             {{localeData.PROP_tabQualityHWebp}}
@@ -150,7 +150,7 @@
         </div>
 
         <!-- 容量最適化 -->
-        <div *ngIf="animationOptionData.enabledExportWebp == true" class="card card-block p-3">
+        <div *ngIf="animationOptionData.enabledExportWebp == true" class="card card-block p-4 mb-4">
           <div class="checkbox">
             <label data-toggle="tooltip" data-placement="right" title="{{localeData.PROP_tabQualityApngOptTooltip}}">
               <input type="checkbox" [(ngModel)]="animationOptionData.enabledWebpCompress">
@@ -160,7 +160,7 @@
         </div>
 
         <!-- HTMLファイル出力 -->
-        <div class="checkbox" class="pt-3">
+        <div class="checkbox">
           <label data-toggle="tooltip" data-placement="right" title="{{localeData.PROP_tabQualityHHtmlTooltip}}">
             <input type="checkbox" [(ngModel)]="animationOptionData.enabledExportHtml">
             {{localeData.PROP_tabQualityHHtml}}
