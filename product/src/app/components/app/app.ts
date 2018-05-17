@@ -14,7 +14,7 @@ import { PresetLine } from '../../preset/preset-line';
 import { ProcessExportImage } from '../../process/process-export-image';
 import { AppConfig } from '../../config/app-config';
 import { ImageData } from '../../data/image-data';
-// import { ApplicationMenu } from '../../menu/application-menu';
+import { ApplicationMenu } from '../../menu/application-menu';
 // import { ErrorMessage } from '../../error/error-message';
 import { LocaleData } from '../../i18n/locale-data';
 import { LocaleManager } from '../../i18n/locale-manager';
@@ -66,11 +66,12 @@ export class AppComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
-    // const menu: ApplicationMenu = new ApplicationMenu(
-    //   this.appConfig,
-    //   this.localeData
-    // );
-    // menu.createMenu();
+    const menu: ApplicationMenu = new ApplicationMenu(
+      this.appConfig,
+      this.localeData,
+      this._electronService
+    );
+    menu.createMenu();
 
     this.animationOptionData = new AnimationImageOptions();
 
@@ -119,7 +120,7 @@ export class AppComponent implements OnInit, AfterViewInit {
       this.handleDrop(event);
     });
 
-    // (<any>window).$('[data-toggle="tooltip"]').tooltip()
+    // (<any>window).$('[data-toggle='tooltip']').tooltip()
   }
 
   public openDirectories() {

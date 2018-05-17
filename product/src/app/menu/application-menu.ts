@@ -1,11 +1,16 @@
 import { AppConfig } from '../config/app-config';
 import { LocaleData } from '../i18n/locale-data';
+import { ElectronService } from 'ngx-electron';
 
 /**
  * アプリケーションメニューの制御クラスです。
  */
 export class ApplicationMenu {
-  constructor(private appConfig: AppConfig, private localeData: LocaleData) {}
+  constructor(
+    private appConfig: AppConfig,
+    private localeData: LocaleData,
+    private _electronService: ElectronService
+  ) {}
 
   public createMenu(): void {
     // 	Macの場合のみメニューを生成する。
@@ -13,8 +18,9 @@ export class ApplicationMenu {
       return;
     }
 
-    const { remote, shell } = require('electron');
-    const { Menu, MenuItem } = remote;
+    const remote = this._electronService.remote;
+    const shell = this._electronService.shell;
+    const Menu = remote.Menu;
     const app = remote.app;
     const version = this.appConfig.version;
     const name = this.localeData.APP_NAME;
