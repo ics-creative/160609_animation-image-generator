@@ -12,7 +12,7 @@
     "release-darwin": "rm -rf アニメ画像に変換する君-mas-x64 && node build-scripts/for-mac-prebuild.js && cd tmpDarwin && npm install --prod && cd ../ && node build-scripts/for-mac-packaging.js",
     "prebuild-win32": "node build-scripts/for-windows-prebuild.js",
     "package-win32": "cd tmpWin32 && npm install --prod && cd ../ && node build-scripts/for-windows-packaging.js",
-    "copy-debug-asssets": "node build-scripts/copy-debug-assets.js"
+    "copy-binary-asssets": "node build-scripts/copy-binary-assets.js"
   },
   "lint-staged": {
     "*.ts": [

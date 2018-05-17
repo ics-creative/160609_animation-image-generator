@@ -11,6 +11,7 @@ module.exports = {
   distPath: './dist',
   binPath: './dist/assets/bin',
   projectSrcPath: './src',
+  projectDistConfigPath: './dist-config',
   packageTmpPath: {
     win32: 'tmpWin32',
     darwin: 'tmpDarwin'
