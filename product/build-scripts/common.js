@@ -23,18 +23,24 @@ module.exports = {
 
     console.log(binaryDirectory);
 
+    const isWindows = process.platform === 'win32';
+
     for (let i = 0; i < resources.length; i++) {
       const dest = path.join(binaryDirectory, resources[i].fileName);
-      // パーミッションも同じままコピーしないといけないので、macのcpコマンドでコピーしている
-      execSync(
-        `cp -P ./resources/${resources[i].path} ${dest}`,
-        (err, stdout, stderr) => {
-          if (err) {
-            console.log(err);
+      if (isWindows) {
+        cpx.copySync(`./resources/${resources[i].path}`, binaryDirectory);
+      } else {
+        // パーミッションも同じままコピーしないといけないので、macのcpコマンドでコピーしている
+        execSync(
+          `cp -P ./resources/${resources[i].path} ${dest}`,
+          (err, stdout, stderr) => {
+            if (err) {
+              console.log(err);
+            }
+            console.log(stdout);
           }
-          console.log(stdout);
-        }
-      );
+        );
+      }
     }
 
     console.log('exit!');

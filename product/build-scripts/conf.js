@@ -9,7 +9,7 @@ module.exports = {
     bundleId: 'media.ics.AnimationImageConverter'
   },
   distPath: './dist',
-  binPath: './dist/assets/bin',
+  binPath: './bin',
   projectSrcPath: './src',
   projectDistConfigPath: './dist-config',
   packageTmpPath: {
