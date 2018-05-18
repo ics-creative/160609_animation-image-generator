@@ -9,7 +9,10 @@
     "precommit": "lint-staged",
     "lint": "tslint --project ./tsconfig.json",
     "format": "tslint --project ./tsconfig.json --fix && prettier */*.{js,css} --write",
-    "release-darwin": "rm -rf アニメ画像に変換する君-mas-x64 && node build-scripts/for-mac-prebuild.js && cd tmpDarwin && npm install --prod && cd ../ && node build-scripts/for-mac-packaging.js",
+    "release-darwin": "rm -rf アニメ画像に変換する君-mas-x64 && npm run prebuild-darwin && npm run package-darwin",
+    "release-win32": "npm run prebuil-win32 && npm run package-win32",
+    "prebuild-darwin": "node build-scripts/for-mac-prebuild.js",
+    "package-darwin": "node build-scripts/for-mac-packaging.js",
     "prebuild-win32": "node build-scripts/for-windows-prebuild.js",
     "package-win32": "cd tmpWin32 && npm install --prod && cd ../ && node build-scripts/for-windows-packaging.js",
     "copy-binary-asssets": "node build-scripts/copy-binary-assets.js"
