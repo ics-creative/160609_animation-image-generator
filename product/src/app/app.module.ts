@@ -1,27 +1,31 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-
-import { AppComponent } from './components/AppComponent';
-import { AnimPreviewComponent } from './components/AnimPreviewComponent';
-import { PropertiesComponent } from './components/PropertiesComponent';
 import { FormsModule } from '@angular/forms';
-import { LocaleData } from './i18n/locale-data';
+import { NgxElectronModule } from 'ngx-electron';
 
-import '../assets/js/createjs-2015.11.26.min.js';
-import '../assets/js/jquery.min.js';
-import '../assets/js/tether.min.js';
+import { AppComponent } from './components/app/app';
+import { AnimPreviewComponent } from './components/anim-preview/anim-preview';
+import { PropertiesComponent } from './components/properties/properties';
+import { LocaleData } from './i18n/locale-data';
+import { ErrorMessage } from './error/error-message';
+import { SendError } from './error/send-error';
+// Bootstrapのスタイルシート側の機能を読み込む
+import 'bootstrap/dist/css/bootstrap.min.css';
+// BootstrapのJavaScript側の機能を読み込む
+import 'bootstrap';
+// FontAwesomeを読み込む
+import 'font-awesome/css/font-awesome.css';
+
+import '../assets/js/createjs-1.0.0.min.js';
+import './styles/main.css';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    AnimPreviewComponent,
-    PropertiesComponent
-  ],
-  imports: [
-    BrowserModule,
-    FormsModule
-  ],
-  providers: [LocaleData],
+  declarations: [AppComponent, AnimPreviewComponent, PropertiesComponent],
+  imports: [BrowserModule, FormsModule, NgxElectronModule],
+  providers: [LocaleData, ErrorMessage, SendError],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+/**
+ * メインのアプリケーションモジュールを定義します。
+ */
+export class AppModule {}
