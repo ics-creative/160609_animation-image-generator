@@ -10,7 +10,7 @@
     "lint": "tslint --project ./tsconfig.json",
     "format": "tslint --project ./tsconfig.json --fix && prettier */*.{js,css} --write",
     "release-darwin": "rm -rf アニメ画像に変換する君-mas-x64 && npm run prebuild-darwin && npm run package-darwin",
-    "release-win32": "nnpm run prebuild-win32 && npm run package-win32",
+    "release-win32": "npm run prebuild-win32 && npm run package-win32",
     "prebuild-darwin": "node build-scripts/for-mac-prebuild.js",
     "package-darwin": "node build-scripts/for-mac-packaging.js",
     "prebuild-win32": "node build-scripts/for-windows-prebuild.js",
