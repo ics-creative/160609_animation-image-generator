@@ -68,7 +68,7 @@ export class ProcessExportImage {
     console.log(this.exeExt);
     console.log(process.platform);
 
-    const SHA256 = this.electronService.remote.require('crypto-js/sha256');
+    const SHA256 = require('crypto-js/sha256');
 
     // お問い合わせコード生成
     this.inquiryCode = SHA256(

@@ -1,10 +1,52 @@
 // electron-packager ./tmp-release-mac 'アニメ画像に変換する君' --platform=mas --overwrite  --arch=x64 --app-bundle-id='media.ics.AnimationImageConverter'  --extend-info=dev/Info.plist  --version='1.2.3'  --app-version='1.2.0' --build-version='1.2.000' --icon='resources/app.icns' --overwrite
 // electron-osx-flat 'アニメ画像に変換する君-mas-x64/アニメ画像に変換する君.app' --identity '3rd Party Mac Developer Installer: ICS INC. (53YCXL8YSM)' --verbose --pkg AnimationImageConverter.pkg
 
-const electronPackager = require('electron-packager');
 const conf = require('./conf.js');
-const execSync = require('child_process').execSync;
 
+function startFlat() {
+  console.log('start flat...');
+  const flat = require('electron-osx-sign').flat;
+  flat(
+    {
+      app: `${conf.JP_NAME}-mas-x64/${conf.JP_NAME}.app`,
+      identity: conf.sign.identity,
+      pkg: `../${conf.pkg}`,
+      platform: 'mas'
+    },
+    function done(err) {
+      if (err) {
+        console.log(err);
+        console.log('flat failure!');
+        return;
+      }
+      console.log('flat done!');
+    }
+  );
+}
+
+function startSign() {
+  console.log('start sign...');
+  const sign = require('electron-osx-sign');
+  sign(
+    {
+      app: `${conf.JP_NAME}-mas-x64/${conf.JP_NAME}.app`,
+      entitlements: 'resources/dev/parent.plist',
+      'entitlements-inherit': 'resources/dev/child.plist',
+      platform: 'mas'
+    },
+    function(err) {
+      if (err) {
+        console.log(err);
+        console.log('sign failure!');
+
+        return;
+      }
+      startFlat();
+    }
+  );
+}
+
+const electronPackager = require('electron-packager');
 electronPackager(
   {
     name: conf.JP_NAME,
@@ -30,30 +72,6 @@ electronPackager(
     }
     console.log('package done!  ' + appPaths);
 
-    const execSign = `export DEBUG=electron-osx-sign && electron-osx-sign "${
-      conf.JP_NAME
-    }-mas-x64/${
-      conf.JP_NAME
-    }.app" --entitlements='resources/dev/parent.plist' --entitlements-inherit='resources/dev/child.plist' --platform=mas`;
-    console.log(execSign);
-    execSync(execSign, (err, stdout, stderr) => {
-      if (err) {
-        console.log(err);
-      }
-      console.log(stdout);
-    });
-    console.log('sign done!');
-
-    const execFlat = `electron-osx-flat "${conf.JP_NAME}-mas-x64/${
-      conf.JP_NAME
-    }.app" --identity '${conf.sign.identity}' --verbose --pkg '../${conf.pkg}'`;
-    console.log(execFlat);
-    execSync(execFlat, (err, stdout, stderr) => {
-      if (err) {
-        console.log(err);
-      }
-      console.log(stdout);
-    });
-    console.log('flat done!');
+    startSign();
   }
 );
