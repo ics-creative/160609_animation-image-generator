@@ -13,11 +13,6 @@ export class ApplicationMenu {
   ) {}
 
   public createMenu(): void {
-    // 	Macの場合のみメニューを生成する。
-    if (process.platform !== 'darwin') {
-      return;
-    }
-
     const remote = this._electronService.remote;
     const shell = this._electronService.shell;
     const Menu = remote.Menu;
@@ -27,6 +22,12 @@ export class ApplicationMenu {
 
     const template: any[] = [];
 
+    // Macの場合以外のときで開発モードでなければMenuを空にする。
+    // ※ 開発中はリロードメニューを付けたいので空にしない。
+    if (process.platform !== 'darwin') {
+      Menu.setApplicationMenu(null);
+      return;
+    }
     template.push({
       label: name,
       submenu: [
@@ -70,6 +71,7 @@ export class ApplicationMenu {
       label: this.localeData.MENU_help,
       submenu: helpMenu
     });
+
     const menu = Menu.buildFromTemplate(template);
     Menu.setApplicationMenu(menu);
   }
