@@ -21,6 +21,7 @@ import { LocaleManager } from '../../i18n/locale-manager';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { ErrorMessage } from '../../error/error-message';
 import { SendError } from '../../error/send-error';
+import { Del } from '../../process/del.service';
 
 @Component({
   selector: 'my-app',
@@ -57,7 +58,8 @@ export class AppComponent implements OnInit, AfterViewInit {
     sanitizer: DomSanitizer,
     private electronService: ElectronService,
     private sendError: SendError,
-    private errorMessage: ErrorMessage
+    private errorMessage: ErrorMessage,
+    private del: Del
   ) {
     this.gaUrl = sanitizer.bypassSecurityTrustResourceUrl(
       'http://ics-web.jp/projects/animation-image-tool/?v=' +
@@ -83,7 +85,8 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.exportImagesProcess = new ProcessExportImage(
       this.localeData,
       this.electronService,
-      this.sendError
+      this.sendError,
+      this.del
     );
 
     // 初回プリセットの設定

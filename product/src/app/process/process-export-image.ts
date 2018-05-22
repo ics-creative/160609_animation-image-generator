@@ -7,11 +7,12 @@ import { CompressionType } from '../type/CompressionType';
 import { ErrorCode } from '../error/error-code';
 import { LocaleData } from '../i18n/locale-data';
 import { SendError } from '../error/send-error';
-import { ErrorMessage } from '../error/error-message';
+import { Del } from './del.service';
 
 namespace Error {
   export const ENOENT_ERROR = 'ENOENT';
 }
+
 /**
  * 画像を変換するプロセスを定義したクラスです。
  */
@@ -46,7 +47,8 @@ export class ProcessExportImage {
   constructor(
     private localeData: LocaleData,
     private electronService: ElectronService,
-    private sendError: SendError
+    private sendError: SendError,
+    private del: Del
   ) {
     this.lastSelectBaseName = this.localeData.defaultFileName;
   }
@@ -237,15 +239,17 @@ export class ProcessExportImage {
    */
   private _cleanTemporary(): Promise<any> {
     return new Promise((resolve: Function, reject: Function) => {
-      const del = this.electronService.remote.require('del');
       const path = this.electronService.remote.require('path');
-      const pngTemporary = path.join(this.temporaryPath, '*.*');
-      const pngCompressTemporary = path.join(this.temporaryCompressPath, '*.*');
+      const pngTemporary = path.join(this.temporaryPath);
+      const pngCompressTemporary = path.join(this.temporaryCompressPath);
 
-      del([pngTemporary, pngCompressTemporary], { force: true }).then(
-        (paths: string[]) => {
+      this.del
+        .deleteDirectory(pngTemporary)
+        .then(() => {
+          return this.del.deleteDirectory(pngCompressTemporary);
+        })
+        .then(() => {
           const fs = this.electronService.remote.require('fs');
-
           // フォルダーを作成
           try {
             console.log(this.temporaryPath);
@@ -267,8 +271,7 @@ export class ProcessExportImage {
 
           console.log('clean-temporary : success');
           resolve();
-        }
-      );
+        });
     });
   }
 

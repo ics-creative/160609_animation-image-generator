@@ -18,11 +18,12 @@ import 'font-awesome/css/font-awesome.css';
 
 import '../assets/js/createjs-1.0.0.min.js';
 import './styles/main.css';
+import { Del } from './process/del.service';
 
 @NgModule({
   declarations: [AppComponent, AnimPreviewComponent, PropertiesComponent],
   imports: [BrowserModule, FormsModule, NgxElectronModule],
-  providers: [LocaleData, ErrorMessage, SendError],
+  providers: [LocaleData, ErrorMessage, SendError, Del],
   bootstrap: [AppComponent]
 })
 /**
