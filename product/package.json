@@ -1,8 +1,7 @@
 {
   "scripts": {
     "build": "ng build --prod",
-    "start": "concurrently \"NODE_ENV=develop electron ./dist-config\" \"ng build --watch\"",
-    "start-windows": "concurrently \"set NODE_ENV=develop && electron ./dist-config\" \"npm run ng-serve\"",
+    "start": "concurrently \"cross-env NODE_ENV=develop electron ./dist-config\" \"ng build --watch\"",
     "precommit": "lint-staged",
     "lint": "tslint --project ./tsconfig.json",
     "format": "tslint --project ./tsconfig.json --fix && prettier */*.{js,css} --write",
@@ -63,6 +62,7 @@
     "chokidar": "^2.0.3",
     "codelyzer": "~4.3.0",
     "concurrently": "^3.5.1",
+    "cross-env": "^5.1.5",
     "electron-osx-sign": "0.4.10",
     "electron-packager": "^12.0.2",
     "husky": "^0.14.3",
