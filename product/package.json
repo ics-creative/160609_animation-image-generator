@@ -1,11 +1,8 @@
 {
   "scripts": {
-    "ng-build": "ng build --prod",
-    "ng-serve": "ng build --watch",
-    "start": "concurrently \"npm run start-electron\" \"npm run ng-serve\"",
-    "start-windows": "concurrently \"npm run start-electron-windows\" \"npm run ng-serve\"",
-    "start-electron": "NODE_ENV=develop electron ./dist-config",
-    "start-electron-windows": "set NODE_ENV=develop && electron ./dist-config",
+    "build": "ng build --prod",
+    "start": "concurrently \"NODE_ENV=develop electron ./dist-config\" \"ng build --watch\"",
+    "start-windows": "concurrently \"set NODE_ENV=develop && electron ./dist-config\" \"npm run ng-serve\"",
     "precommit": "lint-staged",
     "lint": "tslint --project ./tsconfig.json",
     "format": "tslint --project ./tsconfig.json --fix && prettier */*.{js,css} --write",
