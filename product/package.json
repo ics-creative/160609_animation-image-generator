@@ -8,9 +8,9 @@
     "release-darwin": "rm -rf アニメ画像に変換する君-mas-x64 && npm run prebuild-darwin && npm run package-darwin",
     "release-win32": "npm run prebuild-win32 && npm run package-win32",
     "prebuild-darwin": "npm run build && node build-scripts/for-mac-prebuild.js",
-    "package-darwin": "node build-scripts/for-mac-packaging.js",
+    "package-darwin": "export DEBUG=electron-osx-sign && node build-scripts/for-mac-packaging.js",
     "prebuild-win32": "npm run build && node build-scripts/for-windows-prebuild.js",
-    "package-win32": "cd tmpWin32 && npm install --prod && cd ../ && node build-scripts/for-windows-packaging.js",
+    "package-win32": "node build-scripts/for-windows-packaging.js",
     "copy-binary-asssets": "node build-scripts/copy-binary-assets.js"
   },
   "lint-staged": {
