@@ -27,9 +27,11 @@ function startFlat() {
 function startSign() {
   console.log('start sign...');
   const sign = require('electron-osx-sign');
+  const appName = `${conf.JP_NAME}-mas-x64/${conf.JP_NAME}.app`;
+
   sign(
     {
-      app: `${conf.JP_NAME}-mas-x64/${conf.JP_NAME}.app`,
+      app: appName,
       entitlements: 'resources/dev/parent.plist',
       'entitlements-inherit': 'resources/dev/child.plist',
       platform: 'mas'
@@ -67,7 +69,7 @@ electronPackager(
     // 完了時のコールバック
     if (err) {
       console.log(err);
-      console.log('package failure!  ' + appPaths);
+      console.log('package failure!  ' + err);
       return;
     }
     console.log('package done!  ' + appPaths);
