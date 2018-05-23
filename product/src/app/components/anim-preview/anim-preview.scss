@@ -50,7 +50,6 @@
 }
 
 .mod-zoom-select {
-  zoom: 0.75;
   width: 100px;
 }
 
@@ -58,4 +57,9 @@
   button {
     width: 40px;
   }
+}
+
+// バッジが中央揃えに見えないための対策
+.badge {
+  vertical-align: text-bottom;
 }
