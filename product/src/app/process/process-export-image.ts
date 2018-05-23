@@ -245,6 +245,9 @@ export class ProcessExportImage {
 
       this.del
         .deleteDirectory(pngTemporary)
+        .catch(() => {
+          console.log('フォルダを削除できませんでした。');
+        })
         .then(() => {
           return this.del.deleteDirectory(pngCompressTemporary);
         })
