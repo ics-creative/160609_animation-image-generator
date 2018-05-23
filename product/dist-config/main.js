@@ -26,8 +26,8 @@ function createWindow() {
       })
     );
 
-    // デベロッパーツールの起動
-    mainWindow.webContents.openDevTools();
+    // 開発中以外はデベロッパーツールを起動しない
+    // mainWindow.webContents.openDevTools();
   } else {
     mainWindow.loadURL(
       url.format({
