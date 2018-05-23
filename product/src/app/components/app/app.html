@@ -24,8 +24,8 @@
     <div class="text-center">
 
       <button (click)="generateAnimImage()"
-              class="btn btn-outline-primary mx-auto"
-              [ngClass]="{disabled: !isImageSelected}">
+              class="btn btn-primary mx-auto"
+              [disabled]="!isImageSelected">
         {{localeData.PROP_btnSave}}
       </button>
     </div>

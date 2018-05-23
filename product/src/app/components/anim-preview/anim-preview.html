@@ -5,7 +5,7 @@
       <small>{{localeData.PREV_selectOr}}</small>
     </div>
     <button class="btn btn-primary mt-1"
-            [ngClass]="{disabled: openingDirectories == true}"
+            [disabled]="openingDirectories === true"
             (click)="openDirectories()">{{localeData.PREV_btnSelect}}
     </button>
   </div>
@@ -33,18 +33,18 @@
 
       <!-- 再生・停止・戻るボタン -->
       <span class="mr-2 button-group" role="group">
-      <button type="button" class="btn btn-outline-secondary btn-sm"
-              [ngClass]="{disabled: playing == true}"
+      <button type="button" class="btn btn-secondary btn-sm mr-1"
+              [disabled]="playing === true"
               (click)="resume();">
         <i class="fa fa-play"></i>
       </button>
-      <button type="button" class="btn btn-outline-secondary btn-sm　m-1"
-              [ngClass]="{disabled: playing == false}"
+      <button type="button" class="btn btn-secondary btn-sm mr-1"
+              [disabled]="playing === false"
               (click)="pause();">
         <i class="fa fa-stop"></i>
       </button>
-      <button type="button" class="btn btn-outline-secondary btn-sm"
-              [ngClass]="{disabled: currentFrame == 0 && currentLoopCount == 0 }"
+      <button type="button" class="btn btn-secondary btn-sm"
+              [disabled]="currentFrame === 0 && currentLoopCount === 0"
               (click)="gotoAndStop(0);">
         <i class="fa fa-step-backward"></i>
       </button>
@@ -60,8 +60,8 @@
         <option value="1.0" selected>100%</option>
         <option value="2.0">200%</option>
       </select>
-      <button class="btn btn-outline-secondary btn-sm ml-1"
-              [ngClass]="{disabled: openingDirectories == true}"
+      <button class="btn btn-secondary btn-sm ml-1"
+              [disabled]="openingDirectories === true"
               (click)="openDirectories()">{{localeData.PREV_btnSelectRe}}
       </button>
     </div>
