@@ -248,6 +248,9 @@ export class ProcessExportImage {
         .then(() => {
           return this.del.deleteDirectory(pngCompressTemporary);
         })
+        .catch(() => {
+          console.log('フォルダを削除できませんでした。');
+        })
         .then(() => {
           const fs = this.electronService.remote.require('fs');
           // フォルダーを作成
