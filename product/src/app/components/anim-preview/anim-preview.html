@@ -34,16 +34,19 @@
       <!-- 再生・停止・戻るボタン -->
       <span class="mr-2 button-group" role="group">
       <button type="button" class="btn btn-secondary btn-sm mr-1"
+              aria-label="Play"
               [disabled]="playing === true"
               (click)="resume();">
         <i class="fa fa-play"></i>
       </button>
       <button type="button" class="btn btn-secondary btn-sm mr-1"
+              aria-label="Stop"
               [disabled]="playing === false"
               (click)="pause();">
         <i class="fa fa-stop"></i>
       </button>
       <button type="button" class="btn btn-secondary btn-sm"
+              aria-label="Forward"
               [disabled]="currentFrame === 0 && currentLoopCount === 0"
               (click)="gotoAndStop(0);">
         <i class="fa fa-step-backward"></i>
