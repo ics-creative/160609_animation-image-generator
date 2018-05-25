@@ -3,23 +3,26 @@
 
 const conf = require('./conf.js');
 
+const appDirectory = `${conf.JP_NAME}-mas-x64`;
+const appPath = `${appDirectory}/${conf.JP_NAME}.app`;
+
 function startFlat() {
   console.log('start flat...');
   const flat = require('electron-osx-sign').flat;
   flat(
     {
-      app: `${conf.JP_NAME}-mas-x64/${conf.JP_NAME}.app`,
+      app: appPath,
       identity: conf.sign.identity,
       pkg: `../${conf.pkg}`,
       platform: 'mas'
     },
     function done(err) {
       if (err) {
-        console.log(err);
-        console.log('flat failure!');
+        console.error(err);
+        console.error('flat failure!');
         return;
       }
-      console.log('flat done!');
+      console.info('flat done!');
     }
   );
 }
@@ -27,19 +30,18 @@ function startFlat() {
 function startSign() {
   console.log('start sign...');
   const sign = require('electron-osx-sign');
-  const appName = `${conf.JP_NAME}-mas-x64/${conf.JP_NAME}.app`;
 
   sign(
     {
-      app: appName,
+      app: appPath,
       entitlements: 'resources/dev/parent.plist',
       'entitlements-inherit': 'resources/dev/child.plist',
       platform: 'mas'
     },
     function(err) {
       if (err) {
-        console.log(err);
-        console.log('sign failure!');
+        console.error(err);
+        console.error('sign failure!');
 
         return;
       }
@@ -47,6 +49,9 @@ function startSign() {
     }
   );
 }
+
+// パッケージング前にフォルダを削除
+require('del').sync([`${appDirectory}/**`]);
 
 const electronPackager = require('electron-packager');
 electronPackager(
@@ -68,11 +73,11 @@ electronPackager(
   function(err, appPaths) {
     // 完了時のコールバック
     if (err) {
-      console.log(err);
-      console.log('package failure!  ' + err);
+      console.error(err);
+      console.error('package failure!  ' + err);
       return;
     }
-    console.log('package done!  ' + appPaths);
+    console.info('package done!  ' + appPaths);
 
     startSign();
   }
