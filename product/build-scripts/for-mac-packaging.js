@@ -68,6 +68,7 @@ electronPackager(
     extendInfo: 'resources/dev/Info.plist',
     appBundleId: conf.sign.bundleId,
     appVersion: conf.APP_VERSION,
+    buildVersion: conf.BUILD_VERSION,
     appCopyright: 'Copyright (C) 2017 ICS INC.'
   },
   function(err, appPaths) {
