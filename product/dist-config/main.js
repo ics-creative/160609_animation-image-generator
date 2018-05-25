@@ -40,6 +40,7 @@ function createWindow() {
 
     // メインウィンドウが閉じられたときの処理
     mainWindow.on('closed', function() {
+      console.log('mainwindow-close');
       mainWindow = null;
     });
   }
@@ -57,12 +58,21 @@ app.on('window-all-closed', function() {
     app.quit();
   }
 });
+
 // アプリケーションがアクティブになった時の処理(Macだと、Dockがクリックされた時）
 app.on('activate', function() {
   /// メインウィンドウが消えている場合は再度メインウィンドウを作成する
+  console.log("active-with-open-window" , mainWindow);
   if (mainWindow === null) {
     createWindow();
+  } else {
+    mainWindow.show();
   }
+});
+
+app.on('will-quit', function () {
+  console.log("will-quit");
+  mainWindow = null;
 });
 
 function openFileDialog(event) {
