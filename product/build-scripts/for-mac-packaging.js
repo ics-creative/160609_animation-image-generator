@@ -37,7 +37,7 @@ function startSign() {
       'entitlements': 'resources/dev/parent.plist',
       'entitlements-inherit': 'resources/dev/child.plist',
       'platform': 'mas',
-      'provisioning-profile': 'resources/dev/provisioningProfiles.provisionprofile'
+      'provisioning-profile': 'resources/dev/embedded.provisionprofile'
     },
     function (err) {
       if (err) {
