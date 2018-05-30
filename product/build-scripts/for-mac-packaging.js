@@ -66,7 +66,7 @@ electronPackager(
     'electronVersion': conf.ELECTRON_VERSION,
     'overwrite': true,
     'asar': false,
-    'extendInfo': 'resources/dev/Info.plist',
+    'extendInfo': './resources/dev/info.plist',
     'appBundleId': conf.sign.bundleId,
     'appVersion': conf.APP_VERSION,
     'buildVersion': conf.BUILD_VERSION,
