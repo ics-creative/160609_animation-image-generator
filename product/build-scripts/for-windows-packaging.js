@@ -39,11 +39,13 @@ electronPackager(
     appBundleId: conf.sign.bundleId,
     appVersion: conf.APP_VERSION,
     appCopyright: 'Copyright (C) 2018 ICS INC.'
-  },
-  function(err, appPaths) {
-    // 完了時のコールバック
-    if (err) console.log(err);
-    console.log('Done: ' + appPaths);
-    convertWindowsStore();
   }
-);
+).then((appPaths) => {
+  console.info('[electron-packager] success : ' + appPaths);
+  // コードサイニング証明書を付与
+  convertWindowsStore();
+}).catch((err) => {
+  // エラーが発生したのでログを表示して終了
+  console.error('[electron-packager] failure : ' + err);
+});
+
