@@ -18,7 +18,7 @@ electronPackager(
     asar: false,
     appBundleId: conf.sign.bundleId,
     appVersion: conf.APP_VERSION,
-    appCopyright: 'Copyright (C) 2017 ICS INC.'
+    appCopyright: 'Copyright (C) 2018 ICS INC.'
   },
   function(err, appPaths) {
     // 完了時のコールバック
