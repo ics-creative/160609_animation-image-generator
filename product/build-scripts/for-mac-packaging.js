@@ -71,16 +71,12 @@ electronPackager(
     'appVersion': conf.APP_VERSION,
     'buildVersion': conf.BUILD_VERSION,
     'appCopyright': 'Copyright (C) 2018 ICS INC.'
-  },
-  function (err, appPaths) {
-    // 完了時のコールバック
-    if (err) {
-      console.error(err);
-      console.error('package failure!  ' + err);
-      return;
-    }
-    console.info('package done!  ' + appPaths);
-
-    startSign();
   }
-);
+).then((appPaths) => {
+  console.info('[electron-packager] success : ' + appPaths);
+  // コードサイニング証明書を付与
+  startSign();
+}).catch((err) => {
+  // エラーが発生したのでログを表示して終了
+  console.error('[electron-packager] failure : ' + err);
+});
