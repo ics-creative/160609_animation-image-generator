@@ -65,6 +65,7 @@
     "del": "^3.0.0",
     "electron-osx-sign": "0.4.10",
     "electron-packager": "^12.0.2",
+    "electron-windows-store": "^0.12.0",
     "husky": "^0.14.3",
     "lint-staged": "^7.1.0",
     "mkdirp": "^0.5.1",
