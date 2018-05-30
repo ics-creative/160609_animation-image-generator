@@ -10,7 +10,7 @@ function convertWindowsStore() {
   electronWindowsStore({
     containerVirtualization: false,
     inputDirectory: '.',
-    outputDirectory: '.',
+    outputDirectory: '../windows-store',
     flatten: false,
     packageVersion: conf.APP_VERSION,
     packageName: 'AnimationImageConverter',
