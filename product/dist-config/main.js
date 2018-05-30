@@ -62,7 +62,7 @@ app.on('window-all-closed', function() {
 // アプリケーションがアクティブになった時の処理(Macだと、Dockがクリックされた時）
 app.on('activate', function() {
   /// メインウィンドウが消えている場合は再度メインウィンドウを作成する
-  console.log("active-with-open-window" , mainWindow);
+  console.log('active-with-open-window', mainWindow);
   if (mainWindow === null) {
     createWindow();
   } else {
@@ -70,8 +70,8 @@ app.on('activate', function() {
   }
 });
 
-app.on('will-quit', function () {
-  console.log("will-quit");
+app.on('will-quit', function() {
+  console.log('will-quit');
   mainWindow = null;
 });
 

@@ -4,7 +4,27 @@
 const electronPackager = require('electron-packager');
 const conf = require('./conf.js');
 
-// ./tmp-release-win32 animation-image-converter --platform=win32 --arch=ia32 --overwrite --asar --icon=resources/app.ico
+function convertWindowsStore() {
+  const electronWindowsStore = require('electron-windows-store');
+
+  electronWindowsStore({
+    containerVirtualization: false,
+    inputDirectory: '.',
+    outputDirectory: '.',
+    flatten: false,
+    packageVersion: conf.APP_VERSION,
+    packageName: 'AnimationImageConverter',
+    packageDisplayName: conf.JP_NAME,
+    packageDescription: conf.JP_DESCRIPTION,
+    packageExecutable: `${conf.packageTmpPath.win32}/${conf.EN_NAME}.exe`,
+    deploy: false,
+    finalSay: function() {
+      console.log('exit');
+      return new Promise((resolve, reject) => resolve());
+    }
+  });
+}
+
 electronPackager(
   {
     name: conf.EN_NAME,
@@ -24,5 +44,6 @@ electronPackager(
     // 完了時のコールバック
     if (err) console.log(err);
     console.log('Done: ' + appPaths);
+    convertWindowsStore();
   }
 );
