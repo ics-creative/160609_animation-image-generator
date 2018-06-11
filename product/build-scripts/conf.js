@@ -4,7 +4,7 @@ module.exports = {
   JP_DESCRIPTION:
     '「アニメ画像に変換する君」は連番画像をLINEアニメーションスタンプや、Web用アニメーション画像に変換するアプリケーションです。',
   APP_VERSION: '2.1.0',
-  BUILD_VERSION: '2.1.003',
+  BUILD_VERSION: '2.1.004',
   ELECTRON_VERSION: '2.0.0',
   sign: {
     identity: '3rd Party Mac Developer Installer: ICS INC. (53YCXL8YSM)',
