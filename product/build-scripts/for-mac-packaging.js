@@ -32,9 +32,9 @@ function startSign() {
   const sign = require('electron-osx-sign');
 
   // 開発バージョン
-  // const signType = 'development' ;
+  const signType = 'development' ;
   // リリースバージョン
-  const signType = 'distribution' ;
+  // const signType = 'distribution' ;
 
   sign(
     {
@@ -42,7 +42,7 @@ function startSign() {
       'entitlements': 'resources/dev/parent.plist',
       'entitlements-inherit': 'resources/dev/child.plist',
       'platform': 'mas',
-      'provisioning-profile': 'resources/cert/embedded.provisionprofile',
+      'provisioning-profile': 'resources/cert/AnimationImageConverter.provisionprofile',
       'type' : signType
     },
     function (err) {
