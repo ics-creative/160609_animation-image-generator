@@ -42,7 +42,7 @@ function startSign() {
       'entitlements': 'resources/dev/parent.plist',
       'entitlements-inherit': 'resources/dev/child.plist',
       'platform': 'mas',
-      'provisioning-profile': 'resources/cert/AnimationImageConverter.provisionprofile',
+      'provisioning-profile': `resources/cert/${signType}.provisionprofile`,
       'type' : signType
     },
     function (err) {
