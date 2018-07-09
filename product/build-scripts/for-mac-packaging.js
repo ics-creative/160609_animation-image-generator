@@ -31,14 +31,19 @@ function startSign() {
   console.log('start sign...');
   const sign = require('electron-osx-sign');
 
+  // 開発バージョン
+  // const signType = 'development' ;
+  // リリースバージョン
+  const signType = 'distribution' ;
+
   sign(
     {
       'app': appPath,
       'entitlements': 'resources/dev/parent.plist',
       'entitlements-inherit': 'resources/dev/child.plist',
       'platform': 'mas',
-      'provisioning-profile': 'resources/dev/embedded.provisionprofile',
-      // 'type' : 'development'
+      'provisioning-profile': 'resources/cert/embedded.provisionprofile',
+      'type' : signType
     },
     function (err) {
       if (err) {
