@@ -6,14 +6,22 @@ const conf = require('./conf.js');
 const appDirectory = `${conf.JP_NAME}-mas-x64`;
 const appPath = `${appDirectory}/${conf.JP_NAME}.app`;
 
+// 開発バージョン
+// const signType = 'development' ;
+// リリースバージョン
+const signType = 'distribution' ;
+
 function startFlat() {
   console.log('start flat...');
   const flat = require('electron-osx-sign').flat;
+
+  const pkg = `AnimationImageConverter_${signType}.pkg`;
+
   flat(
     {
       'app': appPath,
       'identity': conf.sign.identity,
-      'pkg': `../${conf.pkg}`,
+      'pkg': `../${pkg}`,
       'platform': 'mas'
     },
     function done(err) {
@@ -30,11 +38,6 @@ function startFlat() {
 function startSign() {
   console.log('start sign...');
   const sign = require('electron-osx-sign');
-
-  // 開発バージョン
-  const signType = 'development' ;
-  // リリースバージョン
-  // const signType = 'distribution' ;
 
   sign(
     {

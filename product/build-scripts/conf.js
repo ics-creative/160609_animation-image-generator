@@ -18,7 +18,6 @@ module.exports = {
     win32: 'tmpWin32',
     darwin: 'tmpDarwin'
   },
-  pkg: 'AnimationImageConverter.pkg',
   resourcesPath: {
     win32: [
       {
