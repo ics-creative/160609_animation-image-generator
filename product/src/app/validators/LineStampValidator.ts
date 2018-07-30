@@ -32,7 +32,7 @@ export class LineStampValidator {
     if (options.noLoop === true) {
       validateArr.push(localeData.VALIDATE_noLoop);
     } else {
-      const playTime = options.imageInfo.length * options.loop / options.fps;
+      const playTime = (options.imageInfo.length * options.loop) / options.fps;
       if (LineStampValidator.validateTime(options) === false) {
         const val = Math.round(playTime * 100) / 100;
         validateArr.push(localeData.VALIDATE_time.split('${1}').join(val + ''));
@@ -86,7 +86,7 @@ export class LineStampValidator {
   }
 
   static validateTime(options: AnimationImageOptions): boolean {
-    const playTime = options.imageInfo.length * options.loop / options.fps;
+    const playTime = (options.imageInfo.length * options.loop) / options.fps;
     return [1, 2, 3, 4].indexOf(playTime) >= 0;
   }
 

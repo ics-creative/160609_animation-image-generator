@@ -19,10 +19,10 @@ function startFlat() {
 
   flat(
     {
-      'app': appPath,
-      'identity': conf.sign.identity,
-      'pkg': `../${pkg}`,
-      'platform': 'mas',
+      app: appPath,
+      identity: conf.sign.identity,
+      pkg: `../${pkg}`,
+      platform: 'mas'
     },
     function done(err) {
       if (err) {
@@ -31,7 +31,7 @@ function startFlat() {
         return;
       }
       console.info('flat done!');
-    },
+    }
   );
 }
 
@@ -41,14 +41,14 @@ function startSign() {
 
   sign(
     {
-      'app': appPath,
-      'entitlements': 'resources/dev/parent.plist',
+      app: appPath,
+      entitlements: 'resources/dev/parent.plist',
       'entitlements-inherit': 'resources/dev/child.plist',
-      'platform': 'mas',
+      platform: 'mas',
       'provisioning-profile': `resources/cert/${signType}.provisionprofile`,
-      'type': signType,
+      type: signType
     },
-    function (err) {
+    function(err) {
       if (err) {
         console.error(err);
         console.error('sign failure!');
@@ -56,7 +56,7 @@ function startSign() {
         return;
       }
       startFlat();
-    },
+    }
   );
 }
 
@@ -64,28 +64,28 @@ function startSign() {
 require('del').sync([`${appDirectory}/**`]);
 
 const electronPackager = require('electron-packager');
-electronPackager(
-  {
-    'name': conf.JP_NAME,
-    'dir': conf.packageTmpPath.darwin,
-    'out': './',
-    'icon': './resources/app.icons',
-    'platform': 'mas',
-    'arch': 'x64',
-    'electronVersion': conf.ELECTRON_VERSION,
-    'overwrite': true,
-    'asar': false,
-    'extendInfo': './resources/dev/info.plist',
-    'appBundleId': conf.sign.bundleId,
-    'appVersion': conf.APP_VERSION,
-    'buildVersion': conf.BUILD_VERSION,
-    'appCopyright': 'Copyright (C) 2018 ICS INC.',
-  },
-).then((appPaths) => {
-  console.info('[electron-packager] success : ' + appPaths);
-  // コードサイニング証明書を付与
-  startSign();
-}).catch((err) => {
-  // エラーが発生したのでログを表示して終了
-  console.error('[electron-packager] failure : ' + err);
-});
+electronPackager({
+  name: conf.JP_NAME,
+  dir: conf.packageTmpPath.darwin,
+  out: './',
+  icon: './resources/app.icons',
+  platform: 'mas',
+  arch: 'x64',
+  electronVersion: conf.ELECTRON_VERSION,
+  overwrite: true,
+  asar: false,
+  extendInfo: './resources/dev/info.plist',
+  appBundleId: conf.sign.bundleId,
+  appVersion: conf.APP_VERSION,
+  buildVersion: conf.BUILD_VERSION,
+  appCopyright: 'Copyright (C) 2018 ICS INC.'
+})
+  .then(appPaths => {
+    console.info('[electron-packager] success : ' + appPaths);
+    // コードサイニング証明書を付与
+    startSign();
+  })
+  .catch(err => {
+    // エラーが発生したのでログを表示して終了
+    console.error('[electron-packager] failure : ' + err);
+  });

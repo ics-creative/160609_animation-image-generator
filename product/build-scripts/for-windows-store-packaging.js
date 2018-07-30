@@ -16,7 +16,9 @@ function convertWindowsStore() {
     packageName: 'AnimationImageConverter',
     packageDisplayName: conf.JP_NAME,
     packageDescription: conf.JP_DESCRIPTION,
-    packageExecutable: `../animation-image-converter-win32-ia32/${conf.EN_NAME}.exe`,
+    packageExecutable: `../animation-image-converter-win32-ia32/${
+      conf.EN_NAME
+    }.exe`,
     deploy: false,
     finalSay: function() {
       console.log('exit');
@@ -25,27 +27,26 @@ function convertWindowsStore() {
   });
 }
 
-electronPackager(
-  {
-    name: conf.EN_NAME,
-    dir: conf.packageTmpPath.win32,
-    out: '../',
-    icon: './resources/app.ico',
-    platform: 'win32',
-    arch: 'ia32',
-    electronVersion: conf.ELECTRON_VERSION,
-    overwrite: true,
-    asar: false,
-    appBundleId: conf.sign.bundleId,
-    appVersion: conf.APP_VERSION,
-    appCopyright: 'Copyright (C) 2018 ICS INC.'
-  }
-).then((appPaths) => {
-  console.info('[electron-packager] success : ' + appPaths);
-  // コードサイニング証明書を付与
-  convertWindowsStore();
-}).catch((err) => {
-  // エラーが発生したのでログを表示して終了
-  console.error('[electron-packager] failure : ' + err);
-});
-
+electronPackager({
+  name: conf.EN_NAME,
+  dir: conf.packageTmpPath.win32,
+  out: '../',
+  icon: './resources/app.ico',
+  platform: 'win32',
+  arch: 'ia32',
+  electronVersion: conf.ELECTRON_VERSION,
+  overwrite: true,
+  asar: false,
+  appBundleId: conf.sign.bundleId,
+  appVersion: conf.APP_VERSION,
+  appCopyright: 'Copyright (C) 2018 ICS INC.'
+})
+  .then(appPaths => {
+    console.info('[electron-packager] success : ' + appPaths);
+    // コードサイニング証明書を付与
+    convertWindowsStore();
+  })
+  .catch(err => {
+    // エラーが発生したのでログを表示して終了
+    console.error('[electron-packager] failure : ' + err);
+  });
