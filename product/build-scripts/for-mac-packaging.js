@@ -9,7 +9,7 @@ const appPath = `${appDirectory}/${conf.JP_NAME}.app`;
 // 開発バージョン
 // const signType = 'development' ;
 // リリースバージョン
-const signType = 'distribution' ;
+const signType = 'distribution';
 
 function startFlat() {
   console.log('start flat...');
@@ -22,7 +22,7 @@ function startFlat() {
       'app': appPath,
       'identity': conf.sign.identity,
       'pkg': `../${pkg}`,
-      'platform': 'mas'
+      'platform': 'mas',
     },
     function done(err) {
       if (err) {
@@ -31,7 +31,7 @@ function startFlat() {
         return;
       }
       console.info('flat done!');
-    }
+    },
   );
 }
 
@@ -46,7 +46,7 @@ function startSign() {
       'entitlements-inherit': 'resources/dev/child.plist',
       'platform': 'mas',
       'provisioning-profile': `resources/cert/${signType}.provisionprofile`,
-      'type' : signType
+      'type': signType,
     },
     function (err) {
       if (err) {
@@ -56,7 +56,7 @@ function startSign() {
         return;
       }
       startFlat();
-    }
+    },
   );
 }
 
@@ -79,8 +79,8 @@ electronPackager(
     'appBundleId': conf.sign.bundleId,
     'appVersion': conf.APP_VERSION,
     'buildVersion': conf.BUILD_VERSION,
-    'appCopyright': 'Copyright (C) 2018 ICS INC.'
-  }
+    'appCopyright': 'Copyright (C) 2018 ICS INC.',
+  },
 ).then((appPaths) => {
   console.info('[electron-packager] success : ' + appPaths);
   // コードサイニング証明書を付与
