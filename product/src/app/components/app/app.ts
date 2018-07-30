@@ -63,7 +63,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   ) {
     this.gaUrl = sanitizer.bypassSecurityTrustResourceUrl(
       'http://ics-web.jp/projects/animation-image-tool/?v=' +
-        this.appConfig.version
+        this.appConfig.analyticsVersion
     );
     new LocaleManager().applyClientLocale(localeData);
 
