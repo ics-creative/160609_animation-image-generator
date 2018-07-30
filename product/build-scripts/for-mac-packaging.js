@@ -6,15 +6,23 @@ const conf = require('./conf.js');
 const appDirectory = `${conf.JP_NAME}-mas-x64`;
 const appPath = `${appDirectory}/${conf.JP_NAME}.app`;
 
+// 開発バージョン
+// const signType = 'development' ;
+// リリースバージョン
+const signType = 'distribution';
+
 function startFlat() {
   console.log('start flat...');
   const flat = require('electron-osx-sign').flat;
+
+  const pkg = `AnimationImageConverter_${signType}.pkg`;
+
   flat(
     {
       'app': appPath,
       'identity': conf.sign.identity,
-      'pkg': `../${conf.pkg}`,
-      'platform': 'mas'
+      'pkg': `../${pkg}`,
+      'platform': 'mas',
     },
     function done(err) {
       if (err) {
@@ -23,7 +31,7 @@ function startFlat() {
         return;
       }
       console.info('flat done!');
-    }
+    },
   );
 }
 
@@ -37,7 +45,8 @@ function startSign() {
       'entitlements': 'resources/dev/parent.plist',
       'entitlements-inherit': 'resources/dev/child.plist',
       'platform': 'mas',
-      'provisioning-profile': 'resources/dev/embedded.provisionprofile'
+      'provisioning-profile': `resources/cert/${signType}.provisionprofile`,
+      'type': signType,
     },
     function (err) {
       if (err) {
@@ -47,7 +56,7 @@ function startSign() {
         return;
       }
       startFlat();
-    }
+    },
   );
 }
 
@@ -70,8 +79,8 @@ electronPackager(
     'appBundleId': conf.sign.bundleId,
     'appVersion': conf.APP_VERSION,
     'buildVersion': conf.BUILD_VERSION,
-    'appCopyright': 'Copyright (C) 2018 ICS INC.'
-  }
+    'appCopyright': 'Copyright (C) 2018 ICS INC.',
+  },
 ).then((appPaths) => {
   console.info('[electron-packager] success : ' + appPaths);
   // コードサイニング証明書を付与

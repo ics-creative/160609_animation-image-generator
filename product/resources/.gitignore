@@ -2,3 +2,4 @@
 !app.icns
 !app.ico
 !.gitignore
+cert/*
