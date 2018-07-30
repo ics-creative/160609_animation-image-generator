@@ -23,52 +23,8 @@
 
 次のURLからソフトウェアをダウンロードください。
 
-### ダウンロードURL
-
-- [Windowsはこちらから](https://github.com/ics-creative/160609_animation-image-generator/releases/download/release-0.3.0/Software-Win.zip)
-- [macOSはこちらから](https://github.com/ics-creative/160609_animation-image-generator/releases/download/release-0.3.0/Software-Mac.zip)
-
-
-#### Windowsユーザーの方へ
-
-① アプリケーションの起動を行うと「WindowsによってPCが保護されました」という余計なエラーが表示されます。大変お手数ですが次のサイトを参考に、起動ください。
-
-- [Windows8で「WindowsによってPCが保護されました」と表示されてソフトウェアをインストールできない場合 | 西沢直木のIT講座](http://www.nishi2002.com/4577.html)
-
-② Windows 7以上のバージョンでのみ動作します。Windows XPやVistaでは起動できません。
-
-#### macOSユーザーの方へ
-
-① アプリケーションの起動を行うと「開発元が未確認のため開けません」という余計なエラーが表示されます。大変お手数ですが次のサイトを参考に、起動ください。
-
-- [Macの開発元が未確認で開けないアプリはControlキーで幸せになれる | あなたのスイッチを押すブログ](http://bamka.info/mac-app-security)
-
-② OS X 10.9 Mavericks以上のバージョンでのみ動作します。
-
-### バージョンアップの履歴
-
-#### バージョン 0.3.0 (2016年6月24日 金)
-
-- 連番PNG画像のフレームサイズが統一されているか検証する機能を搭載
-- アイコンを変更
-- ファイル生成失敗時に、エラー情報が表示されるよう変更
-- LINEスタンプのガイドラインチェックの追加 (長辺サイズのチェック)
-
-
-#### バージョン 0.2.0 (2016年6月17日 金)
-
-- Windows版をリリースしました
-- 各フレームで一時停止できるようにしました。LINEアニメスタンプでは1番目のフレームがプレビューに使われますが、確認できるようになりました
-- 画質設定の各項目の説明を追加しました。ツールチップで表示されます
-- LINEアニメスタンプのルールに適合しているか、リアルタイムでチェックできるようになりました (フレームサイズ、フレーム数、再生秒数)
-- バージョン番号をステータスバーに表示しました
-- ダイアログが重複して表示される不具合を修正しました
-- webページ用書き出しで、各種モダンブラウザでAPNGファイルを再生できるようにしました
-- WebP画像に画質圧縮オプションを追加しました
-
-#### バージョン 0.1.0 (2016年6月14日 火)
-
-- Mac版をリリースしました
+- [Windowsはこちらから](https://github.com/ics-creative/160609_animation-image-generator/blob/master/help/Help_Windows.md)
+- [macOSはこちらから(Mac App Store)](https://itunes.apple.com/jp/app/anime-hua-xiangni-bian-huansuru/id1127676902?mt=12)
 
 ## 使い方
 
@@ -144,7 +100,6 @@ LINEスタンプアニメーションの[ガイドライン](https://creator.lin
 ## 開発者について
 
 [株式会社ICS](https://ics.media/)というWeb制作プロダクションが開発してます。
-
 
 
 ### 不具合報告や機能要望について

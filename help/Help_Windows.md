@@ -6,7 +6,7 @@ Windows版はベータ（開発途中）のため、インストールするに�
 
 ### ダウンロードURL
 
-- [Windowsはこちらから](https://github.com/ics-creative/160609_animation-image-generator/releases/download/release-2.0.0-alpha/Software-Win.zip)
+- [Windowsはこちらから](https://github.com/ics-creative/160609_animation-image-generator/releases/download/release%2F2.1.5/Software-Win.zip)
 
 
 #### Windowsユーザーの方へ
@@ -18,6 +18,11 @@ Windows版はベータ（開発途中）のため、インストールするに�
 ② Windows 7以上のバージョンでのみ動作します。Windows XPやVistaでは起動できません。
 
 #### 更新履歴
+
+バージョン 2.1.5 (2018年7月30日)
+
+- フレームワークの更新を行い、パフォーマンスを改善しました
+- 画像変換バイナリの更新を行いました。
 
 バージョン 2.0.0 Alpha (2017年7月24日)
 
@@ -42,3 +47,5 @@ Windows版はベータ（開発途中）のため、インストールするに�
 バージョン 1.0.0 Beta (2016年6月30日)
 
 - 公開しました
+
+これ以前の履歴は[更新履歴](Change_Log.md)からご確認ください。
