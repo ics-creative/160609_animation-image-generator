@@ -450,15 +450,7 @@ export class ProcessExportImage {
 
       if (this.animationOptionData.noLoop === false) {
         options.push(`-loop`);
-        let loopNum = this.animationOptionData.loop - 1;
-
-        // ループ回数が0だと無限ループになる
-        // ループ回数が1だと2ループになる
-        // 一回きりの再生ができない・・・！
-        if (loopNum === 0) {
-          loopNum = 1; // バグ
-        }
-        options.push(loopNum + '');
+        options.push(this.animationOptionData.loop + '');
       }
 
       options.push(`-o`);
