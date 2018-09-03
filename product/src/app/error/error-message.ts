@@ -86,13 +86,16 @@ export class ErrorMessage {
 
       // 	PNG圧縮
       case ErrorCode.PNG_COMPRESS_ERROR:
-        return 'PNG画像の事前圧縮に失敗しました。';
+        return 'PNG画像の容量最適化に失敗しました。';
 
       case ErrorCode.PNG_COMPRESS_ACCESS_ERROR:
-        return 'PNG画像の事前圧縮に失敗しました。';
+        return 'PNG画像の容量最適化に失敗しました。';
+
+      case ErrorCode.PNG_COMPRESS_QUALITY_ERROR:
+        return 'PNG画像の容量最適化に失敗しました。「容量最適化」のチェックマークを外して再度お試しください。';
 
       case ErrorCode.PNG_COMPRESS_OTHER_ERROR:
-        return 'PNG画像の事前圧縮中に原因不明のエラーが発生しました。';
+        return 'PNG画像の容量最適化中に原因不明のエラーが発生しました。';
 
       // HTML生成
       case ErrorCode.HTML_ERROR:
