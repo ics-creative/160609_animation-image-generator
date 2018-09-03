@@ -6,7 +6,7 @@
     '「アニメ画像に変換する君」は連番画像をLINEアニメーションスタンプや、Web用アニメーション画像に変換するアプリケーションです。',
   APP_VERSION: '2.1.6',
   BUILD_VERSION: '2.1.6',
-  ELECTRON_VERSION: '2.0.0',
+  ELECTRON_VERSION: '2.0.8',
   sign: {
     identity: '3rd Party Mac Developer Installer: ICS INC. (53YCXL8YSM)',
     bundleId: 'media.ics.AnimationImageConverter'
