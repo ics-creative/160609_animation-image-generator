@@ -6,7 +6,7 @@ Windows版はベータ（開発途中）のため、インストールするに�
 
 ### ダウンロードURL
 
-- [Windowsはこちらから](https://github.com/ics-creative/160609_animation-image-generator/releases/download/release%2F2.1.5/Software-Win.zip)
+- [Windowsはこちらから](https://github.com/ics-creative/160609_animation-image-generator/releases/download/release-2.1.6/Software-Win.zip)
 
 
 #### Windowsユーザーの方へ
@@ -18,6 +18,12 @@ Windows版はベータ（開発途中）のため、インストールするに�
 ② Windows 7以上のバージョンでのみ動作します。Windows XPやVistaでは起動できません。
 
 #### 更新履歴
+
+
+バージョン 2.1.6 (2018年9月3日)
+
+- WebPのループが意図しない回数になる不具合を修正しました
+- フレームワークの更新を行い、パフォーマンスを改善しました
 
 バージョン 2.1.5 (2018年7月30日)
 
