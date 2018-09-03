@@ -1,4 +1,4 @@
-export enum ErrorCode {
+export enum ErrorType {
   UNKNOWN = 0,
 
   APNG_ACCESS_ERORR = 10, // 実行ファイルのアクセスに失敗

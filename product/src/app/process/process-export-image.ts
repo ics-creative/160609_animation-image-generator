@@ -4,7 +4,7 @@ import { ImageData } from '../data/image-data';
 import { PresetType } from '../type/PresetType';
 import { LineStampValidator } from '../validators/LineStampValidator';
 import { CompressionType } from '../type/CompressionType';
-import { ErrorCode } from '../error/error-code';
+import { ErrorType } from '../error/error-type';
 import { LocaleData } from '../i18n/locale-data';
 import { SendError } from '../error/send-error';
 import { Del } from './del.service';
@@ -18,7 +18,7 @@ namespace Error {
  */
 export class ProcessExportImage {
   public errorDetail: string;
-  public errorCode: ErrorCode;
+  public errorCode: ErrorType;
   public errorStack: string;
   public inquiryCode: string; // お問い合わせ用コード
 
@@ -99,7 +99,7 @@ export class ProcessExportImage {
     this.generateCancelHTML = false;
     this.generateCancelWebP = false;
 
-    this.errorCode = ErrorCode.UNKNOWN; // 	デフォルトのエラーメッセージ
+    this.errorCode = ErrorType.UNKNOWN; // 	デフォルトのエラーメッセージ
     this.errorDetail = ''; // 	追加のエラーメッセージ
 
     // PNG事前圧縮&APNGファイルを生成する
@@ -115,15 +115,15 @@ export class ProcessExportImage {
     }
 
     return new Promise((resolve: Function, reject: Function) => {
-      this.errorCode = ErrorCode.TEMPORARY_CLEAN_ERROR;
+      this.errorCode = ErrorType.TEMPORARY_CLEAN_ERROR;
       this._cleanTemporary()
         .then(() => {
-          this.errorCode = ErrorCode.MAKE_TEMPORARY_ERROR;
+          this.errorCode = ErrorType.MAKE_TEMPORARY_ERROR;
           return this._copyTemporaryDirectory();
         })
         .then(() => {
           if (compressPNG) {
-            this.errorCode = ErrorCode.PNG_COMPRESS_ERROR;
+            this.errorCode = ErrorType.PNG_COMPRESS_ERROR;
             return this._pngCompressAll();
           }
         })
@@ -131,7 +131,7 @@ export class ProcessExportImage {
           // APNG書き出しが有効になっている場合
           if (this.animationOptionData.enabledExportApng === true) {
             // ひとまず謎エラーとしとく
-            this.errorCode = ErrorCode.APNG_OTHER_ERORR;
+            this.errorCode = ErrorType.APNG_OTHER_ERORR;
             return this.openSaveDialog('png').then((fileName: string) => {
               if (fileName) {
                 return this._generateApng(fileName);
@@ -165,7 +165,7 @@ export class ProcessExportImage {
               );
               return;
             }
-            this.errorCode = ErrorCode.HTML_ERROR;
+            this.errorCode = ErrorType.HTML_ERROR;
             return this.openSaveDialog('html').then((fileName: string) => {
               if (fileName) {
                 return this._generateHtml(fileName);
@@ -389,9 +389,9 @@ export class ProcessExportImage {
               this.setErrorDetail(stdout);
 
               if (err.code === Error.ENOENT_ERROR) {
-                this.errorCode = ErrorCode.APNG_ERORR;
+                this.errorCode = ErrorType.APNG_ERORR;
               } else {
-                this.errorCode = ErrorCode.APNG_ACCESS_ERORR;
+                this.errorCode = ErrorType.APNG_ACCESS_ERORR;
               }
               // エラー内容の送信
               this.sendError.exec(
@@ -456,12 +456,12 @@ export class ProcessExportImage {
       options.push(`-o`);
       options.push(exportFilePath);
 
-      this.errorCode = ErrorCode.CWEBP_OTHER_ERROR;
+      this.errorCode = ErrorType.CWEBP_OTHER_ERROR;
 
       this._convertPng2Webps(pngFiles)
         .then(() => {
           setImmediate(() => {
-            this.errorCode = ErrorCode.WEBPMUX_OTHER_ERROR;
+            this.errorCode = ErrorType.WEBPMUX_OTHER_ERROR;
             execFile(
               `${appPath}/bin/webpmux${this.exeExt}`,
               options,
@@ -471,9 +471,9 @@ export class ProcessExportImage {
                 } else {
                   console.error(stderr);
                   if (err.code === Error.ENOENT_ERROR) {
-                    this.errorCode = ErrorCode.WEBPMUX_ACCESS_ERROR;
+                    this.errorCode = ErrorType.WEBPMUX_ACCESS_ERROR;
                   } else {
-                    this.errorCode = ErrorCode.WEBPMUX_ERROR;
+                    this.errorCode = ErrorType.WEBPMUX_ERROR;
                   }
                   // エラー内容の送信
                   this.sendError.exec(
@@ -546,9 +546,9 @@ export class ProcessExportImage {
               this.setErrorDetail(stdout);
 
               if (err.code === Error.ENOENT_ERROR) {
-                this.errorCode = ErrorCode.CWEBP_ACCESS_ERROR;
+                this.errorCode = ErrorType.CWEBP_ACCESS_ERROR;
               } else {
-                this.errorCode = ErrorCode.CWEBP_ERROR;
+                this.errorCode = ErrorType.CWEBP_ERROR;
               }
 
               // エラー内容の送信
@@ -750,11 +750,11 @@ export class ProcessExportImage {
             console.error(stderr);
 
             if (err.code === Error.ENOENT_ERROR) {
-              this.errorCode = ErrorCode.APNG_ERORR;
+              this.errorCode = ErrorType.APNG_ERORR;
             } else if (err.code === 99) {
-              this.errorCode = ErrorCode.PNG_COMPRESS_QUALITY_ERROR;
+              this.errorCode = ErrorType.PNG_COMPRESS_QUALITY_ERROR;
             } else {
-              this.errorCode = ErrorCode.PNG_COMPRESS_ERROR;
+              this.errorCode = ErrorType.PNG_COMPRESS_ERROR;
             }
 
             // エラー内容の送信
