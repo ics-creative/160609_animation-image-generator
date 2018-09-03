@@ -24,6 +24,7 @@
 次のURLからソフトウェアをダウンロードください。
 
 - [Windowsはこちらから](https://github.com/ics-creative/160609_animation-image-generator/blob/master/help/Help_Windows.md)
+- [Windows 10以降はこちらから(Windows Store)](https://www.microsoft.com/ja-jp/p/%E3%82%A2%E3%83%8B%E3%83%A1%E7%94%BB%E5%83%8F%E3%81%AB%E5%A4%89%E6%8F%9B%E3%81%99%E3%82%8B%E5%90%9B/9n36kvc52st9?activetab)
 - [macOSはこちらから(Mac App Store)](https://itunes.apple.com/jp/app/anime-hua-xiangni-bian-huansuru/id1127676902?mt=12)
 
 ## 使い方
