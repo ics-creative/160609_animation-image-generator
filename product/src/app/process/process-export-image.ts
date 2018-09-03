@@ -614,6 +614,8 @@ export class ProcessExportImage {
    * HTMLファイルを作成します。
    * @private
    */
+
+  /* tslint:disable:quotemark */
   private _generateHtml(exportFilePath: string): void {
     const fs = this.electronService.remote.require('fs');
     const path = this.electronService.remote.require('path');
@@ -628,29 +630,30 @@ export class ProcessExportImage {
       this.animationOptionData.enabledExportApng &&
       this.animationOptionData.enabledExportWebp
     ) {
+      // tslint-disable-next-line quotemark
       imageElement = `
     <!-- Chrome と Firefox と Safari で再生可能 (IE, Edge ではアニメは再生できません) -->
     <picture>
 	  <!-- Chrome 用 -->
-      <source type='image/webp' srcset='${fileWebPName}' />
+      <source type="image/webp" srcset="${fileWebPName}" />
       <!-- Firefox, Safari 用 -->
-      <img src='${filePNGName}' width='${
+      <img src="${filePNGName}" width="${
         this.animationOptionData.imageInfo.width
-      }' height='${
+      }" height="${
         this.animationOptionData.imageInfo.height
-      }' alt='' class='apng-image' />
+      }" alt="" class="apng-image" />
     </picture>`;
 
-      scriptElement1 = `<script src='https://cdnjs.cloudflare.com/ajax/libs/apng-canvas/2.1.1/apng-canvas.min.js'></script>`;
+      scriptElement1 = `<script src="https://cdnjs.cloudflare.com/ajax/libs/apng-canvas/2.1.1/apng-canvas.min.js"></script>`;
       scriptElement2 = `
     <script>
-      if(window.navigator.userAgent.indexOf('Chrome') >= 0 && window.navigator.userAgent.indexOf('Edge') == -1){
+      if(window.navigator.userAgent.indexOf("Chrome") >= 0 && window.navigator.userAgent.indexOf("Edge") == -1){
         // Chrome の場合は WebP ファイルが表示される
       }else{
         // Chrome 以外の場合は APNG 利用可否を判定する
         APNG.ifNeeded().then(function () {
           // APNG に未対応のブラウザ(例：IE, Edge)では、JSライブラリ「apng-canvas」により表示可能にする
-          var images = document.querySelectorAll('.apng-image');
+          var images = document.querySelectorAll(".apng-image");
           for (var i = 0; i < images.length; i++){ APNG.animateImage(images[i]); }
         });
       }
@@ -658,36 +661,37 @@ export class ProcessExportImage {
     } else if (this.animationOptionData.enabledExportApng) {
       imageElement = `
     <!-- Firefox と Safari で再生可能 (Chrome, IE, Edge ではアニメは再生できません) -->
-    <img src='${filePNGName}' width='${
+    <img src="${filePNGName}" width="${
         this.animationOptionData.imageInfo.width
-      }' height='${
+      }" height="${
         this.animationOptionData.imageInfo.height
-      }' alt='' class='apng-image' />`;
-      scriptElement1 = `<script src='https://cdnjs.cloudflare.com/ajax/libs/apng-canvas/2.1.1/apng-canvas.min.js'></script>`;
+      }" alt="" class="apng-image" />`;
+      scriptElement1 = `<script src="https://cdnjs.cloudflare.com/ajax/libs/apng-canvas/2.1.1/apng-canvas.min.js"></script>`;
       scriptElement2 = `
     <script>
       // APNG に未対応のブラウザ(例：IE, Edge, Chrome)では、JSライブラリ「apng-canvas」により表示可能にする
       APNG.ifNeeded().then(function () {
-        var images = document.querySelectorAll('.apng-image');
+        var images = document.querySelectorAll(".apng-image");
         for (var i = 0; i < images.length; i++){ APNG.animateImage(images[i]); }
       });
     </script>`;
     } else if (this.animationOptionData.enabledExportWebp) {
       imageElement = `
     <!-- Chrome で再生可能 (IE, Edge, Firefox, Safari では表示できません) -->
-    <img src='${fileWebPName}' width='${
+    <img src="${fileWebPName}" width="${
         this.animationOptionData.imageInfo.width
-      }' height='${this.animationOptionData.imageInfo.height}' alt='' />`;
+      }" height="${this.animationOptionData.imageInfo.height}" alt="" />`;
     } else {
       return;
     }
 
+    // tslint:disable-next-line:max-line-length
     const backgroundImageUrl =
       'https://raw.githubusercontent.com/ics-creative/160609_animation-image-generator/master/app/imgs/opacity.png';
     const data = `<!DOCTYPE html>
 <html>
   <head>
-    <meta charset='UTF-8' />
+    <meta charset="UTF-8" />
     <style>
       /* 確認用のCSS */
       body { background: #444; }
@@ -706,6 +710,7 @@ export class ProcessExportImage {
 
     fs.writeFileSync(exportFilePath, data);
   }
+  /* tslint:enable:quotemark */
 
   private getCompressOption(type: CompressionType) {
     switch (type) {
