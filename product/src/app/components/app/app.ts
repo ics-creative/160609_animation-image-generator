@@ -48,10 +48,14 @@ export class AppComponent implements OnInit, AfterViewInit {
   private apngFileSizeError = false;
   public gaUrl: SafeResourceUrl;
 
-  @Input() animationOptionData: AnimationImageOptions;
+  @Input()
+  animationOptionData: AnimationImageOptions;
 
-  @ViewChild('myComponent') myComponent: ElementRef;
-  @ViewChild('optionSelecter') optionSelecterComponent: ElementRef;
+  @ViewChild('myComponent')
+  myComponent: ElementRef;
+
+  @ViewChild('optionSelecter')
+  optionSelecterComponent: ElementRef;
 
   constructor(
     public localeData: LocaleData,

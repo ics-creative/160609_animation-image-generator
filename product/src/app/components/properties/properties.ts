@@ -11,7 +11,8 @@ import { LocaleData } from '../../i18n/locale-data';
  * 画面左側のプロパティー領域のコンポーネントです。
  */
 export class PropertiesComponent {
-  @Input() animationOptionData: AnimationImageOptions;
+  @Input()
+  animationOptionData: AnimationImageOptions;
 
   constructor(public localeData: LocaleData) {}
 }

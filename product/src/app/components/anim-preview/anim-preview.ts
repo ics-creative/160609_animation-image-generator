@@ -26,12 +26,18 @@ declare function require(value: String): any;
  * アニメーションのプレビュー領域のコンポーネントです。
  */
 export class AnimPreviewComponent implements OnChanges, OnInit {
-  @Input() imagePath: string;
-  @Input() animationOptionData: AnimationImageOptions;
-  @Input() items: ImageData[];
+  @Input()
+  imagePath: string;
+
+  @Input()
+  animationOptionData: AnimationImageOptions;
+
+  @Input()
+  items: ImageData[];
 
   /** ファイル選択ダイアログのイベントです。 */
-  @Output() private clickFileSelectButtonEvent = new EventEmitter();
+  @Output()
+  private clickFileSelectButtonEvent = new EventEmitter();
 
   private playing = false;
   private currentFrame = 0;
