@@ -35,7 +35,6 @@
     "@angular/compiler": "8.0.0",
     "@angular/core": "8.0.0",
     "@angular/forms": "8.0.0",
-    "@angular/http": "7.1.0",
     "@angular/platform-browser": "8.0.0",
     "@angular/platform-browser-dynamic": "8.0.0",
     "@types/createjs": "^0.0.29",
