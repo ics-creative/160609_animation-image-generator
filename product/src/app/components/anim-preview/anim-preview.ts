@@ -37,7 +37,7 @@ export class AnimPreviewComponent implements OnChanges, OnInit {
 
   /** ファイル選択ダイアログのイベントです。 */
   @Output()
-  private clickFileSelectButtonEvent = new EventEmitter();
+  public clickFileSelectButtonEvent = new EventEmitter();
 
   private playing = false;
   private currentFrame = 0;
