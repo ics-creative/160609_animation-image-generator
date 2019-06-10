@@ -11,7 +11,14 @@ let mainWindow;
 
 function createWindow() {
   // メインウィンドウを作成します
-  mainWindow = new BrowserWindow({ width: 800, height: 600 });
+  mainWindow = new BrowserWindow(
+    {
+      width: 800, height: 600,
+      webPreferences: {
+        nodeIntegration: true,
+        backgroundThrottling: false
+      }
+    });
 
   console.log(process.env.NODE_ENV);
 
