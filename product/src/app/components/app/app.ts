@@ -51,10 +51,10 @@ export class AppComponent implements OnInit, AfterViewInit {
   @Input()
   animationOptionData: AnimationImageOptions;
 
-  @ViewChild('myComponent')
+  @ViewChild('myComponent', { static: true })
   myComponent: ElementRef;
 
-  @ViewChild('optionSelecter')
+  @ViewChild('optionSelecter', { static: true })
   optionSelecterComponent: ElementRef;
 
   constructor(
