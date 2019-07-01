@@ -4,8 +4,8 @@
   COPY_RIGHT: 'Copyright (C) 2018 ICS INC.',
   JP_DESCRIPTION:
     '「アニメ画像に変換する君」は連番画像をLINEアニメーションスタンプや、Web用アニメーション画像に変換するアプリケーションです。',
-  APP_VERSION: '2.1.7',
-  BUILD_VERSION: '2.1.7',
+  APP_VERSION: '2.1.8',
+  BUILD_VERSION: '2.1.8',
   ELECTRON_VERSION: '2.0.8',
   sign: {
     identity: '3rd Party Mac Developer Installer: ICS INC. (53YCXL8YSM)',
