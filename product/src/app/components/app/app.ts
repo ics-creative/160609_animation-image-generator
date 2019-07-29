@@ -51,10 +51,10 @@ export class AppComponent implements OnInit, AfterViewInit {
   @Input()
   animationOptionData: AnimationImageOptions;
 
-  @ViewChild('myComponent')
+  @ViewChild('myComponent', { static: true })
   myComponent: ElementRef;
 
-  @ViewChild('optionSelecter')
+  @ViewChild('optionSelecter', { static: true })
   optionSelecterComponent: ElementRef;
 
   constructor(
@@ -378,9 +378,7 @@ export class AppComponent implements OnInit, AfterViewInit {
             } else {
               // 画像サイズが異なっていることを通知する
               alert(
-                `${items[i].imageBaseName} ${
-                  this.localeData.VALIDATE_ImportImageSize
-                }`
+                `${items[i].imageBaseName} ${this.localeData.VALIDATE_ImportImageSize}`
               );
               errorFlag = true;
             }

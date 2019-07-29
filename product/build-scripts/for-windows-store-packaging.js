@@ -16,9 +16,7 @@ function convertWindowsStore() {
     packageName: 'AnimationImageConverter',
     packageDisplayName: conf.JP_NAME,
     packageDescription: conf.JP_DESCRIPTION,
-    packageExecutable: `../animation-image-converter-win32-ia32/${
-      conf.EN_NAME
-    }.exe`,
+    packageExecutable: `../animation-image-converter-win32-ia32/${conf.EN_NAME}.exe`,
     deploy: false,
     finalSay: function() {
       console.log('exit');

@@ -637,11 +637,8 @@ export class ProcessExportImage {
 	  <!-- Chrome 用 -->
       <source type="image/webp" srcset="${fileWebPName}" />
       <!-- Firefox, Safari 用 -->
-      <img src="${filePNGName}" width="${
-        this.animationOptionData.imageInfo.width
-      }" height="${
-        this.animationOptionData.imageInfo.height
-      }" alt="" class="apng-image" />
+      <img src="${filePNGName}" width="${this.animationOptionData.imageInfo.width}"
+      height="${this.animationOptionData.imageInfo.height}" alt="" class="apng-image" />
     </picture>`;
 
       scriptElement1 = `<script src="https://cdnjs.cloudflare.com/ajax/libs/apng-canvas/2.1.1/apng-canvas.min.js"></script>`;
@@ -661,11 +658,8 @@ export class ProcessExportImage {
     } else if (this.animationOptionData.enabledExportApng) {
       imageElement = `
     <!-- Firefox と Safari で再生可能 (Chrome, IE, Edge ではアニメは再生できません) -->
-    <img src="${filePNGName}" width="${
-        this.animationOptionData.imageInfo.width
-      }" height="${
-        this.animationOptionData.imageInfo.height
-      }" alt="" class="apng-image" />`;
+    <img src="${filePNGName}" width="${this.animationOptionData.imageInfo.width}"
+    height="${this.animationOptionData.imageInfo.height}" alt="" class="apng-image" />`;
       scriptElement1 = `<script src="https://cdnjs.cloudflare.com/ajax/libs/apng-canvas/2.1.1/apng-canvas.min.js"></script>`;
       scriptElement2 = `
     <script>
@@ -678,9 +672,8 @@ export class ProcessExportImage {
     } else if (this.animationOptionData.enabledExportWebp) {
       imageElement = `
     <!-- Chrome で再生可能 (IE, Edge, Firefox, Safari では表示できません) -->
-    <img src="${fileWebPName}" width="${
-        this.animationOptionData.imageInfo.width
-      }" height="${this.animationOptionData.imageInfo.height}" alt="" />`;
+    <img src="${fileWebPName}" width="${this.animationOptionData.imageInfo.width}"
+    height="${this.animationOptionData.imageInfo.height}" alt="" />`;
     } else {
       return;
     }
