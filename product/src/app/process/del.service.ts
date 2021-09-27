@@ -15,7 +15,7 @@ export class Del {
     const fs = this.electronService.remote.require('fs');
     const path = this.electronService.remote.require('path');
 
-    return new Promise(function(resolve, reject) {
+    return new Promise<void>(function(resolve, reject) {
       const filePath = path.join(dir, file);
       fs.lstat(filePath, function(lstatErorr, stats) {
         if (lstatErorr) {
@@ -44,7 +44,7 @@ export class Del {
     const fs = this.electronService.remote.require('fs');
     const path = this.electronService.remote.require('path');
 
-    return new Promise((resolve, reject) => {
+    return new Promise<void>((resolve, reject) => {
       fs.access(dir, (err: NodeJS.ErrnoException) => {
         if (err) {
           return reject(err);

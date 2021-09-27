@@ -717,7 +717,7 @@ export class ProcessExportImage {
   }
 
   private _pngCompress(item: ImageData) {
-    return new Promise((resolve, reject) => {
+    return new Promise<void>((resolve, reject) => {
       const path = this.electronService.remote.require('path');
       const appPath: string = this.getAppPath();
       const execFile = this.electronService.remote.require('child_process')
