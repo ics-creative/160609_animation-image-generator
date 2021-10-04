@@ -11,7 +11,7 @@ export class Del {
    * @param file
    * @returns {Promise<any>}
    */
-  public deleteFile(dir: string, file) {
+  public deleteFile(dir: string, file: string) {
     const fs = this.electronService.remote.require('fs');
     const path = this.electronService.remote.require('path');
 

@@ -7,6 +7,7 @@ import {
   ViewChild
 } from '@angular/core';
 import { ElectronService } from 'ngx-electron';
+import { IpcRenderer } from 'electron';
 import { AnimationImageOptions } from '../../data/animation-image-option';
 import { PresetType } from '../../type/PresetType';
 import { PresetWeb } from '../../preset/preset-web';
@@ -47,6 +48,8 @@ export class AppComponent implements OnInit, AfterViewInit {
   public _isDragover = false;
   private apngFileSizeError = false;
   public gaUrl: SafeResourceUrl;
+  private ipcRenderer: IpcRenderer;
+  private electron: any;
 
   @Input()
   animationOptionData: AnimationImageOptions;
@@ -71,8 +74,14 @@ export class AppComponent implements OnInit, AfterViewInit {
     );
     new LocaleManager().applyClientLocale(localeData);
 
-    const win = this.electronService.remote.getCurrentWindow();
-    win.setTitle(localeData.APP_NAME);
+    try {
+      this.electron = (window as any).require('electron');
+      this.ipcRenderer = this.electron.ipcRenderer;
+    } catch (e) {
+      throw e;
+    }
+
+    this.ipcRenderer.send('change-window-title', localeData.APP_NAME);
   }
 
   ngOnInit() {
@@ -98,22 +107,25 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.changePreset(this.presetMode);
 
     // 	保存先の指定返却
-    const ipc = this.electronService.ipcRenderer;
+    this.ipcRenderer.on(
+      'selected-open-images',
+      (event: any, filePathList: string[]) => {
+        this._selectedImages(filePathList);
+      }
+    );
 
-    ipc.on('selected-open-images', (event: any, filePathList: string[]) => {
-      this._selectedImages(filePathList);
-    });
-
-    ipc.on('unlock-select-ui', (event: any, filePathList: string[]) => {
-      console.log('unlockUI');
-      this.openingDirectories = false;
-    });
+    this.ipcRenderer.on(
+      'unlock-select-ui',
+      (event: any, filePathList: string[]) => {
+        console.log('unlockUI');
+        this.openingDirectories = false;
+      }
+    );
   }
 
   openExternalBrowser(url) {
-    const { shell } = this.electronService.remote.require('electron');
+    const { shell } = this.electron;
     shell.openExternal(url);
-    console.log(url);
   }
 
   ngAfterViewInit() {
@@ -140,8 +152,7 @@ export class AppComponent implements OnInit, AfterViewInit {
       return;
     }
     this.openingDirectories = true;
-    const ipc = this.electronService.ipcRenderer;
-    ipc.send('open-file-dialog');
+    this.ipcRenderer.send('open-file-dialog');
   }
 
   public _selectedImages(filePathList: string[]) {
@@ -150,7 +161,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   }
 
   public handleDrop(event: DragEvent) {
-    const path = this.electronService.remote.require('path');
+    const path = this.electron.require('path');
 
     const length = event.dataTransfer.files
       ? event.dataTransfer.files.length
@@ -275,8 +286,7 @@ export class AppComponent implements OnInit, AfterViewInit {
       return;
     }
     this.openingDirectories = true;
-    const ipc = this.electronService.ipcRenderer;
-    ipc.send('open-file-dialog');
+    this.ipcRenderer.send('open-file-dialog');
   }
 
   /**
@@ -284,7 +294,7 @@ export class AppComponent implements OnInit, AfterViewInit {
    * @param filePathList
    */
   public setFilePathList(filePathList: string[]): void {
-    const path = this.electronService.remote.require('path');
+    const path = (window as any).require('path');
 
     const length = filePathList ? filePathList.length : 0;
 

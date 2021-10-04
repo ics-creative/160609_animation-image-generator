@@ -6,6 +6,8 @@ const BrowserWindow = electron.BrowserWindow;
 const path = require('path');
 const url = require('url');
 
+const ipcMain = electron.ipcMain;
+
 // メインウィンドウ
 let mainWindow;
 
@@ -93,3 +95,9 @@ function openFileDialog(event) {
     }
   });
 }
+
+ipcMain.on('change-window-title', (event, title) => {
+  console.log(`change-window-title to ${title}`);
+  mainWindow.setTitle(title);
+  return;
+});

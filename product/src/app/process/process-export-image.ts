@@ -54,9 +54,7 @@ export class ProcessExportImage {
   }
 
   public get exeExt() {
-    const platform: string = this.electronService.remote
-      .require('os')
-      .platform();
+    const platform: string = (window as any).require('os').platform();
     return platform === 'win32' ? '.exe' : '';
   }
 
@@ -190,7 +188,7 @@ export class ProcessExportImage {
           }
 
           // エクスプローラーで開くでも、まだいいかも
-          const { shell } = this.electronService.remote.require('electron');
+          const { shell } = (window as any).require('electron');
           if (this._enableExportHTML()) {
             shell.showItemInFolder(this.selectedHTMLPath);
           } else if (this._enableExportApng()) {
@@ -239,7 +237,7 @@ export class ProcessExportImage {
    */
   private _cleanTemporary(): Promise<any> {
     return new Promise((resolve: Function, reject: Function) => {
-      const path = this.electronService.remote.require('path');
+      const path = (window as any).require('path');
       const pngTemporary = path.join(this.temporaryPath);
       const pngCompressTemporary = path.join(this.temporaryCompressPath);
 
