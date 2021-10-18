@@ -7,7 +7,7 @@ import { CompressionType } from '../type/CompressionType';
 import { ErrorType } from '../error/error-type';
 import { LocaleData } from '../i18n/locale-data';
 import { SendError } from '../error/send-error';
-import { Del } from './del.service';
+import { FileService } from './file.service';
 
 namespace Error {
   export const ENOENT_ERROR = 'ENOENT';
@@ -48,7 +48,7 @@ export class ProcessExportImage {
     private localeData: LocaleData,
     private electronService: ElectronService,
     private sendError: SendError,
-    private del: Del
+    private fileService: FileService
   ) {
     this.lastSelectBaseName = this.localeData.defaultFileName;
   }
@@ -241,38 +241,36 @@ export class ProcessExportImage {
       const pngTemporary = path.join(this.temporaryPath);
       const pngCompressTemporary = path.join(this.temporaryCompressPath);
 
-      this.del
+      this.fileService
         .deleteDirectory(pngTemporary)
         .catch(() => {
-          console.log('フォルダを削除できませんでした。');
+          console.log(`フォルダを削除できませんでした。${pngTemporary}`);
         })
         .then(() => {
-          return this.del.deleteDirectory(pngCompressTemporary);
+          return this.fileService.deleteDirectory(pngCompressTemporary);
         })
         .catch(() => {
-          console.log('フォルダを削除できませんでした。');
+          console.log(
+            `フォルダを削除できませんでした。${pngCompressTemporary}`
+          );
         })
         .then(() => {
-          const fs = this.electronService.remote.require('fs');
           // フォルダーを作成
-          try {
-            console.log(this.temporaryPath);
-            fs.mkdirSync(this.temporaryPath);
-          } catch (e) {
-            console.error(
-              'フォルダーの作成に失敗しました :' + this.temporaryPath
-            );
-          }
-
-          try {
-            // フォルダーを作成
-            fs.mkdirSync(this.temporaryCompressPath);
-          } catch (e) {
-            console.error(
-              'フォルダーの作成に失敗しました :' + this.temporaryCompressPath
-            );
-          }
-
+          this.fileService.createDirectory(this.temporaryPath);
+        })
+        .catch(() => {
+          console.log(`フォルダを作成できませんでした ${this.temporaryPath}`);
+        })
+        .then(() => {
+          // フォルダーを作成
+          this.fileService.createDirectory(this.temporaryCompressPath);
+        })
+        .catch(() => {
+          console.log(
+            `フォルダを作成できませんでした ${this.temporaryCompressPath}`
+          );
+        })
+        .then(() => {
           console.log('clean-temporary : success');
           resolve();
         });

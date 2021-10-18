@@ -7,7 +7,7 @@ import { CompressionType } from '../type/CompressionType';
 import { ErrorType } from '../error/error-type';
 import { LocaleData } from '../i18n/locale-data';
 import { SendError } from '../error/send-error';
-import { DeleteFile } from './delete-file';
+import { DeleteFile } from './file';
 
 namespace Error {
   export const ENOENT_ERROR = 'ENOENT';

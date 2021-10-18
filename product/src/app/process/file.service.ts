@@ -1,13 +1,12 @@
 import { Injectable } from '@angular/core';
-import { ipcRenderer, IpcRenderer } from 'electron';
-import { ElectronService } from 'ngx-electron';
+import { IpcRenderer } from 'electron';
 import { IpcId } from '../../../common-src/ipc-id';
 
 @Injectable()
-export class Del {
+export class FileService {
   private ipcRenderer: IpcRenderer;
 
-  constructor(private electronService: ElectronService) {
+  constructor() {
     this.init();
   }
 
@@ -46,9 +45,23 @@ export class Del {
    */
   public deleteDirectory(dir: string) {
     return new Promise<void>((resolve, reject) => {
-      console.log(IpcId.DELETE_DIRECTORY, this.ipcRenderer);
       const result = this.ipcRenderer.sendSync(IpcId.DELETE_DIRECTORY, dir);
-      console.log(result);
+      if (result) {
+        resolve();
+      } else {
+        reject();
+      }
+    });
+  }
+
+  /**
+   * ディレクトリーを作成する処理です。
+   * @param {string} dir
+   * @returns {Promise<any>}
+   */
+  public createDirectory(dir: string) {
+    return new Promise<void>((resolve, reject) => {
+      const result = this.ipcRenderer.sendSync(IpcId.CREATE_DIRECTORY, dir);
       if (result) {
         resolve();
       } else {

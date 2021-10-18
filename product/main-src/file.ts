@@ -1,4 +1,4 @@
-export default class DeleteFile {
+export default class File {
   constructor() {
     console.log('delete-file');
   }

@@ -1,7 +1,7 @@
 "use strict";
 exports.__esModule = true;
 var ipc_id_1 = require("../common-src/ipc-id");
-var delete_file_1 = require("./delete-file");
+var file_1 = require("./file");
 // アプリケーション作成用のモジュールを読み込み
 var electron = require('electron');
 var app = electron.app;
@@ -20,6 +20,7 @@ function createWindow() {
             nodeIntegration: true,
             // contextIsolation: true,  // あとで調整する
             backgroundThrottling: false
+            // preload: path.join(__dirname,'/preload.js') // あとで使う
         }
     });
     console.log(process.env.NODE_ENV);
@@ -91,23 +92,41 @@ ipcMain.on(ipc_id_1.IpcId.CHANGE_WINDOW_TITLE, function (event, title) {
     mainWindow.setTitle(title);
     return;
 });
+// todo:async-await対応
 ipcMain.on(ipc_id_1.IpcId.DELETE_DIRECTORY, function (event, directory) {
     console.log(ipc_id_1.IpcId.DELETE_DIRECTORY + " : " + directory);
-    new delete_file_1["default"]().deleteDirectory(directory).then(function () {
+    new file_1["default"]()
+        .deleteDirectory(directory)
+        .then(function () {
         event.returnValue = true;
     })["catch"](function (e) {
         event.returnValue = false;
     });
     return;
 });
+// todo:async-await対応
 ipcMain.on(ipc_id_1.IpcId.DELETE_FILE, function (event, directory, file) {
     console.log("delete-file : " + directory + ", " + file);
-    new delete_file_1["default"]().deleteFile(directory, file).then(function () {
-        console.log("delete-file : true");
+    new file_1["default"]()
+        .deleteFile(directory, file)
+        .then(function () {
         event.returnValue = true;
     })["catch"](function (e) {
-        console.log("delete-file : false");
         event.returnValue = false;
     });
+    return;
+});
+// todo:async-await対応
+ipcMain.on(ipc_id_1.IpcId.CREATE_DIRECTORY, function (event, directory) {
+    console.log(ipc_id_1.IpcId.CREATE_DIRECTORY + " : " + directory);
+    try {
+        console.log(directory);
+        require('fs').mkdirSync(directory);
+        event.returnValue = true;
+    }
+    catch (e) {
+        console.error("\u30D5\u30A9\u30EB\u30C0\u30FC\u306E\u4F5C\u6210\u306B\u5931\u6557\u3057\u307E\u3057\u305F :" + directory);
+        event.returnValue = false;
+    }
     return;
 });

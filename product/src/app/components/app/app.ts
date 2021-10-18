@@ -22,7 +22,7 @@ import { LocaleManager } from '../../i18n/locale-manager';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { ErrorMessage } from '../../error/error-message';
 import { SendError } from '../../error/send-error';
-import { Del } from '../../process/del.service';
+import { FileService } from '../../process/file.service';
 import { IpcId } from '../../../../common-src/ipc-id';
 
 @Component({
@@ -67,7 +67,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     private electronService: ElectronService,
     private sendError: SendError,
     private errorMessage: ErrorMessage,
-    private del: Del
+    private fileService: FileService
   ) {
     this.gaUrl = sanitizer.bypassSecurityTrustResourceUrl(
       'http://ics-web.jp/projects/animation-image-tool/?v=' +
@@ -100,7 +100,7 @@ export class AppComponent implements OnInit, AfterViewInit {
       this.localeData,
       this.electronService,
       this.sendError,
-      this.del
+      this.fileService
     );
 
     // 初回プリセットの設定

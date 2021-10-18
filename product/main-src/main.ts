@@ -1,6 +1,6 @@
 import { OpenDialogOptions } from 'electron';
 import { IpcId } from '../common-src/ipc-id';
-import DeleteFile from './delete-file';
+import File from './file';
 
 // アプリケーション作成用のモジュールを読み込み
 const electron = require('electron');
@@ -112,7 +112,7 @@ ipcMain.on(IpcId.CHANGE_WINDOW_TITLE, (event, title: string) => {
 ipcMain.on(IpcId.DELETE_DIRECTORY, (event, directory: string) => {
   console.log(`${IpcId.DELETE_DIRECTORY} : ${directory}`);
 
-  new DeleteFile()
+  new File()
     .deleteDirectory(directory)
     .then(() => {
       event.returnValue = true;
@@ -128,16 +128,29 @@ ipcMain.on(IpcId.DELETE_DIRECTORY, (event, directory: string) => {
 ipcMain.on(IpcId.DELETE_FILE, (event, directory: string, file: string) => {
   console.log(`delete-file : ${directory}, ${file}`);
 
-  new DeleteFile()
+  new File()
     .deleteFile(directory, file)
     .then(() => {
-      console.log(`delete-file : true`);
       event.returnValue = true;
     })
     .catch(e => {
-      console.log(`delete-file : false`);
       event.returnValue = false;
     });
+
+  return;
+});
+
+// todo:async-await対応
+ipcMain.on(IpcId.CREATE_DIRECTORY, (event, directory: string) => {
+  console.log(`${IpcId.CREATE_DIRECTORY} : ${directory}`);
+  try {
+    console.log(directory);
+    require('fs').mkdirSync(directory);
+    event.returnValue = true;
+  } catch (e) {
+    console.error(`フォルダーの作成に失敗しました :${directory}`);
+    event.returnValue = false;
+  }
 
   return;
 });

@@ -6,5 +6,6 @@ var IpcId;
     IpcId.DELETE_FILE = 'delete-file';
     IpcId.DELETE_DIRECTORY = 'delete-directory';
     IpcId.OPEN_FILE_DIALOG = 'open-file-dialog';
+    IpcId.CREATE_DIRECTORY = 'create-directory';
     IpcId.CHANGE_WINDOW_TITLE = 'change-window-title';
 })(IpcId = exports.IpcId || (exports.IpcId = {}));
