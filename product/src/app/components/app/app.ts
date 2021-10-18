@@ -16,13 +16,10 @@ import { ProcessExportImage } from '../../process/process-export-image';
 import { AppConfig } from '../../config/app-config';
 import { ImageData } from '../../data/image-data';
 import { ApplicationMenu } from '../../menu/application-menu';
-// import { ErrorMessage } from '../../error/error-message';
 import { LocaleData } from '../../i18n/locale-data';
 import { LocaleManager } from '../../i18n/locale-manager';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
-import { ErrorMessage } from '../../error/error-message';
-import { SendError } from '../../error/send-error';
-import { FileService } from '../../process/file.service';
+import IpcService from '../../process/ipc.service';
 import { IpcId } from '../../../../common-src/ipc-id';
 
 @Component({
@@ -65,9 +62,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     public localeData: LocaleData,
     sanitizer: DomSanitizer,
     private electronService: ElectronService,
-    private sendError: SendError,
-    private errorMessage: ErrorMessage,
-    private fileService: FileService
+    private ipcService: IpcService
   ) {
     this.gaUrl = sanitizer.bypassSecurityTrustResourceUrl(
       'http://ics-web.jp/projects/animation-image-tool/?v=' +
@@ -82,7 +77,8 @@ export class AppComponent implements OnInit, AfterViewInit {
       throw e;
     }
 
-    this.ipcRenderer.send('change-window-title', localeData.APP_NAME);
+    this.ipcService.changeWindowTitle(localeData.APP_NAME);
+    this.ipcService.setDefaultFileName(localeData.defaultFileName);
   }
 
   ngOnInit() {
@@ -98,9 +94,8 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.isImageSelected = false;
     this.exportImagesProcess = new ProcessExportImage(
       this.localeData,
-      this.electronService,
-      this.sendError,
-      this.fileService
+      this.ipcService,
+      this.electronService
     );
 
     // 初回プリセットの設定
@@ -229,9 +224,15 @@ export class AppComponent implements OnInit, AfterViewInit {
     this._exportImages();
   }
 
+  public showFileSizeErrorMessage(): void {
+    alert(
+      '連番画像のサイズが異なるため、APNGファイルの保存ができません。連番画像のサイズが統一されているか確認ください。'
+    );
+  }
+
   public _exportImages() {
     if (this.apngFileSizeError && this.animationOptionData.enabledExportApng) {
-      this.errorMessage.showFileSizeErrorMessage();
+      this.showFileSizeErrorMessage();
       return;
     }
 
@@ -245,7 +246,8 @@ export class AppComponent implements OnInit, AfterViewInit {
       .catch(() => {
         this._hideLockDialog();
 
-        this.errorMessage.showErrorMessage(
+        this.ipcRenderer.send(
+          IpcId.SHOW_ERROR_MESSAGE,
           this.exportImagesProcess.errorCode,
           this.exportImagesProcess.inquiryCode,
           this.exportImagesProcess.errorDetail,

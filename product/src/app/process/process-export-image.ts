@@ -1,13 +1,12 @@
-import { ElectronService } from 'ngx-electron';
 import { AnimationImageOptions } from '../data/animation-image-option';
 import { ImageData } from '../data/image-data';
 import { PresetType } from '../type/PresetType';
 import { LineStampValidator } from '../validators/LineStampValidator';
 import { CompressionType } from '../type/CompressionType';
-import { ErrorType } from '../error/error-type';
 import { LocaleData } from '../i18n/locale-data';
-import { SendError } from '../error/send-error';
-import { FileService } from './file.service';
+import { ErrorType } from '../../../common-src/error/error-type';
+import IpcService from './ipc.service';
+import { ElectronService } from 'ngx-electron';
 
 namespace Error {
   export const ENOENT_ERROR = 'ENOENT';
@@ -31,9 +30,6 @@ export class ProcessExportImage {
   private selectedHTMLPath: string;
   private selectedHTMLDirectoryPath: string;
 
-  private lastSelectSaveDirectories: string;
-  private lastSelectBaseName: string;
-
   private itemList: ImageData[];
 
   private _version: string;
@@ -46,12 +42,9 @@ export class ProcessExportImage {
 
   constructor(
     private localeData: LocaleData,
-    private electronService: ElectronService,
-    private sendError: SendError,
-    private fileService: FileService
-  ) {
-    this.lastSelectBaseName = this.localeData.defaultFileName;
-  }
+    private ipcService: IpcService,
+    private electronService: ElectronService
+  ) {}
 
   public get exeExt() {
     const platform: string = (window as any).require('os').platform();
@@ -205,7 +198,8 @@ export class ProcessExportImage {
           if (message) {
             console.error(message);
             this.errorStack = message.stack;
-            this.sendError.exec(
+
+            this.ipcService.sendError(
               this._version,
               this.inquiryCode,
               'ERROR',
@@ -236,45 +230,7 @@ export class ProcessExportImage {
    * @private
    */
   private _cleanTemporary(): Promise<any> {
-    return new Promise((resolve: Function, reject: Function) => {
-      const path = (window as any).require('path');
-      const pngTemporary = path.join(this.temporaryPath);
-      const pngCompressTemporary = path.join(this.temporaryCompressPath);
-
-      this.fileService
-        .deleteDirectory(pngTemporary)
-        .catch(() => {
-          console.log(`フォルダを削除できませんでした。${pngTemporary}`);
-        })
-        .then(() => {
-          return this.fileService.deleteDirectory(pngCompressTemporary);
-        })
-        .catch(() => {
-          console.log(
-            `フォルダを削除できませんでした。${pngCompressTemporary}`
-          );
-        })
-        .then(() => {
-          // フォルダーを作成
-          this.fileService.createDirectory(this.temporaryPath);
-        })
-        .catch(() => {
-          console.log(`フォルダを作成できませんでした ${this.temporaryPath}`);
-        })
-        .then(() => {
-          // フォルダーを作成
-          this.fileService.createDirectory(this.temporaryCompressPath);
-        })
-        .catch(() => {
-          console.log(
-            `フォルダを作成できませんでした ${this.temporaryCompressPath}`
-          );
-        })
-        .then(() => {
-          console.log('clean-temporary : success');
-          resolve();
-        });
-    });
+    return this.ipcService.creanTemporaryDirectory();
   }
 
   private _copyTemporaryDirectory() {
@@ -284,33 +240,11 @@ export class ProcessExportImage {
     return Promise.all(promises);
   }
 
-  private _copyTemporaryImage(item: any): Promise<any> {
-    return new Promise((resolve: Function, reject: Function) => {
-      setImmediate(() => {
-        const fs = this.electronService.remote.require('fs');
-        const path = this.electronService.remote.require('path');
-        const src = item.imagePath;
-
-        const destination: string = path.join(
-          this.temporaryPath,
-          `frame${item.frameNumber}.png`
-        );
-
-        const r = fs.createReadStream(src);
-        const w = fs.createWriteStream(destination);
-
-        r.on('error', (err: any) => {
-          reject(err);
-        });
-        w.on('error', (err: any) => {
-          reject(err);
-        });
-        w.on('close', (ex: any) => {
-          resolve();
-        });
-        r.pipe(w);
-      });
-    });
+  private _copyTemporaryImage(item: {
+    frameNumber: number;
+    imagePath: string;
+  }): Promise<any> {
+    return this.ipcService.copyTemporaryImage(item.frameNumber, item.imagePath);
   }
 
   /**
@@ -390,7 +324,7 @@ export class ProcessExportImage {
                 this.errorCode = ErrorType.APNG_ACCESS_ERORR;
               }
               // エラー内容の送信
-              this.sendError.exec(
+              this.ipcService.sendError(
                 this._version,
                 this.inquiryCode,
                 'ERROR',
@@ -437,7 +371,7 @@ export class ProcessExportImage {
 
       const pngFiles: string[] = [];
       for (let i = 0; i < this.itemList.length; i++) {
-        // なんかおかしい
+        // フレーム数に違和感がある
         options.push(`-frame`);
         options.push(`${pngPath}/frame${i}.png.webp`);
         options.push(`+${frameMs}+0+0+1`);
@@ -472,7 +406,7 @@ export class ProcessExportImage {
                     this.errorCode = ErrorType.WEBPMUX_ERROR;
                   }
                   // エラー内容の送信
-                  this.sendError.exec(
+                  this.ipcService.sendError(
                     this._version,
                     this.inquiryCode,
                     'ERROR',
@@ -548,7 +482,7 @@ export class ProcessExportImage {
               }
 
               // エラー内容の送信
-              this.sendError.exec(
+              this.ipcService.sendError(
                 this._version,
                 this.inquiryCode,
                 'ERROR',
@@ -752,7 +686,7 @@ export class ProcessExportImage {
             }
 
             // エラー内容の送信
-            this.sendError.exec(
+            this.ipcService.sendError(
               this._version,
               this.inquiryCode,
               'ERROR',
@@ -776,84 +710,33 @@ export class ProcessExportImage {
 
   private openSaveDialog(imageType: string) {
     return new Promise((resolve: Function, reject: Function) => {
-      let title = '';
-      let defaultPathName = '';
-      let defaultPath = '';
-      let extention = '';
-
-      const lastBaseName = this.lastSelectBaseName;
-      console.log(lastBaseName);
-      switch (imageType) {
-        case 'png':
-          title = 'ファイルの保存先を選択';
-          defaultPathName = `${lastBaseName}.png`;
-          extention = 'png';
-          break;
-        case 'webp':
-          title = 'ファイルの保存先を選択';
-          defaultPathName = `${lastBaseName}.webp`;
-          extention = 'webp';
-          break;
-        case 'html':
-          title = 'ファイルの保存先を選択';
-          defaultPathName = `${lastBaseName}.html`;
-          extention = 'html';
-          break;
-      }
-      const remote = this.electronService.remote;
-      const { dialog } = this.electronService.remote;
-      const win = remote.getCurrentWindow();
-      const app = remote.app;
-      const fs = this.electronService.remote.require('fs');
-
-      try {
-        fs.statSync(this.lastSelectSaveDirectories);
-      } catch (e) {
-        console.log('catch!');
-        // 	失敗したらパス修正
-        this.lastSelectSaveDirectories = app.getPath('desktop');
-      }
-      const path = this.electronService.remote.require('path');
-      defaultPath = path.join(this.lastSelectSaveDirectories, defaultPathName);
-
-      dialog.showSaveDialog(
-        win,
-        {
-          title: title,
-          defaultPath: defaultPath,
-          filters: [
-            {
-              name: imageType === 'html' ? 'html' : 'Images',
-              extensions: [extention]
+      this.ipcService
+        .openSaveDialog(imageType)
+        .then(
+          (result: {
+            result: boolean;
+            fileName: string;
+            lastDirectory: string;
+          }) => {
+            if (result) {
+              switch (imageType) {
+                case 'png':
+                  this.selectedPNGPath = `${result.fileName}`;
+                  break;
+                case 'webp':
+                  this.selectedWebPPath = `${result.fileName}`;
+                  break;
+                case 'html':
+                  this.selectedHTMLPath = `${result.fileName}`;
+                  this.selectedHTMLDirectoryPath = result.lastDirectory;
+                  break;
+              }
+              resolve(result.fileName);
+            } else {
+              reject();
             }
-          ]
-          // 2018-05-15 ビルドを通すため一時的にコメントアウト
-          // properties: ['openFile']
-        },
-        (fileName: string) => {
-          if (fileName) {
-            this.lastSelectSaveDirectories = path.dirname(fileName);
-            this.lastSelectBaseName = path.basename(fileName, `.${imageType}`);
-            console.log(this.lastSelectBaseName);
-
-            switch (imageType) {
-              case 'png':
-                this.selectedPNGPath = `${fileName}`;
-                break;
-              case 'webp':
-                this.selectedWebPPath = `${fileName}`;
-                break;
-              case 'html':
-                this.selectedHTMLPath = `${fileName}`;
-                this.selectedHTMLDirectoryPath = this.lastSelectSaveDirectories;
-                break;
-            }
-            resolve(fileName);
-          } else {
-            resolve(null);
           }
-        }
-      );
+        );
     });
   }
 

@@ -1,6 +1,8 @@
 "use strict";
 exports.__esModule = true;
 var ipc_id_1 = require("../common-src/ipc-id");
+var error_message_1 = require("./error/error-message");
+var send_error_1 = require("./error/send-error");
 var file_1 = require("./file");
 // アプリケーション作成用のモジュールを読み込み
 var electron = require('electron');
@@ -9,6 +11,9 @@ var BrowserWindow = electron.BrowserWindow;
 var path = require('path');
 var url = require('url');
 var ipcMain = electron.ipcMain;
+var fileService = new file_1["default"](app.getPath('temp'));
+var errorMessage = new error_message_1.ErrorMessage();
+var sendError = new send_error_1.SendError();
 // メインウィンドウ
 var mainWindow;
 function createWindow() {
@@ -87,46 +92,51 @@ function openFileDialog(event) {
         }
     });
 }
+ipcMain.on(ipc_id_1.IpcId.SET_DEFAULT_FILE_NAME, function (event, name) {
+    console.log(ipc_id_1.IpcId.SET_DEFAULT_FILE_NAME + " to " + name);
+    fileService.setDefaultFileName(name);
+});
 ipcMain.on(ipc_id_1.IpcId.CHANGE_WINDOW_TITLE, function (event, title) {
     console.log(ipc_id_1.IpcId.CHANGE_WINDOW_TITLE + " to " + title);
     mainWindow.setTitle(title);
     return;
 });
 // todo:async-await対応
-ipcMain.on(ipc_id_1.IpcId.DELETE_DIRECTORY, function (event, directory) {
-    console.log(ipc_id_1.IpcId.DELETE_DIRECTORY + " : " + directory);
-    new file_1["default"]()
-        .deleteDirectory(directory)
+ipcMain.on(ipc_id_1.IpcId.CLEAN_TEMPORARY_DIRECTORY, function (event) {
+    console.log("" + ipc_id_1.IpcId.CLEAN_TEMPORARY_DIRECTORY);
+    fileService
+        .cleanTemporaryDirectory()
         .then(function () {
         event.returnValue = true;
     })["catch"](function (e) {
         event.returnValue = false;
     });
-    return;
 });
 // todo:async-await対応
-ipcMain.on(ipc_id_1.IpcId.DELETE_FILE, function (event, directory, file) {
-    console.log("delete-file : " + directory + ", " + file);
-    new file_1["default"]()
-        .deleteFile(directory, file)
+ipcMain.on(ipc_id_1.IpcId.COPY_TEMPORARY_IMAGE, function (event, frameNumber, imagePath) {
+    console.log(ipc_id_1.IpcId.COPY_TEMPORARY_IMAGE + ", " + frameNumber + ", " + imagePath);
+    fileService
+        .copyTemporaryImage(frameNumber, imagePath)
         .then(function () {
         event.returnValue = true;
     })["catch"](function (e) {
         event.returnValue = false;
     });
-    return;
 });
 // todo:async-await対応
-ipcMain.on(ipc_id_1.IpcId.CREATE_DIRECTORY, function (event, directory) {
-    console.log(ipc_id_1.IpcId.CREATE_DIRECTORY + " : " + directory);
-    try {
-        console.log(directory);
-        require('fs').mkdirSync(directory);
-        event.returnValue = true;
-    }
-    catch (e) {
-        console.error("\u30D5\u30A9\u30EB\u30C0\u30FC\u306E\u4F5C\u6210\u306B\u5931\u6557\u3057\u307E\u3057\u305F :" + directory);
-        event.returnValue = false;
-    }
-    return;
+ipcMain.on(ipc_id_1.IpcId.OPEN_SAVE_DIALOG, function (event, imageType) {
+    console.log(ipc_id_1.IpcId.OPEN_SAVE_DIALOG + ", " + imageType);
+    fileService
+        .openSaveDialog(imageType, mainWindow, app.getPath('desktop'))
+        .then(function (result) {
+        event.returnValue = result;
+    })["catch"](function (e) {
+        event.returnValue = { result: false };
+    });
+});
+ipcMain.on(ipc_id_1.IpcId.SHOW_ERROR_MESSAGE, function (event, errorCode, inquiryCode, errorDetail, errorStack, appName) {
+    errorMessage.showErrorMessage(errorCode, inquiryCode, errorDetail, errorStack, appName, mainWindow);
+});
+ipcMain.on(ipc_id_1.IpcId.SEND_ERROR, function (event, version, code, category, title, detail) {
+    sendError.exec(version, code, category, title, detail);
 });

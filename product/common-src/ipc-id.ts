@@ -1,8 +1,17 @@
 export namespace IpcId {
-  export const DELETE_FILE: 'delete-file' = 'delete-file';
-  export const DELETE_DIRECTORY: 'delete-directory' = 'delete-directory';
   export const OPEN_FILE_DIALOG: 'open-file-dialog' = 'open-file-dialog';
-  export const CREATE_DIRECTORY: 'create-directory' = 'create-directory';
   export const CHANGE_WINDOW_TITLE: 'change-window-title' =
     'change-window-title';
+  export const CLEAN_TEMPORARY_DIRECTORY: 'clean-temporary-directory' =
+    'clean-temporary-directory';
+  export const COPY_TEMPORARY_IMAGE: 'copy-temporary-image' =
+    'copy-temporary-image';
+
+  export const OPEN_SAVE_DIALOG: 'open-save-dialog' = 'open-save-dialog';
+
+  export const SET_DEFAULT_FILE_NAME: 'set-default-file-name' =
+    'set-default-file-name';
+
+  export const SHOW_ERROR_MESSAGE: 'show-error-message' = 'show-error-message';
+  export const SEND_ERROR: 'send-error' = 'send-error';
 }

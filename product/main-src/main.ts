@@ -1,5 +1,8 @@
 import { OpenDialogOptions } from 'electron';
+import { ErrorType } from '../common-src/error/error-type';
 import { IpcId } from '../common-src/ipc-id';
+import { ErrorMessage } from './error/error-message';
+import { SendError } from './error/send-error';
 import File from './file';
 
 // アプリケーション作成用のモジュールを読み込み
@@ -11,6 +14,9 @@ const path = require('path');
 const url = require('url');
 
 const ipcMain = electron.ipcMain;
+const fileService = new File(app.getPath('temp'));
+const errorMessage = new ErrorMessage();
+const sendError = new SendError();
 
 // メインウィンドウ
 let mainWindow;
@@ -102,6 +108,11 @@ function openFileDialog(event) {
   });
 }
 
+ipcMain.on(IpcId.SET_DEFAULT_FILE_NAME, (event, name: string) => {
+  console.log(`${IpcId.SET_DEFAULT_FILE_NAME} to ${name}`);
+  fileService.setDefaultFileName(name);
+});
+
 ipcMain.on(IpcId.CHANGE_WINDOW_TITLE, (event, title: string) => {
   console.log(`${IpcId.CHANGE_WINDOW_TITLE} to ${title}`);
   mainWindow.setTitle(title);
@@ -109,48 +120,80 @@ ipcMain.on(IpcId.CHANGE_WINDOW_TITLE, (event, title: string) => {
 });
 
 // todo:async-await対応
-ipcMain.on(IpcId.DELETE_DIRECTORY, (event, directory: string) => {
-  console.log(`${IpcId.DELETE_DIRECTORY} : ${directory}`);
+ipcMain.on(IpcId.CLEAN_TEMPORARY_DIRECTORY, event => {
+  console.log(`${IpcId.CLEAN_TEMPORARY_DIRECTORY}`);
 
-  new File()
-    .deleteDirectory(directory)
+  fileService
+    .cleanTemporaryDirectory()
     .then(() => {
       event.returnValue = true;
     })
     .catch(e => {
       event.returnValue = false;
     });
-
-  return;
 });
 
 // todo:async-await対応
-ipcMain.on(IpcId.DELETE_FILE, (event, directory: string, file: string) => {
-  console.log(`delete-file : ${directory}, ${file}`);
-
-  new File()
-    .deleteFile(directory, file)
-    .then(() => {
-      event.returnValue = true;
-    })
-    .catch(e => {
-      event.returnValue = false;
-    });
-
-  return;
-});
-
-// todo:async-await対応
-ipcMain.on(IpcId.CREATE_DIRECTORY, (event, directory: string) => {
-  console.log(`${IpcId.CREATE_DIRECTORY} : ${directory}`);
-  try {
-    console.log(directory);
-    require('fs').mkdirSync(directory);
-    event.returnValue = true;
-  } catch (e) {
-    console.error(`フォルダーの作成に失敗しました :${directory}`);
-    event.returnValue = false;
+ipcMain.on(
+  IpcId.COPY_TEMPORARY_IMAGE,
+  (event, frameNumber: number, imagePath: string) => {
+    console.log(`${IpcId.COPY_TEMPORARY_IMAGE}, ${frameNumber}, ${imagePath}`);
+    fileService
+      .copyTemporaryImage(frameNumber, imagePath)
+      .then(() => {
+        event.returnValue = true;
+      })
+      .catch(e => {
+        event.returnValue = false;
+      });
   }
+);
 
-  return;
+// todo:async-await対応
+ipcMain.on(IpcId.OPEN_SAVE_DIALOG, (event, imageType: string) => {
+  console.log(`${IpcId.OPEN_SAVE_DIALOG}, ${imageType}`);
+
+  fileService
+    .openSaveDialog(imageType, mainWindow, app.getPath('desktop'))
+    .then(result => {
+      event.returnValue = result;
+    })
+    .catch(e => {
+      event.returnValue = { result: false };
+    });
 });
+
+ipcMain.on(
+  IpcId.SHOW_ERROR_MESSAGE,
+  (
+    event,
+    errorCode: ErrorType,
+    inquiryCode: string,
+    errorDetail: string,
+    errorStack: string,
+    appName: string
+  ) => {
+    errorMessage.showErrorMessage(
+      errorCode,
+      inquiryCode,
+      errorDetail,
+      errorStack,
+      appName,
+      mainWindow
+    );
+  }
+);
+
+ipcMain.on(
+  IpcId.SEND_ERROR,
+  (
+    event,
+    version: string,
+    code: string,
+    category: string,
+    title: string,
+    detail: string
+  ) => {
+    sendError.exec(version, code, category, title, detail);
+  }
+);

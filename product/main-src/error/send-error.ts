@@ -1,9 +1,5 @@
-import { ElectronService } from 'ngx-electron';
-import { Injectable } from '@angular/core';
-
-@Injectable()
 export class SendError {
-  constructor(private _electronService: ElectronService) {}
+  constructor() {}
   public exec(
     version: string,
     code: string,
@@ -12,7 +8,7 @@ export class SendError {
     detail: string
   ): void {
     const saveData = {
-      OS: this._electronService.remote.require('os').platform(),
+      OS: require('os').platform(),
       version: version,
       code: code,
       category: category,
