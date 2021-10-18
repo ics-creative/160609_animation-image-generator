@@ -1,7 +1,7 @@
 {
   "scripts": {
-    "build": "ng build --configuration production",
-    "start": "concurrently \"cross-env NODE_ENV=develop electron ./dist-config\" \"ng build --watch\"",
+    "build": "tsc --project main-src/tsconfig.json && ng build --configuration production",
+    "start": "tsc --project main-src/tsconfig.json && concurrently \"cross-env NODE_ENV=develop electron ./dist-config\" \"ng build --watch\"",
     "precommit": "lint-staged",
     "lint": "tslint --project ./tsconfig.json",
     "format": "tslint --project ./tsconfig.json --fix && prettier */*.{js,css} --write",

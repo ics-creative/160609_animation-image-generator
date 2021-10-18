@@ -1,9 +1,24 @@
 import { Injectable } from '@angular/core';
+import { ipcRenderer, IpcRenderer } from 'electron';
 import { ElectronService } from 'ngx-electron';
+import { IpcId } from '../../../common-src/ipc-id';
 
 @Injectable()
 export class Del {
-  constructor(private electronService: ElectronService) {}
+  private ipcRenderer: IpcRenderer;
+
+  constructor(private electronService: ElectronService) {
+    this.init();
+  }
+
+  private init(): void {
+    try {
+      const electron = (window as any).require('electron');
+      this.ipcRenderer = electron.ipcRenderer;
+    } catch (e) {
+      throw e;
+    }
+  }
 
   /**
    * ファイルを削除する処理です。
@@ -12,26 +27,15 @@ export class Del {
    * @returns {Promise<any>}
    */
   public deleteFile(dir: string, file: string) {
-    const fs = this.electronService.remote.require('fs');
-    const path = this.electronService.remote.require('path');
-
     return new Promise<void>(function(resolve, reject) {
-      const filePath = path.join(dir, file);
-      fs.lstat(filePath, function(lstatErorr, stats) {
-        if (lstatErorr) {
-          return reject(lstatErorr);
-        }
-        if (stats.isDirectory()) {
-          resolve(this.deleteDirectory(filePath));
-        } else {
-          fs.unlink(filePath, function(unlinkError: NodeJS.ErrnoException) {
-            if (unlinkError) {
-              return reject(unlinkError);
-            }
-            resolve();
-          });
-        }
-      });
+      console.log(IpcId.DELETE_FILE, this.ipcRenderer);
+      const result = this.ipcRenderer.sendSync(IpcId.DELETE_FILE, file);
+      console.log(result);
+      if (result) {
+        resolve();
+      } else {
+        reject();
+      }
     });
   }
 
@@ -41,37 +45,15 @@ export class Del {
    * @returns {Promise<any>}
    */
   public deleteDirectory(dir: string) {
-    const fs = this.electronService.remote.require('fs');
-    const path = this.electronService.remote.require('path');
-
     return new Promise<void>((resolve, reject) => {
-      fs.access(dir, (err: NodeJS.ErrnoException) => {
-        if (err) {
-          return reject(err);
-        }
-        fs.readdir(
-          dir,
-          (fsReadError: NodeJS.ErrnoException, files: string[]) => {
-            if (fsReadError) {
-              return reject(fsReadError);
-            }
-            Promise.all(
-              files.map((file: string) => {
-                return this.deleteFile(dir, file);
-              })
-            )
-              .then(() => {
-                fs.rmdir(dir, (fsRmError: NodeJS.ErrnoException) => {
-                  if (fsRmError) {
-                    return reject(fsRmError);
-                  }
-                  resolve();
-                });
-              })
-              .catch(reject);
-          }
-        );
-      });
+      console.log(IpcId.DELETE_DIRECTORY, this.ipcRenderer);
+      const result = this.ipcRenderer.sendSync(IpcId.DELETE_DIRECTORY, dir);
+      console.log(result);
+      if (result) {
+        resolve();
+      } else {
+        reject();
+      }
     });
   }
 }

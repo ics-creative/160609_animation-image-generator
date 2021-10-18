@@ -1,3 +1,7 @@
+import { OpenDialogOptions } from 'electron';
+import { IpcId } from '../common-src/ipc-id';
+import DeleteFile from './delete-file';
+
 // アプリケーション作成用のモジュールを読み込み
 const electron = require('electron');
 const app = electron.app;
@@ -17,8 +21,10 @@ function createWindow() {
     width: 800,
     height: 600,
     webPreferences: {
-      nodeIntegration: true,
+      nodeIntegration: true, // あとでfalseにする
+      // contextIsolation: true,  // あとで調整する
       backgroundThrottling: false
+      // preload: path.join(__dirname,'/preload.js') // あとで使う
     }
   });
 
@@ -29,7 +35,7 @@ function createWindow() {
     // 今回はdistディレクトリのindex.html
     mainWindow.loadURL(
       url.format({
-        pathname: path.join(__dirname, 'dist', 'index.html'),
+        pathname: path.join(__dirname, '../../dist', 'index.html'),
         protocol: 'file:',
         slashes: true
       })
@@ -40,7 +46,7 @@ function createWindow() {
   } else {
     mainWindow.loadURL(
       url.format({
-        pathname: path.join(__dirname, '../dist', 'index.html'),
+        pathname: path.join(__dirname, '../../dist', 'index.html'),
         protocol: 'file:',
         slashes: true
       })
@@ -83,7 +89,7 @@ app.on('will-quit', function() {
 
 function openFileDialog(event) {
   const dialog = require('electron').dialog;
-  const dialogOption = {
+  const dialogOption: OpenDialogOptions = {
     properties: ['openFile', 'multiSelections'],
     filters: [{ name: 'Images', extensions: ['png'] }]
   };
@@ -96,8 +102,42 @@ function openFileDialog(event) {
   });
 }
 
-ipcMain.on('change-window-title', (event, title) => {
-  console.log(`change-window-title to ${title}`);
+ipcMain.on(IpcId.CHANGE_WINDOW_TITLE, (event, title: string) => {
+  console.log(`${IpcId.CHANGE_WINDOW_TITLE} to ${title}`);
   mainWindow.setTitle(title);
+  return;
+});
+
+// todo:async-await対応
+ipcMain.on(IpcId.DELETE_DIRECTORY, (event, directory: string) => {
+  console.log(`${IpcId.DELETE_DIRECTORY} : ${directory}`);
+
+  new DeleteFile()
+    .deleteDirectory(directory)
+    .then(() => {
+      event.returnValue = true;
+    })
+    .catch(e => {
+      event.returnValue = false;
+    });
+
+  return;
+});
+
+// todo:async-await対応
+ipcMain.on(IpcId.DELETE_FILE, (event, directory: string, file: string) => {
+  console.log(`delete-file : ${directory}, ${file}`);
+
+  new DeleteFile()
+    .deleteFile(directory, file)
+    .then(() => {
+      console.log(`delete-file : true`);
+      event.returnValue = true;
+    })
+    .catch(e => {
+      console.log(`delete-file : false`);
+      event.returnValue = false;
+    });
+
   return;
 });

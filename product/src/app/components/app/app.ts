@@ -23,6 +23,7 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { ErrorMessage } from '../../error/error-message';
 import { SendError } from '../../error/send-error';
 import { Del } from '../../process/del.service';
+import { IpcId } from '../../../../common-src/ipc-id';
 
 @Component({
   selector: 'my-app',
@@ -286,7 +287,7 @@ export class AppComponent implements OnInit, AfterViewInit {
       return;
     }
     this.openingDirectories = true;
-    this.ipcRenderer.send('open-file-dialog');
+    this.ipcRenderer.send(IpcId.OPEN_FILE_DIALOG);
   }
 
   /**

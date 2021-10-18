@@ -1,0 +1,20 @@
+{
+    "compilerOptions": {
+      "outDir": "../dist-config",
+      "baseUrl": "",
+      "types": [],
+      "sourceMap": false
+    },
+    "files": [
+      "main.ts"
+    ],
+    "include": [
+      "src/**/*.d.ts",
+      "../common-src/**/*.ts"
+    ],
+    "target": "es5",
+    "typeRoots": [
+      "../node_modules/@types"
+    ]
+  }
+  
