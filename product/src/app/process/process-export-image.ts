@@ -68,51 +68,9 @@ export class ProcessExportImage {
       resolve();
     });
 
-    // お問い合わせコード生成
-    this.inquiryCode = SHA256(
-      this.electronService.remote.require('os').platform +
-        '/' +
-        new Date().toString()
-    )
-      .toString()
-      .slice(0, 8);
-
-    console.log(this.inquiryCode);
-
-    // 	テンポラリパス生成
-    const remote = this.electronService.remote;
-    const app = remote.app;
-    const path = this.electronService.remote.require('path');
-    this.itemList = itemList;
-    this.temporaryPath = path.join(app.getPath('temp'), 'a-img-generator');
-    this.temporaryCompressPath = path.join(
-      app.getPath('temp'),
-      'a-img-generator-compress'
-    );
-    this.animationOptionData = animationOptionData;
-
-    this.generateCancelPNG = false;
-    this.generateCancelHTML = false;
-    this.generateCancelWebP = false;
-
-    this.errorCode = ErrorType.UNKNOWN; // 	デフォルトのエラーメッセージ
-    this.errorDetail = ''; // 	追加のエラーメッセージ
-
-    // PNG事前圧縮&APNGファイルを生成する
-    const compressPNG =
-      this.animationOptionData.enabledPngCompress &&
-      this.animationOptionData.enabledExportApng;
-
-    // 	最終的なテンポラリパスを設定する
-    if (compressPNG) {
-      this.temporaryLastPath = this.temporaryCompressPath;
-    } else {
-      this.temporaryLastPath = this.temporaryPath;
-    }
-
     return new Promise((resolve: Function, reject: Function) => {
       this.errorCode = ErrorType.TEMPORARY_CLEAN_ERROR;
-      this._cleanTemporary()
+      /*this._cleanTemporary()
         .then(() => {
           this.errorCode = ErrorType.MAKE_TEMPORARY_ERROR;
           return this._copyTemporaryDirectory();
@@ -122,7 +80,11 @@ export class ProcessExportImage {
             this.errorCode = ErrorType.PNG_COMPRESS_ERROR;
             return this._pngCompressAll();
           }
-        })
+        })*/
+      new Promise((res, rej) => {
+        resolve();
+      })
+        ///////// ここまで実装を移行
         .then(() => {
           // APNG書き出しが有効になっている場合
           if (this.animationOptionData.enabledExportApng === true) {
@@ -227,29 +189,6 @@ export class ProcessExportImage {
         !this.generateCancelWebP) ||
       (this.animationOptionData.enabledExportApng && !this.generateCancelPNG)
     );
-  }
-
-  /**
-   * 作業用フォルダーのクリーンアップ
-   * @returns {Promise<any>}
-   * @private
-   */
-  private _cleanTemporary(): Promise<any> {
-    return this.ipcService.creanTemporaryDirectory();
-  }
-
-  private _copyTemporaryDirectory() {
-    const promises: Promise<any>[] = this.itemList.map((item: any) => {
-      return this._copyTemporaryImage(item);
-    });
-    return Promise.all(promises);
-  }
-
-  private _copyTemporaryImage(item: {
-    frameNumber: number;
-    imagePath: string;
-  }): Promise<any> {
-    return this.ipcService.copyTemporaryImage(item.frameNumber, item.imagePath);
   }
 
   /**

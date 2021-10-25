@@ -2,10 +2,6 @@ export namespace IpcId {
   export const OPEN_FILE_DIALOG: 'open-file-dialog' = 'open-file-dialog';
   export const CHANGE_WINDOW_TITLE: 'change-window-title' =
     'change-window-title';
-  export const CLEAN_TEMPORARY_DIRECTORY: 'clean-temporary-directory' =
-    'clean-temporary-directory';
-  export const COPY_TEMPORARY_IMAGE: 'copy-temporary-image' =
-    'copy-temporary-image';
 
   export const OPEN_SAVE_DIALOG: 'open-save-dialog' = 'open-save-dialog';
 

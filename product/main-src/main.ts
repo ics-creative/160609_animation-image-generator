@@ -122,36 +122,6 @@ ipcMain.on(IpcId.CHANGE_WINDOW_TITLE, (event, title: string) => {
 });
 
 // todo:async-await対応
-ipcMain.on(IpcId.CLEAN_TEMPORARY_DIRECTORY, event => {
-  console.log(`${IpcId.CLEAN_TEMPORARY_DIRECTORY}`);
-
-  fileService
-    .cleanTemporaryDirectory()
-    .then(() => {
-      event.returnValue = true;
-    })
-    .catch(e => {
-      event.returnValue = false;
-    });
-});
-
-// todo:async-await対応
-ipcMain.on(
-  IpcId.COPY_TEMPORARY_IMAGE,
-  (event, frameNumber: number, imagePath: string) => {
-    console.log(`${IpcId.COPY_TEMPORARY_IMAGE}, ${frameNumber}, ${imagePath}`);
-    fileService
-      .copyTemporaryImage(frameNumber, imagePath)
-      .then(() => {
-        event.returnValue = true;
-      })
-      .catch(e => {
-        event.returnValue = false;
-      });
-  }
-);
-
-// todo:async-await対応
 ipcMain.on(IpcId.OPEN_SAVE_DIALOG, (event, imageType: string) => {
   console.log(`${IpcId.OPEN_SAVE_DIALOG}, ${imageType}`);
 

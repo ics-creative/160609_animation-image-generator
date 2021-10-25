@@ -213,9 +213,7 @@ var File = /** @class */ (function () {
         console.log(process.platform);
         var SHA256 = require('crypto-js/sha256');
         // お問い合わせコード生成
-        this.inquiryCode = SHA256(require('os').platform +
-            '/' +
-            new Date().toString())
+        this.inquiryCode = SHA256(require('os').platform + '/' + new Date().toString())
             .toString()
             .slice(0, 8);
         console.log(this.inquiryCode);
@@ -254,8 +252,7 @@ var File = /** @class */ (function () {
                 return _this._pngCompressAll();
             }
         })
-            .then(function () {
-        });
+            .then(function () { });
     };
     File.prototype._copyTemporaryDirectory = function () {
         var _this = this;
@@ -273,7 +270,7 @@ var File = /** @class */ (function () {
     };
     File.prototype._pngCompress = function (item) {
         return new Promise(function (resolve, reject) {
-            //　TODO:未実装
+            // 　TODO:未実装
             resolve();
         });
     };

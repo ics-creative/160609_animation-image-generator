@@ -102,28 +102,6 @@ ipcMain.on(ipc_id_1.IpcId.CHANGE_WINDOW_TITLE, function (event, title) {
     return;
 });
 // todo:async-await対応
-ipcMain.on(ipc_id_1.IpcId.CLEAN_TEMPORARY_DIRECTORY, function (event) {
-    console.log("" + ipc_id_1.IpcId.CLEAN_TEMPORARY_DIRECTORY);
-    fileService
-        .cleanTemporaryDirectory()
-        .then(function () {
-        event.returnValue = true;
-    })["catch"](function (e) {
-        event.returnValue = false;
-    });
-});
-// todo:async-await対応
-ipcMain.on(ipc_id_1.IpcId.COPY_TEMPORARY_IMAGE, function (event, frameNumber, imagePath) {
-    console.log(ipc_id_1.IpcId.COPY_TEMPORARY_IMAGE + ", " + frameNumber + ", " + imagePath);
-    fileService
-        .copyTemporaryImage(frameNumber, imagePath)
-        .then(function () {
-        event.returnValue = true;
-    })["catch"](function (e) {
-        event.returnValue = false;
-    });
-});
-// todo:async-await対応
 ipcMain.on(ipc_id_1.IpcId.OPEN_SAVE_DIALOG, function (event, imageType) {
     console.log(ipc_id_1.IpcId.OPEN_SAVE_DIALOG + ", " + imageType);
     fileService
@@ -142,7 +120,9 @@ ipcMain.on(ipc_id_1.IpcId.SEND_ERROR, function (event, version, code, category, 
 });
 ipcMain.on(ipc_id_1.IpcId.EXEC_IMAGE_EXPORT_PROCESS, function (event, version, itemList, animationOptionData) {
     console.log(version, itemList, animationOptionData);
-    fileService.exec(app.getPath('temp'), version, itemList, animationOptionData).then(function () {
+    fileService
+        .exec(app.getPath('temp'), version, itemList, animationOptionData)
+        .then(function () {
         console.log("returnValue:true");
         event.returnValue = true;
     })["catch"](function () {

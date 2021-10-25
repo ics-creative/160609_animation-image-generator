@@ -21,45 +21,11 @@ export default class IpcService {
     }
   }
 
-  /**
-   * テンポラリディレクトリをクリーンナップします
-   * @returns {Promise<any>}
-   */
-  public creanTemporaryDirectory() {
-    return new Promise<void>((resolve, reject) => {
-      const result = this.ipcRenderer.sendSync(IpcId.CLEAN_TEMPORARY_DIRECTORY);
-      if (result) {
-        resolve();
-      } else {
-        reject();
-      }
-    });
-  }
-
   public changeWindowTitle(title: string) {
     this.ipcRenderer.send(IpcId.CHANGE_WINDOW_TITLE, title);
   }
   public setDefaultFileName(defaultFileName: string) {
     this.ipcRenderer.send(IpcId.SET_DEFAULT_FILE_NAME, defaultFileName);
-  }
-
-  public copyTemporaryImage(
-    frameNumber: number,
-    imagePath: string
-  ): Promise<any> {
-    return new Promise<void>((resolve, reject) => {
-      this.init();
-      const result = this.ipcRenderer.sendSync(
-        IpcId.COPY_TEMPORARY_IMAGE,
-        frameNumber,
-        imagePath
-      );
-      if (result) {
-        resolve();
-      } else {
-        reject();
-      }
-    });
   }
 
   public openSaveDialog(imageType: string) {
@@ -112,5 +78,8 @@ export default class IpcService {
       itemList,
       animationOptionData
     );
+    if (result.result) {
+      console.log(result);
+    }
   }
 }
