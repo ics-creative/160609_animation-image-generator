@@ -371,41 +371,45 @@ export class AppComponent implements OnInit, AfterViewInit {
         reject();
       };
       image.src = items[0].imagePath;
-    }).then(() => {
-      const promiseArr: Promise<any>[] = [];
+    })
+      .then(() => {
+        const promiseArr: Promise<any>[] = [];
 
-      if (items.length <= 1) {
-        return;
-      }
-      for (let i = 1; i < items.length; i++) {
-        const promise = new Promise((resolve: Function, reject: Function) => {
-          const path = items[i].imagePath;
-          const image = new Image();
-          image.onload = (event: Event) => {
-            let errorFlag = false;
-            if (
-              this.animationOptionData.imageInfo.width === image.width &&
-              this.animationOptionData.imageInfo.height === image.height
-            ) {
-              // 何もしない
-            } else {
-              // 画像サイズが異なっていることを通知する
-              alert(
-                `${items[i].imageBaseName} ${this.localeData.VALIDATE_ImportImageSize}`
-              );
-              errorFlag = true;
-            }
-            this.apngFileSizeError = errorFlag;
-            errorFlag ? reject() : resolve();
-          };
-          image.onerror = (event: Event) => {
-            reject();
-          };
-          image.src = path;
-        });
-        promiseArr.push(promise);
-      }
-      Promise.all(promiseArr);
-    });
+        if (items.length <= 1) {
+          return;
+        }
+        for (let i = 1; i < items.length; i++) {
+          const promise = new Promise((resolve: Function, reject: Function) => {
+            const path = items[i].imagePath;
+            const image = new Image();
+            image.onload = (event: Event) => {
+              let errorFlag = false;
+              if (
+                this.animationOptionData.imageInfo.width === image.width &&
+                this.animationOptionData.imageInfo.height === image.height
+              ) {
+                // 何もしない
+              } else {
+                // 画像サイズが異なっていることを通知する
+                alert(
+                  `${items[i].imageBaseName} ${this.localeData.VALIDATE_ImportImageSize}`
+                );
+                errorFlag = true;
+              }
+              this.apngFileSizeError = errorFlag;
+              errorFlag ? reject() : resolve();
+            };
+            image.onerror = (event: Event) => {
+              reject();
+            };
+            image.src = path;
+          });
+          promiseArr.push(promise);
+        }
+        return Promise.all(promiseArr);
+      })
+      .catch(error => {
+        // '画像読み込みエラー';
+      });
   }
 }
