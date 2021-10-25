@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { IpcRenderer } from 'electron';
 import { IpcId } from '../../../common-src/ipc-id';
+import { AnimationImageOptions } from '../../../common-src/data/animation-image-option';
+import { ImageData } from '../../../common-src/data/image-data';
 
 @Injectable()
 export default class IpcService {
@@ -95,6 +97,20 @@ export default class IpcService {
       category,
       title,
       detail
+    );
+  }
+
+  public exec(
+    version: string,
+    itemList: ImageData[],
+    animationOptionData: AnimationImageOptions
+  ) {
+    this.init();
+    const result = this.ipcRenderer.sendSync(
+      IpcId.EXEC_IMAGE_EXPORT_PROCESS,
+      version,
+      itemList,
+      animationOptionData
     );
   }
 }

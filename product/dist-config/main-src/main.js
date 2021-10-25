@@ -140,3 +140,14 @@ ipcMain.on(ipc_id_1.IpcId.SHOW_ERROR_MESSAGE, function (event, errorCode, inquir
 ipcMain.on(ipc_id_1.IpcId.SEND_ERROR, function (event, version, code, category, title, detail) {
     sendError.exec(version, code, category, title, detail);
 });
+ipcMain.on(ipc_id_1.IpcId.EXEC_IMAGE_EXPORT_PROCESS, function (event, version, itemList, animationOptionData) {
+    console.log(version, itemList, animationOptionData);
+    fileService.exec(app.getPath('temp'), version, itemList, animationOptionData).then(function () {
+        console.log("returnValue:true");
+        event.returnValue = true;
+    })["catch"](function () {
+        // 失敗時の処理
+        console.log("returnValue:false");
+        event.returnValue = false;
+    });
+});

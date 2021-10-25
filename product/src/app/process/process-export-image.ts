@@ -62,6 +62,12 @@ export class ProcessExportImage {
 
     const SHA256 = require('crypto-js/sha256');
 
+    this.ipcService.exec(version, itemList, animationOptionData);
+
+    return new Promise((resolve: Function, reject: Function) => {
+      resolve();
+    });
+
     // お問い合わせコード生成
     this.inquiryCode = SHA256(
       this.electronService.remote.require('os').platform +

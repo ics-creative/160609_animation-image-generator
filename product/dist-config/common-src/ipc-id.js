@@ -11,4 +11,5 @@ var IpcId;
     IpcId.SET_DEFAULT_FILE_NAME = 'set-default-file-name';
     IpcId.SHOW_ERROR_MESSAGE = 'show-error-message';
     IpcId.SEND_ERROR = 'send-error';
+    IpcId.EXEC_IMAGE_EXPORT_PROCESS = 'exec-image-export-process';
 })(IpcId = exports.IpcId || (exports.IpcId = {}));

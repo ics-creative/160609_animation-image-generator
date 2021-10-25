@@ -1,5 +1,6 @@
 "use strict";
 exports.__esModule = true;
+var error_type_1 = require("../common-src/error/error-type");
 var File = /** @class */ (function () {
     function File(appTemporaryPath) {
         console.log('delete-file');
@@ -198,6 +199,82 @@ var File = /** @class */ (function () {
                     resolve({ result: false });
                 }
             });
+        });
+    };
+    File.prototype.getExeExt = function () {
+        var platform = require('os').platform();
+        return platform === 'win32' ? '.exe' : '';
+    };
+    File.prototype.exec = function (temporaryPath, version, itemList, animationOptionData) {
+        var _this = this;
+        this._version = version;
+        // 	platformで実行先の拡張子を変える
+        console.log(this.getExeExt());
+        console.log(process.platform);
+        var SHA256 = require('crypto-js/sha256');
+        // お問い合わせコード生成
+        this.inquiryCode = SHA256(require('os').platform +
+            '/' +
+            new Date().toString())
+            .toString()
+            .slice(0, 8);
+        console.log(this.inquiryCode);
+        // 	テンポラリパス生成
+        var path = require('path');
+        this.itemList = itemList;
+        this.temporaryPath = path.join(temporaryPath, 'a-img-generator');
+        this.temporaryCompressPath = path.join(temporaryPath, 'a-img-generator-compress');
+        this.animationOptionData = animationOptionData;
+        this.generateCancelPNG = false;
+        this.generateCancelHTML = false;
+        this.generateCancelWebP = false;
+        this.errorCode = error_type_1.ErrorType.UNKNOWN; // 	デフォルトのエラーメッセージ
+        this.errorDetail = ''; // 	追加のエラーメッセージ
+        // PNG事前圧縮&APNGファイルを生成する
+        var compressPNG = this.animationOptionData.enabledPngCompress &&
+            this.animationOptionData.enabledExportApng;
+        // 	最終的なテンポラリパスを設定する
+        if (compressPNG) {
+            this.temporaryLastPath = this.temporaryCompressPath;
+        }
+        else {
+            this.temporaryLastPath = this.temporaryPath;
+        }
+        this.errorCode = error_type_1.ErrorType.TEMPORARY_CLEAN_ERROR;
+        return this.cleanTemporaryDirectory()
+            .then(function () {
+            console.log('make_temporary');
+            _this.errorCode = error_type_1.ErrorType.MAKE_TEMPORARY_ERROR;
+            return _this._copyTemporaryDirectory();
+        })
+            .then(function () {
+            if (compressPNG) {
+                console.log('compressPNG');
+                _this.errorCode = error_type_1.ErrorType.PNG_COMPRESS_ERROR;
+                return _this._pngCompressAll();
+            }
+        })
+            .then(function () {
+        });
+    };
+    File.prototype._copyTemporaryDirectory = function () {
+        var _this = this;
+        var promises = this.itemList.map(function (item) {
+            return _this.copyTemporaryImage(item.frameNumber, item.imagePath);
+        });
+        return Promise.all(promises);
+    };
+    File.prototype._pngCompressAll = function () {
+        var _this = this;
+        var promises = this.itemList.map(function (item) {
+            return _this._pngCompress(item);
+        });
+        return Promise.all(promises);
+    };
+    File.prototype._pngCompress = function (item) {
+        return new Promise(function (resolve, reject) {
+            //　TODO:未実装
+            resolve();
         });
     };
     return File;

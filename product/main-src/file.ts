@@ -1,9 +1,8 @@
-export default class File {
-  private temporaryCompressPath: string;
-  private temporaryPath: string;
-  private lastSelectSaveDirectories: string;
-  private lastSelectBaseName: string;
+import { AnimationImageOptions } from '../common-src/data/animation-image-option';
+import { ImageData } from '../common-src/data/image-data';
+import { ErrorType } from '../common-src/error/error-type';
 
+export default class File {
   constructor(appTemporaryPath) {
     console.log('delete-file');
     const path = require('path');
@@ -15,6 +14,32 @@ export default class File {
       'a-img-generator-compress'
     );
   }
+  private temporaryCompressPath: string;
+  private temporaryPath: string;
+  private lastSelectSaveDirectories: string;
+  private lastSelectBaseName: string;
+
+  public errorDetail: string;
+  public errorCode: ErrorType;
+  public errorStack: string;
+  public inquiryCode: string; // お問い合わせ用コード
+
+  private temporaryLastPath: string;
+
+  private selectedWebPPath: string;
+  private selectedPNGPath: string;
+  private selectedHTMLPath: string;
+  private selectedHTMLDirectoryPath: string;
+
+  private itemList: ImageData[];
+
+  private _version: string;
+
+  private animationOptionData: AnimationImageOptions;
+
+  private generateCancelPNG: boolean;
+  private generateCancelHTML: boolean;
+  private generateCancelWebP: boolean;
 
   public setDefaultFileName(name: string) {
     this.lastSelectBaseName = name;
@@ -240,6 +265,100 @@ export default class File {
           }
         }
       );
+    });
+  }
+
+  public getExeExt() {
+    const platform: string = require('os').platform();
+    return platform === 'win32' ? '.exe' : '';
+  }
+
+  public exec(
+    temporaryPath: string,
+    version: string,
+    itemList: ImageData[],
+    animationOptionData: AnimationImageOptions
+  ): Promise<void> {
+    this._version = version;
+    // 	platformで実行先の拡張子を変える
+    console.log(this.getExeExt());
+    console.log(process.platform);
+
+    const SHA256 = require('crypto-js/sha256');
+
+    // お問い合わせコード生成
+    this.inquiryCode = SHA256(
+      require('os').platform + '/' + new Date().toString()
+    )
+      .toString()
+      .slice(0, 8);
+
+    console.log(this.inquiryCode);
+
+    // 	テンポラリパス生成
+    const path = require('path');
+    this.itemList = itemList;
+    this.temporaryPath = path.join(temporaryPath, 'a-img-generator');
+    this.temporaryCompressPath = path.join(
+      temporaryPath,
+      'a-img-generator-compress'
+    );
+    this.animationOptionData = animationOptionData;
+
+    this.generateCancelPNG = false;
+    this.generateCancelHTML = false;
+    this.generateCancelWebP = false;
+
+    this.errorCode = ErrorType.UNKNOWN; // 	デフォルトのエラーメッセージ
+    this.errorDetail = ''; // 	追加のエラーメッセージ
+
+    // PNG事前圧縮&APNGファイルを生成する
+    const compressPNG =
+      this.animationOptionData.enabledPngCompress &&
+      this.animationOptionData.enabledExportApng;
+
+    // 	最終的なテンポラリパスを設定する
+    if (compressPNG) {
+      this.temporaryLastPath = this.temporaryCompressPath;
+    } else {
+      this.temporaryLastPath = this.temporaryPath;
+    }
+
+    this.errorCode = ErrorType.TEMPORARY_CLEAN_ERROR;
+    return this.cleanTemporaryDirectory()
+      .then(() => {
+        console.log('make_temporary');
+        this.errorCode = ErrorType.MAKE_TEMPORARY_ERROR;
+        return this._copyTemporaryDirectory();
+      })
+      .then(() => {
+        if (compressPNG) {
+          console.log('compressPNG');
+          this.errorCode = ErrorType.PNG_COMPRESS_ERROR;
+          return this._pngCompressAll();
+        }
+      })
+      .then(() => {});
+  }
+
+  private _copyTemporaryDirectory() {
+    const promises: Promise<any>[] = this.itemList.map((item: any) => {
+      return this.copyTemporaryImage(item.frameNumber, item.imagePath);
+    });
+    return Promise.all(promises);
+  }
+
+  private _pngCompressAll(): Promise<void[]> {
+    const promises: Promise<void>[] = this.itemList.map((item: ImageData) => {
+      return this._pngCompress(item);
+    });
+    return Promise.all(promises);
+  }
+
+  private _pngCompress(item: ImageData): Promise<void> {
+    return new Promise((resolve, reject) => {
+      // 　TODO:未実装
+      resolve();
     });
   }
 }

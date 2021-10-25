@@ -1,8 +1,10 @@
 import { OpenDialogOptions } from 'electron';
+import { AnimationImageOptions } from '../common-src/data/animation-image-option';
 import { ErrorType } from '../common-src/error/error-type';
 import { IpcId } from '../common-src/ipc-id';
 import { ErrorMessage } from './error/error-message';
 import { SendError } from './error/send-error';
+import { ImageData } from '../common-src/data/image-data';
 import File from './file';
 
 // アプリケーション作成用のモジュールを読み込み
@@ -195,5 +197,29 @@ ipcMain.on(
     detail: string
   ) => {
     sendError.exec(version, code, category, title, detail);
+  }
+);
+
+ipcMain.on(
+  IpcId.EXEC_IMAGE_EXPORT_PROCESS,
+  (
+    event,
+    version: string,
+    itemList: ImageData[],
+    animationOptionData: AnimationImageOptions
+  ) => {
+    console.log(version, itemList, animationOptionData);
+
+    fileService
+      .exec(app.getPath('temp'), version, itemList, animationOptionData)
+      .then(() => {
+        console.log(`returnValue:true`);
+        event.returnValue = true;
+      })
+      .catch(() => {
+        // 失敗時の処理
+        console.log(`returnValue:false`);
+        event.returnValue = false;
+      });
   }
 );

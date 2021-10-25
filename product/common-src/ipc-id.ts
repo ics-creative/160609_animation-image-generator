@@ -14,4 +14,6 @@ export namespace IpcId {
 
   export const SHOW_ERROR_MESSAGE: 'show-error-message' = 'show-error-message';
   export const SEND_ERROR: 'send-error' = 'send-error';
+  export const EXEC_IMAGE_EXPORT_PROCESS: 'exec-image-export-process' =
+    'exec-image-export-process';
 }
