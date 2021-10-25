@@ -9,11 +9,11 @@ import {
   OnInit,
   Output
 } from '@angular/core';
-import { AnimationImageOptions } from '../../data/animation-image-option';
-import { ImageData } from '../../data/image-data';
 import { LineStampValidator } from '../../validators/LineStampValidator';
-import { PresetType } from '../../type/PresetType';
 import { LocaleData } from '../../i18n/locale-data';
+import { PresetType } from '../../../../common-src/type/PresetType';
+import { ImageData } from '../../../../common-src/data/image-data';
+import { AnimationImageOptions } from '../../../../common-src/data/animation-image-option';
 
 declare function require(value: String): any;
 

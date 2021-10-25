@@ -8,19 +8,19 @@ import {
 } from '@angular/core';
 import { ElectronService } from 'ngx-electron';
 import { IpcRenderer } from 'electron';
-import { AnimationImageOptions } from '../../data/animation-image-option';
-import { PresetType } from '../../type/PresetType';
-import { PresetWeb } from '../../preset/preset-web';
-import { PresetLine } from '../../preset/preset-line';
 import { ProcessExportImage } from '../../process/process-export-image';
 import { AppConfig } from '../../config/app-config';
-import { ImageData } from '../../data/image-data';
 import { ApplicationMenu } from '../../menu/application-menu';
 import { LocaleData } from '../../i18n/locale-data';
 import { LocaleManager } from '../../i18n/locale-manager';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import IpcService from '../../process/ipc.service';
 import { IpcId } from '../../../../common-src/ipc-id';
+import { PresetType } from '../../../../common-src/type/PresetType';
+import { PresetLine } from '../../../../common-src/preset/preset-line';
+import { PresetWeb } from '../../../../common-src/preset/preset-web';
+import { AnimationImageOptions } from '../../../../common-src/data/animation-image-option';
+import { ImageData } from '../../../../common-src/data/image-data';
 
 @Component({
   selector: 'my-app',

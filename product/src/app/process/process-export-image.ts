@@ -1,13 +1,12 @@
-import { AnimationImageOptions } from '../data/animation-image-option';
-import { ImageData } from '../data/image-data';
-import { PresetType } from '../type/PresetType';
+import { PresetType } from '../../../common-src/type/PresetType';
 import { LineStampValidator } from '../validators/LineStampValidator';
-import { CompressionType } from '../type/CompressionType';
+import { CompressionType } from '../../../common-src/type/CompressionType';
 import { LocaleData } from '../i18n/locale-data';
 import { ErrorType } from '../../../common-src/error/error-type';
 import IpcService from './ipc.service';
 import { ElectronService } from 'ngx-electron';
-
+import { AnimationImageOptions } from '../../../common-src/data/animation-image-option';
+import { ImageData } from '../../../common-src/data/image-data';
 namespace Error {
   export const ENOENT_ERROR = 'ENOENT';
 }

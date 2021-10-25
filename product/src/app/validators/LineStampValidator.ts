@@ -1,5 +1,5 @@
 import { ElectronService } from 'ngx-electron';
-import { AnimationImageOptions } from '../data/animation-image-option';
+import { AnimationImageOptions } from '../../../common-src/data/animation-image-option';
 import { LocaleData } from '../i18n/locale-data';
 
 /**
