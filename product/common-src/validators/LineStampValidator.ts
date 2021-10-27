@@ -1,21 +1,16 @@
-import { ElectronService } from 'ngx-electron';
-import { AnimationImageOptions } from '../../../common-src/data/animation-image-option';
-import { LocaleData } from '../i18n/locale-data';
+import { AnimationImageOptions } from '../data/animation-image-option';
+import { ILocaleData } from '../i18n/locale-data.interface';
 
 /**
  * LINEスタンプの規約に即しているかを検証するバリデーターです。
  */
 export class LineStampValidator {
   static validate(
-    output: string,
+    stat: { size: number },
     options: AnimationImageOptions,
-    localeData: LocaleData,
-    _electronService: ElectronService
+    localeData: ILocaleData
   ): string[] {
     const validateArr: string[] = [];
-
-    const fs = _electronService.remote.require('fs');
-    const stat: { size: number } = fs.statSync(output);
 
     if (stat.size > 300 * 1024) {
       const val = Math.round(stat.size / 1000);

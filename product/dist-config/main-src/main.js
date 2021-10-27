@@ -13,7 +13,7 @@ var url = require('url');
 var ipcMain = electron.ipcMain;
 var sendError = new send_error_1.SendError();
 var errorMessage = new error_message_1.ErrorMessage();
-var fileService = new file_1["default"](app.getPath('temp'), app.getAppPath(), sendError);
+var fileService = new file_1["default"](app.getPath('temp'), app.getAppPath(), sendError, app.getPath('desktop'));
 // メインウィンドウ
 var mainWindow;
 function createWindow() {
@@ -28,6 +28,7 @@ function createWindow() {
             // preload: path.join(__dirname,'/preload.js') // あとで使う
         }
     });
+    fileService.setMainWindow(mainWindow);
     console.log(process.env.NODE_ENV);
     // メインウィンドウに表示するURLを指定します
     if (process.env.NODE_ENV !== 'develop') {
@@ -92,14 +93,10 @@ function openFileDialog(event) {
         }
     });
 }
-ipcMain.on(ipc_id_1.IpcId.SET_DEFAULT_FILE_NAME, function (event, name) {
-    console.log(ipc_id_1.IpcId.SET_DEFAULT_FILE_NAME + " to " + name);
-    fileService.setDefaultFileName(name);
-});
-ipcMain.on(ipc_id_1.IpcId.CHANGE_WINDOW_TITLE, function (event, title) {
-    console.log(ipc_id_1.IpcId.CHANGE_WINDOW_TITLE + " to " + title);
-    mainWindow.setTitle(title);
-    return;
+ipcMain.on(ipc_id_1.IpcId.SET_LOCALE_DATA, function (event, localeData) {
+    console.log(ipc_id_1.IpcId.SET_LOCALE_DATA + " to " + localeData);
+    fileService.setDefaultFileName(localeData.defaultFileName);
+    mainWindow.setTitle(localeData.APP_NAME);
 });
 // todo:async-await対応
 ipcMain.on(ipc_id_1.IpcId.OPEN_SAVE_DIALOG, function (event, imageType) {

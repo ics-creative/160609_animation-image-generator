@@ -1,14 +1,23 @@
+import { BrowserWindow } from 'electron';
 import { SendError } from 'error/send-error';
 import { AnimationImageOptions } from '../common-src/data/animation-image-option';
 import { ImageData } from '../common-src/data/image-data';
 import { ErrorType } from '../common-src/error/error-type';
+import { ILocaleData } from '../common-src/i18n/locale-data.interface';
 import { CompressionType } from '../common-src/type/CompressionType';
+import { PresetType } from '../common-src/type/PresetType';
+import { LineStampValidator } from '../common-src/validators/LineStampValidator';
 namespace Error {
   export const ENOENT_ERROR = 'ENOENT';
 }
 
 export default class File {
-  constructor(appTemporaryPath: string, appPath: string, sendError: SendError) {
+  constructor(
+    appTemporaryPath: string,
+    appPath: string,
+    sendError: SendError,
+    defaultSaveDirectory: string
+  ) {
     console.log('delete-file');
     const path = require('path');
 
@@ -20,7 +29,11 @@ export default class File {
     );
     this.appPath = appPath;
     this.sendError = sendError;
+    this.defaultSaveDirectory = defaultSaveDirectory;
   }
+
+  private mainWindow: BrowserWindow;
+  private defaultSaveDirectory: string;
 
   private sendError: SendError;
 
@@ -42,6 +55,8 @@ export default class File {
   private selectedHTMLPath: string;
   private selectedHTMLDirectoryPath: string;
 
+  private localeData: ILocaleData;
+
   private itemList: ImageData[];
 
   private _version: string;
@@ -54,6 +69,10 @@ export default class File {
 
   public setDefaultFileName(name: string) {
     this.lastSelectBaseName = name;
+  }
+
+  public setMainWindow(window: Electron.BrowserWindow) {
+    this.mainWindow = window;
   }
 
   /**
@@ -279,6 +298,10 @@ export default class File {
     });
   }
 
+  public setLocaleData(localeData: ILocaleData) {
+    this.localeData = localeData;
+  }
+
   public getExeExt() {
     const platform: string = require('os').platform();
     return platform === 'win32' ? '.exe' : '';
@@ -348,9 +371,129 @@ export default class File {
           return this._pngCompressAll();
         }
       })
+      .then(() => {
+        // APNG書き出しが有効になっている場合
+        if (this.animationOptionData.enabledExportApng === true) {
+          // ひとまず謎エラーとしとく
+          this.errorCode = ErrorType.APNG_OTHER_ERORR;
+          return this.openSaveDialog(
+            'png',
+            this.mainWindow,
+            this.defaultSaveDirectory
+          ).then((fileName: string) => {
+            if (fileName) {
+              return this._generateApng(fileName);
+            } else {
+              this.generateCancelPNG = true;
+            }
+          });
+        }
+      })
       .then(() => {});
   }
 
+  private setErrorDetail(stdout: string) {
+    if (stdout !== '') {
+      const errorMesageList = stdout.split('\n').filter(function(e: string) {
+        return e !== '';
+      });
+
+      const errorMessage = errorMesageList.pop();
+
+      this.errorDetail = errorMessage ? errorMessage : '';
+    }
+  }
+
+  /**
+   * APNG画像を保存します。
+   * @returns {Promise<T>}
+   * @private
+   */
+  private _generateApng(exportFilePath: string): Promise<any> {
+    return new Promise((resolve: Function, reject: Function) => {
+      const path = require('path');
+
+      const exec = require('child_process').execFile;
+      const pngPath = path.join(this.temporaryLastPath, 'frame*.png');
+
+      const compressOptions = this.getCompressOption(
+        this.animationOptionData.compression
+      );
+      console.log(
+        'this.animationOptionData.loop : ' + this.animationOptionData.loop
+      );
+      const loopOption =
+        '-l' +
+        (this.animationOptionData.noLoop ? 0 : this.animationOptionData.loop);
+      console.log('loopOption : ' + loopOption);
+      const options = [
+        exportFilePath,
+        pngPath,
+        '1',
+        this.animationOptionData.fps,
+        compressOptions,
+        loopOption,
+        '-kc'
+      ];
+
+      setImmediate(() => {
+        exec(
+          path.join(this.appPath, `/bin/apngasm${this.getExeExt()}`),
+          options,
+          (err: any, stdout: any, stderr: any) => {
+            if (!err) {
+              // TODO 書きだしたフォルダーを対応ブラウザーで開く (OSで分岐)
+              // exec(`/Applications/Safari.app`, [this.apngPath]);
+
+              if (this.animationOptionData.preset === PresetType.LINE) {
+                const stat = require('fs').statSync(exportFilePath);
+                const validateArr = LineStampValidator.validate(
+                  stat,
+                  this.animationOptionData,
+                  this.localeData
+                );
+
+                if (validateArr.length > 0) {
+                  const { dialog } = require('electron');
+                  const win = this.mainWindow;
+                  const message = this.localeData.VALIDATE_title;
+                  const detailMessage = '・' + validateArr.join('\n\n・');
+
+                  const dialogOption = {
+                    type: 'info',
+                    buttons: ['OK'],
+                    title: this.localeData.APP_NAME,
+                    // message: message,
+                    detail: message + '\n\n' + detailMessage
+                  };
+                  dialog.showMessageBox(<any>win, <any>dialogOption);
+                }
+              }
+              resolve();
+            } else {
+              this.setErrorDetail(stdout);
+
+              if (err.code === Error.ENOENT_ERROR) {
+                this.errorCode = ErrorType.APNG_ERORR;
+              } else {
+                this.errorCode = ErrorType.APNG_ACCESS_ERORR;
+              }
+              // エラー内容の送信
+              this.sendError.exec(
+                this._version,
+                this.inquiryCode,
+                'ERROR',
+                this.errorCode + '',
+                err.code + ' : ' + stdout + ', message:' + err.message
+              );
+
+              reject();
+            }
+          }
+        );
+      });
+    });
+  }
   private _copyTemporaryDirectory() {
     const promises: Promise<any>[] = this.itemList.map((item: any) => {
       return this.copyTemporaryImage(item.frameNumber, item.imagePath);

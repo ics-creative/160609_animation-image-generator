@@ -6,6 +6,7 @@ import { ErrorMessage } from './error/error-message';
 import { SendError } from './error/send-error';
 import { ImageData } from '../common-src/data/image-data';
 import File from './file';
+import { ILocaleData } from '../common-src/i18n/locale-data.interface';
 
 // アプリケーション作成用のモジュールを読み込み
 const electron = require('electron');
@@ -18,7 +19,12 @@ const url = require('url');
 const ipcMain = electron.ipcMain;
 const sendError = new SendError();
 const errorMessage = new ErrorMessage();
-const fileService = new File(app.getPath('temp'), app.getAppPath(), sendError);
+const fileService = new File(
+  app.getPath('temp'),
+  app.getAppPath(),
+  sendError,
+  app.getPath('desktop')
+);
 
 // メインウィンドウ
 let mainWindow;
@@ -35,6 +41,8 @@ function createWindow() {
       // preload: path.join(__dirname,'/preload.js') // あとで使う
     }
   });
+
+  fileService.setMainWindow(mainWindow);
 
   console.log(process.env.NODE_ENV);
 
@@ -110,15 +118,11 @@ function openFileDialog(event) {
   });
 }
 
-ipcMain.on(IpcId.SET_DEFAULT_FILE_NAME, (event, name: string) => {
-  console.log(`${IpcId.SET_DEFAULT_FILE_NAME} to ${name}`);
-  fileService.setDefaultFileName(name);
-});
+ipcMain.on(IpcId.SET_LOCALE_DATA, (event, localeData: ILocaleData) => {
+  console.log(`${IpcId.SET_LOCALE_DATA} to ${localeData}`);
 
-ipcMain.on(IpcId.CHANGE_WINDOW_TITLE, (event, title: string) => {
-  console.log(`${IpcId.CHANGE_WINDOW_TITLE} to ${title}`);
-  mainWindow.setTitle(title);
-  return;
+  fileService.setDefaultFileName(localeData.defaultFileName);
+  mainWindow.setTitle(localeData.APP_NAME);
 });
 
 // todo:async-await対応

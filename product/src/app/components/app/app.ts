@@ -76,9 +76,6 @@ export class AppComponent implements OnInit, AfterViewInit {
     } catch (e) {
       throw e;
     }
-
-    this.ipcService.changeWindowTitle(localeData.APP_NAME);
-    this.ipcService.setDefaultFileName(localeData.defaultFileName);
   }
 
   ngOnInit() {
@@ -101,6 +98,8 @@ export class AppComponent implements OnInit, AfterViewInit {
     // 初回プリセットの設定
     this.presetMode = Number(localStorage.getItem(this.PRESET_ID));
     this.changePreset(this.presetMode);
+
+    this.ipcService.setLocaleData(this.localeData);
 
     // 	保存先の指定返却
     this.ipcRenderer.on(

@@ -2,12 +2,14 @@
 exports.__esModule = true;
 var error_type_1 = require("../common-src/error/error-type");
 var CompressionType_1 = require("../common-src/type/CompressionType");
+var PresetType_1 = require("../common-src/type/PresetType");
+var LineStampValidator_1 = require("../common-src/validators/LineStampValidator");
 var Error;
 (function (Error) {
     Error.ENOENT_ERROR = 'ENOENT';
 })(Error || (Error = {}));
 var File = /** @class */ (function () {
-    function File(appTemporaryPath, appPath, sendError) {
+    function File(appTemporaryPath, appPath, sendError, defaultSaveDirectory) {
         console.log('delete-file');
         var path = require('path');
         // 	テンポラリパス生成
@@ -15,9 +17,13 @@ var File = /** @class */ (function () {
         this.temporaryCompressPath = path.join(appTemporaryPath, 'a-img-generator-compress');
         this.appPath = appPath;
         this.sendError = sendError;
+        this.defaultSaveDirectory = defaultSaveDirectory;
     }
     File.prototype.setDefaultFileName = function (name) {
         this.lastSelectBaseName = name;
+    };
+    File.prototype.setMainWindow = function (window) {
+        this.mainWindow = window;
     };
     /**
      * ファイルを削除する処理です。
@@ -208,6 +214,9 @@ var File = /** @class */ (function () {
             });
         });
     };
+    File.prototype.setLocaleData = function (localeData) {
+        this.localeData = localeData;
+    };
     File.prototype.getExeExt = function () {
         var platform = require('os').platform();
         return platform === 'win32' ? '.exe' : '';
@@ -258,7 +267,98 @@ var File = /** @class */ (function () {
                 return _this._pngCompressAll();
             }
         })
+            .then(function () {
+            // APNG書き出しが有効になっている場合
+            if (_this.animationOptionData.enabledExportApng === true) {
+                // ひとまず謎エラーとしとく
+                _this.errorCode = error_type_1.ErrorType.APNG_OTHER_ERORR;
+                return _this.openSaveDialog('png', _this.mainWindow, _this.defaultSaveDirectory).then(function (fileName) {
+                    if (fileName) {
+                        return _this._generateApng(fileName);
+                    }
+                    else {
+                        _this.generateCancelPNG = true;
+                    }
+                });
+            }
+        })
             .then(function () { });
+    };
+    File.prototype.setErrorDetail = function (stdout) {
+        if (stdout !== '') {
+            var errorMesageList = stdout.split('\n').filter(function (e) {
+                return e !== '';
+            });
+            var errorMessage = errorMesageList.pop();
+            this.errorDetail = errorMessage ? errorMessage : '';
+        }
+    };
+    /**
+     * APNG画像を保存します。
+     * @returns {Promise<T>}
+     * @private
+     */
+    File.prototype._generateApng = function (exportFilePath) {
+        var _this = this;
+        return new Promise(function (resolve, reject) {
+            var path = require('path');
+            var exec = require('child_process')
+                .execFile;
+            var pngPath = path.join(_this.temporaryLastPath, 'frame*.png');
+            var compressOptions = _this.getCompressOption(_this.animationOptionData.compression);
+            console.log('this.animationOptionData.loop : ' + _this.animationOptionData.loop);
+            var loopOption = '-l' +
+                (_this.animationOptionData.noLoop ? 0 : _this.animationOptionData.loop);
+            console.log('loopOption : ' + loopOption);
+            var options = [
+                exportFilePath,
+                pngPath,
+                '1',
+                _this.animationOptionData.fps,
+                compressOptions,
+                loopOption,
+                '-kc'
+            ];
+            setImmediate(function () {
+                exec(path.join(_this.appPath, "/bin/apngasm" + _this.getExeExt()), options, function (err, stdout, stderr) {
+                    if (!err) {
+                        // TODO 書きだしたフォルダーを対応ブラウザーで開く (OSで分岐)
+                        // exec(`/Applications/Safari.app`, [this.apngPath]);
+                        if (_this.animationOptionData.preset === PresetType_1.PresetType.LINE) {
+                            var stat = require('fs').statSync(exportFilePath);
+                            var validateArr = LineStampValidator_1.LineStampValidator.validate(stat, _this.animationOptionData, _this.localeData);
+                            if (validateArr.length > 0) {
+                                var dialog = require('electron').dialog;
+                                var win = _this.mainWindow;
+                                var message = _this.localeData.VALIDATE_title;
+                                var detailMessage = '・' + validateArr.join('\n\n・');
+                                var dialogOption = {
+                                    type: 'info',
+                                    buttons: ['OK'],
+                                    title: _this.localeData.APP_NAME,
+                                    // message: message,
+                                    detail: message + '\n\n' + detailMessage
+                                };
+                                dialog.showMessageBox(win, dialogOption);
+                            }
+                        }
+                        resolve();
+                    }
+                    else {
+                        _this.setErrorDetail(stdout);
+                        if (err.code === Error.ENOENT_ERROR) {
+                            _this.errorCode = error_type_1.ErrorType.APNG_ERORR;
+                        }
+                        else {
+                            _this.errorCode = error_type_1.ErrorType.APNG_ACCESS_ERORR;
+                        }
+                        // エラー内容の送信
+                        _this.sendError.exec(_this._version, _this.inquiryCode, 'ERROR', _this.errorCode + '', err.code + ' : ' + stdout + ', message:' + err.message);
+                        reject();
+                    }
+                });
+            });
+        });
     };
     File.prototype._copyTemporaryDirectory = function () {
         var _this = this;
@@ -289,8 +389,7 @@ var File = /** @class */ (function () {
         var _this = this;
         return new Promise(function (resolve, reject) {
             var path = require('path');
-            var execFile = require('child_process')
-                .execFile;
+            var execFile = require('child_process').execFile;
             var options = [
                 '--quality=65-80',
                 '--speed',
@@ -300,12 +399,10 @@ var File = /** @class */ (function () {
                 '--',
                 path.join("" + _this.temporaryPath, "frame" + item.frameNumber + ".png")
             ];
-            console.log("_pngCompress " + item.frameNumber);
             execFile(
             // 2018-05-15 一時的にファイルパスを変更
             _this.appPath + "/bin/pngquant" + _this.getExeExt(), options, function (err, stdout, stderr) {
                 if (!err) {
-                    console.log("resolve " + item.frameNumber);
                     resolve();
                 }
                 else {

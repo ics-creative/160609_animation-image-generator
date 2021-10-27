@@ -3,6 +3,7 @@ import { IpcRenderer } from 'electron';
 import { IpcId } from '../../../common-src/ipc-id';
 import { AnimationImageOptions } from '../../../common-src/data/animation-image-option';
 import { ImageData } from '../../../common-src/data/image-data';
+import { ILocaleData } from '../../../common-src/i18n/locale-data.interface';
 
 @Injectable()
 export default class IpcService {
@@ -21,11 +22,8 @@ export default class IpcService {
     }
   }
 
-  public changeWindowTitle(title: string) {
-    this.ipcRenderer.send(IpcId.CHANGE_WINDOW_TITLE, title);
-  }
-  public setDefaultFileName(defaultFileName: string) {
-    this.ipcRenderer.send(IpcId.SET_DEFAULT_FILE_NAME, defaultFileName);
+  public setLocaleData(localeData: ILocaleData) {
+    this.ipcRenderer.send(IpcId.SET_LOCALE_DATA, localeData);
   }
 
   public openSaveDialog(imageType: string) {

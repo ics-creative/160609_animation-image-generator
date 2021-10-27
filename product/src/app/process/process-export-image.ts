@@ -1,5 +1,4 @@
 import { PresetType } from '../../../common-src/type/PresetType';
-import { LineStampValidator } from '../validators/LineStampValidator';
 import { CompressionType } from '../../../common-src/type/CompressionType';
 import { LocaleData } from '../i18n/locale-data';
 import { ErrorType } from '../../../common-src/error/error-type';
@@ -85,20 +84,6 @@ export class ProcessExportImage {
         resolve();
       })
         ///////// ここまで実装を移行
-        .then(() => {
-          // APNG書き出しが有効になっている場合
-          if (this.animationOptionData.enabledExportApng === true) {
-            // ひとまず謎エラーとしとく
-            this.errorCode = ErrorType.APNG_OTHER_ERORR;
-            return this.openSaveDialog('png').then((fileName: string) => {
-              if (fileName) {
-                return this._generateApng(fileName);
-              } else {
-                this.generateCancelPNG = true;
-              }
-            });
-          }
-        })
         .then(() => {
           // WebP書き出しが有効になっている場合
           if (this.animationOptionData.enabledExportWebp === true) {
@@ -189,99 +174,6 @@ export class ProcessExportImage {
         !this.generateCancelWebP) ||
       (this.animationOptionData.enabledExportApng && !this.generateCancelPNG)
     );
-  }
-
-  /**
-   * APNG画像を保存します。
-   * @returns {Promise<T>}
-   * @private
-   */
-  private _generateApng(exportFilePath: string): Promise<any> {
-    return new Promise((resolve: Function, reject: Function) => {
-      const path = this.electronService.remote.require('path');
-      const appPath: string = this.getAppPath();
-
-      const exec = this.electronService.remote.require('child_process')
-        .execFile;
-      const pngPath = path.join(this.temporaryLastPath, 'frame*.png');
-
-      const compressOptions = this.getCompressOption(
-        this.animationOptionData.compression
-      );
-      console.log(
-        'this.animationOptionData.loop : ' + this.animationOptionData.loop
-      );
-      const loopOption =
-        '-l' +
-        (this.animationOptionData.noLoop ? 0 : this.animationOptionData.loop);
-      console.log('loopOption : ' + loopOption);
-      const options = [
-        exportFilePath,
-        pngPath,
-        '1',
-        this.animationOptionData.fps,
-        compressOptions,
-        loopOption,
-        '-kc'
-      ];
-
-      setImmediate(() => {
-        exec(
-          path.join(appPath, `/bin/apngasm${this.exeExt}`),
-          options,
-          (err: any, stdout: any, stderr: any) => {
-            if (!err) {
-              // TODO 書きだしたフォルダーを対応ブラウザーで開く (OSで分岐)
-              // exec(`/Applications/Safari.app`, [this.apngPath]);
-
-              if (this.animationOptionData.preset === PresetType.LINE) {
-                const validateArr = LineStampValidator.validate(
-                  exportFilePath,
-                  this.animationOptionData,
-                  this.localeData,
-                  this.electronService
-                );
-
-                if (validateArr.length > 0) {
-                  const { dialog } = this.electronService.remote;
-                  const win = this.electronService.remote.getCurrentWindow();
-                  const message = this.localeData.VALIDATE_title;
-                  const detailMessage = '・' + validateArr.join('\n\n・');
-
-                  const dialogOption = {
-                    type: 'info',
-                    buttons: ['OK'],
-                    title: this.localeData.APP_NAME,
-                    // message: message,
-                    detail: message + '\n\n' + detailMessage
-                  };
-                  dialog.showMessageBox(<any>win, <any>dialogOption);
-                }
-              }
-              resolve();
-            } else {
-              this.setErrorDetail(stdout);
-
-              if (err.code === Error.ENOENT_ERROR) {
-                this.errorCode = ErrorType.APNG_ERORR;
-              } else {
-                this.errorCode = ErrorType.APNG_ACCESS_ERORR;
-              }
-              // エラー内容の送信
-              this.ipcService.sendError(
-                this._version,
-                this.inquiryCode,
-                'ERROR',
-                this.errorCode + '',
-                err.code + ' : ' + stdout + ', message:' + err.message
-              );
-
-              reject();
-            }
-          }
-        );
-      });
-    });
   }
 
   private setErrorDetail(stdout: string) {

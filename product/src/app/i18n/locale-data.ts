@@ -1,8 +1,9 @@
 'use strict';
 import { Injectable } from '@angular/core';
+import { ILocaleData } from '../../../common-src/i18n/locale-data.interface';
 
 @Injectable()
-export class LocaleData {
+export class LocaleData implements ILocaleData {
   APP_NAME: string = null;
 
   PROP_use: string = null;
