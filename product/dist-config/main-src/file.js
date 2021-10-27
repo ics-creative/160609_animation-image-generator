@@ -1,13 +1,20 @@
 "use strict";
 exports.__esModule = true;
 var error_type_1 = require("../common-src/error/error-type");
+var CompressionType_1 = require("../common-src/type/CompressionType");
+var Error;
+(function (Error) {
+    Error.ENOENT_ERROR = 'ENOENT';
+})(Error || (Error = {}));
 var File = /** @class */ (function () {
-    function File(appTemporaryPath) {
+    function File(appTemporaryPath, appPath, sendError) {
         console.log('delete-file');
         var path = require('path');
         // 	テンポラリパス生成
         this.temporaryPath = path.join(appTemporaryPath, 'a-img-generator');
         this.temporaryCompressPath = path.join(appTemporaryPath, 'a-img-generator-compress');
+        this.appPath = appPath;
+        this.sendError = sendError;
     }
     File.prototype.setDefaultFileName = function (name) {
         this.lastSelectBaseName = name;
@@ -247,7 +254,6 @@ var File = /** @class */ (function () {
         })
             .then(function () {
             if (compressPNG) {
-                console.log('compressPNG');
                 _this.errorCode = error_type_1.ErrorType.PNG_COMPRESS_ERROR;
                 return _this._pngCompressAll();
             }
@@ -268,10 +274,57 @@ var File = /** @class */ (function () {
         });
         return Promise.all(promises);
     };
+    /* tslint:enable:quotemark */
+    File.prototype.getCompressOption = function (type) {
+        switch (type) {
+            case CompressionType_1.CompressionType.zlib:
+                return '-z0';
+            case CompressionType_1.CompressionType.zip7:
+                return '-z1';
+            case CompressionType_1.CompressionType.Zopfli:
+                return '-z2';
+        }
+    };
     File.prototype._pngCompress = function (item) {
+        var _this = this;
         return new Promise(function (resolve, reject) {
-            // 　TODO:未実装
-            resolve();
+            var path = require('path');
+            var execFile = require('child_process')
+                .execFile;
+            var options = [
+                '--quality=65-80',
+                '--speed',
+                '1',
+                '--output',
+                path.join("" + _this.temporaryCompressPath, "frame" + item.frameNumber + ".png"),
+                '--',
+                path.join("" + _this.temporaryPath, "frame" + item.frameNumber + ".png")
+            ];
+            console.log("_pngCompress " + item.frameNumber);
+            execFile(
+            // 2018-05-15 一時的にファイルパスを変更
+            _this.appPath + "/bin/pngquant" + _this.getExeExt(), options, function (err, stdout, stderr) {
+                if (!err) {
+                    console.log("resolve " + item.frameNumber);
+                    resolve();
+                }
+                else {
+                    console.error(err);
+                    console.error(stderr);
+                    if (err.code === Error.ENOENT_ERROR) {
+                        _this.errorCode = error_type_1.ErrorType.APNG_ERORR;
+                    }
+                    else if (err.code === 99) {
+                        _this.errorCode = error_type_1.ErrorType.PNG_COMPRESS_QUALITY_ERROR;
+                    }
+                    else {
+                        _this.errorCode = error_type_1.ErrorType.PNG_COMPRESS_ERROR;
+                    }
+                    // エラー内容の送信
+                    _this.sendError.exec(_this._version, _this.inquiryCode, 'ERROR', _this.errorCode + '', err.code + ' : ' + stdout + ', message:' + err.message);
+                    reject();
+                }
+            });
         });
     };
     return File;

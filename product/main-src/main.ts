@@ -16,9 +16,9 @@ const path = require('path');
 const url = require('url');
 
 const ipcMain = electron.ipcMain;
-const fileService = new File(app.getPath('temp'));
-const errorMessage = new ErrorMessage();
 const sendError = new SendError();
+const errorMessage = new ErrorMessage();
+const fileService = new File(app.getPath('temp'), app.getAppPath(), sendError);
 
 // メインウィンドウ
 let mainWindow;

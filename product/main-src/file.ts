@@ -1,9 +1,14 @@
+import { SendError } from 'error/send-error';
 import { AnimationImageOptions } from '../common-src/data/animation-image-option';
 import { ImageData } from '../common-src/data/image-data';
 import { ErrorType } from '../common-src/error/error-type';
+import { CompressionType } from '../common-src/type/CompressionType';
+namespace Error {
+  export const ENOENT_ERROR = 'ENOENT';
+}
 
 export default class File {
-  constructor(appTemporaryPath) {
+  constructor(appTemporaryPath: string, appPath: string, sendError: SendError) {
     console.log('delete-file');
     const path = require('path');
 
@@ -13,7 +18,13 @@ export default class File {
       appTemporaryPath,
       'a-img-generator-compress'
     );
+    this.appPath = appPath;
+    this.sendError = sendError;
   }
+
+  private sendError: SendError;
+
+  private appPath: string;
   private temporaryCompressPath: string;
   private temporaryPath: string;
   private lastSelectSaveDirectories: string;
@@ -333,7 +344,6 @@ export default class File {
       })
       .then(() => {
         if (compressPNG) {
-          console.log('compressPNG');
           this.errorCode = ErrorType.PNG_COMPRESS_ERROR;
           return this._pngCompressAll();
         }
@@ -355,10 +365,69 @@ export default class File {
     return Promise.all(promises);
   }
 
-  private _pngCompress(item: ImageData): Promise<void> {
-    return new Promise((resolve, reject) => {
-      // 　TODO:未実装
-      resolve();
+  /* tslint:enable:quotemark */
+
+  private getCompressOption(type: CompressionType) {
+    switch (type) {
+      case CompressionType.zlib:
+        return '-z0';
+      case CompressionType.zip7:
+        return '-z1';
+      case CompressionType.Zopfli:
+        return '-z2';
+    }
+  }
+
+  private _pngCompress(item: ImageData) {
+    return new Promise<void>((resolve, reject) => {
+      const path = require('path');
+      const execFile = require('child_process').execFile;
+
+      const options: string[] = [
+        '--quality=65-80',
+        '--speed',
+        '1',
+        '--output',
+        path.join(
+          `${this.temporaryCompressPath}`,
+          `frame${item.frameNumber}.png`
+        ),
+        '--',
+        path.join(`${this.temporaryPath}`, `frame${item.frameNumber}.png`)
+      ];
+
+      execFile(
+        // 2018-05-15 一時的にファイルパスを変更
+        `${this.appPath}/bin/pngquant${this.getExeExt()}`,
+        options,
+        (err: any, stdout: any, stderr: any) => {
+          if (!err) {
+            resolve();
+          } else {
+            console.error(err);
+            console.error(stderr);
+
+            if (err.code === Error.ENOENT_ERROR) {
+              this.errorCode = ErrorType.APNG_ERORR;
+            } else if (err.code === 99) {
+              this.errorCode = ErrorType.PNG_COMPRESS_QUALITY_ERROR;
+            } else {
+              this.errorCode = ErrorType.PNG_COMPRESS_ERROR;
+            }
+
+            // エラー内容の送信
+            this.sendError.exec(
+              this._version,
+              this.inquiryCode,
+              'ERROR',
+              this.errorCode + '',
+              err.code + ' : ' + stdout + ', message:' + err.message
+            );
+
+            reject();
+          }
+        }
+      );
     });
   }
 }

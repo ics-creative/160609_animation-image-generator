@@ -590,68 +590,6 @@ export class ProcessExportImage {
     }
   }
 
-  private _pngCompress(item: ImageData) {
-    return new Promise<void>((resolve, reject) => {
-      const path = this.electronService.remote.require('path');
-      const appPath: string = this.getAppPath();
-      const execFile = this.electronService.remote.require('child_process')
-        .execFile;
-
-      const options: string[] = [
-        '--quality=65-80',
-        '--speed',
-        '1',
-        '--output',
-        path.join(
-          `${this.temporaryCompressPath}`,
-          `frame${item.frameNumber}.png`
-        ),
-        '--',
-        path.join(`${this.temporaryPath}`, `frame${item.frameNumber}.png`)
-      ];
-
-      execFile(
-        // 2018-05-15 一時的にファイルパスを変更
-        `${appPath}/bin/pngquant${this.exeExt}`,
-        options,
-        (err: any, stdout: any, stderr: any) => {
-          if (!err) {
-            resolve();
-          } else {
-            console.error(err);
-            console.error(stderr);
-
-            if (err.code === Error.ENOENT_ERROR) {
-              this.errorCode = ErrorType.APNG_ERORR;
-            } else if (err.code === 99) {
-              this.errorCode = ErrorType.PNG_COMPRESS_QUALITY_ERROR;
-            } else {
-              this.errorCode = ErrorType.PNG_COMPRESS_ERROR;
-            }
-
-            // エラー内容の送信
-            this.ipcService.sendError(
-              this._version,
-              this.inquiryCode,
-              'ERROR',
-              this.errorCode + '',
-              err.code + ' : ' + stdout + ', message:' + err.message
-            );
-
-            reject();
-          }
-        }
-      );
-    });
-  }
-
-  private _pngCompressAll() {
-    const promises: Promise<any>[] = this.itemList.map((item: any) => {
-      return this._pngCompress(item);
-    });
-    return Promise.all(promises);
-  }
-
   private openSaveDialog(imageType: string) {
     return new Promise((resolve: Function, reject: Function) => {
       this.ipcService

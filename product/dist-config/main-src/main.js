@@ -11,9 +11,9 @@ var BrowserWindow = electron.BrowserWindow;
 var path = require('path');
 var url = require('url');
 var ipcMain = electron.ipcMain;
-var fileService = new file_1["default"](app.getPath('temp'));
-var errorMessage = new error_message_1.ErrorMessage();
 var sendError = new send_error_1.SendError();
+var errorMessage = new error_message_1.ErrorMessage();
+var fileService = new file_1["default"](app.getPath('temp'), app.getAppPath(), sendError);
 // メインウィンドウ
 var mainWindow;
 function createWindow() {
