@@ -68,16 +68,21 @@ export default class IpcService {
     version: string,
     itemList: ImageData[],
     animationOptionData: AnimationImageOptions
-  ) {
+  ): Promise<void> {
     this.init();
-    const result = this.ipcRenderer.sendSync(
-      IpcId.EXEC_IMAGE_EXPORT_PROCESS,
-      version,
-      itemList,
-      animationOptionData
-    );
-    if (result.result) {
-      console.log(result);
-    }
+    return new Promise((resolve, reject) => {
+      const result = this.ipcRenderer.sendSync(
+        IpcId.EXEC_IMAGE_EXPORT_PROCESS,
+        version,
+        itemList,
+        animationOptionData
+      );
+      if (result.result) {
+        console.log(result);
+        resolve();
+      } else {
+        reject();
+      }
+    });
   }
 }

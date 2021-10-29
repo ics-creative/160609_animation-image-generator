@@ -9,7 +9,7 @@ var Error;
     Error.ENOENT_ERROR = 'ENOENT';
 })(Error || (Error = {}));
 var File = /** @class */ (function () {
-    function File(appTemporaryPath, appPath, sendError, defaultSaveDirectory) {
+    function File(appTemporaryPath, appPath, sendError, errorMessage, defaultSaveDirectory) {
         console.log('delete-file');
         var path = require('path');
         // 	テンポラリパス生成
@@ -17,6 +17,7 @@ var File = /** @class */ (function () {
         this.temporaryCompressPath = path.join(appTemporaryPath, 'a-img-generator-compress');
         this.appPath = appPath;
         this.sendError = sendError;
+        this.errorMessage = errorMessage;
         this.defaultSaveDirectory = defaultSaveDirectory;
     }
     File.prototype.setDefaultFileName = function (name) {
@@ -295,7 +296,127 @@ var File = /** @class */ (function () {
                 });
             }
         })
-            .then(function () { });
+            .then(function () {
+            // APNGとWebP画像の両方書き出しが有効になっている場合
+            if (_this.animationOptionData.enabledExportHtml === true) {
+                // 	画像ファイルが保存されているか。
+                if (!_this._imageFileSaved()) {
+                    _this.generateCancelHTML = true;
+                    alert('画像ファイルが保存されなかったため、HTMLの保存を行いませんでした。');
+                    return;
+                }
+                _this.errorCode = error_type_1.ErrorType.HTML_ERROR;
+                return _this.openSaveDialog('html', _this.mainWindow, _this.defaultSaveDirectory).then(function (fileName) {
+                    if (fileName) {
+                        return _this._generateHtml(fileName);
+                    }
+                    else {
+                        _this.generateCancelHTML = true;
+                    }
+                });
+            }
+        }).then(function () {
+            if (!((_this.animationOptionData.enabledExportHtml &&
+                !_this.generateCancelHTML) ||
+                _this._enableExportApng() ||
+                _this._enableExportWebp())) {
+                console.log('ファイルが一つも保存されませんでした');
+                return Promise.resolve();
+            }
+            // エクスプローラーで開くでも、まだいいかも
+            var shell = window.require('electron').shell;
+            if (_this._enableExportHTML()) {
+                shell.showItemInFolder(_this.selectedHTMLPath);
+            }
+            else if (_this._enableExportApng()) {
+                shell.showItemInFolder(_this.selectedPNGPath);
+            }
+            else if (_this._enableExportWebp()) {
+                // 	ここにこない可能性は高い
+                shell.showItemInFolder(_this.selectedWebPPath);
+            }
+            return Promise.resolve();
+        })["catch"](function (message) {
+            // エラー内容の送信
+            if (message) {
+                console.error(message);
+                _this.errorStack = message.stack;
+                _this.sendError.exec(_this._version, _this.inquiryCode, 'ERROR', _this.errorCode.toString(), message.stack);
+                _this.errorMessage.showErrorMessage(_this.errorCode, _this.inquiryCode, _this.errorDetail, _this.errorStack, _this.localeData.APP_NAME, _this.mainWindow);
+            }
+            return Promise.reject();
+        });
+    };
+    /**
+     * HTMLファイルを作成します。
+     * @private
+     */
+    /* tslint:disable:quotemark */
+    File.prototype._generateHtml = function (exportFilePath) {
+        var fs = require('fs');
+        var filePNGName = this._getApngPathRelativeHTML();
+        var fileWebPName = this._getWebpPathReleativeHTML();
+        var imageElement = "";
+        var scriptElement1 = "";
+        var scriptElement2 = "";
+        if (this.animationOptionData.enabledExportApng &&
+            this.animationOptionData.enabledExportWebp) {
+            // tslint-disable-next-line quotemark
+            imageElement = "\n    <!-- Chrome \u3068 Firefox \u3068 Safari \u3067\u518D\u751F\u53EF\u80FD (IE, Edge \u3067\u306F\u30A2\u30CB\u30E1\u306F\u518D\u751F\u3067\u304D\u307E\u305B\u3093) -->\n    <picture>\n\t  <!-- Chrome \u7528 -->\n      <source type=\"image/webp\" srcset=\"" + fileWebPName + "\" />\n      <!-- Firefox, Safari \u7528 -->\n      <img src=\"" + filePNGName + "\" width=\"" + this.animationOptionData.imageInfo.width + "\"\n      height=\"" + this.animationOptionData.imageInfo.height + "\" alt=\"\" class=\"apng-image\" />\n    </picture>";
+            scriptElement1 = "<script src=\"https://cdnjs.cloudflare.com/ajax/libs/apng-canvas/2.1.1/apng-canvas.min.js\"></script>";
+            scriptElement2 = "\n    <script>\n      if(window.navigator.userAgent.indexOf(\"Chrome\") >= 0 && window.navigator.userAgent.indexOf(\"Edge\") == -1){\n        // Chrome \u306E\u5834\u5408\u306F WebP \u30D5\u30A1\u30A4\u30EB\u304C\u8868\u793A\u3055\u308C\u308B\n      }else{\n        // Chrome \u4EE5\u5916\u306E\u5834\u5408\u306F APNG \u5229\u7528\u53EF\u5426\u3092\u5224\u5B9A\u3059\u308B\n        APNG.ifNeeded().then(function () {\n          // APNG \u306B\u672A\u5BFE\u5FDC\u306E\u30D6\u30E9\u30A6\u30B6(\u4F8B\uFF1AIE, Edge)\u3067\u306F\u3001JS\u30E9\u30A4\u30D6\u30E9\u30EA\u300Capng-canvas\u300D\u306B\u3088\u308A\u8868\u793A\u53EF\u80FD\u306B\u3059\u308B\n          var images = document.querySelectorAll(\".apng-image\");\n          for (var i = 0; i < images.length; i++){ APNG.animateImage(images[i]); }\n        });\n      }\n    </script>";
+        }
+        else if (this.animationOptionData.enabledExportApng) {
+            imageElement = "\n    <!-- Firefox \u3068 Safari \u3067\u518D\u751F\u53EF\u80FD (Chrome, IE, Edge \u3067\u306F\u30A2\u30CB\u30E1\u306F\u518D\u751F\u3067\u304D\u307E\u305B\u3093) -->\n    <img src=\"" + filePNGName + "\" width=\"" + this.animationOptionData.imageInfo.width + "\"\n    height=\"" + this.animationOptionData.imageInfo.height + "\" alt=\"\" class=\"apng-image\" />";
+            scriptElement1 = "<script src=\"https://cdnjs.cloudflare.com/ajax/libs/apng-canvas/2.1.1/apng-canvas.min.js\"></script>";
+            scriptElement2 = "\n    <script>\n      // APNG \u306B\u672A\u5BFE\u5FDC\u306E\u30D6\u30E9\u30A6\u30B6(\u4F8B\uFF1AIE, Edge, Chrome)\u3067\u306F\u3001JS\u30E9\u30A4\u30D6\u30E9\u30EA\u300Capng-canvas\u300D\u306B\u3088\u308A\u8868\u793A\u53EF\u80FD\u306B\u3059\u308B\n      APNG.ifNeeded().then(function () {\n        var images = document.querySelectorAll(\".apng-image\");\n        for (var i = 0; i < images.length; i++){ APNG.animateImage(images[i]); }\n      });\n    </script>";
+        }
+        else if (this.animationOptionData.enabledExportWebp) {
+            imageElement = "\n    <!-- Chrome \u3067\u518D\u751F\u53EF\u80FD (IE, Edge, Firefox, Safari \u3067\u306F\u8868\u793A\u3067\u304D\u307E\u305B\u3093) -->\n    <img src=\"" + fileWebPName + "\" width=\"" + this.animationOptionData.imageInfo.width + "\"\n    height=\"" + this.animationOptionData.imageInfo.height + "\" alt=\"\" />";
+        }
+        else {
+            return;
+        }
+        // tslint:disable-next-line:max-line-length
+        var backgroundImageUrl = 'https://raw.githubusercontent.com/ics-creative/160609_animation-image-generator/master/app/imgs/opacity.png';
+        var data = "<!DOCTYPE html>\n<html>\n  <head>\n    <meta charset=\"UTF-8\" />\n    <style>\n      /* \u78BA\u8A8D\u7528\u306ECSS */\n      body { background: #444; }\n      picture img, .apng-image\n      {\n        background: url(" + backgroundImageUrl + ");\n      }\n    </style>\n    " + scriptElement1 + "\n  </head>\n  <body>\n  \t" + imageElement + "\n  \t" + scriptElement2 + "\n  </body>\n</html>";
+        fs.writeFileSync(exportFilePath, data);
+    };
+    File.prototype._getApngPathRelativeHTML = function () {
+        if (this._enableExportApng()) {
+            return require('path')
+                .relative(this.selectedHTMLDirectoryPath, this.selectedPNGPath);
+        }
+        return undefined;
+    };
+    File.prototype._enableExportHTML = function () {
+        return (this.animationOptionData.enabledExportHtml && !this.generateCancelHTML);
+    };
+    File.prototype._enableExportApng = function () {
+        return (this.animationOptionData.enabledExportApng && !this.generateCancelPNG);
+    };
+    File.prototype._enableExportWebp = function () {
+        return (this.animationOptionData.enabledExportWebp && !this.generateCancelWebP);
+    };
+    /**
+     * HTMLファイルを作成します。
+     * @private
+     */
+    File.prototype._getWebpPathReleativeHTML = function () {
+        if (this._enableExportWebp()) {
+            return require('path')
+                .relative(this.selectedHTMLDirectoryPath, this.selectedWebPPath);
+        }
+        return undefined;
+    };
+    /**
+     * ファイルが保存されているかを調べます。
+     * @returns {any}
+     */
+    File.prototype._imageFileSaved = function () {
+        return ((this.animationOptionData.enabledExportWebp &&
+            !this.generateCancelWebP) ||
+            (this.animationOptionData.enabledExportApng && !this.generateCancelPNG));
     };
     File.prototype.setErrorDetail = function (stdout) {
         if (stdout !== '') {

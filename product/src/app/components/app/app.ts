@@ -8,7 +8,6 @@ import {
 } from '@angular/core';
 import { ElectronService } from 'ngx-electron';
 import { IpcRenderer } from 'electron';
-import { ProcessExportImage } from '../../process/process-export-image';
 import { AppConfig } from '../../config/app-config';
 import { ApplicationMenu } from '../../menu/application-menu';
 import { LocaleData } from '../../i18n/locale-data';
@@ -35,7 +34,6 @@ export class AppComponent implements OnInit, AfterViewInit {
     return 'preset_id';
   }
 
-  private exportImagesProcess: ProcessExportImage;
   public isImageSelected: boolean;
   public presetMode: number;
 
@@ -89,11 +87,6 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.animationOptionData = new AnimationImageOptions();
 
     this.isImageSelected = false;
-    this.exportImagesProcess = new ProcessExportImage(
-      this.localeData,
-      this.ipcService,
-      this.electronService
-    );
 
     // 初回プリセットの設定
     this.presetMode = Number(localStorage.getItem(this.PRESET_ID));
@@ -116,6 +109,14 @@ export class AppComponent implements OnInit, AfterViewInit {
         this.openingDirectories = false;
       }
     );
+  }
+
+  exportImageProsess(
+    version: string,
+    itemList: ImageData[],
+    animationOptionData: AnimationImageOptions
+  ): Promise<void> {
+    return this.ipcService.exec(version, itemList, animationOptionData);
   }
 
   openExternalBrowser(url) {
@@ -237,22 +238,16 @@ export class AppComponent implements OnInit, AfterViewInit {
 
     this._showLockDialog();
 
-    this.exportImagesProcess
-      .exec(this.appConfig.version, this.items, this.animationOptionData)
+    this.exportImageProsess(
+      this.appConfig.version,
+      this.items,
+      this.animationOptionData
+    )
       .then(() => {
         this._hideLockDialog();
       })
       .catch(() => {
         this._hideLockDialog();
-
-        this.ipcRenderer.send(
-          IpcId.SHOW_ERROR_MESSAGE,
-          this.exportImagesProcess.errorCode,
-          this.exportImagesProcess.inquiryCode,
-          this.exportImagesProcess.errorDetail,
-          this.exportImagesProcess.errorStack,
-          this.localeData.APP_NAME
-        );
       });
   }
 

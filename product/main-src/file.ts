@@ -1,4 +1,5 @@
 import { BrowserWindow } from 'electron';
+import { ErrorMessage } from 'error/error-message';
 import { SendError } from 'error/send-error';
 import { AnimationImageOptions } from '../common-src/data/animation-image-option';
 import { ImageData } from '../common-src/data/image-data';
@@ -16,6 +17,7 @@ export default class File {
     appTemporaryPath: string,
     appPath: string,
     sendError: SendError,
+    errorMessage: ErrorMessage,
     defaultSaveDirectory: string
   ) {
     console.log('delete-file');
@@ -29,6 +31,7 @@ export default class File {
     );
     this.appPath = appPath;
     this.sendError = sendError;
+    this.errorMessage = errorMessage;
     this.defaultSaveDirectory = defaultSaveDirectory;
   }
 
@@ -36,6 +39,7 @@ export default class File {
   private defaultSaveDirectory: string;
 
   private sendError: SendError;
+  private errorMessage: ErrorMessage;
 
   private appPath: string;
   private temporaryCompressPath: string;
@@ -405,7 +409,230 @@ export default class File {
           });
         }
       })
-      .then(() => {});
+      .then(() => {
+        // APNGとWebP画像の両方書き出しが有効になっている場合
+        if (this.animationOptionData.enabledExportHtml === true) {
+          // 	画像ファイルが保存されているか。
+          if (!this._imageFileSaved()) {
+            this.generateCancelHTML = true;
+            alert(
+              '画像ファイルが保存されなかったため、HTMLの保存を行いませんでした。'
+            );
+            return;
+          }
+          this.errorCode = ErrorType.HTML_ERROR;
+          return this.openSaveDialog(
+            'html',
+            this.mainWindow,
+            this.defaultSaveDirectory
+          ).then((fileName: string) => {
+            if (fileName) {
+              return this._generateHtml(fileName);
+            } else {
+              this.generateCancelHTML = true;
+            }
+          });
+        }
+      })
+      .then(() => {
+        if (
+          !(
+            (this.animationOptionData.enabledExportHtml &&
+              !this.generateCancelHTML) ||
+            this._enableExportApng() ||
+            this._enableExportWebp()
+          )
+        ) {
+          console.log('ファイルが一つも保存されませんでした');
+
+          return Promise.resolve();
+        }
+
+        // エクスプローラーで開くでも、まだいいかも
+        const { shell } = (window as any).require('electron');
+        if (this._enableExportHTML()) {
+          shell.showItemInFolder(this.selectedHTMLPath);
+        } else if (this._enableExportApng()) {
+          shell.showItemInFolder(this.selectedPNGPath);
+        } else if (this._enableExportWebp()) {
+          // 	ここにこない可能性は高い
+          shell.showItemInFolder(this.selectedWebPPath);
+        }
+
+        return Promise.resolve();
+      })
+      .catch(message => {
+        // エラー内容の送信
+        if (message) {
+          console.error(message);
+          this.errorStack = message.stack;
+
+          this.sendError.exec(
+            this._version,
+            this.inquiryCode,
+            'ERROR',
+            this.errorCode.toString(),
+            message.stack
+          );
+
+          this.errorMessage.showErrorMessage(
+            this.errorCode,
+            this.inquiryCode,
+            this.errorDetail,
+            this.errorStack,
+            this.localeData.APP_NAME,
+            this.mainWindow
+          );
+        }
+        return Promise.reject();
+      });
+  }
+
+  /**
+   * HTMLファイルを作成します。
+   * @private
+   */
+
+  /* tslint:disable:quotemark */
+  private _generateHtml(exportFilePath: string): void {
+    const fs = require('fs');
+    const filePNGName: string = this._getApngPathRelativeHTML();
+    const fileWebPName: string = this._getWebpPathReleativeHTML();
+
+    let imageElement = ``;
+    let scriptElement1 = ``;
+    let scriptElement2 = ``;
+
+    if (
+      this.animationOptionData.enabledExportApng &&
+      this.animationOptionData.enabledExportWebp
+    ) {
+      // tslint-disable-next-line quotemark
+      imageElement = `
+    <!-- Chrome と Firefox と Safari で再生可能 (IE, Edge ではアニメは再生できません) -->
+    <picture>
+	  <!-- Chrome 用 -->
+      <source type="image/webp" srcset="${fileWebPName}" />
+      <!-- Firefox, Safari 用 -->
+      <img src="${filePNGName}" width="${this.animationOptionData.imageInfo.width}"
+      height="${this.animationOptionData.imageInfo.height}" alt="" class="apng-image" />
+    </picture>`;
+
+      scriptElement1 = `<script src="https://cdnjs.cloudflare.com/ajax/libs/apng-canvas/2.1.1/apng-canvas.min.js"></script>`;
+      scriptElement2 = `
+    <script>
+      if(window.navigator.userAgent.indexOf("Chrome") >= 0 && window.navigator.userAgent.indexOf("Edge") == -1){
+        // Chrome の場合は WebP ファイルが表示される
+      }else{
+        // Chrome 以外の場合は APNG 利用可否を判定する
+        APNG.ifNeeded().then(function () {
+          // APNG に未対応のブラウザ(例：IE, Edge)では、JSライブラリ「apng-canvas」により表示可能にする
+          var images = document.querySelectorAll(".apng-image");
+          for (var i = 0; i < images.length; i++){ APNG.animateImage(images[i]); }
+        });
+      }
+    </script>`;
+    } else if (this.animationOptionData.enabledExportApng) {
+      imageElement = `
+    <!-- Firefox と Safari で再生可能 (Chrome, IE, Edge ではアニメは再生できません) -->
+    <img src="${filePNGName}" width="${this.animationOptionData.imageInfo.width}"
+    height="${this.animationOptionData.imageInfo.height}" alt="" class="apng-image" />`;
+      scriptElement1 = `<script src="https://cdnjs.cloudflare.com/ajax/libs/apng-canvas/2.1.1/apng-canvas.min.js"></script>`;
+      scriptElement2 = `
+    <script>
+      // APNG に未対応のブラウザ(例：IE, Edge, Chrome)では、JSライブラリ「apng-canvas」により表示可能にする
+      APNG.ifNeeded().then(function () {
+        var images = document.querySelectorAll(".apng-image");
+        for (var i = 0; i < images.length; i++){ APNG.animateImage(images[i]); }
+      });
+    </script>`;
+    } else if (this.animationOptionData.enabledExportWebp) {
+      imageElement = `
+    <!-- Chrome で再生可能 (IE, Edge, Firefox, Safari では表示できません) -->
+    <img src="${fileWebPName}" width="${this.animationOptionData.imageInfo.width}"
+    height="${this.animationOptionData.imageInfo.height}" alt="" />`;
+    } else {
+      return;
+    }
+
+    // tslint:disable-next-line:max-line-length
+    const backgroundImageUrl =
+      'https://raw.githubusercontent.com/ics-creative/160609_animation-image-generator/master/app/imgs/opacity.png';
+    const data = `<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <style>
+      /* 確認用のCSS */
+      body { background: #444; }
+      picture img, .apng-image
+      {
+        background: url(${backgroundImageUrl});
+      }
+    </style>
+    ${scriptElement1}
+  </head>
+  <body>
+  	${imageElement}
+  	${scriptElement2}
+  </body>
+</html>`;
+
+    fs.writeFileSync(exportFilePath, data);
+  }
+
+  private _getApngPathRelativeHTML(): string {
+    if (this._enableExportApng()) {
+      return require('path').relative(
+        this.selectedHTMLDirectoryPath,
+        this.selectedPNGPath
+      );
+    }
+    return undefined;
+  }
+
+  private _enableExportHTML(): boolean {
+    return (
+      this.animationOptionData.enabledExportHtml && !this.generateCancelHTML
+    );
+  }
+
+  private _enableExportApng(): boolean {
+    return (
+      this.animationOptionData.enabledExportApng && !this.generateCancelPNG
+    );
+  }
+
+  private _enableExportWebp(): boolean {
+    return (
+      this.animationOptionData.enabledExportWebp && !this.generateCancelWebP
+    );
+  }
+
+  /**
+   * HTMLファイルを作成します。
+   * @private
+   */
+  private _getWebpPathReleativeHTML(): string {
+    if (this._enableExportWebp()) {
+      return require('path').relative(
+        this.selectedHTMLDirectoryPath,
+        this.selectedWebPPath
+      );
+    }
+    return undefined;
+  }
+
+  /**
+   * ファイルが保存されているかを調べます。
+   * @returns {any}
+   */
+  private _imageFileSaved(): boolean {
+    return (
+      (this.animationOptionData.enabledExportWebp &&
+        !this.generateCancelWebP) ||
+      (this.animationOptionData.enabledExportApng && !this.generateCancelPNG)
+    );
   }
 
   private setErrorDetail(stdout: string) {

@@ -13,7 +13,7 @@ var url = require('url');
 var ipcMain = electron.ipcMain;
 var sendError = new send_error_1.SendError();
 var errorMessage = new error_message_1.ErrorMessage();
-var fileService = new file_1["default"](app.getPath('temp'), app.getAppPath(), sendError, app.getPath('desktop'));
+var fileService = new file_1["default"](app.getPath('temp'), app.getAppPath(), sendError, errorMessage, app.getPath('desktop'));
 // メインウィンドウ
 var mainWindow;
 function createWindow() {

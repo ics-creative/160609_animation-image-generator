@@ -23,6 +23,7 @@ const fileService = new File(
   app.getPath('temp'),
   app.getAppPath(),
   sendError,
+  errorMessage,
   app.getPath('desktop')
 );
 
