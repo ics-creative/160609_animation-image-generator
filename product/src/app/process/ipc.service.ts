@@ -4,6 +4,7 @@ import { IpcId } from '../../../common-src/ipc-id';
 import { AnimationImageOptions } from '../../../common-src/data/animation-image-option';
 import { ImageData } from '../../../common-src/data/image-data';
 import { ILocaleData } from '../../../common-src/i18n/locale-data.interface';
+import { AppConfig } from 'app/config/app-config';
 
 @Injectable()
 export default class IpcService {
@@ -22,8 +23,8 @@ export default class IpcService {
     }
   }
 
-  public setLocaleData(localeData: ILocaleData) {
-    this.ipcRenderer.send(IpcId.SET_LOCALE_DATA, localeData);
+  public sendConfigData(localeData: ILocaleData, appConfig: AppConfig) {
+    this.ipcRenderer.send(IpcId.SET_CONFIG_DATA, localeData, appConfig);
   }
 
   public openFileDialog() {

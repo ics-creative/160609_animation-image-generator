@@ -7,6 +7,8 @@ import { SendError } from './error/send-error';
 import { ImageData } from '../common-src/data/image-data';
 import File from './file';
 import { ILocaleData } from '../common-src/i18n/locale-data.interface';
+import { ApplicationMenu } from './menu/application-menu';
+import { AppConfig } from '../src/app/config/app-config';
 
 // アプリケーション作成用のモジュールを読み込み
 const electron = require('electron');
@@ -119,12 +121,18 @@ function openFileDialog(event) {
   });
 }
 
-ipcMain.on(IpcId.SET_LOCALE_DATA, (event, localeData: ILocaleData) => {
-  console.log(`${IpcId.SET_LOCALE_DATA} to ${localeData}`);
+ipcMain.on(
+  IpcId.SET_CONFIG_DATA,
+  (event, localeData: ILocaleData, appConfig: AppConfig) => {
+    console.log(`${IpcId.SET_CONFIG_DATA} to ${localeData}`);
 
-  fileService.setDefaultFileName(localeData.defaultFileName);
-  mainWindow.setTitle(localeData.APP_NAME);
-});
+    fileService.setDefaultFileName(localeData.defaultFileName);
+    mainWindow.setTitle(localeData.APP_NAME);
+
+    const menu: ApplicationMenu = new ApplicationMenu(appConfig, localeData);
+    menu.createMenu(app);
+  }
+);
 
 // todo:async-await対応
 ipcMain.on(IpcId.OPEN_SAVE_DIALOG, (event, imageType: string) => {

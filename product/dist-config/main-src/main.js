@@ -4,6 +4,7 @@ var ipc_id_1 = require("../common-src/ipc-id");
 var error_message_1 = require("./error/error-message");
 var send_error_1 = require("./error/send-error");
 var file_1 = require("./file");
+var application_menu_1 = require("./menu/application-menu");
 // アプリケーション作成用のモジュールを読み込み
 var electron = require('electron');
 var app = electron.app;
@@ -93,10 +94,12 @@ function openFileDialog(event) {
         }
     });
 }
-ipcMain.on(ipc_id_1.IpcId.SET_LOCALE_DATA, function (event, localeData) {
-    console.log(ipc_id_1.IpcId.SET_LOCALE_DATA + " to " + localeData);
+ipcMain.on(ipc_id_1.IpcId.SET_CONFIG_DATA, function (event, localeData, appConfig) {
+    console.log(ipc_id_1.IpcId.SET_CONFIG_DATA + " to " + localeData);
     fileService.setDefaultFileName(localeData.defaultFileName);
     mainWindow.setTitle(localeData.APP_NAME);
+    var menu = new application_menu_1.ApplicationMenu(appConfig, localeData);
+    menu.createMenu(app);
 });
 // todo:async-await対応
 ipcMain.on(ipc_id_1.IpcId.OPEN_SAVE_DIALOG, function (event, imageType) {

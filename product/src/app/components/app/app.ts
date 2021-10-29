@@ -6,14 +6,12 @@ import {
   OnInit,
   ViewChild
 } from '@angular/core';
-import { ElectronService } from 'ngx-electron';
 import { AppConfig } from '../../config/app-config';
-import { ApplicationMenu } from '../../menu/application-menu';
+import { ApplicationMenu } from '../../../../main-src/menu/application-menu';
 import { LocaleData } from '../../i18n/locale-data';
 import { LocaleManager } from '../../i18n/locale-manager';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import IpcService from '../../process/ipc.service';
-import { IpcId } from '../../../../common-src/ipc-id';
 import { PresetType } from '../../../../common-src/type/PresetType';
 import { PresetLine } from '../../../../common-src/preset/preset-line';
 import { PresetWeb } from '../../../../common-src/preset/preset-web';
@@ -57,7 +55,6 @@ export class AppComponent implements OnInit, AfterViewInit {
   constructor(
     public localeData: LocaleData,
     sanitizer: DomSanitizer,
-    private electronService: ElectronService,
     private ipcService: IpcService
   ) {
     this.gaUrl = sanitizer.bypassSecurityTrustResourceUrl(
@@ -68,13 +65,6 @@ export class AppComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
-    const menu: ApplicationMenu = new ApplicationMenu(
-      this.appConfig,
-      this.localeData,
-      this.electronService
-    );
-    menu.createMenu();
-
     this.animationOptionData = new AnimationImageOptions();
 
     this.isImageSelected = false;
@@ -83,7 +73,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.presetMode = Number(localStorage.getItem(this.PRESET_ID));
     this.changePreset(this.presetMode);
 
-    this.ipcService.setLocaleData(this.localeData);
+    this.ipcService.sendConfigData(this.localeData, this.appConfig);
 
     // 	保存先の指定返却
     this.ipcService.selectedOpenImages().then(list => {
