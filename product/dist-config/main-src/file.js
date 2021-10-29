@@ -315,7 +315,8 @@ var File = /** @class */ (function () {
                     }
                 });
             }
-        }).then(function () {
+        })
+            .then(function () {
             if (!((_this.animationOptionData.enabledExportHtml &&
                 !_this.generateCancelHTML) ||
                 _this._enableExportApng() ||
@@ -384,8 +385,7 @@ var File = /** @class */ (function () {
     };
     File.prototype._getApngPathRelativeHTML = function () {
         if (this._enableExportApng()) {
-            return require('path')
-                .relative(this.selectedHTMLDirectoryPath, this.selectedPNGPath);
+            return require('path').relative(this.selectedHTMLDirectoryPath, this.selectedPNGPath);
         }
         return undefined;
     };
@@ -404,8 +404,7 @@ var File = /** @class */ (function () {
      */
     File.prototype._getWebpPathReleativeHTML = function () {
         if (this._enableExportWebp()) {
-            return require('path')
-                .relative(this.selectedHTMLDirectoryPath, this.selectedWebPPath);
+            return require('path').relative(this.selectedHTMLDirectoryPath, this.selectedWebPPath);
         }
         return undefined;
     };

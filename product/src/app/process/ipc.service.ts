@@ -26,6 +26,10 @@ export default class IpcService {
     this.ipcRenderer.send(IpcId.SET_LOCALE_DATA, localeData);
   }
 
+  public openFileDialog() {
+    this.ipcRenderer.send(IpcId.OPEN_FILE_DIALOG);
+  }
+
   public openSaveDialog(imageType: string) {
     return new Promise<{
       result: boolean;
@@ -53,7 +57,6 @@ export default class IpcService {
     title: string,
     detail: string
   ) {
-    this.init();
     this.ipcRenderer.sendSync(
       IpcId.SEND_ERROR,
       version,
@@ -64,12 +67,33 @@ export default class IpcService {
     );
   }
 
+  selectedOpenImages(): Promise<string[]> {
+    return new Promise((resolve, reject) => {
+      this.ipcRenderer.on(
+        IpcId.SELECTED_OPEN_IMAGES,
+        (event: any, filePathList: string[]) => {
+          resolve(filePathList);
+        }
+      );
+    });
+  }
+
+  unlockSelectUi(): Promise<void> {
+    return new Promise((resolve, reject) => {
+      this.ipcRenderer.on(
+        IpcId.UNLOCK_SELECT_UI,
+        (event: any, filePathList: string[]) => {
+          resolve();
+        }
+      );
+    });
+  }
+
   public exec(
     version: string,
     itemList: ImageData[],
     animationOptionData: AnimationImageOptions
   ): Promise<void> {
-    this.init();
     return new Promise((resolve, reject) => {
       const result = this.ipcRenderer.sendSync(
         IpcId.EXEC_IMAGE_EXPORT_PROCESS,

@@ -7,7 +7,6 @@ import {
   ViewChild
 } from '@angular/core';
 import { ElectronService } from 'ngx-electron';
-import { IpcRenderer } from 'electron';
 import { AppConfig } from '../../config/app-config';
 import { ApplicationMenu } from '../../menu/application-menu';
 import { LocaleData } from '../../i18n/locale-data';
@@ -44,7 +43,6 @@ export class AppComponent implements OnInit, AfterViewInit {
   public _isDragover = false;
   private apngFileSizeError = false;
   public gaUrl: SafeResourceUrl;
-  private ipcRenderer: IpcRenderer;
   private electron: any;
 
   @Input()
@@ -67,13 +65,6 @@ export class AppComponent implements OnInit, AfterViewInit {
         this.appConfig.analyticsVersion
     );
     new LocaleManager().applyClientLocale(localeData);
-
-    try {
-      this.electron = (window as any).require('electron');
-      this.ipcRenderer = this.electron.ipcRenderer;
-    } catch (e) {
-      throw e;
-    }
   }
 
   ngOnInit() {
@@ -95,20 +86,16 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.ipcService.setLocaleData(this.localeData);
 
     // 	保存先の指定返却
-    this.ipcRenderer.on(
-      IpcId.SELECTED_OPEN_IMAGES,
-      (event: any, filePathList: string[]) => {
-        this._selectedImages(filePathList);
-      }
-    );
+    this.ipcService.selectedOpenImages().then(list => {
+      this.selectedImages(list);
+    });
+    this.ipcService.unlockSelectUi().then(() => {
+      this.unlockSelectUi();
+    });
+  }
 
-    this.ipcRenderer.on(
-      IpcId.UNLOCK_SELECT_UI,
-      (event: any, filePathList: string[]) => {
-        console.log('unlockUI');
-        this.openingDirectories = false;
-      }
-    );
+  unlockSelectUi() {
+    this.openingDirectories = false;
   }
 
   exportImageProsess(
@@ -148,10 +135,10 @@ export class AppComponent implements OnInit, AfterViewInit {
       return;
     }
     this.openingDirectories = true;
-    this.ipcRenderer.send('open-file-dialog');
+    this.ipcService.openFileDialog();
   }
 
-  public _selectedImages(filePathList: string[]) {
+  private selectedImages(filePathList: string[]) {
     this.openingDirectories = false;
     this.setFilePathList(filePathList);
   }
@@ -283,7 +270,7 @@ export class AppComponent implements OnInit, AfterViewInit {
       return;
     }
     this.openingDirectories = true;
-    this.ipcRenderer.send(IpcId.OPEN_FILE_DIALOG);
+    this.ipcService.openFileDialog();
   }
 
   /**
