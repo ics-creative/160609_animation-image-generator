@@ -282,6 +282,19 @@ var File = /** @class */ (function () {
                 });
             }
         })
+            .then(function () {
+            // WebP書き出しが有効になっている場合
+            if (_this.animationOptionData.enabledExportWebp === true) {
+                return _this.openSaveDialog('webp', _this.mainWindow, _this.defaultSaveDirectory).then(function (fileName) {
+                    if (fileName) {
+                        return _this._generateWebp(fileName);
+                    }
+                    else {
+                        _this.generateCancelWebP = true;
+                    }
+                });
+            }
+        })
             .then(function () { });
     };
     File.prototype.setErrorDetail = function (stdout) {
@@ -294,6 +307,120 @@ var File = /** @class */ (function () {
         }
     };
     /**
+     * WEBP アニメーション画像を作ります。
+     * @returns {Promise<T>}
+     * @private
+     */
+    File.prototype._generateWebp = function (exportFilePath) {
+        var _this = this;
+        return new Promise(function (resolve, reject) {
+            var path = require('path');
+            var appPath = _this.appPath;
+            var execFile = require('child_process')
+                .execFile;
+            var pngPath = path.join(_this.temporaryPath);
+            var options = [];
+            var frameMs = Math.round(1000 / _this.animationOptionData.fps);
+            var pngFiles = [];
+            for (var i = 0; i < _this.itemList.length; i++) {
+                // フレーム数に違和感がある
+                options.push("-frame");
+                options.push(pngPath + "/frame" + i + ".png.webp");
+                options.push("+" + frameMs + "+0+0+1");
+                pngFiles.push(pngPath + "/frame" + i + ".png");
+            }
+            if (_this.animationOptionData.noLoop === false) {
+                options.push("-loop");
+                options.push(_this.animationOptionData.loop + '');
+            }
+            options.push("-o");
+            options.push(exportFilePath);
+            _this.errorCode = error_type_1.ErrorType.CWEBP_OTHER_ERROR;
+            _this._convertPng2Webps(pngFiles)
+                .then(function () {
+                setImmediate(function () {
+                    _this.errorCode = error_type_1.ErrorType.WEBPMUX_OTHER_ERROR;
+                    execFile(appPath + "/bin/webpmux" + _this.getExeExt(), options, function (err, stdout, stderr) {
+                        if (!err) {
+                            resolve();
+                        }
+                        else {
+                            console.error(stderr);
+                            if (err.code === Error.ENOENT_ERROR) {
+                                _this.errorCode = error_type_1.ErrorType.WEBPMUX_ACCESS_ERROR;
+                            }
+                            else {
+                                _this.errorCode = error_type_1.ErrorType.WEBPMUX_ERROR;
+                            }
+                            // エラー内容の送信
+                            _this.sendError.exec(_this._version, _this.inquiryCode, 'ERROR', _this.errorCode + '', err.code + ' : ' + stdout + ', message:' + err.message);
+                            reject();
+                        }
+                    });
+                });
+            })["catch"](function () {
+                reject();
+            });
+        });
+    };
+    File.prototype._convertPng2Webps = function (pngPaths) {
+        var promises = [];
+        for (var i = 0; i < pngPaths.length; i++) {
+            promises.push(this._convertPng2Webp(pngPaths[i]));
+        }
+        return new Promise(function (resolve, reject) {
+            Promise.all(promises)
+                .then(function () {
+                resolve();
+            })["catch"](function () {
+                reject();
+            });
+        });
+    };
+    File.prototype._convertPng2Webp = function (filePath) {
+        var _this = this;
+        var path = require('path');
+        var appPath = this.appPath;
+        var execFile = require('child_process')
+            .execFile;
+        var options = [];
+        options.push(filePath);
+        options.push("-o");
+        options.push(filePath + ".webp");
+        options.push(filePath);
+        if (this.animationOptionData.enabledWebpCompress === true) {
+            options.push("-preset", "drawing");
+        }
+        else {
+            options.push("-lossless");
+            // 超低容量設定
+            // options.push(`-q`, `100`);
+            // options.push(`-m`, `6`);
+        }
+        return new Promise(function (resolve, reject) {
+            setImmediate(function () {
+                execFile(appPath + "/bin/cwebp" + _this.getExeExt(), options, function (err, stdout, stderr) {
+                    if (!err) {
+                        resolve();
+                    }
+                    else {
+                        _this.setErrorDetail(stdout);
+                        if (err.code === Error.ENOENT_ERROR) {
+                            _this.errorCode = error_type_1.ErrorType.CWEBP_ACCESS_ERROR;
+                        }
+                        else {
+                            _this.errorCode = error_type_1.ErrorType.CWEBP_ERROR;
+                        }
+                        // エラー内容の送信
+                        _this.sendError.exec(_this._version, _this.inquiryCode, 'ERROR', _this.errorCode + '', err.code + ' : ' + stdout + ', message:' + err.message);
+                        reject();
+                        console.error(stderr);
+                    }
+                });
+            });
+        });
+    };
+    /**
      * APNG画像を保存します。
      * @returns {Promise<T>}
      * @private
@@ -302,8 +429,7 @@ var File = /** @class */ (function () {
         var _this = this;
         return new Promise(function (resolve, reject) {
             var path = require('path');
-            var exec = require('child_process')
-                .execFile;
+            var exec = require('child_process').execFile;
             var pngPath = path.join(_this.temporaryLastPath, 'frame*.png');
             var compressOptions = _this.getCompressOption(_this.animationOptionData.compression);
             console.log('this.animationOptionData.loop : ' + _this.animationOptionData.loop);
