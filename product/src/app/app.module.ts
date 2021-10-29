@@ -1,7 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { NgxElectronModule } from 'ngx-electron';
 
 import { AppComponent } from './components/app/app';
 import { AnimPreviewComponent } from './components/anim-preview/anim-preview';
@@ -20,7 +19,7 @@ import IpcService from './process/ipc.service';
 
 @NgModule({
   declarations: [AppComponent, AnimPreviewComponent, PropertiesComponent],
-  imports: [BrowserModule, FormsModule, NgxElectronModule],
+  imports: [BrowserModule, FormsModule],
   providers: [LocaleData, IpcService],
   bootstrap: [AppComponent]
 })
