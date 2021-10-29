@@ -316,8 +316,7 @@ var File = /** @class */ (function () {
         return new Promise(function (resolve, reject) {
             var path = require('path');
             var appPath = _this.appPath;
-            var execFile = require('child_process')
-                .execFile;
+            var execFile = require('child_process').execFile;
             var pngPath = path.join(_this.temporaryPath);
             var options = [];
             var frameMs = Math.round(1000 / _this.animationOptionData.fps);
@@ -381,8 +380,7 @@ var File = /** @class */ (function () {
         var _this = this;
         var path = require('path');
         var appPath = this.appPath;
-        var execFile = require('child_process')
-            .execFile;
+        var execFile = require('child_process').execFile;
         var options = [];
         options.push(filePath);
         options.push("-o");

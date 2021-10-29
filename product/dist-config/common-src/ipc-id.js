@@ -9,4 +9,6 @@ var IpcId;
     IpcId.SHOW_ERROR_MESSAGE = 'show-error-message';
     IpcId.SEND_ERROR = 'send-error';
     IpcId.EXEC_IMAGE_EXPORT_PROCESS = 'exec-image-export-process';
+    IpcId.SELECTED_OPEN_IMAGES = 'selected-open-images';
+    IpcId.UNLOCK_SELECT_UI = 'unlock-select-ui';
 })(IpcId = exports.IpcId || (exports.IpcId = {}));

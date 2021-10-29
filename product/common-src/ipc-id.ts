@@ -7,4 +7,7 @@ export namespace IpcId {
   export const SEND_ERROR: 'send-error' = 'send-error';
   export const EXEC_IMAGE_EXPORT_PROCESS: 'exec-image-export-process' =
     'exec-image-export-process';
+  export const SELECTED_OPEN_IMAGES: 'selected-open-images' =
+    'selected-open-images';
+  export const UNLOCK_SELECT_UI: 'unlock-select-ui' = 'unlock-select-ui';
 }

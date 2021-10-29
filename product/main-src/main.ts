@@ -111,9 +111,9 @@ function openFileDialog(event) {
   };
   dialog.showOpenDialog(mainWindow, dialogOption, function(files) {
     if (files) {
-      event.sender.send('selected-open-images', files);
+      event.sender.send(IpcId.SELECTED_OPEN_IMAGES, files);
     } else {
-      event.sender.send('unlock-select-ui');
+      event.sender.send(IpcId.UNLOCK_SELECT_UI);
     }
   });
 }

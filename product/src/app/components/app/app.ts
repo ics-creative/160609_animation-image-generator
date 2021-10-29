@@ -103,14 +103,14 @@ export class AppComponent implements OnInit, AfterViewInit {
 
     // 	保存先の指定返却
     this.ipcRenderer.on(
-      'selected-open-images',
+      IpcId.SELECTED_OPEN_IMAGES,
       (event: any, filePathList: string[]) => {
         this._selectedImages(filePathList);
       }
     );
 
     this.ipcRenderer.on(
-      'unlock-select-ui',
+      IpcId.UNLOCK_SELECT_UI,
       (event: any, filePathList: string[]) => {
         console.log('unlockUI');
         this.openingDirectories = false;
