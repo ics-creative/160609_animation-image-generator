@@ -112,13 +112,14 @@ function openFileDialog(event) {
     properties: ['openFile', 'multiSelections'],
     filters: [{ name: 'Images', extensions: ['png'] }]
   };
-  dialog.showOpenDialog(mainWindow, dialogOption, function(files) {
-    if (files) {
+  dialog
+    .showOpenDialog(mainWindow, dialogOption)
+    .then(files => {
       event.sender.send(IpcId.SELECTED_OPEN_IMAGES, files);
-    } else {
+    })
+    .catch(() => {
       event.sender.send(IpcId.UNLOCK_SELECT_UI);
-    }
-  });
+    });
 }
 
 ipcMain.on(

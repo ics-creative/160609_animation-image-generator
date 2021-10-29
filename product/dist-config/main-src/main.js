@@ -85,13 +85,10 @@ function openFileDialog(event) {
         properties: ['openFile', 'multiSelections'],
         filters: [{ name: 'Images', extensions: ['png'] }]
     };
-    dialog.showOpenDialog(mainWindow, dialogOption, function (files) {
-        if (files) {
-            event.sender.send(ipc_id_1.IpcId.SELECTED_OPEN_IMAGES, files);
-        }
-        else {
-            event.sender.send(ipc_id_1.IpcId.UNLOCK_SELECT_UI);
-        }
+    dialog.showOpenDialog(mainWindow, dialogOption).then(function (files) {
+        event.sender.send(ipc_id_1.IpcId.SELECTED_OPEN_IMAGES, files);
+    })["catch"](function () {
+        event.sender.send(ipc_id_1.IpcId.UNLOCK_SELECT_UI);
     });
 }
 ipcMain.on(ipc_id_1.IpcId.SET_CONFIG_DATA, function (event, localeData, appConfig) {

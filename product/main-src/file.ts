@@ -272,9 +272,8 @@ export default class File {
       const path = require('path');
       defaultPath = path.join(this.lastSelectSaveDirectories, defaultPathName);
 
-      dialog.showSaveDialog(
-        window,
-        {
+      dialog
+        .showSaveDialog(window, {
           title: title,
           defaultPath: defaultPath,
           filters: [
@@ -283,8 +282,8 @@ export default class File {
               extensions: [extention]
             }
           ]
-        },
-        (fileName: string) => {
+        })
+        .then(fileName => {
           if (fileName) {
             this.lastSelectSaveDirectories = path.dirname(fileName);
             this.lastSelectBaseName = path.basename(fileName, `.${imageType}`);
@@ -294,11 +293,11 @@ export default class File {
               fileName: fileName,
               lastDirectory: this.lastSelectSaveDirectories
             });
-          } else {
-            resolve({ result: false });
           }
-        }
-      );
+        })
+        .catch(() => {
+          resolve({ result: false });
+        });
     });
   }
 

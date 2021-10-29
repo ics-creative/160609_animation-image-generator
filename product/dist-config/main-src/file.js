@@ -199,7 +199,7 @@ var File = /** @class */ (function () {
                         extensions: [extention]
                     }
                 ]
-            }, function (fileName) {
+            }).then(function (fileName) {
                 if (fileName) {
                     _this.lastSelectSaveDirectories = path.dirname(fileName);
                     _this.lastSelectBaseName = path.basename(fileName, "." + imageType);
@@ -209,9 +209,8 @@ var File = /** @class */ (function () {
                         lastDirectory: _this.lastSelectSaveDirectories
                     });
                 }
-                else {
-                    resolve({ result: false });
-                }
+            })["catch"](function () {
+                resolve({ result: false });
             });
         });
     };
