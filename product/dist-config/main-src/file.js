@@ -128,7 +128,7 @@ var File = /** @class */ (function () {
                 console.log("\u30D5\u30A9\u30EB\u30C0\u3092\u4F5C\u6210\u3067\u304D\u307E\u305B\u3093\u3067\u3057\u305F " + _this.temporaryCompressPath);
             })
                 .then(function () {
-                console.log('clean-temporary : success');
+                console.log('::clean-temporary:: success');
                 resolve();
             });
         });
@@ -157,12 +157,13 @@ var File = /** @class */ (function () {
     File.prototype.openSaveDialog = function (imageType, window, defaultSaveDirectory) {
         var _this = this;
         return new Promise(function (resolve, reject) {
+            console.log('::open-save-dialog::');
             var title = '';
             var defaultPathName = '';
             var defaultPath = '';
             var extention = '';
             var lastBaseName = _this.lastSelectBaseName;
-            console.log(lastBaseName);
+            console.log('lastBaseName', lastBaseName);
             switch (imageType) {
                 case 'png':
                     title = 'ファイルの保存先を選択';
@@ -202,18 +203,18 @@ var File = /** @class */ (function () {
                 ]
             })
                 .then(function (dialogResult) {
-                console.log('showSaveDialog', dialogResult);
                 if (!dialogResult.canceled) {
-                    var path_1 = require('path');
-                    _this.lastSelectSaveDirectories = path_1.dirname(dialogResult.filePath);
-                    _this.lastSelectBaseName = path_1.basename(dialogResult.filePath, "." + imageType);
+                    _this.lastSelectSaveDirectories = path.dirname(dialogResult.filePath);
+                    _this.lastSelectBaseName = path.basename(dialogResult.filePath, "." + imageType);
                     var result = {
                         result: true,
                         filePath: dialogResult.filePath,
                         lastDirectory: _this.lastSelectSaveDirectories
                     };
-                    console.log('result' + result, 'filePath' + dialogResult.filePath, _this.lastSelectSaveDirectories);
                     resolve(result);
+                }
+                else {
+                    resolve({ result: false });
                 }
             })["catch"](function () {
                 resolve({ result: false });
@@ -222,6 +223,7 @@ var File = /** @class */ (function () {
     };
     File.prototype.setLocaleData = function (localeData) {
         this.localeData = localeData;
+        console.log('::set-locale-data::', localeData);
     };
     File.prototype.getExeExt = function () {
         var platform = require('os').platform();
@@ -231,14 +233,13 @@ var File = /** @class */ (function () {
         var _this = this;
         this._version = version;
         // 	platformで実行先の拡張子を変える
-        console.log(this.getExeExt());
-        console.log(process.platform);
+        console.log('exe ext', this.getExeExt());
+        console.log('platform', process.platform);
         var SHA256 = require('crypto-js/sha256');
         // お問い合わせコード生成
         this.inquiryCode = SHA256(require('os').platform + '/' + new Date().toString())
             .toString()
             .slice(0, 8);
-        console.log(this.inquiryCode);
         // 	テンポラリパス生成
         var path = require('path');
         this.itemList = itemList;
@@ -263,7 +264,7 @@ var File = /** @class */ (function () {
         this.errorCode = error_type_1.ErrorType.TEMPORARY_CLEAN_ERROR;
         return this.cleanTemporaryDirectory()
             .then(function () {
-            console.log('make_temporary');
+            console.log('::make-temporary::');
             _this.errorCode = error_type_1.ErrorType.MAKE_TEMPORARY_ERROR;
             return _this._copyTemporaryDirectory();
         })
@@ -285,11 +286,14 @@ var File = /** @class */ (function () {
                     }
                     else {
                         _this.generateCancelPNG = true;
+                        console.log(result);
+                        return Promise.resolve();
                     }
                 });
             }
         })
             .then(function () {
+            console.log('::start-export-wepb::');
             // WebP書き出しが有効になっている場合
             if (_this.animationOptionData.enabledExportWebp === true) {
                 return _this.openSaveDialog('webp', _this.mainWindow, _this.defaultSaveDirectory).then(function (result) {
@@ -300,11 +304,14 @@ var File = /** @class */ (function () {
                     }
                     else {
                         _this.generateCancelWebP = true;
+                        console.log(result);
+                        return Promise.resolve();
                     }
                 });
             }
         })
             .then(function () {
+            console.log('::start-export-html::');
             // APNGとWebP画像の両方書き出しが有効になっている場合
             if (_this.animationOptionData.enabledExportHtml === true) {
                 // 	画像ファイルが保存されているか。
@@ -318,23 +325,25 @@ var File = /** @class */ (function () {
                         detail: '画像ファイルが保存されなかったため、HTMLの保存を行いませんでした。'
                     };
                     electron_1.dialog.showMessageBox(_this.mainWindow, dialogOption);
-                    return;
+                    return Promise.resolve();
                 }
                 _this.errorCode = error_type_1.ErrorType.HTML_ERROR;
                 return _this.openSaveDialog('html', _this.mainWindow, _this.defaultSaveDirectory).then(function (result) {
                     if (result.result) {
-                        var path_2 = require('path');
                         _this.selectedHTMLPath = result.filePath;
                         _this.selectedHTMLDirectoryPath = result.lastDirectory;
                         return _this._generateHtml(result.filePath);
                     }
                     else {
                         _this.generateCancelHTML = true;
+                        console.log(result);
+                        return Promise.resolve();
                     }
                 });
             }
         })
             .then(function () {
+            console.log('::start-export-wepb::');
             if (!((_this.animationOptionData.enabledExportHtml &&
                 !_this.generateCancelHTML) ||
                 _this._enableExportApng() ||
@@ -356,6 +365,7 @@ var File = /** @class */ (function () {
             }
             return Promise.resolve();
         })["catch"](function (message) {
+            console.log('::catch-error::');
             // エラー内容の送信
             if (message) {
                 console.error(message);
@@ -659,9 +669,7 @@ var File = /** @class */ (function () {
                 '--',
                 path.join("" + _this.temporaryPath, "frame" + item.frameNumber + ".png")
             ];
-            execFile(
-            // 2018-05-15 一時的にファイルパスを変更
-            _this.appPath + "/bin/pngquant" + _this.getExeExt(), options, function (err, stdout, stderr) {
+            execFile(_this.appPath + "/bin/pngquant" + _this.getExeExt(), options, function (err, stdout, stderr) {
                 if (!err) {
                     resolve();
                 }

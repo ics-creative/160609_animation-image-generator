@@ -200,7 +200,7 @@ export default class File {
           );
         })
         .then(() => {
-          console.log('clean-temporary : success');
+          console.log('::clean-temporary:: success');
           resolve();
         });
     });
@@ -243,13 +243,15 @@ export default class File {
   ) {
     return new Promise<OpenSaveDailogResult>(
       (resolve: Function, reject: Function) => {
+        console.log('::open-save-dialog::');
+
         let title = '';
         let defaultPathName = '';
         let defaultPath = '';
         let extention = '';
 
         const lastBaseName = this.lastSelectBaseName;
-        console.log(lastBaseName);
+        console.log('lastBaseName', lastBaseName);
         switch (imageType) {
           case 'png':
             title = 'ファイルの保存先を選択';
@@ -309,6 +311,8 @@ export default class File {
                 lastDirectory: this.lastSelectSaveDirectories
               };
               resolve(result);
+            } else {
+              resolve({ result: false });
             }
           })
           .catch(() => {
@@ -320,6 +324,7 @@ export default class File {
 
   public setLocaleData(localeData: ILocaleData) {
     this.localeData = localeData;
+    console.log('::set-locale-data::', localeData);
   }
 
   public getExeExt() {
@@ -335,8 +340,8 @@ export default class File {
   ): Promise<void> {
     this._version = version;
     // 	platformで実行先の拡張子を変える
-    console.log(this.getExeExt());
-    console.log(process.platform);
+    console.log('exe ext', this.getExeExt());
+    console.log('platform', process.platform);
 
     const SHA256 = require('crypto-js/sha256');
 
@@ -346,8 +351,6 @@ export default class File {
     )
       .toString()
       .slice(0, 8);
-
-    console.log(this.inquiryCode);
 
     // 	テンポラリパス生成
     const path = require('path');
@@ -381,7 +384,7 @@ export default class File {
     this.errorCode = ErrorType.TEMPORARY_CLEAN_ERROR;
     return this.cleanTemporaryDirectory()
       .then(() => {
-        console.log('make_temporary');
+        console.log('::make-temporary::');
         this.errorCode = ErrorType.MAKE_TEMPORARY_ERROR;
         return this._copyTemporaryDirectory();
       })
@@ -406,11 +409,13 @@ export default class File {
               return this._generateApng(result.filePath);
             } else {
               this.generateCancelPNG = true;
+              return Promise.resolve();
             }
           });
         }
       })
       .then(() => {
+        console.log('::start-export-wepb::');
         // WebP書き出しが有効になっている場合
         if (this.animationOptionData.enabledExportWebp === true) {
           return this.openSaveDialog(
@@ -418,36 +423,26 @@ export default class File {
             this.mainWindow,
             this.defaultSaveDirectory
           ).then((result: OpenSaveDailogResult) => {
-            console.log(result);
-
             if (result.result) {
               this.selectedWebPPath = result.filePath;
               return this._generateWebp(result.filePath);
             } else {
               this.generateCancelWebP = true;
+              console.log(result);
+              return Promise.resolve();
             }
           });
+        } else {
+          return Promise.resolve();
         }
       })
       .then(() => {
+        console.log('::start-export-html::');
         // APNGとWebP画像の両方書き出しが有効になっている場合
-        if (this.animationOptionData.enabledExportHtml === true) {
-          // 	画像ファイルが保存されているか。
-          if (!this._imageFileSaved()) {
-            this.generateCancelHTML = true;
-
-            const dialogOption = {
-              type: 'info',
-              buttons: ['OK'],
-              title: this.localeData.APP_NAME,
-              message: null,
-              detail:
-                '画像ファイルが保存されなかったため、HTMLの保存を行いませんでした。'
-            };
-            dialog.showMessageBox(this.mainWindow, dialogOption);
-
-            return;
-          }
+        if (
+          this.animationOptionData.enabledExportHtml === true &&
+          this._imageFileSaved()
+        ) {
           this.errorCode = ErrorType.HTML_ERROR;
           return this.openSaveDialog(
             'html',
@@ -460,11 +455,13 @@ export default class File {
               return this._generateHtml(result.filePath);
             } else {
               this.generateCancelHTML = true;
+              return Promise.resolve();
             }
           });
         }
       })
       .then(() => {
+        console.log('::finish::');
         if (
           !(
             (this.animationOptionData.enabledExportHtml &&
@@ -492,6 +489,7 @@ export default class File {
         return Promise.resolve();
       })
       .catch(message => {
+        console.log('::catch-error::');
         // エラー内容の送信
         if (message) {
           console.error(message);
@@ -827,8 +825,8 @@ export default class File {
    * @returns {Promise<T>}
    * @private
    */
-  private _generateApng(exportFilePath: string): Promise<any> {
-    return new Promise((resolve: Function, reject: Function) => {
+  private _generateApng(exportFilePath: string): Promise<void> {
+    return new Promise<void>((resolve: Function, reject: Function) => {
       const path = require('path');
 
       const exec = require('child_process').execFile;
@@ -910,6 +908,7 @@ export default class File {
       });
     });
   }
+
   private _copyTemporaryDirectory() {
     const promises: Promise<any>[] = this.itemList.map((item: any) => {
       return this.copyTemporaryImage(item.frameNumber, item.imagePath);
@@ -956,7 +955,6 @@ export default class File {
       ];
 
       execFile(
-        // 2018-05-15 一時的にファイルパスを変更
         `${this.appPath}/bin/pngquant${this.getExeExt()}`,
         options,
         (err: any, stdout: any, stderr: any) => {
