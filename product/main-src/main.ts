@@ -38,10 +38,10 @@ function createWindow() {
     width: 800,
     height: 600,
     webPreferences: {
-      nodeIntegration: true, // あとでfalseにする
-      // contextIsolation: true,  // あとで調整する
-      backgroundThrottling: false
-      // preload: path.join(__dirname,'/preload.js') // あとで使う
+      nodeIntegration: false,
+      contextIsolation: true,
+      backgroundThrottling: false,
+      preload: path.join(__dirname, '../preload.js')
     }
   });
 

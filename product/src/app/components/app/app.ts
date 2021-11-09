@@ -7,7 +7,6 @@ import {
   ViewChild
 } from '@angular/core';
 import { AppConfig } from '../../config/app-config';
-import { ApplicationMenu } from '../../../../main-src/menu/application-menu';
 import { LocaleData } from '../../i18n/locale-data';
 import { LocaleManager } from '../../i18n/locale-manager';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
@@ -134,7 +133,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   }
 
   public handleDrop(event: DragEvent) {
-    const path = this.electron.require('path');
+    const path = this.ipcService.path;
 
     const length = event.dataTransfer.files
       ? event.dataTransfer.files.length
@@ -268,14 +267,14 @@ export class AppComponent implements OnInit, AfterViewInit {
    * @param filePathList
    */
   public setFilePathList(filePathList: string[]): void {
-    const path = (window as any).require('path');
+    const path = this.ipcService.path;
 
-    const length = filePathList ? filePathList.length : 0;
+    const fileLength = filePathList ? filePathList.length : 0;
 
     // 	再度アイテムがドロップされたらリセットするように調整
     this.items = [];
 
-    for (let i = 0; i < length; i++) {
+    for (let i = 0; i < fileLength; i++) {
       const filePath = filePathList[i];
 
       if (path.extname(filePath) === '.png') {

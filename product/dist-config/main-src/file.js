@@ -1,5 +1,6 @@
 "use strict";
 exports.__esModule = true;
+var electron_1 = require("electron");
 var error_type_1 = require("../common-src/error/error-type");
 var CompressionType_1 = require("../common-src/type/CompressionType");
 var PresetType_1 = require("../common-src/type/PresetType");
@@ -179,7 +180,6 @@ var File = /** @class */ (function () {
                     extention = 'html';
                     break;
             }
-            var dialog = require('electron').dialog;
             var fs = require('fs');
             try {
                 fs.statSync(_this.lastSelectSaveDirectories);
@@ -190,7 +190,8 @@ var File = /** @class */ (function () {
             }
             var path = require('path');
             defaultPath = path.join(_this.lastSelectSaveDirectories, defaultPathName);
-            dialog.showSaveDialog(window, {
+            electron_1.dialog
+                .showSaveDialog(window, {
                 title: title,
                 defaultPath: defaultPath,
                 filters: [
@@ -199,15 +200,20 @@ var File = /** @class */ (function () {
                         extensions: [extention]
                     }
                 ]
-            }).then(function (fileName) {
-                if (fileName) {
-                    _this.lastSelectSaveDirectories = path.dirname(fileName);
-                    _this.lastSelectBaseName = path.basename(fileName, "." + imageType);
-                    resolve({
+            })
+                .then(function (dialogResult) {
+                console.log('showSaveDialog', dialogResult);
+                if (!dialogResult.canceled) {
+                    var path_1 = require('path');
+                    _this.lastSelectSaveDirectories = path_1.dirname(dialogResult.filePath);
+                    _this.lastSelectBaseName = path_1.basename(dialogResult.filePath, "." + imageType);
+                    var result = {
                         result: true,
-                        fileName: fileName,
+                        filePath: dialogResult.filePath,
                         lastDirectory: _this.lastSelectSaveDirectories
-                    });
+                    };
+                    console.log('result' + result, 'filePath' + dialogResult.filePath, _this.lastSelectSaveDirectories);
+                    resolve(result);
                 }
             })["catch"](function () {
                 resolve({ result: false });
@@ -272,9 +278,10 @@ var File = /** @class */ (function () {
             if (_this.animationOptionData.enabledExportApng === true) {
                 // ひとまず謎エラーとしとく
                 _this.errorCode = error_type_1.ErrorType.APNG_OTHER_ERORR;
-                return _this.openSaveDialog('png', _this.mainWindow, _this.defaultSaveDirectory).then(function (fileName) {
-                    if (fileName) {
-                        return _this._generateApng(fileName);
+                return _this.openSaveDialog('png', _this.mainWindow, _this.defaultSaveDirectory).then(function (result) {
+                    if (result.filePath) {
+                        _this.selectedPNGPath = result.filePath;
+                        return _this._generateApng(result.filePath);
                     }
                     else {
                         _this.generateCancelPNG = true;
@@ -285,9 +292,11 @@ var File = /** @class */ (function () {
             .then(function () {
             // WebP書き出しが有効になっている場合
             if (_this.animationOptionData.enabledExportWebp === true) {
-                return _this.openSaveDialog('webp', _this.mainWindow, _this.defaultSaveDirectory).then(function (fileName) {
-                    if (fileName) {
-                        return _this._generateWebp(fileName);
+                return _this.openSaveDialog('webp', _this.mainWindow, _this.defaultSaveDirectory).then(function (result) {
+                    console.log(result);
+                    if (result.result) {
+                        _this.selectedWebPPath = result.filePath;
+                        return _this._generateWebp(result.filePath);
                     }
                     else {
                         _this.generateCancelWebP = true;
@@ -301,13 +310,23 @@ var File = /** @class */ (function () {
                 // 	画像ファイルが保存されているか。
                 if (!_this._imageFileSaved()) {
                     _this.generateCancelHTML = true;
-                    alert('画像ファイルが保存されなかったため、HTMLの保存を行いませんでした。');
+                    var dialogOption = {
+                        type: 'info',
+                        buttons: ['OK'],
+                        title: _this.localeData.APP_NAME,
+                        message: null,
+                        detail: '画像ファイルが保存されなかったため、HTMLの保存を行いませんでした。'
+                    };
+                    electron_1.dialog.showMessageBox(_this.mainWindow, dialogOption);
                     return;
                 }
                 _this.errorCode = error_type_1.ErrorType.HTML_ERROR;
-                return _this.openSaveDialog('html', _this.mainWindow, _this.defaultSaveDirectory).then(function (fileName) {
-                    if (fileName) {
-                        return _this._generateHtml(fileName);
+                return _this.openSaveDialog('html', _this.mainWindow, _this.defaultSaveDirectory).then(function (result) {
+                    if (result.result) {
+                        var path_2 = require('path');
+                        _this.selectedHTMLPath = result.filePath;
+                        _this.selectedHTMLDirectoryPath = result.lastDirectory;
+                        return _this._generateHtml(result.filePath);
                     }
                     else {
                         _this.generateCancelHTML = true;
@@ -324,7 +343,7 @@ var File = /** @class */ (function () {
                 return Promise.resolve();
             }
             // エクスプローラーで開くでも、まだいいかも
-            var shell = window.require('electron').shell;
+            var shell = require('electron').shell;
             if (_this._enableExportHTML()) {
                 shell.showItemInFolder(_this.selectedHTMLPath);
             }
@@ -571,18 +590,16 @@ var File = /** @class */ (function () {
                             var stat = require('fs').statSync(exportFilePath);
                             var validateArr = LineStampValidator_1.LineStampValidator.validate(stat, _this.animationOptionData, _this.localeData);
                             if (validateArr.length > 0) {
-                                var dialog = require('electron').dialog;
-                                var win = _this.mainWindow;
                                 var message = _this.localeData.VALIDATE_title;
                                 var detailMessage = '・' + validateArr.join('\n\n・');
                                 var dialogOption = {
                                     type: 'info',
                                     buttons: ['OK'],
                                     title: _this.localeData.APP_NAME,
-                                    // message: message,
+                                    message: null,
                                     detail: message + '\n\n' + detailMessage
                                 };
-                                dialog.showMessageBox(win, dialogOption);
+                                electron_1.dialog.showMessageBox(_this.mainWindow, dialogOption);
                             }
                         }
                         resolve();

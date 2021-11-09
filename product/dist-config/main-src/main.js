@@ -23,10 +23,10 @@ function createWindow() {
         width: 800,
         height: 600,
         webPreferences: {
-            nodeIntegration: true,
-            // contextIsolation: true,  // あとで調整する
-            backgroundThrottling: false
-            // preload: path.join(__dirname,'/preload.js') // あとで使う
+            nodeIntegration: false,
+            contextIsolation: true,
+            backgroundThrottling: false,
+            preload: path.join(__dirname, '../preload.js')
         }
     });
     fileService.setMainWindow(mainWindow);
@@ -85,7 +85,9 @@ function openFileDialog(event) {
         properties: ['openFile', 'multiSelections'],
         filters: [{ name: 'Images', extensions: ['png'] }]
     };
-    dialog.showOpenDialog(mainWindow, dialogOption).then(function (files) {
+    dialog
+        .showOpenDialog(mainWindow, dialogOption)
+        .then(function (files) {
         event.sender.send(ipc_id_1.IpcId.SELECTED_OPEN_IMAGES, files);
     })["catch"](function () {
         event.sender.send(ipc_id_1.IpcId.UNLOCK_SELECT_UI);

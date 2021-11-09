@@ -1,4 +1,4 @@
-import { BrowserWindow } from 'electron';
+import { BrowserWindow, dialog } from 'electron';
 import { ErrorMessage } from 'error/error-message';
 import { SendError } from 'error/send-error';
 import { AnimationImageOptions } from '../common-src/data/animation-image-option';
@@ -8,10 +8,16 @@ import { ILocaleData } from '../common-src/i18n/locale-data.interface';
 import { CompressionType } from '../common-src/type/CompressionType';
 import { PresetType } from '../common-src/type/PresetType';
 import { LineStampValidator } from '../common-src/validators/LineStampValidator';
+
 namespace Error {
   export const ENOENT_ERROR = 'ENOENT';
 }
 
+interface OpenSaveDailogResult {
+  result: boolean;
+  filePath: string;
+  lastDirectory: string;
+}
 export default class File {
   constructor(
     appTemporaryPath: string,
@@ -235,70 +241,81 @@ export default class File {
     window: Electron.BrowserWindow,
     defaultSaveDirectory: string
   ) {
-    return new Promise<string>((resolve: Function, reject: Function) => {
-      let title = '';
-      let defaultPathName = '';
-      let defaultPath = '';
-      let extention = '';
+    return new Promise<OpenSaveDailogResult>(
+      (resolve: Function, reject: Function) => {
+        let title = '';
+        let defaultPathName = '';
+        let defaultPath = '';
+        let extention = '';
 
-      const lastBaseName = this.lastSelectBaseName;
-      console.log(lastBaseName);
-      switch (imageType) {
-        case 'png':
-          title = 'ファイルの保存先を選択';
-          defaultPathName = `${lastBaseName}.png`;
-          extention = 'png';
-          break;
-        case 'webp':
-          title = 'ファイルの保存先を選択';
-          defaultPathName = `${lastBaseName}.webp`;
-          extention = 'webp';
-          break;
-        case 'html':
-          title = 'ファイルの保存先を選択';
-          defaultPathName = `${lastBaseName}.html`;
-          extention = 'html';
-          break;
-      }
-      const { dialog } = require('electron');
-      const fs = require('fs');
+        const lastBaseName = this.lastSelectBaseName;
+        console.log(lastBaseName);
+        switch (imageType) {
+          case 'png':
+            title = 'ファイルの保存先を選択';
+            defaultPathName = `${lastBaseName}.png`;
+            extention = 'png';
+            break;
+          case 'webp':
+            title = 'ファイルの保存先を選択';
+            defaultPathName = `${lastBaseName}.webp`;
+            extention = 'webp';
+            break;
+          case 'html':
+            title = 'ファイルの保存先を選択';
+            defaultPathName = `${lastBaseName}.html`;
+            extention = 'html';
+            break;
+        }
 
-      try {
-        fs.statSync(this.lastSelectSaveDirectories);
-      } catch (e) {
-        // 	失敗したらパス修正
-        this.lastSelectSaveDirectories = defaultSaveDirectory;
-      }
-      const path = require('path');
-      defaultPath = path.join(this.lastSelectSaveDirectories, defaultPathName);
+        const fs = require('fs');
 
-      dialog
-        .showSaveDialog(window, {
-          title: title,
-          defaultPath: defaultPath,
-          filters: [
-            {
-              name: imageType === 'html' ? 'html' : 'Images',
-              extensions: [extention]
+        try {
+          fs.statSync(this.lastSelectSaveDirectories);
+        } catch (e) {
+          // 	失敗したらパス修正
+          this.lastSelectSaveDirectories = defaultSaveDirectory;
+        }
+        const path = require('path');
+        defaultPath = path.join(
+          this.lastSelectSaveDirectories,
+          defaultPathName
+        );
+
+        dialog
+          .showSaveDialog(window, {
+            title: title,
+            defaultPath: defaultPath,
+            filters: [
+              {
+                name: imageType === 'html' ? 'html' : 'Images',
+                extensions: [extention]
+              }
+            ]
+          })
+          .then(dialogResult => {
+            if (!dialogResult.canceled) {
+              this.lastSelectSaveDirectories = path.dirname(
+                dialogResult.filePath
+              );
+              this.lastSelectBaseName = path.basename(
+                dialogResult.filePath,
+                `.${imageType}`
+              );
+
+              const result = {
+                result: true,
+                filePath: dialogResult.filePath,
+                lastDirectory: this.lastSelectSaveDirectories
+              };
+              resolve(result);
             }
-          ]
-        })
-        .then(fileName => {
-          if (fileName) {
-            this.lastSelectSaveDirectories = path.dirname(fileName);
-            this.lastSelectBaseName = path.basename(fileName, `.${imageType}`);
-
-            resolve({
-              result: true,
-              fileName: fileName,
-              lastDirectory: this.lastSelectSaveDirectories
-            });
-          }
-        })
-        .catch(() => {
-          resolve({ result: false });
-        });
-    });
+          })
+          .catch(() => {
+            resolve({ result: false });
+          });
+      }
+    );
   }
 
   public setLocaleData(localeData: ILocaleData) {
@@ -383,9 +400,10 @@ export default class File {
             'png',
             this.mainWindow,
             this.defaultSaveDirectory
-          ).then((fileName: string) => {
-            if (fileName) {
-              return this._generateApng(fileName);
+          ).then((result: OpenSaveDailogResult) => {
+            if (result.filePath) {
+              this.selectedPNGPath = result.filePath;
+              return this._generateApng(result.filePath);
             } else {
               this.generateCancelPNG = true;
             }
@@ -399,9 +417,12 @@ export default class File {
             'webp',
             this.mainWindow,
             this.defaultSaveDirectory
-          ).then((fileName: string) => {
-            if (fileName) {
-              return this._generateWebp(fileName);
+          ).then((result: OpenSaveDailogResult) => {
+            console.log(result);
+
+            if (result.result) {
+              this.selectedWebPPath = result.filePath;
+              return this._generateWebp(result.filePath);
             } else {
               this.generateCancelWebP = true;
             }
@@ -414,9 +435,17 @@ export default class File {
           // 	画像ファイルが保存されているか。
           if (!this._imageFileSaved()) {
             this.generateCancelHTML = true;
-            alert(
-              '画像ファイルが保存されなかったため、HTMLの保存を行いませんでした。'
-            );
+
+            const dialogOption = {
+              type: 'info',
+              buttons: ['OK'],
+              title: this.localeData.APP_NAME,
+              message: null,
+              detail:
+                '画像ファイルが保存されなかったため、HTMLの保存を行いませんでした。'
+            };
+            dialog.showMessageBox(this.mainWindow, dialogOption);
+
             return;
           }
           this.errorCode = ErrorType.HTML_ERROR;
@@ -424,9 +453,11 @@ export default class File {
             'html',
             this.mainWindow,
             this.defaultSaveDirectory
-          ).then((fileName: string) => {
-            if (fileName) {
-              return this._generateHtml(fileName);
+          ).then((result: OpenSaveDailogResult) => {
+            if (result.result) {
+              this.selectedHTMLPath = result.filePath;
+              this.selectedHTMLDirectoryPath = result.lastDirectory;
+              return this._generateHtml(result.filePath);
             } else {
               this.generateCancelHTML = true;
             }
@@ -448,7 +479,7 @@ export default class File {
         }
 
         // エクスプローラーで開くでも、まだいいかも
-        const { shell } = (window as any).require('electron');
+        const { shell } = require('electron');
         if (this._enableExportHTML()) {
           shell.showItemInFolder(this.selectedHTMLPath);
         } else if (this._enableExportApng()) {
@@ -841,19 +872,17 @@ export default class File {
                 );
 
                 if (validateArr.length > 0) {
-                  const { dialog } = require('electron');
-                  const win = this.mainWindow;
                   const message = this.localeData.VALIDATE_title;
                   const detailMessage = '・' + validateArr.join('\n\n・');
 
-                  const dialogOption = {
+                  const dialogOption: Electron.MessageBoxOptions = {
                     type: 'info',
                     buttons: ['OK'],
                     title: this.localeData.APP_NAME,
-                    // message: message,
+                    message: null,
                     detail: message + '\n\n' + detailMessage
                   };
-                  dialog.showMessageBox(<any>win, <any>dialogOption);
+                  dialog.showMessageBox(this.mainWindow, dialogOption);
                 }
               }
               resolve();
