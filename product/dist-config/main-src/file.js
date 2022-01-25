@@ -286,7 +286,6 @@ var File = /** @class */ (function () {
                     }
                     else {
                         _this.generateCancelPNG = true;
-                        console.log(result);
                         return Promise.resolve();
                     }
                 });
@@ -297,7 +296,6 @@ var File = /** @class */ (function () {
             // WebP書き出しが有効になっている場合
             if (_this.animationOptionData.enabledExportWebp === true) {
                 return _this.openSaveDialog('webp', _this.mainWindow, _this.defaultSaveDirectory).then(function (result) {
-                    console.log(result);
                     if (result.result) {
                         _this.selectedWebPPath = result.filePath;
                         return _this._generateWebp(result.filePath);
@@ -309,24 +307,15 @@ var File = /** @class */ (function () {
                     }
                 });
             }
+            else {
+                return Promise.resolve();
+            }
         })
             .then(function () {
             console.log('::start-export-html::');
             // APNGとWebP画像の両方書き出しが有効になっている場合
-            if (_this.animationOptionData.enabledExportHtml === true) {
-                // 	画像ファイルが保存されているか。
-                if (!_this._imageFileSaved()) {
-                    _this.generateCancelHTML = true;
-                    var dialogOption = {
-                        type: 'info',
-                        buttons: ['OK'],
-                        title: _this.localeData.APP_NAME,
-                        message: null,
-                        detail: '画像ファイルが保存されなかったため、HTMLの保存を行いませんでした。'
-                    };
-                    electron_1.dialog.showMessageBox(_this.mainWindow, dialogOption);
-                    return Promise.resolve();
-                }
+            if (_this.animationOptionData.enabledExportHtml === true &&
+                _this._imageFileSaved()) {
                 _this.errorCode = error_type_1.ErrorType.HTML_ERROR;
                 return _this.openSaveDialog('html', _this.mainWindow, _this.defaultSaveDirectory).then(function (result) {
                     if (result.result) {
@@ -336,14 +325,13 @@ var File = /** @class */ (function () {
                     }
                     else {
                         _this.generateCancelHTML = true;
-                        console.log(result);
                         return Promise.resolve();
                     }
                 });
             }
         })
             .then(function () {
-            console.log('::start-export-wepb::');
+            console.log('::finish::');
             if (!((_this.animationOptionData.enabledExportHtml &&
                 !_this.generateCancelHTML) ||
                 _this._enableExportApng() ||
@@ -606,8 +594,8 @@ var File = /** @class */ (function () {
                                     type: 'info',
                                     buttons: ['OK'],
                                     title: _this.localeData.APP_NAME,
-                                    message: null,
-                                    detail: message + '\n\n' + detailMessage
+                                    message: message,
+                                    detail: detailMessage
                                 };
                                 electron_1.dialog.showMessageBox(_this.mainWindow, dialogOption);
                             }
