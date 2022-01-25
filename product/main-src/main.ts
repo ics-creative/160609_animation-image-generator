@@ -127,6 +127,7 @@ ipcMain.on(
   (event, localeData: ILocaleData, appConfig: AppConfig) => {
     console.log(`${IpcId.SET_CONFIG_DATA} to ${localeData}`);
 
+    fileService.setLocaleData(localeData);
     fileService.setDefaultFileName(localeData.defaultFileName);
     mainWindow.setTitle(localeData.APP_NAME);
 
