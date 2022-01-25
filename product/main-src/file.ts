@@ -877,7 +877,7 @@ export default class File {
                     type: 'info',
                     buttons: ['OK'],
                     title: this.localeData.APP_NAME,
-                    message,
+                    message: message,
                     detail: detailMessage
                   };
                   dialog.showMessageBox(this.mainWindow, dialogOption);
