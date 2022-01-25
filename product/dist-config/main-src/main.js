@@ -95,6 +95,7 @@ function openFileDialog(event) {
 }
 ipcMain.on(ipc_id_1.IpcId.SET_CONFIG_DATA, function (event, localeData, appConfig) {
     console.log(ipc_id_1.IpcId.SET_CONFIG_DATA + " to " + localeData);
+    fileService.setLocaleData(localeData);
     fileService.setDefaultFileName(localeData.defaultFileName);
     mainWindow.setTitle(localeData.APP_NAME);
     var menu = new application_menu_1.ApplicationMenu(appConfig, localeData);
