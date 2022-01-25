@@ -8,6 +8,8 @@ import { ILocaleData } from '../common-src/i18n/locale-data.interface';
 import { CompressionType } from '../common-src/type/CompressionType';
 import { PresetType } from '../common-src/type/PresetType';
 import { LineStampValidator } from '../common-src/validators/LineStampValidator';
+import { emptyDirectory } from 'fileFunctions/emptyDirectory';
+import * as path from 'path';
 
 namespace Error {
   export const ENOENT_ERROR = 'ENOENT';
@@ -85,125 +87,11 @@ export default class File {
     this.mainWindow = window;
   }
 
-  /**
-   * ファイルを削除する処理です。
-   * @param {string} dir
-   * @param file
-   * @returns {Promise<any>}
-   */
-  private deleteFile(dir: string, file: string) {
-    const fs = require('fs');
-    const path = require('path');
-
-    return new Promise<void>((resolve, reject) => {
-      const filePath = path.join(dir, file);
-      fs.lstat(filePath, (lstatErorr, stats) => {
-        if (lstatErorr) {
-          return reject(lstatErorr);
-        }
-        if (stats.isDirectory()) {
-          resolve(this.deleteDirectory(filePath));
-        } else {
-          fs.unlink(filePath, (unlinkError: NodeJS.ErrnoException) => {
-            if (unlinkError) {
-              return reject(unlinkError);
-            }
-            resolve();
-          });
-        }
-      });
-    });
-  }
-
-  /**
-   * ディレクトリーとその中身を削除する処理です。
-   * @param {string} dir
-   * @returns {Promise<any>}
-   */
-  private deleteDirectory(dir: string) {
-    console.log('::delete-directory::');
-    const fs = require('fs');
-    return new Promise<void>((resolve, reject) => {
-      fs.access(dir, (err: NodeJS.ErrnoException) => {
-        if (err) {
-          return reject(err);
-        }
-        fs.readdir(
-          dir,
-          (fsReadError: NodeJS.ErrnoException, files: string[]) => {
-            if (fsReadError) {
-              return reject(fsReadError);
-            }
-            Promise.all(
-              files.map((file: string) => {
-                return this.deleteFile(dir, file);
-              })
-            )
-              .then(() => {
-                fs.rmdir(dir, (fsRmError: NodeJS.ErrnoException) => {
-                  if (fsRmError) {
-                    return reject(fsRmError);
-                  }
-                  resolve();
-                });
-              })
-              .catch(reject);
-          }
-        );
-      });
-    });
-  }
-
-  private createDirectory(directory: string) {
-    return new Promise<void>((resolve, reject) => {
-      try {
-        require('fs').mkdirSync(directory);
-        resolve();
-      } catch (e) {
-        reject();
-      }
-    });
-  }
-
-  public cleanTemporaryDirectory() {
-    return new Promise<void>((resolve, reject) => {
-      const path = require('path');
-      const pngTemporary = path.join(this.temporaryPath);
-      const pngCompressTemporary = path.join(this.temporaryCompressPath);
-
-      this.deleteDirectory(pngTemporary)
-        .catch(() => {
-          console.log(`フォルダを削除できませんでした。${pngTemporary}`);
-        })
-        .then(() => {
-          return this.deleteDirectory(pngCompressTemporary);
-        })
-        .catch(() => {
-          console.log(
-            `フォルダを削除できませんでした。${pngCompressTemporary}`
-          );
-        })
-        .then(() => {
-          // フォルダーを作成
-          this.createDirectory(this.temporaryPath);
-        })
-        .catch(() => {
-          console.log(`フォルダを作成できませんでした ${this.temporaryPath}`);
-        })
-        .then(() => {
-          // フォルダーを作成
-          this.createDirectory(this.temporaryCompressPath);
-        })
-        .catch(() => {
-          console.log(
-            `フォルダを作成できませんでした ${this.temporaryCompressPath}`
-          );
-        })
-        .then(() => {
-          console.log('::clean-temporary:: success');
-          resolve();
-        });
-    });
+  private async cleanTemporaryDirectory() {
+    const pngTemporary = path.join(this.temporaryPath);
+    const pngCompressTemporary = path.join(this.temporaryCompressPath);
+    await emptyDirectory(pngTemporary);
+    await emptyDirectory(pngCompressTemporary);
   }
 
   public copyTemporaryImage(

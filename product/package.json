@@ -2,7 +2,7 @@
   "scripts": {
     "build": "tsc --project main-src/tsconfig.json && ng build --configuration production",
     "start": "tsc --project main-src/tsconfig.json && concurrently \"cross-env NODE_ENV=develop electron ./dist-config\" \"ng build --watch\"",
-    "precommit": "lint-staged",
+    "_precommit": "lint-staged",
     "lint": "tslint --project ./tsconfig.json",
     "format": "tslint --project ./tsconfig.json --fix && prettier */*.{js,css} --write",
     "release-darwin": "npm run prebuild-darwin && npm run package-darwin",
