@@ -1,5 +1,5 @@
 import { app, BrowserWindow } from 'electron';
-import { existsPath } from 'fileFunctions/exists';
+import { existsPath } from '../fileFunctions/existsPath';
 import { openSaveDialog } from './openSaveDialog';
 
 export class SaveDialog {

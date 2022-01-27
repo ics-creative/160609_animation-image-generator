@@ -39,9 +39,9 @@ exports.__esModule = true;
 exports.generateWebp = void 0;
 var path = require("path");
 var error_type_1 = require("../../common-src/error/error-type");
-var getExeExt_1 = require("fileFunctions/getExeExt");
-var execFile_1 = require("fileFunctions/execFile");
-var timer_1 = require("utils/timer");
+var getExeExt_1 = require("../fileFunctions/getExeExt");
+var execFile_1 = require("../fileFunctions/execFile");
+var timer_1 = require("../utils/timer");
 var ENOENT_ERROR = 'ENOENT';
 /**
  * WEBP アニメーション画像を作ります。

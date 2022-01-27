@@ -1,7 +1,7 @@
-import { waitExecFile } from 'fileFunctions/execFile';
-import { getExeExt } from 'fileFunctions/getExeExt';
+import { waitExecFile } from '../fileFunctions/execFile';
+import { getExeExt } from '../fileFunctions/getExeExt';
 import * as path from 'path';
-import { waitImmediate } from 'utils/timer';
+import { waitImmediate } from '../utils/timer';
 import { AnimationImageOptions } from '../../common-src/data/animation-image-option';
 import { ImageData } from '../../common-src/data/image-data';
 import { ErrorType } from '../../common-src/error/error-type';

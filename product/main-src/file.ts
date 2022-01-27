@@ -7,10 +7,10 @@ import { ILocaleData } from '../common-src/i18n/locale-data.interface';
 import { PresetType } from '../common-src/type/PresetType';
 import { LineStampValidator } from '../common-src/validators/LineStampValidator';
 import * as fs from 'fs';
-import { existsPath } from 'fileFunctions/exists';
-import { createInquiryCode } from 'generators/createInquiryCode';
-import { execGenerate } from 'generators/execGenerate';
-import { SaveDialog } from 'dialog/SaveDialog';
+import { createInquiryCode } from './generators/createInquiryCode';
+import { execGenerate } from './generators/execGenerate';
+import { SaveDialog } from './dialog/SaveDialog';
+import { existsPath } from './fileFunctions/existsPath';
 export default class File {
   constructor(
     mainWindow: BrowserWindow,

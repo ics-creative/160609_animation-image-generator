@@ -37,10 +37,10 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 exports.__esModule = true;
 exports.pngCompressAll = exports.generateApng = void 0;
-var execFile_1 = require("fileFunctions/execFile");
-var getExeExt_1 = require("fileFunctions/getExeExt");
+var execFile_1 = require("../fileFunctions/execFile");
+var getExeExt_1 = require("../fileFunctions/getExeExt");
 var path = require("path");
-var timer_1 = require("utils/timer");
+var timer_1 = require("../utils/timer");
 var error_type_1 = require("../../common-src/error/error-type");
 var CompressionType_1 = require("../../common-src/type/CompressionType");
 var ENOENT_ERROR = 'ENOENT';

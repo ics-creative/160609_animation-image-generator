@@ -40,10 +40,10 @@ var electron_1 = require("electron");
 var PresetType_1 = require("../common-src/type/PresetType");
 var LineStampValidator_1 = require("../common-src/validators/LineStampValidator");
 var fs = require("fs");
-var exists_1 = require("fileFunctions/exists");
-var createInquiryCode_1 = require("generators/createInquiryCode");
-var execGenerate_1 = require("generators/execGenerate");
-var SaveDialog_1 = require("dialog/SaveDialog");
+var createInquiryCode_1 = require("./generators/createInquiryCode");
+var execGenerate_1 = require("./generators/execGenerate");
+var SaveDialog_1 = require("./dialog/SaveDialog");
+var existsPath_1 = require("./fileFunctions/existsPath");
 var File = /** @class */ (function () {
     function File(mainWindow, localeData, appPath, sendError, errorMessage, defaultSaveDirectory) {
         this.mainWindow = mainWindow;
@@ -89,7 +89,7 @@ var File = /** @class */ (function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        if (!(0, exists_1.existsPath)(exportFilePath)) {
+                        if (!(0, existsPath_1.existsPath)(exportFilePath)) {
                             return [2 /*return*/];
                         }
                         stat = fs.statSync(exportFilePath);

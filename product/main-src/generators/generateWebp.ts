@@ -3,9 +3,9 @@ import { AnimationImageOptions } from '../../common-src/data/animation-image-opt
 import { ErrorType } from '../../common-src/error/error-type';
 import { ImageData } from '../../common-src/data/image-data';
 import { GenetateError } from './GenerateError';
-import { getExeExt } from 'fileFunctions/getExeExt';
-import { waitExecFile } from 'fileFunctions/execFile';
-import { waitImmediate } from 'utils/timer';
+import { getExeExt } from '../fileFunctions/getExeExt';
+import { waitExecFile } from '../fileFunctions/execFile';
+import { waitImmediate } from '../utils/timer';
 
 const ENOENT_ERROR = 'ENOENT';
 

@@ -38,7 +38,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 exports.__esModule = true;
 exports.SaveDialog = void 0;
 var electron_1 = require("electron");
-var exists_1 = require("fileFunctions/exists");
+var existsPath_1 = require("../fileFunctions/existsPath");
 var openSaveDialog_1 = require("./openSaveDialog");
 var SaveDialog = /** @class */ (function () {
     function SaveDialog(window, defaultSaveDirectory, defaultFileName) {
@@ -53,7 +53,7 @@ var SaveDialog = /** @class */ (function () {
             return __generator(this, function (_c) {
                 switch (_c.label) {
                     case 0:
-                        dir = (_a = (this.lastSelectSaveDirectories && (0, exists_1.existsPath)(this.lastSelectSaveDirectories))) !== null && _a !== void 0 ? _a : this.defaultSaveDirectory;
+                        dir = (_a = (this.lastSelectSaveDirectories && (0, existsPath_1.existsPath)(this.lastSelectSaveDirectories))) !== null && _a !== void 0 ? _a : this.defaultSaveDirectory;
                         baseName = (_b = this.lastSelectBaseName) !== null && _b !== void 0 ? _b : this.defaultFileName;
                         return [4 /*yield*/, (0, openSaveDialog_1.openSaveDialog)(imageType, this.window, dir, baseName)];
                     case 1:
