@@ -1,4 +1,5 @@
 import * as fs from 'fs';
+import * as path from 'path';
 import { deleteDirectory } from './deleteDirectory';
 
 /**
@@ -7,8 +8,6 @@ import { deleteDirectory } from './deleteDirectory';
  * @param file
  */
 export const deleteFile = (dir: string, file: string): Promise<void> => {
-  const path = require('path');
-
   return new Promise<void>((resolve, reject) => {
     const filePath = path.join(dir, file);
     fs.lstat(filePath, (lstatErorr, stats) => {

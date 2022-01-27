@@ -1,4 +1,4 @@
-import { OpenDialogOptions } from 'electron';
+import { app, BrowserWindow, dialog, ipcMain, IpcMainEvent, OpenDialogOptions } from 'electron';
 import { AnimationImageOptions } from '../common-src/data/animation-image-option';
 import { ErrorType } from '../common-src/error/error-type';
 import { IpcId } from '../common-src/ipc-id';
@@ -11,26 +11,17 @@ import { ApplicationMenu } from './menu/application-menu';
 import { AppConfig } from '../src/app/config/app-config';
 
 // アプリケーション作成用のモジュールを読み込み
-const electron = require('electron');
-const app = electron.app;
-const BrowserWindow = electron.BrowserWindow;
 
 const path = require('path');
 const url = require('url');
 
-const ipcMain = electron.ipcMain;
 const sendError = new SendError();
 const errorMessage = new ErrorMessage();
-const fileService = new File(
-  app.getPath('temp'),
-  app.getAppPath(),
-  sendError,
-  errorMessage,
-  app.getPath('desktop')
-);
 
+// 画像生成サービス
+let fileService: File | undefined;
 // メインウィンドウ
-let mainWindow;
+let mainWindow: BrowserWindow | undefined;
 
 function createWindow() {
   // メインウィンドウを作成します
@@ -44,8 +35,6 @@ function createWindow() {
       preload: path.join(__dirname, '../preload.js')
     }
   });
-
-  fileService.setMainWindow(mainWindow);
 
   console.log(process.env.NODE_ENV);
 
@@ -75,7 +64,8 @@ function createWindow() {
     // メインウィンドウが閉じられたときの処理
     mainWindow.on('closed', function() {
       console.log('mainwindow-close');
-      mainWindow = null;
+      mainWindow = undefined;
+      fileService = undefined;
     });
   }
   const ipc = require('electron').ipcMain;
@@ -94,7 +84,7 @@ app.on('window-all-closed', function() {
 app.on('activate', function() {
   /// メインウィンドウが消えている場合は再度メインウィンドウを作成する
   console.log('active-with-open-window', mainWindow);
-  if (mainWindow === null) {
+  if (mainWindow === undefined) {
     createWindow();
   } else {
     mainWindow.show();
@@ -103,17 +93,19 @@ app.on('activate', function() {
 
 app.on('will-quit', function() {
   console.log('will-quit');
-  mainWindow = null;
+  mainWindow = undefined;
+  fileService = undefined;
 });
 
-function openFileDialog(event) {
-  const dialog = require('electron').dialog;
+function openFileDialog(event: IpcMainEvent) {
   const dialogOption: OpenDialogOptions = {
     properties: ['openFile', 'multiSelections'],
     filters: [{ name: 'Images', extensions: ['png'] }]
   };
-  dialog
-    .showOpenDialog(mainWindow, dialogOption)
+  if (!mainWindow) {
+    return;
+  }
+  dialog.showOpenDialog(mainWindow, dialogOption)
     .then(files => {
       event.sender.send(IpcId.SELECTED_OPEN_IMAGES, files);
     })
@@ -127,7 +119,18 @@ ipcMain.on(
   (event, localeData: ILocaleData, appConfig: AppConfig) => {
     console.log(`${IpcId.SET_CONFIG_DATA} to ${localeData}`);
 
-    fileService.setDefaultFileName(localeData.defaultFileName);
+    if (!mainWindow) {
+      return;
+    }
+
+    fileService = new File(
+      mainWindow,
+      localeData,
+      app.getAppPath(),
+      sendError,
+      errorMessage,
+      app.getPath('desktop')
+    );
     mainWindow.setTitle(localeData.APP_NAME);
 
     const menu: ApplicationMenu = new ApplicationMenu(appConfig, localeData);
@@ -139,14 +142,15 @@ ipcMain.on(
 ipcMain.on(IpcId.OPEN_SAVE_DIALOG, (event, imageType: string) => {
   console.log(`${IpcId.OPEN_SAVE_DIALOG}, ${imageType}`);
 
-  fileService
-    .openSaveDialog(imageType, mainWindow, app.getPath('desktop'))
-    .then(result => {
-      event.returnValue = result;
-    })
-    .catch(e => {
-      event.returnValue = { result: false };
-    });
+  // TODO: 使ってない可能性
+  console.warn('OPEN_SAVE_DIALOG');
+  // fileService?.openSaveDialog(imageType, mainWindow, app.getPath('desktop'))
+  //   .then(result => {
+  //     event.returnValue = result;
+  //   })
+  //   .catch(e => {
+  //     event.returnValue = { result: false };
+  //   });
 });
 
 ipcMain.on(
@@ -159,7 +163,7 @@ ipcMain.on(
     errorStack: string,
     appName: string
   ) => {
-    errorMessage.showErrorMessage(
+    mainWindow && errorMessage.showErrorMessage(
       errorCode,
       inquiryCode,
       errorDetail,
@@ -195,7 +199,7 @@ ipcMain.on(
     console.log(version, itemList, animationOptionData);
 
     fileService
-      .exec(app.getPath('temp'), version, itemList, animationOptionData)
+      ?.exec(app.getPath('temp'), version, itemList, animationOptionData)
       .then(() => {
         console.log(`returnValue:true`);
         event.returnValue = true;

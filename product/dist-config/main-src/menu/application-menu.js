@@ -26,9 +26,9 @@ var ApplicationMenu = /** @class */ (function () {
                 {
                     label: this.localeData.MENU_about,
                     click: function () {
-                        alert("\u304A\u4F7F\u3044\u306E\u300C" + name + "\u300D\u306E\u30D0\u30FC\u30B8\u30E7\u30F3\u306F " + version + " \u3067\u3059\u3002" +
+                        alert("\u304A\u4F7F\u3044\u306E\u300C".concat(name, "\u300D\u306E\u30D0\u30FC\u30B8\u30E7\u30F3\u306F ").concat(version, " \u3067\u3059\u3002") +
                             '\n' +
-                            ("You use version " + version + "."));
+                            "You use version ".concat(version, "."));
                     }
                 },
                 {

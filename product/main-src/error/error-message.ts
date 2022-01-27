@@ -1,4 +1,4 @@
-import { BrowserWindow } from 'electron';
+import { BrowserWindow, dialog } from 'electron';
 import { ErrorType } from '../../common-src/error/error-type';
 
 declare function require(value: String): any;
@@ -13,7 +13,6 @@ export class ErrorMessage {
     appName: string,
     window: BrowserWindow
   ): void {
-    const { dialog } = require('electron');
     const errorMessage = this.getErrorMessage(
       errorCode,
       inquiryCode,
