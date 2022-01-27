@@ -5,23 +5,21 @@ import { PresetType } from '../type/PresetType';
  * アニメーション画像のオプション指定を指定するクラスです。
  */
 export class AnimationImageOptions {
-  preset: PresetType;
+  preset: PresetType = PresetType.WEB;
 
-  noLoop: boolean;
-  loop: number;
-  compression: CompressionType;
+  noLoop = false;
+  loop = 0;
+  compression: CompressionType = CompressionType.zlib;
+  fps = 30;
+  enabledPngCompress = false;
+  enabledWebpCompress = false;
 
-  iterations: number;
-  fps: number;
-  enabledPngCompress: boolean;
-  enabledWebpCompress: boolean;
-
-  enabledExportApng: boolean;
-  enabledExportWebp: boolean;
-  enabledExportHtml: boolean;
+  enabledExportApng = false;
+  enabledExportWebp = false;
+  enabledExportHtml = false;
 
   /** 画像の情報です。 */
-  imageInfo: { width: number; height: number; length: number } = {
+  imageInfo = { 
     width: 0,
     height: 0,
     length: 0
