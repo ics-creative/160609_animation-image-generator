@@ -265,6 +265,7 @@ export class AppComponent implements OnInit, AfterViewInit {
 
   /**
    * ファイルがセットされたときの処理です。
+   *
    * @param filePathList
    */
   public setFilePathList(filePathList: string[]): void {

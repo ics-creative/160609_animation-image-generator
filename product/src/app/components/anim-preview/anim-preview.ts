@@ -144,6 +144,7 @@ export class AnimPreviewComponent implements OnChanges, OnInit {
 
   /**
    * 指定したフレームにタイムラインを移動し、停止します。
+   *
    * @param frame
    */
   private gotoAndStop(frame: number): void {
