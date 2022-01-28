@@ -18,7 +18,7 @@ import File from './file';
 import { ILocaleData } from '../common-src/i18n/locale-data.interface';
 import { ApplicationMenu } from './menu/application-menu';
 import { AppConfig } from '../src/app/config/app-config';
-import { SaveDialog } from 'dialog/SaveDialog';
+import { SaveDialog } from './dialog/SaveDialog';
 
 // アプリケーション作成用のモジュールを読み込み
 const sendError = new SendError();

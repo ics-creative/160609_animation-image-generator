@@ -43,21 +43,22 @@ var openSaveDialog_1 = require("./openSaveDialog");
 var SaveDialog = /** @class */ (function () {
     function SaveDialog(window, defaultSaveDirectory, defaultFileName) {
         this.window = window;
-        this.defaultSaveDirectory = defaultSaveDirectory !== null && defaultSaveDirectory !== void 0 ? defaultSaveDirectory : electron_1.app.getPath('desktop');
-        this.defaultFileName = defaultFileName !== null && defaultFileName !== void 0 ? defaultFileName : 'untitled';
+        this.defaultSaveDirectory = defaultSaveDirectory || electron_1.app.getPath('desktop');
+        this.defaultFileName = defaultFileName || 'untitled';
     }
     SaveDialog.prototype.open = function (imageType) {
-        var _a, _b;
         return __awaiter(this, void 0, void 0, function () {
-            var dir, baseName, dialogResult;
-            return __generator(this, function (_c) {
-                switch (_c.label) {
+            var lastDir, dir, baseName, dialogResult;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
                     case 0:
-                        dir = (_a = (this.lastSelectSaveDirectories && (0, existsPath_1.existsPath)(this.lastSelectSaveDirectories))) !== null && _a !== void 0 ? _a : this.defaultSaveDirectory;
-                        baseName = (_b = this.lastSelectBaseName) !== null && _b !== void 0 ? _b : this.defaultFileName;
+                        lastDir = this.lastSelectSaveDirectories &&
+                            (0, existsPath_1.existsPath)(this.lastSelectSaveDirectories);
+                        dir = lastDir !== undefined ? lastDir : this.defaultSaveDirectory;
+                        baseName = this.lastSelectBaseName || this.defaultFileName;
                         return [4 /*yield*/, (0, openSaveDialog_1.openSaveDialog)(imageType, this.window, dir, baseName)];
                     case 1:
-                        dialogResult = _c.sent();
+                        dialogResult = _a.sent();
                         if (dialogResult.result) {
                             this.lastSelectSaveDirectories = dialogResult.directory;
                             this.lastSelectBaseName = dialogResult.baseName;

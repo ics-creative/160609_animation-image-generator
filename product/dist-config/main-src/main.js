@@ -1,14 +1,15 @@
 "use strict";
 exports.__esModule = true;
 var electron_1 = require("electron");
+var path = require("path");
+var url = require("url");
 var ipc_id_1 = require("../common-src/ipc-id");
 var error_message_1 = require("./error/error-message");
 var send_error_1 = require("./error/send-error");
 var file_1 = require("./file");
 var application_menu_1 = require("./menu/application-menu");
+var SaveDialog_1 = require("./dialog/SaveDialog");
 // アプリケーション作成用のモジュールを読み込み
-var path = require('path');
-var url = require('url');
 var sendError = new send_error_1.SendError();
 var errorMessage = new error_message_1.ErrorMessage();
 // 画像生成サービス
@@ -53,8 +54,22 @@ function createWindow() {
             fileService = undefined;
         });
     }
-    var ipc = require('electron').ipcMain;
-    ipc.on('open-file-dialog', openFileDialog);
+}
+function openFileDialog(event) {
+    var dialogOption = {
+        properties: ['openFile', 'multiSelections'],
+        filters: [{ name: 'Images', extensions: ['png'] }]
+    };
+    if (!mainWindow) {
+        return;
+    }
+    electron_1.dialog
+        .showOpenDialog(mainWindow, dialogOption)
+        .then(function (files) {
+        event.sender.send(ipc_id_1.IpcId.SELECTED_OPEN_IMAGES, files);
+    })["catch"](function () {
+        event.sender.send(ipc_id_1.IpcId.UNLOCK_SELECT_UI);
+    });
 }
 //  初期化が完了した時の処理
 electron_1.app.on('ready', createWindow);
@@ -73,58 +88,42 @@ electron_1.app.on('activate', function () {
         mainWindow.show();
     }
 });
+// アプリケーション終了前
 electron_1.app.on('will-quit', function () {
     console.log('will-quit');
     mainWindow = undefined;
     fileService = undefined;
 });
-function openFileDialog(event) {
-    var dialogOption = {
-        properties: ['openFile', 'multiSelections'],
-        filters: [{ name: 'Images', extensions: ['png'] }]
-    };
-    if (!mainWindow) {
-        return;
-    }
-    electron_1.dialog.showOpenDialog(mainWindow, dialogOption)
-        .then(function (files) {
-        event.sender.send(ipc_id_1.IpcId.SELECTED_OPEN_IMAGES, files);
-    })["catch"](function () {
-        event.sender.send(ipc_id_1.IpcId.UNLOCK_SELECT_UI);
-    });
-}
+electron_1.ipcMain.on(ipc_id_1.IpcId.OPEN_FILE_DIALOG, openFileDialog);
 electron_1.ipcMain.on(ipc_id_1.IpcId.SET_CONFIG_DATA, function (event, localeData, appConfig) {
     console.log("".concat(ipc_id_1.IpcId.SET_CONFIG_DATA, " to ").concat(localeData));
     if (!mainWindow) {
         return;
     }
-    fileService = new file_1["default"](mainWindow, localeData, electron_1.app.getAppPath(), sendError, errorMessage, electron_1.app.getPath('desktop'));
+    fileService = new file_1["default"](mainWindow, localeData, electron_1.app.getAppPath(), sendError, errorMessage, new SaveDialog_1.SaveDialog(mainWindow, electron_1.app.getPath('desktop'), localeData.defaultFileName));
     mainWindow.setTitle(localeData.APP_NAME);
     var menu = new application_menu_1.ApplicationMenu(appConfig, localeData);
     menu.createMenu(electron_1.app);
 });
-// todo:async-await対応
-electron_1.ipcMain.on(ipc_id_1.IpcId.OPEN_SAVE_DIALOG, function (event, imageType) {
-    console.log("".concat(ipc_id_1.IpcId.OPEN_SAVE_DIALOG, ", ").concat(imageType));
-    // TODO: 使ってない可能性
-    console.warn('OPEN_SAVE_DIALOG');
-    // fileService?.openSaveDialog(imageType, mainWindow, app.getPath('desktop'))
-    //   .then(result => {
-    //     event.returnValue = result;
-    //   })
-    //   .catch(e => {
-    //     event.returnValue = { result: false };
-    //   });
-});
 electron_1.ipcMain.on(ipc_id_1.IpcId.SHOW_ERROR_MESSAGE, function (event, errorCode, inquiryCode, errorDetail, errorStack, appName) {
-    mainWindow && errorMessage.showErrorMessage(errorCode, inquiryCode, errorDetail, errorStack, appName, mainWindow);
+    if (!mainWindow) {
+        return;
+    }
+    errorMessage.showErrorMessage(errorCode, inquiryCode, errorDetail, errorStack, appName, mainWindow);
 });
 electron_1.ipcMain.on(ipc_id_1.IpcId.SEND_ERROR, function (event, version, code, category, title, detail) {
     sendError.exec(version, code, category, title, detail);
 });
 electron_1.ipcMain.on(ipc_id_1.IpcId.EXEC_IMAGE_EXPORT_PROCESS, function (event, version, itemList, animationOptionData) {
     console.log(version, itemList, animationOptionData);
-    fileService === null || fileService === void 0 ? void 0 : fileService.exec(electron_1.app.getPath('temp'), version, itemList, animationOptionData).then(function () {
+    if (!fileService) {
+        console.error('fileService has not inited');
+        event.returnValue = false;
+        return;
+    }
+    fileService
+        .exec(electron_1.app.getPath('temp'), version, itemList, animationOptionData)
+        .then(function () {
         console.log("returnValue:true");
         event.returnValue = true;
     })["catch"](function () {
