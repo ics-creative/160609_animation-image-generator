@@ -64,11 +64,10 @@ export const generateHtml = (
   filePNGName?: string,
   fileWebPName?: string
 ): void => {
-
   let imageElement = ``;
 
-  const isIncludeApng = optionData.enabledExportApng && filePNGName
-  const isIncludeWebP = optionData.enabledExportWebp && fileWebPName
+  const isIncludeApng = optionData.enabledExportApng && filePNGName;
+  const isIncludeWebP = optionData.enabledExportWebp && fileWebPName;
 
   const { width, height } = optionData.imageInfo;
   if (isIncludeApng && isIncludeWebP) {

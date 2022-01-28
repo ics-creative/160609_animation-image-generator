@@ -18,22 +18,22 @@ export default class File {
     appPath: string,
     sendError: SendError,
     errorMessage: ErrorMessage,
-    defaultSaveDirectory: string
+    saveDialog: SaveDialog
   ) {
     this.mainWindow = mainWindow;
     this.localeData = localeData;
     this.appPath = appPath;
     this.sendError = sendError;
     this.errorMessage = errorMessage;
-    this.saveDialog = new SaveDialog(this.mainWindow, defaultSaveDirectory, localeData.defaultFileName);
+    this.saveDialog = saveDialog;
   }
 
-  private mainWindow: BrowserWindow;
-  private saveDialog: SaveDialog;
-  private sendError: SendError;
-  private errorMessage: ErrorMessage;
-  private appPath: string;
-  private localeData: ILocaleData;
+  private readonly mainWindow: BrowserWindow;
+  private readonly saveDialog: SaveDialog;
+  private readonly sendError: SendError;
+  private readonly errorMessage: ErrorMessage;
+  private readonly appPath: string;
+  private readonly localeData: ILocaleData;
 
   public async exec(
     temporaryPath: string,
@@ -41,9 +41,10 @@ export default class File {
     itemList: ImageData[],
     animationOptionData: AnimationImageOptions
   ): Promise<void> {
-
     // お問い合わせコード生成
     const inquiryCode = createInquiryCode();
+
+    // 出力処理を実行
     const result = await execGenerate(
       itemList,
       animationOptionData,
@@ -52,38 +53,44 @@ export default class File {
       this.saveDialog
     );
 
+    // プリセットがLINEの場合、出力成功後にチェックを行い、警告があれば表示
     if (animationOptionData.preset === PresetType.LINE && result.pngPath) {
       await this.validateLineStamp(result.pngPath, animationOptionData);
     }
 
-      if (result.error) {
-        const error = result.error;
-        console.log('::catch-error::');
-        // エラー内容の送信
-          console.error(error);
-          const errorStack = error.cause.stack;
+    if (result.error) {
+      const error = result.error;
+      console.log('::catch-error::');
+      // エラー内容の送信
+      console.error(error);
+      const errorStack = error.cause.stack;
 
-          this.sendError.exec(
-            version,
-            inquiryCode,
-            'ERROR',
-            error.errCode.toString(),
-            (errorStack ?? '')
-          );
+      this.sendError.exec(
+        version,
+        inquiryCode,
+        'ERROR',
+        error.errCode.toString(),
+        errorStack || ''
+      );
 
-          this.errorMessage.showErrorMessage(
-            error.errCode,
-            inquiryCode,
-            error.errDetail,
-            (errorStack ?? ''),
-            this.localeData.APP_NAME,
-            this.mainWindow
-          );
-      }
+      this.errorMessage.showErrorMessage(
+        error.errCode,
+        inquiryCode,
+        error.errDetail,
+        errorStack || '',
+        this.localeData.APP_NAME,
+        this.mainWindow
+      );
+    }
   }
 
-  private async validateLineStamp(exportFilePath: string, animationOptionData: AnimationImageOptions) {
-    if (!existsPath(exportFilePath)) {return; }
+  private async validateLineStamp(
+    exportFilePath: string,
+    animationOptionData: AnimationImageOptions
+  ) {
+    if (!existsPath(exportFilePath)) {
+      return;
+    }
     const stat = fs.statSync(exportFilePath);
     const validateArr = LineStampValidator.validate(
       stat,
@@ -105,5 +112,4 @@ export default class File {
       await dialog.showMessageBox(this.mainWindow, dialogOption);
     }
   }
-
 }

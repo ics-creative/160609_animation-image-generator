@@ -1,4 +1,13 @@
-import { app, BrowserWindow, dialog, ipcMain, IpcMainEvent, OpenDialogOptions } from 'electron';
+import {
+  app,
+  BrowserWindow,
+  dialog,
+  ipcMain,
+  IpcMainEvent,
+  OpenDialogOptions
+} from 'electron';
+import * as path from 'path';
+import * as url from 'url';
 import { AnimationImageOptions } from '../common-src/data/animation-image-option';
 import { ErrorType } from '../common-src/error/error-type';
 import { IpcId } from '../common-src/ipc-id';
@@ -9,12 +18,9 @@ import File from './file';
 import { ILocaleData } from '../common-src/i18n/locale-data.interface';
 import { ApplicationMenu } from './menu/application-menu';
 import { AppConfig } from '../src/app/config/app-config';
+import { SaveDialog } from 'dialog/SaveDialog';
 
 // アプリケーション作成用のモジュールを読み込み
-
-const path = require('path');
-const url = require('url');
-
 const sendError = new SendError();
 const errorMessage = new ErrorMessage();
 
@@ -68,8 +74,24 @@ function createWindow() {
       fileService = undefined;
     });
   }
-  const ipc = require('electron').ipcMain;
-  ipc.on('open-file-dialog', openFileDialog);
+}
+
+function openFileDialog(event: IpcMainEvent) {
+  const dialogOption: OpenDialogOptions = {
+    properties: ['openFile', 'multiSelections'],
+    filters: [{ name: 'Images', extensions: ['png'] }]
+  };
+  if (!mainWindow) {
+    return;
+  }
+  dialog
+    .showOpenDialog(mainWindow, dialogOption)
+    .then(files => {
+      event.sender.send(IpcId.SELECTED_OPEN_IMAGES, files);
+    })
+    .catch(() => {
+      event.sender.send(IpcId.UNLOCK_SELECT_UI);
+    });
 }
 
 //  初期化が完了した時の処理
@@ -91,28 +113,14 @@ app.on('activate', function() {
   }
 });
 
+// アプリケーション終了前
 app.on('will-quit', function() {
   console.log('will-quit');
   mainWindow = undefined;
   fileService = undefined;
 });
 
-function openFileDialog(event: IpcMainEvent) {
-  const dialogOption: OpenDialogOptions = {
-    properties: ['openFile', 'multiSelections'],
-    filters: [{ name: 'Images', extensions: ['png'] }]
-  };
-  if (!mainWindow) {
-    return;
-  }
-  dialog.showOpenDialog(mainWindow, dialogOption)
-    .then(files => {
-      event.sender.send(IpcId.SELECTED_OPEN_IMAGES, files);
-    })
-    .catch(() => {
-      event.sender.send(IpcId.UNLOCK_SELECT_UI);
-    });
-}
+ipcMain.on(IpcId.OPEN_FILE_DIALOG, openFileDialog);
 
 ipcMain.on(
   IpcId.SET_CONFIG_DATA,
@@ -129,7 +137,11 @@ ipcMain.on(
       app.getAppPath(),
       sendError,
       errorMessage,
-      app.getPath('desktop')
+      new SaveDialog(
+        mainWindow,
+        app.getPath('desktop'),
+        localeData.defaultFileName
+      )
     );
     mainWindow.setTitle(localeData.APP_NAME);
 
@@ -137,21 +149,6 @@ ipcMain.on(
     menu.createMenu(app);
   }
 );
-
-// todo:async-await対応
-ipcMain.on(IpcId.OPEN_SAVE_DIALOG, (event, imageType: string) => {
-  console.log(`${IpcId.OPEN_SAVE_DIALOG}, ${imageType}`);
-
-  // TODO: 使ってない可能性
-  console.warn('OPEN_SAVE_DIALOG');
-  // fileService?.openSaveDialog(imageType, mainWindow, app.getPath('desktop'))
-  //   .then(result => {
-  //     event.returnValue = result;
-  //   })
-  //   .catch(e => {
-  //     event.returnValue = { result: false };
-  //   });
-});
 
 ipcMain.on(
   IpcId.SHOW_ERROR_MESSAGE,
@@ -163,7 +160,10 @@ ipcMain.on(
     errorStack: string,
     appName: string
   ) => {
-    mainWindow && errorMessage.showErrorMessage(
+    if (!mainWindow) {
+      return;
+    }
+    errorMessage.showErrorMessage(
       errorCode,
       inquiryCode,
       errorDetail,
@@ -198,8 +198,13 @@ ipcMain.on(
   ) => {
     console.log(version, itemList, animationOptionData);
 
+    if (!fileService) {
+      console.error('fileService has not inited');
+      event.returnValue = false;
+      return;
+    }
     fileService
-      ?.exec(app.getPath('temp'), version, itemList, animationOptionData)
+      .exec(app.getPath('temp'), version, itemList, animationOptionData)
       .then(() => {
         console.log(`returnValue:true`);
         event.returnValue = true;

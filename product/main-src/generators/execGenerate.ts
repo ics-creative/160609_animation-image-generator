@@ -1,6 +1,6 @@
 import * as path from 'path';
 import * as fs from 'fs';
-import {emptyDirectory } from '../fileFunctions/emptyDirectory';
+import { emptyDirectory } from '../fileFunctions/emptyDirectory';
 import { getExeExt } from '../fileFunctions/getExeExt';
 import { AnimationImageOptions } from '../../common-src/data/animation-image-option';
 import { ImageData } from '../../common-src/data/image-data';

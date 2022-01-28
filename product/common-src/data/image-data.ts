@@ -7,8 +7,8 @@ export class ImageData {
   public frameNumber: number;
 
   constructor(imageBaseName: string, imagePath: string, frameNumber: number) {
-    this.imageBaseName = imageBaseName
-    this.imagePath = imagePath
-    this.frameNumber = frameNumber
+    this.imageBaseName = imageBaseName;
+    this.imagePath = imagePath;
+    this.frameNumber = frameNumber;
   }
 }

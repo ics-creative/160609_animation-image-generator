@@ -19,7 +19,7 @@ export class AnimationImageOptions {
   enabledExportHtml = false;
 
   /** 画像の情報です。 */
-  imageInfo = { 
+  imageInfo = {
     width: 0,
     height: 0,
     length: 0
