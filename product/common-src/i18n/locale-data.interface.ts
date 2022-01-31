@@ -9,6 +9,7 @@ export interface ILocaleData {
   PROP_tabQuality: string;
 
   PROP_tabAnimFps: string;
+  PROP_tabAnimLoop: string;
   PROP_tabAnimLoopNum: string;
   PROP_tabAnimLoopInitiny: string;
 
@@ -27,6 +28,10 @@ export interface ILocaleData {
   PROP_tabQualityHWebp: string;
   PROP_tabQualityHHtml: string;
 
+  PROP_tabQualityHApngTooltip: string;
+  PROP_tabQualityHWebpTooltip: string;
+  PROP_tabQualityHHtmlTooltip: string;
+
   PROP_btnSave: string;
 
   PREV_selectDrop: string;
@@ -36,6 +41,7 @@ export interface ILocaleData {
   PREV_infoFrameSize: string;
   PREV_infoFrameNum: string;
   PREV_infoTime: string;
+  PREV_infoTimeUnit: string;
   PREV_zoom: string;
   PREV_btnSelectRe: string;
   PREV_preview: string;

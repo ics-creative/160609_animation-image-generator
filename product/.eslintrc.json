@@ -32,6 +32,8 @@
             "accessibility": "explicit"
           }
         ],
+        "@typescript-eslint/naming-convention": "off",
+        "@typescript-eslint/member-ordering": "off",
         "arrow-parens": [
           "off",
           "always"

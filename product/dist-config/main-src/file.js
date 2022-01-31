@@ -42,16 +42,15 @@ var LineStampValidator_1 = require("../common-src/validators/LineStampValidator"
 var fs = require("fs");
 var createInquiryCode_1 = require("./generators/createInquiryCode");
 var execGenerate_1 = require("./generators/execGenerate");
-var SaveDialog_1 = require("./dialog/SaveDialog");
 var existsPath_1 = require("./fileFunctions/existsPath");
 var File = /** @class */ (function () {
-    function File(mainWindow, localeData, appPath, sendError, errorMessage, defaultSaveDirectory) {
+    function File(mainWindow, localeData, appPath, sendError, errorMessage, saveDialog) {
         this.mainWindow = mainWindow;
         this.localeData = localeData;
         this.appPath = appPath;
         this.sendError = sendError;
         this.errorMessage = errorMessage;
-        this.saveDialog = new SaveDialog_1.SaveDialog(this.mainWindow, defaultSaveDirectory, localeData.defaultFileName);
+        this.saveDialog = saveDialog;
     }
     File.prototype.exec = function (temporaryPath, version, itemList, animationOptionData) {
         return __awaiter(this, void 0, void 0, function () {
@@ -75,8 +74,8 @@ var File = /** @class */ (function () {
                             // エラー内容の送信
                             console.error(error);
                             errorStack = error.cause.stack;
-                            this.sendError.exec(version, inquiryCode, 'ERROR', error.errCode.toString(), (errorStack !== null && errorStack !== void 0 ? errorStack : ''));
-                            this.errorMessage.showErrorMessage(error.errCode, inquiryCode, error.errDetail, (errorStack !== null && errorStack !== void 0 ? errorStack : ''), this.localeData.APP_NAME, this.mainWindow);
+                            this.sendError.exec(version, inquiryCode, 'ERROR', error.errCode.toString(), errorStack || '');
+                            this.errorMessage.showErrorMessage(error.errCode, inquiryCode, error.errDetail, errorStack || '', this.localeData.APP_NAME, this.mainWindow);
                         }
                         return [2 /*return*/];
                 }

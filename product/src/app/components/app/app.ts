@@ -18,7 +18,7 @@ import { AnimationImageOptions } from '../../../../common-src/data/animation-ima
 import { ImageData } from '../../../../common-src/data/image-data';
 
 @Component({
-  selector: 'my-app',
+  selector: 'app-main',
   templateUrl: './app.html',
   styleUrls: ['./app.scss']
 })
@@ -33,7 +33,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   public isImageSelected: boolean;
   public presetMode: number;
 
-  private openingDirectories: boolean;
+  openingDirectories: boolean;
   public items: ImageData[] = [];
 
   public appConfig: AppConfig = new AppConfig();
@@ -300,7 +300,7 @@ export class AppComponent implements OnInit, AfterViewInit {
    * 再ナンバリングします。
    */
   public numbering(): void {
-    this.items.sort(function(a, b) {
+    this.items.sort((a, b) => {
       const aRes = a.imageBaseName.match(/\d+/g);
       const bRes = b.imageBaseName.match(/\d+/g);
 
@@ -332,7 +332,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   }
 
   public checkImageSize(items: ImageData[]): void {
-    new Promise((resolve: Function, reject: Function) => {
+    new Promise<void>((resolve, reject) => {
       this.apngFileSizeError = false;
       const image = new Image();
       image.onload = (event: Event) => {
@@ -352,7 +352,7 @@ export class AppComponent implements OnInit, AfterViewInit {
           return;
         }
         for (let i = 1; i < items.length; i++) {
-          const promise = new Promise((resolve: Function, reject: Function) => {
+          const promise = new Promise<void>((resolve, reject) => {
             const path = items[i].imagePath;
             const image = new Image();
             image.onload = (event: Event) => {
@@ -370,7 +370,11 @@ export class AppComponent implements OnInit, AfterViewInit {
                 errorFlag = true;
               }
               this.apngFileSizeError = errorFlag;
-              errorFlag ? reject() : resolve();
+              if (errorFlag) {
+                reject();
+              } else {
+                resolve();
+              }
             };
             image.onerror = (event: Event) => {
               reject();

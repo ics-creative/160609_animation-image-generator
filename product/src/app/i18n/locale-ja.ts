@@ -34,7 +34,7 @@ export class LocaleJaData extends LocaleData {
   PROP_tabQualityHWebp = 'WebPファイル出力';
   PROP_tabQualityHHtml = 'HTMLファイル出力';
 
-  ROP_tabQualityHApngTooltip = 'APNGはFirefoxやSafari用のアニメ画像形式です';
+  PROP_tabQualityHApngTooltip = 'APNGはFirefoxやSafari用のアニメ画像形式です';
   PROP_tabQualityHWebpTooltip = 'WebPはChromeブラウザ用のアニメ画像形式です';
   PROP_tabQualityHHtmlTooltip = 'アニメ画像を表示するためのHTMLを作成します';
 

@@ -14,6 +14,7 @@ export class LocaleData implements ILocaleData {
   PROP_tabQuality: string = null;
 
   PROP_tabAnimFps: string = null;
+  PROP_tabAnimLoop: string = null;
   PROP_tabAnimLoopNum: string = null;
   PROP_tabAnimLoopInitiny: string = null;
 
@@ -32,6 +33,10 @@ export class LocaleData implements ILocaleData {
   PROP_tabQualityHWebp: string = null;
   PROP_tabQualityHHtml: string = null;
 
+  PROP_tabQualityHApngTooltip: string = null;
+  PROP_tabQualityHWebpTooltip: string = null;
+  PROP_tabQualityHHtmlTooltip: string = null;
+
   PROP_btnSave: string = null;
 
   PREV_selectDrop: string = null;
@@ -41,6 +46,7 @@ export class LocaleData implements ILocaleData {
   PREV_infoFrameSize: string = null;
   PREV_infoFrameNum: string = null;
   PREV_infoTime: string = null;
+  PREV_infoTimeUnit: string = null;
   PREV_zoom: string = null;
   PREV_btnSelectRe: string = null;
   PREV_preview: string = null;
