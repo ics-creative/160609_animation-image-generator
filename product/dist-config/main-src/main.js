@@ -132,3 +132,6 @@ electron_1.ipcMain.on(ipc_id_1.IpcId.EXEC_IMAGE_EXPORT_PROCESS, function (event,
         event.returnValue = false;
     });
 });
+electron_1.ipcMain.on(ipc_id_1.IpcId.OPEN_EXTERNAL_BROWSER, function (event, pageUrl) {
+    electron_1.shell.openExternal(pageUrl);
+});

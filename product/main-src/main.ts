@@ -4,7 +4,8 @@ import {
   dialog,
   ipcMain,
   IpcMainEvent,
-  OpenDialogOptions
+  OpenDialogOptions,
+  shell
 } from 'electron';
 import * as path from 'path';
 import * as url from 'url';
@@ -122,33 +123,30 @@ app.on('will-quit', () => {
 
 ipcMain.on(IpcId.OPEN_FILE_DIALOG, openFileDialog);
 
-ipcMain.on(
-  IpcId.SET_CONFIG_DATA,
-  (event, localeData: ILocaleData) => {
-    console.log(`${IpcId.SET_CONFIG_DATA} to ${localeData}`);
+ipcMain.on(IpcId.SET_CONFIG_DATA, (event, localeData: ILocaleData) => {
+  console.log(`${IpcId.SET_CONFIG_DATA} to ${localeData}`);
 
-    if (!mainWindow) {
-      return;
-    }
-
-    fileService = new File(
-      mainWindow,
-      localeData,
-      app.getAppPath(),
-      sendError,
-      errorMessage,
-      new SaveDialog(
-        mainWindow,
-        app.getPath('desktop'),
-        localeData.defaultFileName
-      )
-    );
-    mainWindow.setTitle(localeData.APP_NAME);
-
-    const menu: ApplicationMenu = new ApplicationMenu(localeData);
-    menu.createMenu(app);
+  if (!mainWindow) {
+    return;
   }
-);
+
+  fileService = new File(
+    mainWindow,
+    localeData,
+    app.getAppPath(),
+    sendError,
+    errorMessage,
+    new SaveDialog(
+      mainWindow,
+      app.getPath('desktop'),
+      localeData.defaultFileName
+    )
+  );
+  mainWindow.setTitle(localeData.APP_NAME);
+
+  const menu: ApplicationMenu = new ApplicationMenu(localeData);
+  menu.createMenu(app);
+});
 
 ipcMain.on(
   IpcId.SHOW_ERROR_MESSAGE,
@@ -216,3 +214,7 @@ ipcMain.on(
       });
   }
 );
+
+ipcMain.on(IpcId.OPEN_EXTERNAL_BROWSER, (event, pageUrl: string) => {
+  shell.openExternal(pageUrl);
+});

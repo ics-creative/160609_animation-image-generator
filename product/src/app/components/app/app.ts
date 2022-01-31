@@ -28,8 +28,6 @@ import { ImageData } from '../../../../common-src/data/image-data';
 export class AppComponent implements OnInit, AfterViewInit {
   private readonly PRESET_ID = 'preset_id';
   private apngFileSizeError = false;
-  private electron: any;
-
   readonly AppConfig = AppConfig;
 
   isImageSelected = false;
@@ -93,8 +91,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   }
 
   openExternalBrowser(url: string) {
-    const { shell } = this.electron;
-    shell.openExternal(url);
+    this.ipcService.openExternalBrowser(url);
   }
 
   ngAfterViewInit() {

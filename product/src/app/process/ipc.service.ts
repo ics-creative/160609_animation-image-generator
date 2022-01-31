@@ -31,14 +31,14 @@ export default class IpcService {
     this.path = this.api.path;
   }
 
-  public sendConfigData(localeData: ILocaleData) {
+  sendConfigData(localeData: ILocaleData) {
     this.api.send(IpcId.SET_CONFIG_DATA, localeData);
   }
 
-  public openFileDialog() {
+  openFileDialog() {
     this.api.send(IpcId.OPEN_FILE_DIALOG);
   }
-  public sendError(
+  sendError(
     version: string,
     code: string,
     category: string,
@@ -70,7 +70,11 @@ export default class IpcService {
     });
   }
 
-  public exec(
+  openExternalBrowser(url: string) {
+    this.api.sendSync(IpcId.OPEN_EXTERNAL_BROWSER, url);
+  }
+
+  exec(
     version: string,
     itemList: ImageData[],
     animationOptionData: AnimationImageOptions
