@@ -11,7 +11,8 @@ const ENOENT_ERROR = 'ENOENT';
 
 /**
  * WEBP アニメーション画像を作ります。
- * @returns {Promise<T>}
+ *
+ * @returns
  * @private
  */
 export const generateWebp = async (
@@ -69,6 +70,7 @@ export const generateWebp = async (
 
 /**
  * PNG->WebPの変換を一括で行います
+ *
  * @param pngPaths
  * @param appPath
  * @param optionData
@@ -89,6 +91,7 @@ const convertPng2Webps = async (
 
 /**
  * PNG->WebPの変換を行います
+ *
  * @param pngPaths
  * @param appPath
  * @param optionData

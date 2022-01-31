@@ -32,7 +32,7 @@ export class LocaleEnData extends LocaleData {
   PROP_tabQualityHWebp = 'Export as WebP';
   PROP_tabQualityHHtml = 'Export as HTML';
 
-  ROP_tabQualityHApngTooltip = '';
+  PROP_tabQualityHApngTooltip = '';
   PROP_tabQualityHWebpTooltip = '';
   PROP_tabQualityHHtmlTooltip = '';
 

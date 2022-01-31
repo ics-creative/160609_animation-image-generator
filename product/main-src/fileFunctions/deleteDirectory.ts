@@ -3,6 +3,7 @@ import { deleteFile } from './deleteFile';
 
 /**
  * ディレクトリーとその中身を削除する処理です。
+ *
  * @param dir
  */
 export const deleteDirectory = (dir: string): Promise<void> => {
@@ -17,9 +18,7 @@ export const deleteDirectory = (dir: string): Promise<void> => {
           return reject(fsReadError);
         }
         Promise.all(
-          files.map((file: string) => {
-            return deleteFile(dir, file);
-          })
+          files.map((file: string) => deleteFile(dir, file))
         )
           .then(() => {
             fs.rmdir(dir, fsRmError => {

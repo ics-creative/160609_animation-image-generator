@@ -24,7 +24,7 @@ export class ApplicationMenu {
       submenu: [
         {
           label: this.localeData.MENU_about,
-          click() {
+          click: () => {
             alert(
               `お使いの「${name}」のバージョンは ${version} です。` +
                 '\n' +
@@ -35,7 +35,7 @@ export class ApplicationMenu {
         {
           label: this.localeData.MENU_quit,
           accelerator: 'Command+Q',
-          click() {
+          click: () => {
             app.quit();
           }
         }
@@ -45,7 +45,7 @@ export class ApplicationMenu {
     const helpMenu: any[] = [
       {
         label: this.localeData.MENU_helpOnline,
-        click() {
+        click: () => {
           shell.openExternal(
             'https://github.com/ics-creative/160609_animation-image-generator/tree/master/help'
           );
@@ -53,7 +53,7 @@ export class ApplicationMenu {
       },
       {
         label: this.localeData.MENU_helpQuestion,
-        click() {
+        click: () => {
           shell.openExternal('http://goo.gl/forms/5DUI1UnTUXR6AmCw2');
         }
       }

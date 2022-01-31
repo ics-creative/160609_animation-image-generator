@@ -46,7 +46,8 @@ var CompressionType_1 = require("../../common-src/type/CompressionType");
 var ENOENT_ERROR = 'ENOENT';
 /**
  * APNG画像を保存します。
- * @returns {Promise<T>}
+ *
+ * @returns
  * @private
  */
 var generateApng = function (exportFilePath, appPath, pngPath, optionData) { return __awaiter(void 0, void 0, void 0, function () {

@@ -29,7 +29,7 @@ let fileService: File | undefined;
 // メインウィンドウ
 let mainWindow: BrowserWindow | undefined;
 
-function createWindow() {
+const createWindow = () => {
   // メインウィンドウを作成します
   mainWindow = new BrowserWindow({
     width: 800,
@@ -68,15 +68,15 @@ function createWindow() {
     mainWindow.webContents.openDevTools();
 
     // メインウィンドウが閉じられたときの処理
-    mainWindow.on('closed', function() {
+    mainWindow.on('closed', () => {
       console.log('mainwindow-close');
       mainWindow = undefined;
       fileService = undefined;
     });
   }
-}
+};
 
-function openFileDialog(event: IpcMainEvent) {
+const openFileDialog = (event: IpcMainEvent) => {
   const dialogOption: OpenDialogOptions = {
     properties: ['openFile', 'multiSelections'],
     filters: [{ name: 'Images', extensions: ['png'] }]
@@ -92,18 +92,18 @@ function openFileDialog(event: IpcMainEvent) {
     .catch(() => {
       event.sender.send(IpcId.UNLOCK_SELECT_UI);
     });
-}
+};
 
 //  初期化が完了した時の処理
 app.on('ready', createWindow);
 
 // 全てのウィンドウが閉じたときの処理
-app.on('window-all-closed', function() {
+app.on('window-all-closed', () => {
   app.quit();
 });
 
 // アプリケーションがアクティブになった時の処理(Macだと、Dockがクリックされた時）
-app.on('activate', function() {
+app.on('activate', () => {
   /// メインウィンドウが消えている場合は再度メインウィンドウを作成する
   console.log('active-with-open-window', mainWindow);
   if (mainWindow === undefined) {
@@ -114,7 +114,7 @@ app.on('activate', function() {
 });
 
 // アプリケーション終了前
-app.on('will-quit', function() {
+app.on('will-quit', () => {
   console.log('will-quit');
   mainWindow = undefined;
   fileService = undefined;

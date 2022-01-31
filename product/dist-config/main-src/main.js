@@ -16,7 +16,7 @@ var errorMessage = new error_message_1.ErrorMessage();
 var fileService;
 // メインウィンドウ
 var mainWindow;
-function createWindow() {
+var createWindow = function () {
     // メインウィンドウを作成します
     mainWindow = new electron_1.BrowserWindow({
         width: 800,
@@ -54,8 +54,8 @@ function createWindow() {
             fileService = undefined;
         });
     }
-}
-function openFileDialog(event) {
+};
+var openFileDialog = function (event) {
     var dialogOption = {
         properties: ['openFile', 'multiSelections'],
         filters: [{ name: 'Images', extensions: ['png'] }]
@@ -70,7 +70,7 @@ function openFileDialog(event) {
     })["catch"](function () {
         event.sender.send(ipc_id_1.IpcId.UNLOCK_SELECT_UI);
     });
-}
+};
 //  初期化が完了した時の処理
 electron_1.app.on('ready', createWindow);
 // 全てのウィンドウが閉じたときの処理

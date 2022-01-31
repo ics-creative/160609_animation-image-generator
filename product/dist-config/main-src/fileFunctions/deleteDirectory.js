@@ -5,6 +5,7 @@ var fs = require("fs");
 var deleteFile_1 = require("./deleteFile");
 /**
  * ディレクトリーとその中身を削除する処理です。
+ *
  * @param dir
  */
 var deleteDirectory = function (dir) {
@@ -18,9 +19,7 @@ var deleteDirectory = function (dir) {
                 if (fsReadError) {
                     return reject(fsReadError);
                 }
-                Promise.all(files.map(function (file) {
-                    return (0, deleteFile_1.deleteFile)(dir, file);
-                }))
+                Promise.all(files.map(function (file) { return (0, deleteFile_1.deleteFile)(dir, file); }))
                     .then(function () {
                     fs.rmdir(dir, function (fsRmError) {
                         if (fsRmError) {

@@ -18,7 +18,7 @@ import { AnimationImageOptions } from '../../../../common-src/data/animation-ima
 import { ImageData } from '../../../../common-src/data/image-data';
 
 @Component({
-  selector: 'my-app',
+  selector: 'app-main',
   templateUrl: './app.html',
   styleUrls: ['./app.scss']
 })
@@ -29,27 +29,25 @@ export class AppComponent implements OnInit, AfterViewInit {
   private get PRESET_ID(): string {
     return 'preset_id';
   }
-
-  public isImageSelected: boolean;
-  public presetMode: number;
-
-  private openingDirectories: boolean;
-  public items: ImageData[] = [];
-
-  public appConfig: AppConfig = new AppConfig();
-  public _isDragover = false;
   private apngFileSizeError = false;
-  public gaUrl: SafeResourceUrl;
   private electron: any;
 
+  isImageSelected = false;
+  presetMode: PresetType = PresetType.LINE;
+  openingDirectories = false;
+  items: ImageData[] = [];
+  appConfig: AppConfig = new AppConfig();
+  _isDragover = false;
+  gaUrl: SafeResourceUrl;
+
   @Input()
-  animationOptionData: AnimationImageOptions;
+  animationOptionData = new AnimationImageOptions();
 
   @ViewChild('myComponent', { static: true })
-  myComponent: ElementRef;
+  myComponent?: ElementRef;
 
   @ViewChild('optionSelecter', { static: true })
-  optionSelecterComponent: ElementRef;
+  optionSelecterComponent?: ElementRef;
 
   constructor(
     public localeData: LocaleData,
@@ -95,13 +93,13 @@ export class AppComponent implements OnInit, AfterViewInit {
     return this.ipcService.exec(version, itemList, animationOptionData);
   }
 
-  openExternalBrowser(url) {
+  openExternalBrowser(url: string) {
     const { shell } = this.electron;
     shell.openExternal(url);
   }
 
   ngAfterViewInit() {
-    const component = this.myComponent.nativeElement;
+    const component = this.myComponent?.nativeElement;
     component.addEventListener('dragover', (event: DragEvent) => {
       this._isDragover = true;
       event.preventDefault();
@@ -134,18 +132,13 @@ export class AppComponent implements OnInit, AfterViewInit {
 
   public handleDrop(event: DragEvent) {
     const path = this.ipcService.path;
-
-    const length = event.dataTransfer.files
-      ? event.dataTransfer.files.length
-      : 0;
+    const files = Array.from(event.dataTransfer?.files ?? []);
 
     // 	再度アイテムがドロップされたらリセットするように調整
     this.items = [];
 
-    for (let i = 0; i < length; i++) {
-      const file: any = event.dataTransfer.files[i];
+    files.forEach(file => {
       const filePath = file.path;
-
       if (path.extname(filePath) === '.png') {
         path.dirname(filePath);
 
@@ -157,7 +150,7 @@ export class AppComponent implements OnInit, AfterViewInit {
 
         this.items.push(item);
       }
-    }
+    });
 
     this.numbering();
 
@@ -265,6 +258,7 @@ export class AppComponent implements OnInit, AfterViewInit {
 
   /**
    * ファイルがセットされたときの処理です。
+   *
    * @param filePathList
    */
   public setFilePathList(filePathList: string[]): void {
@@ -299,12 +293,14 @@ export class AppComponent implements OnInit, AfterViewInit {
    * 再ナンバリングします。
    */
   public numbering(): void {
-    this.items.sort(function(a, b) {
+    this.items.sort((a, b) => {
       const aRes = a.imageBaseName.match(/\d+/g);
       const bRes = b.imageBaseName.match(/\d+/g);
 
-      const aNum = aRes ? (aRes.length >= 1 ? parseInt(aRes.pop(), 10) : 0) : 0;
-      const bNum = bRes ? (bRes.length >= 1 ? parseInt(bRes.pop(), 10) : 0) : 0;
+      const aNumStr = aRes?.pop();
+      const bNumStr = bRes?.pop();
+      const aNum = aNumStr !== undefined ? parseInt(aNumStr, 10) : 0;
+      const bNum = bNumStr !== undefined ? parseInt(bNumStr, 10) : 0;
 
       if (aNum < bNum) {
         return -1;
@@ -331,7 +327,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   }
 
   public checkImageSize(items: ImageData[]): void {
-    new Promise((resolve: Function, reject: Function) => {
+    new Promise<void>((resolve, reject) => {
       this.apngFileSizeError = false;
       const image = new Image();
       image.onload = (event: Event) => {
@@ -339,7 +335,7 @@ export class AppComponent implements OnInit, AfterViewInit {
         this.animationOptionData.imageInfo.height = image.height;
         resolve();
       };
-      image.onerror = (event: Event) => {
+      image.onerror = (event) => {
         reject();
       };
       image.src = items[0].imagePath;
@@ -351,7 +347,7 @@ export class AppComponent implements OnInit, AfterViewInit {
           return;
         }
         for (let i = 1; i < items.length; i++) {
-          const promise = new Promise((resolve: Function, reject: Function) => {
+          const promise = new Promise<void>((resolve, reject) => {
             const path = items[i].imagePath;
             const image = new Image();
             image.onload = (event: Event) => {
@@ -369,9 +365,13 @@ export class AppComponent implements OnInit, AfterViewInit {
                 errorFlag = true;
               }
               this.apngFileSizeError = errorFlag;
-              errorFlag ? reject() : resolve();
+              if (errorFlag) {
+                reject();
+              } else {
+                resolve();
+              }
             };
-            image.onerror = (event: Event) => {
+            image.onerror = (event) => {
               reject();
             };
             image.src = path;

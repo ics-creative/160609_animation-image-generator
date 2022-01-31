@@ -12,7 +12,8 @@ const ENOENT_ERROR = 'ENOENT';
 
 /**
  * APNG画像を保存します。
- * @returns {Promise<T>}
+ *
+ * @returns
  * @private
  */
 export const generateApng = async (
