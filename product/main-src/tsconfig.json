@@ -1,16 +1,15 @@
 {
     "compilerOptions": {
+      "strict": true,
       "outDir": "../dist-config",
-      "baseUrl": "",
+      "baseUrl": "./",
       "types": [],
       "sourceMap": false
     },
-    "files": [
-      "main.ts"
-    ],
     "include": [
       "src/**/*.d.ts",
-      "../common-src/**/*.ts"
+      "../common-src/**/*.ts",
+      "**/*.ts"
     ],
     "target": "es5",
     "typeRoots": [

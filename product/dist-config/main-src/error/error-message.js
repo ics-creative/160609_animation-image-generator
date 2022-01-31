@@ -1,12 +1,12 @@
 "use strict";
 exports.__esModule = true;
 exports.ErrorMessage = void 0;
+var electron_1 = require("electron");
 var error_type_1 = require("../../common-src/error/error-type");
 var ErrorMessage = /** @class */ (function () {
     function ErrorMessage() {
     }
     ErrorMessage.prototype.showErrorMessage = function (errorCode, inquiryCode, errorDetail, errorStack, appName, window) {
-        var dialog = require('electron').dialog;
         var errorMessage = this.getErrorMessage(errorCode, inquiryCode, errorDetail);
         var options = {
             type: 'info',
@@ -14,14 +14,14 @@ var ErrorMessage = /** @class */ (function () {
             title: appName,
             message: errorMessage
         };
-        dialog.showMessageBox(window, options);
+        electron_1.dialog.showMessageBox(window, options);
     };
     ErrorMessage.prototype.getErrorMessage = function (errorCode, inquiryCode, errorDetail) {
         var errorPhaseMessage = this.getErrorPhaseMessage(errorCode);
         var errorDetailMessage = errorDetail
             ? '\n\nエラー詳細：' + errorDetail
             : '';
-        return "" + errorPhaseMessage + errorDetailMessage + "\n\n\u4F55\u5EA6\u3082\u540C\u3058\u30A8\u30E9\u30FC\u304C\u767A\u751F\u3059\u308B\u5834\u5408\u306F\u3001\u304A\u624B\u6570\u3067\u3059\u304C\u30B5\u30DD\u30FC\u30C8\u30DA\u30FC\u30B8\u307E\u3067\u304A\u554F\u3044\u5408\u308F\u305B\u304F\u3060\u3055\u3044\u3002\n\n\u304A\u554F\u3044\u5408\u308F\u305B\u30B3\u30FC\u30C9:" + inquiryCode + "\n\t\t";
+        return "".concat(errorPhaseMessage).concat(errorDetailMessage, "\n\n\u4F55\u5EA6\u3082\u540C\u3058\u30A8\u30E9\u30FC\u304C\u767A\u751F\u3059\u308B\u5834\u5408\u306F\u3001\u304A\u624B\u6570\u3067\u3059\u304C\u30B5\u30DD\u30FC\u30C8\u30DA\u30FC\u30B8\u307E\u3067\u304A\u554F\u3044\u5408\u308F\u305B\u304F\u3060\u3055\u3044\u3002\n\n\u304A\u554F\u3044\u5408\u308F\u305B\u30B3\u30FC\u30C9:").concat(inquiryCode, "\n\t\t");
     };
     ErrorMessage.prototype.getErrorPhaseMessage = function (errorCode) {
         switch (errorCode) {

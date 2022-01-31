@@ -149,10 +149,11 @@ export class AppComponent implements OnInit, AfterViewInit {
       if (path.extname(filePath) === '.png') {
         path.dirname(filePath);
 
-        const item: ImageData = new ImageData();
-        item.imageBaseName = path.basename(filePath);
-        item.imagePath = filePath;
-        item.frameNumber = this.items.length;
+        const item: ImageData = new ImageData(
+          path.basename(filePath),
+          filePath,
+          this.items.length
+        );
 
         this.items.push(item);
       }
@@ -280,10 +281,11 @@ export class AppComponent implements OnInit, AfterViewInit {
       if (path.extname(filePath) === '.png') {
         path.dirname(filePath);
 
-        const item: ImageData = new ImageData();
-        item.imageBaseName = path.basename(filePath);
-        item.imagePath = filePath;
-        item.frameNumber = this.items.length;
+        const item: ImageData = new ImageData(
+          path.basename(filePath),
+          filePath,
+          this.items.length
+        );
 
         this.items.push(item);
       }

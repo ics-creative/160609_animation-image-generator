@@ -39,24 +39,6 @@ export default class IpcService {
   public openFileDialog() {
     this.api.send(IpcId.OPEN_FILE_DIALOG);
   }
-
-  public openSaveDialog(imageType: string) {
-    return new Promise<{
-      result: boolean;
-      fileName: string;
-      lastDirectory: string;
-    }>((resolve: Function, reject: Function) => {
-      console.log(IpcId.OPEN_SAVE_DIALOG, imageType);
-
-      const result = this.api.sendSync(IpcId.OPEN_SAVE_DIALOG, imageType);
-      if (result.result) {
-        resolve(result);
-      } else {
-        reject();
-      }
-    });
-  }
-
   public sendError(
     version: string,
     code: string,
