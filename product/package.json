@@ -53,7 +53,6 @@
     "@types/node": "^12.11.1",
     "@typescript-eslint/eslint-plugin": "5.10.1",
     "@typescript-eslint/parser": "5.10.1",
-    "chokidar": "^3.5.2",
     "concurrently": "^4.1.2",
     "cpx": "^1.5.0",
     "cross-env": "^5.2.1",
@@ -67,13 +66,8 @@
     "eslint-plugin-prefer-arrow": "latest",
     "eslint-plugin-react": "latest",
     "husky": "^2.7.0",
-    "lint-staged": "^8.2.1",
     "mkdirp": "^0.5.5",
     "prettier": "^2.5.1",
-    "rxjs-compat": "^6.6.7",
-    "ts-node": "^8.10.2",
-    "tslint-config-prettier": "^1.18.0",
-    "tslint-plugin-prettier": "^2.3.0",
     "typescript": "4.5.4"
   },
   "husky": {
