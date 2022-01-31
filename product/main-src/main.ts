@@ -5,7 +5,7 @@ import {
   ipcMain,
   IpcMainEvent,
   OpenDialogOptions,
-  shell
+  shell,
 } from 'electron';
 import * as path from 'path';
 import * as url from 'url';
@@ -39,8 +39,8 @@ const createWindow = () => {
       nodeIntegration: false,
       contextIsolation: true,
       backgroundThrottling: false,
-      preload: path.join(__dirname, '../preload.js')
-    }
+      preload: path.join(__dirname, '../preload.js'),
+    },
   });
 
   console.log(process.env.NODE_ENV);
@@ -52,7 +52,7 @@ const createWindow = () => {
       url.format({
         pathname: path.join(__dirname, '../../dist', 'index.html'),
         protocol: 'file:',
-        slashes: true
+        slashes: true,
       })
     );
 
@@ -63,7 +63,7 @@ const createWindow = () => {
       url.format({
         pathname: path.join(__dirname, '../../dist', 'index.html'),
         protocol: 'file:',
-        slashes: true
+        slashes: true,
       })
     );
     mainWindow.webContents.openDevTools();
@@ -80,14 +80,14 @@ const createWindow = () => {
 const openFileDialog = (event: IpcMainEvent) => {
   const dialogOption: OpenDialogOptions = {
     properties: ['openFile', 'multiSelections'],
-    filters: [{ name: 'Images', extensions: ['png'] }]
+    filters: [{ name: 'Images', extensions: ['png'] }],
   };
   if (!mainWindow) {
     return;
   }
   dialog
     .showOpenDialog(mainWindow, dialogOption)
-    .then(files => {
+    .then((files) => {
       event.sender.send(IpcId.SELECTED_OPEN_IMAGES, files);
     })
     .catch(() => {

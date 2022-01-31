@@ -107,7 +107,7 @@ export default class File {
         buttons: ['OK'],
         title: this.localeData.APP_NAME,
         message: message,
-        detail: detailMessage
+        detail: detailMessage,
       };
       await dialog.showMessageBox(this.mainWindow, dialogOption);
     }
