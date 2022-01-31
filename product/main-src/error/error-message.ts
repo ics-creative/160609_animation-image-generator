@@ -1,7 +1,7 @@
 import { BrowserWindow, dialog } from 'electron';
 import { ErrorType } from '../../common-src/error/error-type';
 
-declare function require(value: String): any;
+declare function require(value: string): any;
 
 export class ErrorMessage {
   constructor() {}

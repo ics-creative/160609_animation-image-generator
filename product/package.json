@@ -2,9 +2,8 @@
   "scripts": {
     "build": "tsc --project main-src/tsconfig.json && ng build --configuration production",
     "start": "tsc --project main-src/tsconfig.json && concurrently \"cross-env NODE_ENV=develop electron ./dist-config\" \"ng build --watch\"",
-    "_precommit": "lint-staged",
-    "lint": "ng lint",
-    "format": "ng lint --fix && prettier */*.{ts,scss} --write",
+    "lint": "ng lint && eslint main-src/**/*.ts",
+    "format": "ng lint --fix &&  eslint --fix main-src/**/*.ts && prettier */*.{ts,scss} --write",
     "release-darwin": "npm run prebuild-darwin && npm run package-darwin",
     "release-win32": "npm run prebuild-win32 && npm run package-win32",
     "release-windows-store": "npm run prebuild-win32 && npm run package-windows-store",
@@ -14,16 +13,6 @@
     "package-win32": "node build-scripts/for-windows-packaging.js",
     "package-windows-store": "node build-scripts/for-windows-store-packaging.js",
     "copy-binary-asssets": "node build-scripts/copy-binary-assets.js"
-  },
-  "lint-staged": {
-    "*.ts": [
-      "ng lint",
-      "git add"
-    ],
-    "*.{js,json,css,md}": [
-      "prettier",
-      "git add"
-    ]
   },
   "prettier": {
     "singleQuote": true
@@ -86,5 +75,10 @@
     "tslint-config-prettier": "^1.18.0",
     "tslint-plugin-prettier": "^2.3.0",
     "typescript": "4.5.4"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run format"
+    }
   }
 }

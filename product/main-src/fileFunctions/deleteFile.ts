@@ -4,11 +4,11 @@ import { deleteDirectory } from './deleteDirectory';
 
 /**
  * ファイルを削除する処理です。
+ *
  * @param dir
  * @param file
  */
-export const deleteFile = (dir: string, file: string): Promise<void> => {
-  return new Promise<void>((resolve, reject) => {
+export const deleteFile = (dir: string, file: string): Promise<void> => new Promise<void>((resolve, reject) => {
     const filePath = path.join(dir, file);
     fs.lstat(filePath, (lstatErorr, stats) => {
       if (lstatErorr) {
@@ -26,4 +26,3 @@ export const deleteFile = (dir: string, file: string): Promise<void> => {
       }
     });
   });
-};

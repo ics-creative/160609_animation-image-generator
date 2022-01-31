@@ -38,6 +38,7 @@
           "off",
           "always"
         ],
+        "object-shorthand": "off",
         "brace-style": [
           "error",
           "1tbs"
