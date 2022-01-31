@@ -1,4 +1,4 @@
-import { Menu, shell } from 'electron';
+import { dialog, Menu, shell } from 'electron';
 import { ILocaleData } from '../../common-src/i18n/locale-data.interface';
 import { AppConfig } from '../../src/app/config/app-config';
 
@@ -25,11 +25,12 @@ export class ApplicationMenu {
         {
           label: this.localeData.MENU_about,
           click: () => {
-            alert(
-              `お使いの「${name}」のバージョンは ${version} です。` +
+            dialog.showMessageBox({
+              message:
+                `お使いの「${name}」のバージョンは ${version} です。` +
                 '\n' +
                 `You use version ${version}.`
-            );
+            });
           }
         },
         {
