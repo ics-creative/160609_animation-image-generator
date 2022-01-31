@@ -45,7 +45,8 @@ var timer_1 = require("../utils/timer");
 var ENOENT_ERROR = 'ENOENT';
 /**
  * WEBP アニメーション画像を作ります。
- * @returns {Promise<T>}
+ *
+ * @returns
  * @private
  */
 var generateWebp = function (exportFilePath, appPath, temporaryPath, itemList, optionData) { return __awaiter(void 0, void 0, void 0, function () {
@@ -100,6 +101,7 @@ var generateWebp = function (exportFilePath, appPath, temporaryPath, itemList, o
 exports.generateWebp = generateWebp;
 /**
  * PNG->WebPの変換を一括で行います
+ *
  * @param pngPaths
  * @param appPath
  * @param optionData
@@ -123,6 +125,7 @@ var convertPng2Webps = function (pngPaths, appPath, optionData) { return __await
 }); };
 /**
  * PNG->WebPの変換を行います
+ *
  * @param pngPaths
  * @param appPath
  * @param optionData

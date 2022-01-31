@@ -10,6 +10,7 @@ var createImageElementWebP = function (fileWebPName, width, height) { return "\n
 var createImageElementWebpAndApng = function (fileWebPName, filePNGName, width, height) { return "\n<!-- Chrome \u3068 Firefox \u3068 Safari \u3067\u518D\u751F\u53EF\u80FD (IE, Edge \u3067\u306F\u30A2\u30CB\u30E1\u306F\u518D\u751F\u3067\u304D\u307E\u305B\u3093) -->\n<picture>\n<!-- Chrome \u7528 -->\n  <source type=\"image/webp\" srcset=\"".concat(fileWebPName, "\" />\n  <!-- Firefox, Safari \u7528 -->\n  <img src=\"").concat(filePNGName, "\" width=\"").concat(width, "\"\n  height=\"").concat(height, "\" alt=\"\" class=\"apng-image\" />\n</picture>"); };
 /**
  * HTMLファイルを作成します。
+ *
  * @private
  */
 /* tslint:disable:quotemark */

@@ -24,22 +24,21 @@ import { LineStampValidator } from '../../../../common-src/validators/LineStampV
  * アニメーションのプレビュー領域のコンポーネントです。
  */
 export class AnimPreviewComponent implements OnChanges, OnInit {
-  @Input()
-  imagePath: string;
 
   @Input()
-  animationOptionData: AnimationImageOptions;
+  animationOptionData = new AnimationImageOptions();
 
   @Input()
-  items: ImageData[];
+  items: ImageData[] = [];
 
   @Input()
-  openingDirectories: boolean;
+  openingDirectories = false;
 
   /** ファイル選択ダイアログのイベントです。 */
   @Output()
   public clickFileSelectButtonEvent = new EventEmitter();
 
+  imagePath = '';
   playing = false;
   currentFrame = 0;
   currentLoopCount = 0;

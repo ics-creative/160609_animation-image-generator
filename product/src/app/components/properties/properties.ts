@@ -13,7 +13,7 @@ import { LocaleData } from '../../i18n/locale-data';
  */
 export class PropertiesComponent {
   @Input()
-  animationOptionData: AnimationImageOptions;
+  animationOptionData = new AnimationImageOptions();
 
   PresetType = PresetType;
 
