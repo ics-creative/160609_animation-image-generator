@@ -95,14 +95,14 @@ electron_1.app.on('will-quit', function () {
     fileService = undefined;
 });
 electron_1.ipcMain.on(ipc_id_1.IpcId.OPEN_FILE_DIALOG, openFileDialog);
-electron_1.ipcMain.on(ipc_id_1.IpcId.SET_CONFIG_DATA, function (event, localeData, appConfig) {
+electron_1.ipcMain.on(ipc_id_1.IpcId.SET_CONFIG_DATA, function (event, localeData) {
     console.log("".concat(ipc_id_1.IpcId.SET_CONFIG_DATA, " to ").concat(localeData));
     if (!mainWindow) {
         return;
     }
     fileService = new file_1["default"](mainWindow, localeData, electron_1.app.getAppPath(), sendError, errorMessage, new SaveDialog_1.SaveDialog(mainWindow, electron_1.app.getPath('desktop'), localeData.defaultFileName));
     mainWindow.setTitle(localeData.APP_NAME);
-    var menu = new application_menu_1.ApplicationMenu(appConfig, localeData);
+    var menu = new application_menu_1.ApplicationMenu(localeData);
     menu.createMenu(electron_1.app);
 });
 electron_1.ipcMain.on(ipc_id_1.IpcId.SHOW_ERROR_MESSAGE, function (event, errorCode, inquiryCode, errorDetail, errorStack, appName) {

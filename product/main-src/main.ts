@@ -17,7 +17,7 @@ import { ImageData } from '../common-src/data/image-data';
 import File from './file';
 import { ILocaleData } from '../common-src/i18n/locale-data.interface';
 import { ApplicationMenu } from './menu/application-menu';
-import { AppConfig } from '../src/app/config/app-config';
+import { AppConfig } from '../common-src/config/app-config';
 import { SaveDialog } from './dialog/SaveDialog';
 
 // アプリケーション作成用のモジュールを読み込み
@@ -124,7 +124,7 @@ ipcMain.on(IpcId.OPEN_FILE_DIALOG, openFileDialog);
 
 ipcMain.on(
   IpcId.SET_CONFIG_DATA,
-  (event, localeData: ILocaleData, appConfig: AppConfig) => {
+  (event, localeData: ILocaleData) => {
     console.log(`${IpcId.SET_CONFIG_DATA} to ${localeData}`);
 
     if (!mainWindow) {
@@ -145,7 +145,7 @@ ipcMain.on(
     );
     mainWindow.setTitle(localeData.APP_NAME);
 
-    const menu: ApplicationMenu = new ApplicationMenu(appConfig, localeData);
+    const menu: ApplicationMenu = new ApplicationMenu(localeData);
     menu.createMenu(app);
   }
 );

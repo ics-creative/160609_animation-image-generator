@@ -6,7 +6,7 @@ import {
   OnInit,
   ViewChild
 } from '@angular/core';
-import { AppConfig } from '../../config/app-config';
+import { AppConfig } from '../../../../common-src/config/app-config';
 import { LocaleData } from '../../i18n/locale-data';
 import { LocaleManager } from '../../i18n/locale-manager';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
@@ -26,18 +26,17 @@ import { ImageData } from '../../../../common-src/data/image-data';
  * アプリケーション全体領域のコンポーネントです。
  */
 export class AppComponent implements OnInit, AfterViewInit {
-  private get PRESET_ID(): string {
-    return 'preset_id';
-  }
+  private readonly PRESET_ID = 'preset_id';
   private apngFileSizeError = false;
   private electron: any;
 
+  readonly AppConfig = AppConfig;
+
   isImageSelected = false;
-  presetMode: PresetType = PresetType.LINE;
   openingDirectories = false;
-  items: ImageData[] = [];
-  appConfig: AppConfig = new AppConfig();
   _isDragover = false;
+  presetMode: PresetType = PresetType.LINE;
+  items: ImageData[] = [];
   gaUrl: SafeResourceUrl;
 
   @Input()
@@ -56,7 +55,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   ) {
     this.gaUrl = sanitizer.bypassSecurityTrustResourceUrl(
       'http://ics-web.jp/projects/animation-image-tool/?v=' +
-        this.appConfig.analyticsVersion
+        AppConfig.analyticsVersion
     );
     new LocaleManager().applyClientLocale(localeData);
   }
@@ -70,7 +69,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.presetMode = Number(localStorage.getItem(this.PRESET_ID));
     this.changePreset(this.presetMode);
 
-    this.ipcService.sendConfigData(this.localeData, this.appConfig);
+    this.ipcService.sendConfigData(this.localeData);
 
     // 	保存先の指定返却
     this.ipcService.selectedOpenImages().then(list => {
@@ -209,7 +208,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     this._showLockDialog();
 
     this.exportImageProsess(
-      this.appConfig.version,
+      AppConfig.version,
       this.items,
       this.animationOptionData
     )
@@ -274,8 +273,7 @@ export class AppComponent implements OnInit, AfterViewInit {
 
       if (path.extname(filePath) === '.png') {
         path.dirname(filePath);
-
-        const item: ImageData = new ImageData(
+        const item = new ImageData(
           path.basename(filePath),
           filePath,
           this.items.length
@@ -285,7 +283,6 @@ export class AppComponent implements OnInit, AfterViewInit {
       }
     }
     this.numbering();
-
     this.changeImageItems(this.items);
   }
 

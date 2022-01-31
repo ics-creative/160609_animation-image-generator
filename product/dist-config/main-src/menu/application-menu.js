@@ -2,16 +2,16 @@
 exports.__esModule = true;
 exports.ApplicationMenu = void 0;
 var electron_1 = require("electron");
+var app_config_1 = require("../../common-src/config/app-config");
 /**
  * アプリケーションメニューの制御クラスです。
  */
 var ApplicationMenu = /** @class */ (function () {
-    function ApplicationMenu(appConfig, localeData) {
-        this.appConfig = appConfig;
+    function ApplicationMenu(localeData) {
         this.localeData = localeData;
     }
     ApplicationMenu.prototype.createMenu = function (app) {
-        var version = this.appConfig.version;
+        var version = app_config_1.AppConfig.version;
         var name = this.localeData.APP_NAME;
         var template = [];
         // Macの場合以外のときで開発モードでなければMenuを空にする。

@@ -1,15 +1,15 @@
 import { dialog, Menu, shell } from 'electron';
+import { AppConfig } from '../../common-src/config/app-config';
 import { ILocaleData } from '../../common-src/i18n/locale-data.interface';
-import { AppConfig } from '../../src/app/config/app-config';
 
 /**
  * アプリケーションメニューの制御クラスです。
  */
 export class ApplicationMenu {
-  constructor(private appConfig: AppConfig, private localeData: ILocaleData) {}
+  constructor(private localeData: ILocaleData) {}
 
   public createMenu(app: Electron.App): void {
-    const version = this.appConfig.version;
+    const version = AppConfig.version;
     const name = this.localeData.APP_NAME;
     const template: any[] = [];
 
