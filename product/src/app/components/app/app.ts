@@ -91,14 +91,6 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.openingDirectories = false;
   }
 
-  exportImageProsess(
-    version: string,
-    itemList: ImageData[],
-    animationOptionData: AnimationImageOptions
-  ): Promise<void> {
-    return this.ipcService.exec(version, itemList, animationOptionData);
-  }
-
   openExternalBrowser(url: string) {
     this.ipcService.openExternalBrowser(url);
   }
@@ -122,7 +114,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     // (<any>window).$('[data-toggle='tooltip']').tooltip()
   }
 
-  public openDirectories() {
+  openDirectories() {
     if (this.openingDirectories) {
       return;
     }
@@ -130,25 +122,25 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.ipcService.openFileDialog();
   }
 
-  private selectedImages(filePathList: string[]) {
+  selectedImages(filePathList: string[]) {
     this.openingDirectories = false;
     this.setFilePathList(filePathList);
   }
 
-  public handleDrop(event: DragEvent) {
+  handleDrop(event: DragEvent) {
     const files = Array.from(event.dataTransfer?.files ?? []);
     this.setFilePathList(files.map((file) => file.path));
     event.preventDefault();
   }
 
-  public handlePresetChange(presetMode: string) {
+  handlePresetChange(presetMode: string) {
     localStorage.setItem(this.PRESET_ID, presetMode);
     this.presetMode = Number(presetMode);
 
     this.changePreset(this.presetMode);
   }
 
-  public changePreset(presetMode: number) {
+  changePreset(presetMode: number) {
     switch (presetMode) {
       case PresetType.LINE:
         PresetLine.setPreset(this.animationOptionData);
@@ -159,7 +151,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     }
   }
 
-  public generateAnimImage() {
+  generateAnimImage() {
     // 	画像が選択されていないので保存しない。
     if (!this.isImageSelected) {
       return;
@@ -177,14 +169,14 @@ export class AppComponent implements OnInit, AfterViewInit {
     this._exportImages();
   }
 
-  public showFileSizeErrorMessage(): void {
+  showFileSizeErrorMessage(): void {
     // TODO: 多言語対応
     alert(
       '連番画像のサイズが異なるため、APNGファイルの保存ができません。連番画像のサイズが統一されているか確認ください。'
     );
   }
 
-  public async _exportImages() {
+  async _exportImages() {
     if (this.apngFileSizeError && this.animationOptionData.enabledExportApng) {
       this.showFileSizeErrorMessage();
       return;
@@ -192,7 +184,7 @@ export class AppComponent implements OnInit, AfterViewInit {
 
     this._showLockDialog();
     try {
-      this.exportImageProsess(
+      await this.ipcService.exec(
         AppConfig.version,
         this.items,
         this.animationOptionData
@@ -205,7 +197,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   /**
    * 画面を操作できないようにロックするモダールダイアログを開きます。
    */
-  public _showLockDialog() {
+  _showLockDialog() {
     const dialog: any = document.querySelector('dialog');
     dialog.showModal();
     dialog.style['display'] = 'flex'; // こんな書き方をする必要があるのか…
@@ -217,7 +209,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   /**
    * 画面を操作できないようにロックするモダールダイアログを閉じます。
    */
-  public _hideLockDialog() {
+  _hideLockDialog() {
     const dialog: any = document.querySelector('dialog');
     dialog.close();
     dialog.style['display'] = 'none'; // こんな書き方をする必要があるのか…
@@ -229,7 +221,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   /**
    * ファイル選択ボタンが押された時のハンドラーです。
    */
-  public handleClickFileSelectButton(): void {
+  handleClickFileSelectButton(): void {
     if (this.openingDirectories === true) {
       return;
     }
@@ -242,7 +234,7 @@ export class AppComponent implements OnInit, AfterViewInit {
    *
    * @param filePathList
    */
-  public setFilePathList(filePathList: string[]): void {
+  setFilePathList(filePathList: string[]): void {
     const path = this.ipcService.path;
     const isPngFile = (name: string) => path.extname(name) === '.png';
     // 	再度アイテムがドロップされたらリセットするように調整
@@ -276,7 +268,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     });
   }
 
-  public changeImageItems(items: ImageData[]): void {
+  changeImageItems(items: ImageData[]): void {
     this.items = items;
     this.numbering();
     if (items.length >= 1) {
@@ -290,7 +282,7 @@ export class AppComponent implements OnInit, AfterViewInit {
    * 全ての画像のサイズが一致するかチェックし、不一致があればエラーメッセージを表示します。
    * TODO: ファイルの展開に失敗した場合にエラーなしとして処理している。適切なエラーを表示したい
    */
-  public async checkImageSize(items: ImageData[]): Promise<void> {
+  async checkImageSize(items: ImageData[]): Promise<void> {
     // エラーフラグをリセット
     this.apngFileSizeError = false;
     const { baseSize, errorItem } = await checkImagePxSizeMatched(items);
