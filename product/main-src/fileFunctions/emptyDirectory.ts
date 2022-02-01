@@ -2,7 +2,7 @@ import { promises as fs } from 'fs';
 
 export const emptyDirectory = async (dir: string) => {
   try {
-    await fs.rmdir(dir, { recursive: true });
+    await fs.rm(dir, { recursive: true });
   } catch (err) {
     console.log(`フォルダを削除できませんでした。${dir}`);
   }
