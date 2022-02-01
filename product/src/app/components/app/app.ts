@@ -4,7 +4,7 @@ import {
   ElementRef,
   Input,
   OnInit,
-  ViewChild
+  ViewChild,
 } from '@angular/core';
 import { AppConfig } from '../../../../common-src/config/app-config';
 import { LocaleData } from '../../i18n/locale-data';
@@ -16,11 +16,20 @@ import { PresetLine } from '../../../../common-src/preset/preset-line';
 import { PresetWeb } from '../../../../common-src/preset/preset-web';
 import { AnimationImageOptions } from '../../../../common-src/data/animation-image-option';
 import { ImageData } from '../../../../common-src/data/image-data';
+import { checkImagePxSizeMatched } from './checkImagePxSizeMatched';
+
+const getFirstNumber = (text: string): number | undefined => {
+  const numStr = text.match(/\d+/g)?.pop();
+  if (numStr === undefined) {
+    return undefined;
+  }
+  return parseInt(numStr, 10);
+};
 
 @Component({
   selector: 'app-main',
   templateUrl: './app.html',
-  styleUrls: ['./app.scss']
+  styleUrls: ['./app.scss'],
 })
 /**
  * アプリケーション全体領域のコンポーネントです。
@@ -33,7 +42,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   isImageSelected = false;
   openingDirectories = false;
   _isDragover = false;
-  presetMode: PresetType = PresetType.LINE;
+  presetMode = PresetType.LINE;
   items: ImageData[] = [];
   gaUrl: SafeResourceUrl;
 
@@ -70,7 +79,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.ipcService.sendConfigData(this.localeData);
 
     // 	保存先の指定返却
-    this.ipcService.selectedOpenImages().then(list => {
+    this.ipcService.selectedOpenImages().then((list) => {
       this.selectedImages(list);
     });
     this.ipcService.unlockSelectUi().then(() => {
@@ -127,31 +136,8 @@ export class AppComponent implements OnInit, AfterViewInit {
   }
 
   public handleDrop(event: DragEvent) {
-    const path = this.ipcService.path;
     const files = Array.from(event.dataTransfer?.files ?? []);
-
-    // 	再度アイテムがドロップされたらリセットするように調整
-    this.items = [];
-
-    files.forEach(file => {
-      const filePath = file.path;
-      if (path.extname(filePath) === '.png') {
-        path.dirname(filePath);
-
-        const item: ImageData = new ImageData(
-          path.basename(filePath),
-          filePath,
-          this.items.length
-        );
-
-        this.items.push(item);
-      }
-    });
-
-    this.numbering();
-
-    this.changeImageItems(this.items);
-
+    this.setFilePathList(files.map((file) => file.path));
     event.preventDefault();
   }
 
@@ -183,6 +169,7 @@ export class AppComponent implements OnInit, AfterViewInit {
       this.animationOptionData.enabledExportApng === false &&
       this.animationOptionData.enabledExportWebp === false
     ) {
+      // TODO: 多言語対応
       alert('出力画像の形式を選択ください。');
       return;
     }
@@ -191,30 +178,28 @@ export class AppComponent implements OnInit, AfterViewInit {
   }
 
   public showFileSizeErrorMessage(): void {
+    // TODO: 多言語対応
     alert(
       '連番画像のサイズが異なるため、APNGファイルの保存ができません。連番画像のサイズが統一されているか確認ください。'
     );
   }
 
-  public _exportImages() {
+  public async _exportImages() {
     if (this.apngFileSizeError && this.animationOptionData.enabledExportApng) {
       this.showFileSizeErrorMessage();
       return;
     }
 
     this._showLockDialog();
-
-    this.exportImageProsess(
-      AppConfig.version,
-      this.items,
-      this.animationOptionData
-    )
-      .then(() => {
-        this._hideLockDialog();
-      })
-      .catch(() => {
-        this._hideLockDialog();
-      });
+    try {
+      this.exportImageProsess(
+        AppConfig.version,
+        this.items,
+        this.animationOptionData
+      );
+    } finally {
+      this._hideLockDialog();
+    }
   }
 
   /**
@@ -259,60 +244,41 @@ export class AppComponent implements OnInit, AfterViewInit {
    */
   public setFilePathList(filePathList: string[]): void {
     const path = this.ipcService.path;
-
-    const fileLength = filePathList ? filePathList.length : 0;
-
+    const isPngFile = (name: string) => path.extname(name) === '.png';
     // 	再度アイテムがドロップされたらリセットするように調整
-    this.items = [];
-
-    for (let i = 0; i < fileLength; i++) {
-      const filePath = filePathList[i];
-
-      if (path.extname(filePath) === '.png') {
-        path.dirname(filePath);
-        const item = new ImageData(
+    const items = filePathList.filter(isPngFile).map(
+      (filePath) =>
+        new ImageData(
           path.basename(filePath),
           filePath,
-          this.items.length
-        );
-
-        this.items.push(item);
-      }
-    }
-    this.numbering();
-    this.changeImageItems(this.items);
+          0 // changeImageItemsでセットする際にソートされるので、一旦0で登録
+        )
+    );
+    this.changeImageItems(items);
   }
 
   /**
    * 再ナンバリングします。
    */
-  public numbering(): void {
+  private numbering(): void {
     this.items.sort((a, b) => {
-      const aRes = a.imageBaseName.match(/\d+/g);
-      const bRes = b.imageBaseName.match(/\d+/g);
+      const aNum = getFirstNumber(a.imageBaseName) ?? 0;
+      const bNum = getFirstNumber(b.imageBaseName) ?? 0;
 
-      const aNumStr = aRes?.pop();
-      const bNumStr = bRes?.pop();
-      const aNum = aNumStr !== undefined ? parseInt(aNumStr, 10) : 0;
-      const bNum = bNumStr !== undefined ? parseInt(bNumStr, 10) : 0;
-
-      if (aNum < bNum) {
-        return -1;
+      if (aNum === bNum) {
+        return 0;
       }
-      if (aNum > bNum) {
-        return 1;
-      }
-      return 0;
+      return aNum > bNum ? 1 : -1;
     });
 
-    const length = this.items.length;
-    for (let i = 0; i < length; i++) {
-      this.items[i].frameNumber = i;
-    }
+    this.items.forEach((item, index) => {
+      item.frameNumber = index;
+    });
   }
 
   public changeImageItems(items: ImageData[]): void {
     this.items = items;
+    this.numbering();
     if (items.length >= 1) {
       this.checkImageSize(items);
       this.animationOptionData.imageInfo.length = items.length;
@@ -320,62 +286,25 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.isImageSelected = this.items.length >= 1;
   }
 
-  public checkImageSize(items: ImageData[]): void {
-    new Promise<void>((resolve, reject) => {
-      this.apngFileSizeError = false;
-      const image = new Image();
-      image.onload = (event: Event) => {
-        this.animationOptionData.imageInfo.width = image.width;
-        this.animationOptionData.imageInfo.height = image.height;
-        resolve();
-      };
-      image.onerror = (event) => {
-        reject();
-      };
-      image.src = items[0].imagePath;
-    })
-      .then(() => {
-        const promiseArr: Promise<any>[] = [];
-
-        if (items.length <= 1) {
-          return;
-        }
-        for (let i = 1; i < items.length; i++) {
-          const promise = new Promise<void>((resolve, reject) => {
-            const path = items[i].imagePath;
-            const image = new Image();
-            image.onload = (event: Event) => {
-              let errorFlag = false;
-              if (
-                this.animationOptionData.imageInfo.width === image.width &&
-                this.animationOptionData.imageInfo.height === image.height
-              ) {
-                // 何もしない
-              } else {
-                // 画像サイズが異なっていることを通知する
-                alert(
-                  `${items[i].imageBaseName} ${this.localeData.VALIDATE_ImportImageSize}`
-                );
-                errorFlag = true;
-              }
-              this.apngFileSizeError = errorFlag;
-              if (errorFlag) {
-                reject();
-              } else {
-                resolve();
-              }
-            };
-            image.onerror = (event) => {
-              reject();
-            };
-            image.src = path;
-          });
-          promiseArr.push(promise);
-        }
-        return Promise.all(promiseArr);
-      })
-      .catch(error => {
-        // '画像読み込みエラー';
-      });
+  /**
+   * 全ての画像のサイズが一致するかチェックし、不一致があればエラーメッセージを表示します。
+   * TODO: ファイルの展開に失敗した場合にエラーなしとして処理している。適切なエラーを表示したい
+   */
+  public async checkImageSize(items: ImageData[]): Promise<void> {
+    // エラーフラグをリセット
+    this.apngFileSizeError = false;
+    const { baseSize, errorItem } = await checkImagePxSizeMatched(items);
+    if (!baseSize) {
+      // サイズが取れなかったら何もしない
+      return;
+    }
+    this.animationOptionData.imageInfo.width = baseSize.w;
+    this.animationOptionData.imageInfo.height = baseSize.h;
+    if (errorItem) {
+      // 不一致ならエラーフラグを立てた上でエラーメッセージを表示
+      this.apngFileSizeError = true;
+      const msg = `${errorItem.imageBaseName} ${this.localeData.VALIDATE_ImportImageSize}`;
+      alert(msg);
+    }
   }
 }
