@@ -67,7 +67,7 @@ var openFileDialog = function (event) {
         .showOpenDialog(mainWindow, dialogOption)
         .then(function (files) {
         event.sender.send(ipc_id_1.IpcId.SELECTED_OPEN_IMAGES, files);
-    })["catch"](function () {
+    })["finally"](function () {
         event.sender.send(ipc_id_1.IpcId.UNLOCK_SELECT_UI);
     });
 };

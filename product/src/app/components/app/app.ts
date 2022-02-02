@@ -79,11 +79,15 @@ export class AppComponent implements OnInit, AfterViewInit {
 
     this.ipcService.sendConfigData(this.localeData);
 
-    // 	保存先の指定返却
-    this.ipcService.selectedOpenImages().then((list) => {
+    // 保存先の指定返却
+    this.ipcService.onSelectedOpenImages((list) => {
+      if (!list.length) {
+        return;
+      }
       this.selectedImages(list);
     });
-    this.ipcService.unlockSelectUi().then(() => {
+    // UIロックの解除
+    this.ipcService.onUnlockSelectUi(() => {
       this.unlockSelectUi();
     });
   }

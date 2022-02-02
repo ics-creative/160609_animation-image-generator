@@ -90,7 +90,7 @@ const openFileDialog = (event: IpcMainEvent) => {
     .then((files) => {
       event.sender.send(IpcId.SELECTED_OPEN_IMAGES, files);
     })
-    .catch(() => {
+    .finally(() => {
       event.sender.send(IpcId.UNLOCK_SELECT_UI);
     });
 };
