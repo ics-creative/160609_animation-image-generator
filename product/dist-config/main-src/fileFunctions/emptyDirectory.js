@@ -37,7 +37,6 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 exports.__esModule = true;
 exports.emptyDirectory = void 0;
-var deleteDirectory_1 = require("./deleteDirectory");
 var fs_1 = require("fs");
 var emptyDirectory = function (dir) { return __awaiter(void 0, void 0, void 0, function () {
     var err_1, err_2;
@@ -45,7 +44,7 @@ var emptyDirectory = function (dir) { return __awaiter(void 0, void 0, void 0, f
         switch (_a.label) {
             case 0:
                 _a.trys.push([0, 2, , 3]);
-                return [4 /*yield*/, (0, deleteDirectory_1.deleteDirectory)(dir)];
+                return [4 /*yield*/, fs_1.promises.rm(dir, { recursive: true })];
             case 1:
                 _a.sent();
                 return [3 /*break*/, 3];

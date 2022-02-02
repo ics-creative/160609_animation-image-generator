@@ -54,6 +54,7 @@ const createImageElementWebpAndApng = (
 
 /**
  * HTMLファイルを作成します。
+ *
  * @private
  */
 

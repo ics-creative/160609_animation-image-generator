@@ -7,12 +7,14 @@ import { ImageData } from '../../common-src/data/image-data';
 import { ErrorType } from '../../common-src/error/error-type';
 import { CompressionType } from '../../common-src/type/CompressionType';
 import { GenetateError } from './GenerateError';
+import { notNull } from '../utils/notNull';
 
 const ENOENT_ERROR = 'ENOENT';
 
 /**
  * APNG画像を保存します。
- * @returns {Promise<T>}
+ *
+ * @returns
  * @private
  */
 export const generateApng = async (
@@ -33,7 +35,7 @@ export const generateApng = async (
     compressOptions,
     loopOption,
     '-kc'
-  ];
+  ].filter(notNull);
 
   await waitImmediate();
   const { err, stdout, stderr } = await waitExecFile(
@@ -58,11 +60,11 @@ export const pngCompressAll = async (
   inDir: string,
   outDir: string
 ): Promise<GenetateError | undefined> => {
-  const promises = itemList.map(item =>
+  const promises = itemList.map((item) =>
     pngCompress(item, appPath, inDir, outDir)
   );
   const errors = await Promise.all(promises);
-  return errors.find(error => error);
+  return errors.find((error) => error);
 };
 
 /* tslint:enable:quotemark */
@@ -72,7 +74,7 @@ const getCompressOption = (type: CompressionType) => {
       return '-z0';
     case CompressionType.zip7:
       return '-z1';
-    case CompressionType.Zopfli:
+    case CompressionType.zopfli:
       return '-z2';
   }
 };

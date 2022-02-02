@@ -1,9 +1,8 @@
-import { deleteDirectory } from './deleteDirectory';
 import { promises as fs } from 'fs';
 
 export const emptyDirectory = async (dir: string) => {
   try {
-    await deleteDirectory(dir);
+    await fs.rm(dir, { recursive: true });
   } catch (err) {
     console.log(`フォルダを削除できませんでした。${dir}`);
   }

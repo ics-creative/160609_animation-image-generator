@@ -4,7 +4,8 @@ import {
   dialog,
   ipcMain,
   IpcMainEvent,
-  OpenDialogOptions
+  OpenDialogOptions,
+  shell
 } from 'electron';
 import * as path from 'path';
 import * as url from 'url';
@@ -17,7 +18,7 @@ import { ImageData } from '../common-src/data/image-data';
 import File from './file';
 import { ILocaleData } from '../common-src/i18n/locale-data.interface';
 import { ApplicationMenu } from './menu/application-menu';
-import { AppConfig } from '../src/app/config/app-config';
+import { AppConfig } from '../common-src/config/app-config';
 import { SaveDialog } from './dialog/SaveDialog';
 
 // アプリケーション作成用のモジュールを読み込み
@@ -29,7 +30,7 @@ let fileService: File | undefined;
 // メインウィンドウ
 let mainWindow: BrowserWindow | undefined;
 
-function createWindow() {
+const createWindow = () => {
   // メインウィンドウを作成します
   mainWindow = new BrowserWindow({
     width: 800,
@@ -68,15 +69,15 @@ function createWindow() {
     mainWindow.webContents.openDevTools();
 
     // メインウィンドウが閉じられたときの処理
-    mainWindow.on('closed', function() {
+    mainWindow.on('closed', () => {
       console.log('mainwindow-close');
       mainWindow = undefined;
       fileService = undefined;
     });
   }
-}
+};
 
-function openFileDialog(event: IpcMainEvent) {
+const openFileDialog = (event: IpcMainEvent) => {
   const dialogOption: OpenDialogOptions = {
     properties: ['openFile', 'multiSelections'],
     filters: [{ name: 'Images', extensions: ['png'] }]
@@ -86,24 +87,24 @@ function openFileDialog(event: IpcMainEvent) {
   }
   dialog
     .showOpenDialog(mainWindow, dialogOption)
-    .then(files => {
+    .then((files) => {
       event.sender.send(IpcId.SELECTED_OPEN_IMAGES, files);
     })
     .catch(() => {
       event.sender.send(IpcId.UNLOCK_SELECT_UI);
     });
-}
+};
 
 //  初期化が完了した時の処理
 app.on('ready', createWindow);
 
 // 全てのウィンドウが閉じたときの処理
-app.on('window-all-closed', function() {
+app.on('window-all-closed', () => {
   app.quit();
 });
 
 // アプリケーションがアクティブになった時の処理(Macだと、Dockがクリックされた時）
-app.on('activate', function() {
+app.on('activate', () => {
   /// メインウィンドウが消えている場合は再度メインウィンドウを作成する
   console.log('active-with-open-window', mainWindow);
   if (mainWindow === undefined) {
@@ -114,7 +115,7 @@ app.on('activate', function() {
 });
 
 // アプリケーション終了前
-app.on('will-quit', function() {
+app.on('will-quit', () => {
   console.log('will-quit');
   mainWindow = undefined;
   fileService = undefined;
@@ -122,33 +123,30 @@ app.on('will-quit', function() {
 
 ipcMain.on(IpcId.OPEN_FILE_DIALOG, openFileDialog);
 
-ipcMain.on(
-  IpcId.SET_CONFIG_DATA,
-  (event, localeData: ILocaleData, appConfig: AppConfig) => {
-    console.log(`${IpcId.SET_CONFIG_DATA} to ${localeData}`);
+ipcMain.on(IpcId.SET_CONFIG_DATA, (event, localeData: ILocaleData) => {
+  console.log(`${IpcId.SET_CONFIG_DATA} to ${localeData}`);
 
-    if (!mainWindow) {
-      return;
-    }
-
-    fileService = new File(
-      mainWindow,
-      localeData,
-      app.getAppPath(),
-      sendError,
-      errorMessage,
-      new SaveDialog(
-        mainWindow,
-        app.getPath('desktop'),
-        localeData.defaultFileName
-      )
-    );
-    mainWindow.setTitle(localeData.APP_NAME);
-
-    const menu: ApplicationMenu = new ApplicationMenu(appConfig, localeData);
-    menu.createMenu(app);
+  if (!mainWindow) {
+    return;
   }
-);
+
+  fileService = new File(
+    mainWindow,
+    localeData,
+    app.getAppPath(),
+    sendError,
+    errorMessage,
+    new SaveDialog(
+      mainWindow,
+      app.getPath('desktop'),
+      localeData.defaultFileName
+    )
+  );
+  mainWindow.setTitle(localeData.APP_NAME);
+
+  const menu: ApplicationMenu = new ApplicationMenu(localeData);
+  menu.createMenu(app);
+});
 
 ipcMain.on(
   IpcId.SHOW_ERROR_MESSAGE,
@@ -216,3 +214,7 @@ ipcMain.on(
       });
   }
 );
+
+ipcMain.on(IpcId.OPEN_EXTERNAL_BROWSER, (event, pageUrl: string) => {
+  shell.openExternal(pageUrl);
+});

@@ -1,86 +1,129 @@
-<div class="please-drag-here" *ngIf="items.length == 0">
+<div class="please-drag-here" *ngIf="items.length === 0">
   <div class="text-center">
-    <h4>{{localeData.PREV_selectDrop}}</h4>
+    <h4>{{ localeData.PREV_selectDrop }}</h4>
     <div>
-      <small>{{localeData.PREV_selectOr}}</small>
+      <small>{{ localeData.PREV_selectOr }}</small>
     </div>
-    <button class="btn btn-primary mt-1"
-            [disabled]="openingDirectories === true"
-            (click)="openDirectories()">{{localeData.PREV_btnSelect}}
+    <button
+      class="btn btn-primary mt-1"
+      [disabled]="openingDirectories === true"
+      (click)="openDirectories()"
+    >
+      {{ localeData.PREV_btnSelect }}
     </button>
   </div>
 </div>
 
 <div class="anim-preview p-3" *ngIf="items.length > 0">
   <p>
-    {{localeData.PREV_infoFrameSize}} <span class="badge"
-                                            [ngClass]="{'badge-success' : isValidFrameSize, 'badge-danger' : !isValidFrameSize}">W{{animationOptionData.imageInfo.width}}×H{{animationOptionData.imageInfo.height}}px</span>
-    / {{localeData.PREV_infoFrameNum}} <span class="badge"
-                                             [ngClass]="{'badge-success' : isValidFrameLength, 'badge-danger' : !isValidFrameLength}">{{items.length}}</span>
-    <span *ngIf="animationOptionData.noLoop == false">
-				/ {{localeData.PREV_infoTime}} <span
-      class="badge badge-success" [ngClass]="{'badge-success' : isValidTime, 'badge-danger' : !isValidTime}">{{items.length * animationOptionData.loop / animationOptionData.fps}}{{localeData.PREV_infoTimeUnit}}</span>
-			</span>
+    {{ localeData.PREV_infoFrameSize }}
+    <span
+      class="badge"
+      [ngClass]="{
+        'badge-success': isValidFrameSize,
+        'badge-danger': !isValidFrameSize
+      }"
+      >W{{ animationOptionData.imageInfo.width }}×H{{
+        animationOptionData.imageInfo.height
+      }}px</span
+    >
+    / {{ localeData.PREV_infoFrameNum }}
+    <span
+      class="badge"
+      [ngClass]="{
+        'badge-success': isValidFrameLength,
+        'badge-danger': !isValidFrameLength
+      }"
+      >{{ items.length }}</span
+    >
+    <span *ngIf="animationOptionData.noLoop === false">
+      / {{ localeData.PREV_infoTime }}
+      <span
+        class="badge badge-success"
+        [ngClass]="{
+          'badge-success': isValidTime,
+          'badge-danger': !isValidTime
+        }"
+        >{{ (items.length * animationOptionData.loop) / animationOptionData.fps
+        }}{{ localeData.PREV_infoTimeUnit }}</span
+      >
+    </span>
   </p>
 
   <div class="preview-area mb-3">
     <!-- 1枚画像プレビュー -->
-    <div [ngStyle]="{ 'zoom' : scaleValue }" class="mb-3">
-      <img data-src="file:///{{imagePath + '?cc=' + cacheClearStamp}}"/>
+    <div [ngStyle]="{ zoom: scaleValue }" class="mb-3">
+      <img data-src="file:///{{ imagePath + '?cc=' + cacheClearStamp }}" />
     </div>
 
     <div class="d-flex align-items-center">
-
       <!-- 再生・停止・戻るボタン -->
       <span class="mr-2 button-group" role="group">
-      <button type="button" class="btn btn-secondary btn-sm mr-1"
-              aria-label="Play"
-              [disabled]="playing === true"
-              (click)="resume();">
-        <i class="fa fa-play"></i>
-      </button>
-      <button type="button" class="btn btn-secondary btn-sm mr-1"
-              aria-label="Stop"
-              [disabled]="playing === false"
-              (click)="pause();">
-        <i class="fa fa-stop"></i>
-      </button>
-      <button type="button" class="btn btn-secondary btn-sm"
-              aria-label="Forward"
-              [disabled]="currentFrame === 0 && currentLoopCount === 0"
-              (click)="gotoAndStop(0);">
-        <i class="fa fa-step-backward"></i>
-      </button>
-    </span>
+        <button
+          type="button"
+          class="btn btn-secondary btn-sm mr-1"
+          aria-label="Play"
+          [disabled]="playing === true"
+          (click)="resume()"
+        >
+          <i class="fa fa-play"></i>
+        </button>
+        <button
+          type="button"
+          class="btn btn-secondary btn-sm mr-1"
+          aria-label="Stop"
+          [disabled]="playing === false"
+          (click)="pause()"
+        >
+          <i class="fa fa-stop"></i>
+        </button>
+        <button
+          type="button"
+          class="btn btn-secondary btn-sm"
+          aria-label="Forward"
+          [disabled]="currentFrame === 0 && currentLoopCount === 0"
+          (click)="gotoAndStop(0)"
+        >
+          <i class="fa fa-step-backward"></i>
+        </button>
+      </span>
 
       <!-- 拡大率 -->
-      <span class="ml-2">{{localeData.PREV_zoom}}</span>
-      <select class="mod-zoom-select ml-1 mr-2 form-control"
-              #selectScale
-              (change)="selectScaleValue(selectScale.value)">
+      <span class="ml-2">{{ localeData.PREV_zoom }}</span>
+      <select
+        class="mod-zoom-select ml-1 mr-2 form-control"
+        #selectScale
+        (change)="selectScaleValue(selectScale.value)"
+      >
         <option value="0.25">25%</option>
         <option value="0.5">50%</option>
         <option value="1.0" selected>100%</option>
         <option value="2.0">200%</option>
       </select>
-      <button class="btn btn-secondary btn-sm ml-1"
-              [disabled]="openingDirectories === true"
-              (click)="openDirectories()">{{localeData.PREV_btnSelectRe}}
+      <button
+        class="btn btn-secondary btn-sm ml-1"
+        [disabled]="openingDirectories === true"
+        (click)="openDirectories()"
+      >
+        {{ localeData.PREV_btnSelectRe }}
       </button>
     </div>
-
   </div>
 
   <!-- コマ画像プレビュー -->
-  <p class="mt-1">{{localeData.PREV_preview}}</p>
+  <p class="mt-1">{{ localeData.PREV_preview }}</p>
   <div>
     <div *ngIf="items.length >= 1">
-      <div *ngFor="let item of items; let i = index"
-           class="frame-image-container"
-           [ngClass]="{active: currentFrame == i}"
-           (click)="gotoAndStop(i);"
+      <div
+        *ngFor="let item of items; let i = index"
+        class="frame-image-container"
+        [ngClass]="{ active: currentFrame === i }"
+        (click)="gotoAndStop(i)"
       >
-        <img data-src="file:///{{item.imagePath + '?cc=' + cacheClearStamp}}" class="frame-image"/>
+        <img
+          data-src="file:///{{ item.imagePath + '?cc=' + cacheClearStamp }}"
+          class="frame-image"
+        />
       </div>
     </div>
   </div>

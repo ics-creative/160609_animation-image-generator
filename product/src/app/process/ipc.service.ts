@@ -3,7 +3,6 @@ import { IpcId } from '../../../common-src/ipc-id';
 import { AnimationImageOptions } from '../../../common-src/data/animation-image-option';
 import { ImageData } from '../../../common-src/data/image-data';
 import { ILocaleData } from '../../../common-src/i18n/locale-data.interface';
-import { AppConfig } from 'app/config/app-config';
 import { IpcRenderer } from 'electron';
 
 interface Path {
@@ -32,14 +31,14 @@ export default class IpcService {
     this.path = this.api.path;
   }
 
-  public sendConfigData(localeData: ILocaleData, appConfig: AppConfig) {
-    this.api.send(IpcId.SET_CONFIG_DATA, localeData, appConfig);
+  sendConfigData(localeData: ILocaleData) {
+    this.api.send(IpcId.SET_CONFIG_DATA, localeData);
   }
 
-  public openFileDialog() {
+  openFileDialog() {
     this.api.send(IpcId.OPEN_FILE_DIALOG);
   }
-  public sendError(
+  sendError(
     version: string,
     code: string,
     category: string,
@@ -71,7 +70,11 @@ export default class IpcService {
     });
   }
 
-  public exec(
+  openExternalBrowser(url: string) {
+    this.api.sendSync(IpcId.OPEN_EXTERNAL_BROWSER, url);
+  }
+
+  exec(
     version: string,
     itemList: ImageData[],
     animationOptionData: AnimationImageOptions

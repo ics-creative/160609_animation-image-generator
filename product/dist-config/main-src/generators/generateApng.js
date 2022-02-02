@@ -43,10 +43,12 @@ var path = require("path");
 var timer_1 = require("../utils/timer");
 var error_type_1 = require("../../common-src/error/error-type");
 var CompressionType_1 = require("../../common-src/type/CompressionType");
+var notNull_1 = require("../utils/notNull");
 var ENOENT_ERROR = 'ENOENT';
 /**
  * APNG画像を保存します。
- * @returns {Promise<T>}
+ *
+ * @returns
  * @private
  */
 var generateApng = function (exportFilePath, appPath, pngPath, optionData) { return __awaiter(void 0, void 0, void 0, function () {
@@ -66,7 +68,7 @@ var generateApng = function (exportFilePath, appPath, pngPath, optionData) { ret
                     compressOptions,
                     loopOption,
                     '-kc'
-                ];
+                ].filter(notNull_1.notNull);
                 return [4 /*yield*/, (0, timer_1.waitImmediate)()];
             case 1:
                 _b.sent();
@@ -109,7 +111,7 @@ var getCompressOption = function (type) {
             return '-z0';
         case CompressionType_1.CompressionType.zip7:
             return '-z1';
-        case CompressionType_1.CompressionType.Zopfli:
+        case CompressionType_1.CompressionType.zopfli:
             return '-z2';
     }
 };

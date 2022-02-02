@@ -3,51 +3,32 @@ import { LocaleJaData } from './locale-ja';
 import { LocaleEnData } from './locale-en';
 
 /**
+ * ユーザーの言語を判定します。
+ * 日本語(ja)以外の場合はすべて英語(en)と判定します
+ */
+const getLocale = (): 'ja' | 'en' => {
+  const nav = navigator;
+  return nav.language.startsWith('ja') ? 'ja' : 'en';
+};
+
+/**
  * 言語を切り替える機能を有したクラスです。
  */
 export class LocaleManager {
   public applyClientLocale(localeData: LocaleData): void {
-    const locale = this.checkLocale();
-    let lData: LocaleData;
-
-    switch (locale) {
-      case 'ja':
-        lData = new LocaleJaData();
-        break;
-      case 'en':
-      default:
-        lData = new LocaleEnData();
-        break;
-    }
+    const lData =
+      getLocale() === 'ja' ? new LocaleJaData() : new LocaleEnData();
     this.changeLocale(localeData, lData);
   }
 
-  public checkLocale(): string {
-    const ua = window.navigator.userAgent.toLowerCase();
-    const nav = <any>navigator;
-    try {
-      // chrome
-      if (ua.indexOf('chrome') !== -1) {
-        return (nav.browserLanguage || nav.language || nav.userLanguage).substr(
-          0,
-          2
-        );
-      } else {
-        return (nav.browserLanguage || nav.language || nav.userLanguage).substr(
-          0,
-          2
-        );
-      }
-    } catch (e) {
-      return undefined;
-    }
-  }
-
-  public changeLocale(master: LocaleData, selectedLocale: LocaleData): void {
+  private changeLocale(master: LocaleData, selectedLocale: LocaleData): void {
+    // TODO: 言語マスタの適用はもっと簡略化＆型安全にする
     for (const key in selectedLocale) {
       if (Reflect.has(selectedLocale, key) === true) {
-        const val: any = <any>Reflect.get(selectedLocale, key);
-        Reflect.set(master, key, val);
+        const val = Reflect.get(selectedLocale, key);
+        if (typeof val === 'string') {
+          Reflect.set(master, key, val);
+        }
       }
     }
   }

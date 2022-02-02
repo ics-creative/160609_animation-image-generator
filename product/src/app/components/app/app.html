@@ -1,43 +1,55 @@
-<div class="app-component" #myComponent [ngClass]="{isDragOver : _isDragover == true}">
+<div class="app-component" #myComponent [ngClass]="{ isDragOver: _isDragover }">
   <div class="mod-setting p-3">
-
     <!-- プリセット切り替え -->
     <div class="row mb-4 align-items-center mod-select-preset">
       <!--用途-->
-      <label class="col-sm-2 form-control-label">{{localeData.PROP_use}}</label>
+      <label class="col-sm-2 form-control-label">{{
+        localeData.PROP_use
+      }}</label>
       <div class="col-sm-10 mod-select-preset">
-        <select class="form-control"
-                style="width:100%;"
-                #optionSelecter
-                (change)="handlePresetChange($event.target.value)">
-          <option value="0" [selected]="presetMode==0">{{localeData.PROP_useItemLine}}</option>
-          <option value="1" [selected]="presetMode==1">{{localeData.PROP_useItemWeb}}</option>
+        <select
+          class="form-control"
+          style="width: 100%"
+          #optionSelecter
+          (change)="handlePresetChange(optionSelecter.value)"
+        >
+          <option value="0" [selected]="presetMode === PresetType.LINE">
+            {{ localeData.PROP_useItemLine }}
+          </option>
+          <option value="1" [selected]="presetMode === PresetType.WEB">
+            {{ localeData.PROP_useItemWeb }}
+          </option>
         </select>
       </div>
     </div>
 
     <!-- プロパティ変更画面 -->
-    <properties [animationOptionData]="animationOptionData"></properties>
-    <hr/>
+    <app-properties
+      [animationOptionData]="animationOptionData"
+    ></app-properties>
+    <hr />
     <!-- アニメ画像を保存するボタン -->
 
     <div class="text-center">
-
-      <button (click)="generateAnimImage()"
-              class="btn btn-primary mx-auto"
-              [disabled]="!isImageSelected">
-        {{localeData.PROP_btnSave}}
+      <button
+        (click)="generateAnimImage()"
+        class="btn btn-primary mx-auto"
+        [disabled]="!isImageSelected"
+      >
+        {{ localeData.PROP_btnSave }}
       </button>
     </div>
-
   </div>
 
   <!-- アニメーションプレビュー画面 -->
   <div class="mod-preview bg-dark text-white">
-    <anim-preview [animationOptionData]="animationOptionData"
-                  [items]="items"
-                  (clickFileSelectButtonEvent)="handleClickFileSelectButton();">
-    </anim-preview>
+    <app-anim-preview
+      [animationOptionData]="animationOptionData"
+      [items]="items"
+      [openingDirectories]="openingDirectories"
+      (clickFileSelectButtonEvent)="handleClickFileSelectButton()"
+    >
+    </app-anim-preview>
   </div>
 </div>
 
@@ -45,19 +57,30 @@
 <div class="mod-statusbar bg-primary text-white">
   <div class="container-fluid">
     <div class="row">
-      <div class="col-6 text-left">{{localeData.TOP_version}} {{appConfig.version}}</div>
+      <div class="col-6 text-left">
+        {{ localeData.TOP_version }} {{ AppConfig.version }}
+      </div>
       <div class="col-6 text-right">
-        <a (click)="openExternalBrowser('https://ics.media/')"
-           data-toggle="tooltip"
-           data-placement="left"
-           title="{{localeData.TOP_icsTooltip}}"
-           target="_blank">
-          <img src="assets/imgs/ics_logo_icon_white.svg" width="16" height="16" style="vertical-align:sub;"/>
+        <a
+          (click)="openExternalBrowser('https://ics.media/')"
+          data-toggle="tooltip"
+          data-placement="left"
+          title="{{ localeData.TOP_icsTooltip }}"
+          target="_blank"
+        >
+          <img
+            src="assets/imgs/ics_logo_icon_white.svg"
+            width="16"
+            height="16"
+            style="vertical-align: sub"
+          />
         </a>
-        <a (click)="openExternalBrowser('http://goo.gl/forms/5DUI1UnTUXR6AmCw2')"
-           data-toggle="tooltip"
-           data-placement="left"
-           title="{{localeData.TOP_onlineHelpTooltip}}">
+        <a
+          (click)="openExternalBrowser('http://goo.gl/forms/5DUI1UnTUXR6AmCw2')"
+          data-toggle="tooltip"
+          data-placement="left"
+          title="{{ localeData.TOP_onlineHelpTooltip }}"
+        >
           <i class="fa fa-smile-o"></i>
         </a>
       </div>
@@ -65,15 +88,10 @@
   </div>
 </div>
 
-
 <!-- ローディング画面 -->
-<dialog style="display: none;">
-  <img src="assets/imgs/preloader.webp" width="52" height="52"/>
+<dialog style="display: none">
+  <img src="assets/imgs/preloader.webp" width="52" height="52" />
 </dialog>
 
 <!-- Google Analytics -->
-<iframe class="tracking-ga"
-        [src]="gaUrl"
-        width="1" height="1">
-</iframe>
-
+<iframe class="tracking-ga" [src]="gaUrl" width="1" height="1"> </iframe>

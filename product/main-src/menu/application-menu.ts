@@ -1,15 +1,15 @@
-import { Menu, shell } from 'electron';
+import { dialog, Menu, shell } from 'electron';
+import { AppConfig } from '../../common-src/config/app-config';
 import { ILocaleData } from '../../common-src/i18n/locale-data.interface';
-import { AppConfig } from '../../src/app/config/app-config';
 
 /**
  * アプリケーションメニューの制御クラスです。
  */
 export class ApplicationMenu {
-  constructor(private appConfig: AppConfig, private localeData: ILocaleData) {}
+  constructor(private localeData: ILocaleData) {}
 
   public createMenu(app: Electron.App): void {
-    const version = this.appConfig.version;
+    const version = AppConfig.version;
     const name = this.localeData.APP_NAME;
     const template: any[] = [];
 
@@ -24,18 +24,19 @@ export class ApplicationMenu {
       submenu: [
         {
           label: this.localeData.MENU_about,
-          click() {
-            alert(
-              `お使いの「${name}」のバージョンは ${version} です。` +
+          click: () => {
+            dialog.showMessageBox({
+              message:
+                `お使いの「${name}」のバージョンは ${version} です。` +
                 '\n' +
                 `You use version ${version}.`
-            );
+            });
           }
         },
         {
           label: this.localeData.MENU_quit,
           accelerator: 'Command+Q',
-          click() {
+          click: () => {
             app.quit();
           }
         }
@@ -45,7 +46,7 @@ export class ApplicationMenu {
     const helpMenu: any[] = [
       {
         label: this.localeData.MENU_helpOnline,
-        click() {
+        click: () => {
           shell.openExternal(
             'https://github.com/ics-creative/160609_animation-image-generator/tree/master/help'
           );
@@ -53,7 +54,7 @@ export class ApplicationMenu {
       },
       {
         label: this.localeData.MENU_helpQuestion,
-        click() {
+        click: () => {
           shell.openExternal('http://goo.gl/forms/5DUI1UnTUXR6AmCw2');
         }
       }

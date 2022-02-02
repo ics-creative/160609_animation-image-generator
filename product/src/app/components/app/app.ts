@@ -6,7 +6,7 @@ import {
   OnInit,
   ViewChild
 } from '@angular/core';
-import { AppConfig } from '../../config/app-config';
+import { AppConfig } from '../../../../common-src/config/app-config';
 import { LocaleData } from '../../i18n/locale-data';
 import { LocaleManager } from '../../i18n/locale-manager';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
@@ -16,9 +16,19 @@ import { PresetLine } from '../../../../common-src/preset/preset-line';
 import { PresetWeb } from '../../../../common-src/preset/preset-web';
 import { AnimationImageOptions } from '../../../../common-src/data/animation-image-option';
 import { ImageData } from '../../../../common-src/data/image-data';
+import { checkImagePxSizeMatched } from './checkImagePxSizeMatched';
+import { loadPresetConfig, savePresetConfig } from './UserConfig';
+
+const getFirstNumber = (text: string): number | undefined => {
+  const numStr = text.match(/\d+/g)?.pop();
+  if (numStr === undefined) {
+    return undefined;
+  }
+  return parseInt(numStr, 10);
+};
 
 @Component({
-  selector: 'my-app',
+  selector: 'app-main',
   templateUrl: './app.html',
   styleUrls: ['./app.scss']
 })
@@ -26,30 +36,25 @@ import { ImageData } from '../../../../common-src/data/image-data';
  * アプリケーション全体領域のコンポーネントです。
  */
 export class AppComponent implements OnInit, AfterViewInit {
-  private get PRESET_ID(): string {
-    return 'preset_id';
-  }
-
-  public isImageSelected: boolean;
-  public presetMode: number;
-
-  private openingDirectories: boolean;
-  public items: ImageData[] = [];
-
-  public appConfig: AppConfig = new AppConfig();
-  public _isDragover = false;
   private apngFileSizeError = false;
-  public gaUrl: SafeResourceUrl;
-  private electron: any;
+  readonly AppConfig = AppConfig;
+
+  isImageSelected = false;
+  openingDirectories = false;
+  _isDragover = false;
+  presetMode = PresetType.LINE;
+  items: ImageData[] = [];
+  gaUrl: SafeResourceUrl;
+  PresetType = PresetType;
 
   @Input()
-  animationOptionData: AnimationImageOptions;
+  animationOptionData = new AnimationImageOptions();
 
   @ViewChild('myComponent', { static: true })
-  myComponent: ElementRef;
+  myComponent?: ElementRef;
 
   @ViewChild('optionSelecter', { static: true })
-  optionSelecterComponent: ElementRef;
+  optionSelecterComponent?: ElementRef;
 
   constructor(
     public localeData: LocaleData,
@@ -58,7 +63,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   ) {
     this.gaUrl = sanitizer.bypassSecurityTrustResourceUrl(
       'http://ics-web.jp/projects/animation-image-tool/?v=' +
-        this.appConfig.analyticsVersion
+        AppConfig.analyticsVersion
     );
     new LocaleManager().applyClientLocale(localeData);
   }
@@ -69,13 +74,13 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.isImageSelected = false;
 
     // 初回プリセットの設定
-    this.presetMode = Number(localStorage.getItem(this.PRESET_ID));
+    this.presetMode = loadPresetConfig();
     this.changePreset(this.presetMode);
 
-    this.ipcService.sendConfigData(this.localeData, this.appConfig);
+    this.ipcService.sendConfigData(this.localeData);
 
     // 	保存先の指定返却
-    this.ipcService.selectedOpenImages().then(list => {
+    this.ipcService.selectedOpenImages().then((list) => {
       this.selectedImages(list);
     });
     this.ipcService.unlockSelectUi().then(() => {
@@ -87,21 +92,12 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.openingDirectories = false;
   }
 
-  exportImageProsess(
-    version: string,
-    itemList: ImageData[],
-    animationOptionData: AnimationImageOptions
-  ): Promise<void> {
-    return this.ipcService.exec(version, itemList, animationOptionData);
-  }
-
-  openExternalBrowser(url) {
-    const { shell } = this.electron;
-    shell.openExternal(url);
+  openExternalBrowser(url: string) {
+    this.ipcService.openExternalBrowser(url);
   }
 
   ngAfterViewInit() {
-    const component = this.myComponent.nativeElement;
+    const component = this.myComponent?.nativeElement;
     component.addEventListener('dragover', (event: DragEvent) => {
       this._isDragover = true;
       event.preventDefault();
@@ -119,7 +115,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     // (<any>window).$('[data-toggle='tooltip']').tooltip()
   }
 
-  public openDirectories() {
+  openDirectories() {
     if (this.openingDirectories) {
       return;
     }
@@ -127,53 +123,27 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.ipcService.openFileDialog();
   }
 
-  private selectedImages(filePathList: string[]) {
+  selectedImages(filePathList: string[]) {
     this.openingDirectories = false;
     this.setFilePathList(filePathList);
   }
 
-  public handleDrop(event: DragEvent) {
-    const path = this.ipcService.path;
-
-    const length = event.dataTransfer.files
-      ? event.dataTransfer.files.length
-      : 0;
-
-    // 	再度アイテムがドロップされたらリセットするように調整
-    this.items = [];
-
-    for (let i = 0; i < length; i++) {
-      const file: any = event.dataTransfer.files[i];
-      const filePath = file.path;
-
-      if (path.extname(filePath) === '.png') {
-        path.dirname(filePath);
-
-        const item: ImageData = new ImageData(
-          path.basename(filePath),
-          filePath,
-          this.items.length
-        );
-
-        this.items.push(item);
-      }
-    }
-
-    this.numbering();
-
-    this.changeImageItems(this.items);
-
+  handleDrop(event: DragEvent) {
+    const files = Array.from(event.dataTransfer?.files ?? []);
+    this.setFilePathList(files.map((file) => file.path));
     event.preventDefault();
   }
 
-  public handlePresetChange(presetMode: string) {
-    localStorage.setItem(this.PRESET_ID, presetMode);
-    this.presetMode = Number(presetMode);
+  handlePresetChange(presetMode: string) {
+    const preset =
+      presetMode === PresetType.WEB ? PresetType.WEB : PresetType.LINE;
+    savePresetConfig(preset);
+    this.presetMode = preset;
 
     this.changePreset(this.presetMode);
   }
 
-  public changePreset(presetMode: number) {
+  changePreset(presetMode: PresetType) {
     switch (presetMode) {
       case PresetType.LINE:
         PresetLine.setPreset(this.animationOptionData);
@@ -184,7 +154,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     }
   }
 
-  public generateAnimImage() {
+  generateAnimImage() {
     // 	画像が選択されていないので保存しない。
     if (!this.isImageSelected) {
       return;
@@ -194,6 +164,7 @@ export class AppComponent implements OnInit, AfterViewInit {
       this.animationOptionData.enabledExportApng === false &&
       this.animationOptionData.enabledExportWebp === false
     ) {
+      // TODO: 多言語対応
       alert('出力画像の形式を選択ください。');
       return;
     }
@@ -201,37 +172,35 @@ export class AppComponent implements OnInit, AfterViewInit {
     this._exportImages();
   }
 
-  public showFileSizeErrorMessage(): void {
+  showFileSizeErrorMessage(): void {
+    // TODO: 多言語対応
     alert(
       '連番画像のサイズが異なるため、APNGファイルの保存ができません。連番画像のサイズが統一されているか確認ください。'
     );
   }
 
-  public _exportImages() {
+  async _exportImages() {
     if (this.apngFileSizeError && this.animationOptionData.enabledExportApng) {
       this.showFileSizeErrorMessage();
       return;
     }
 
     this._showLockDialog();
-
-    this.exportImageProsess(
-      this.appConfig.version,
-      this.items,
-      this.animationOptionData
-    )
-      .then(() => {
-        this._hideLockDialog();
-      })
-      .catch(() => {
-        this._hideLockDialog();
-      });
+    try {
+      await this.ipcService.exec(
+        AppConfig.version,
+        this.items,
+        this.animationOptionData
+      );
+    } finally {
+      this._hideLockDialog();
+    }
   }
 
   /**
    * 画面を操作できないようにロックするモダールダイアログを開きます。
    */
-  public _showLockDialog() {
+  _showLockDialog() {
     const dialog: any = document.querySelector('dialog');
     dialog.showModal();
     dialog.style['display'] = 'flex'; // こんな書き方をする必要があるのか…
@@ -243,7 +212,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   /**
    * 画面を操作できないようにロックするモダールダイアログを閉じます。
    */
-  public _hideLockDialog() {
+  _hideLockDialog() {
     const dialog: any = document.querySelector('dialog');
     dialog.close();
     dialog.style['display'] = 'none'; // こんな書き方をする必要があるのか…
@@ -255,7 +224,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   /**
    * ファイル選択ボタンが押された時のハンドラーです。
    */
-  public handleClickFileSelectButton(): void {
+  handleClickFileSelectButton(): void {
     if (this.openingDirectories === true) {
       return;
     }
@@ -265,64 +234,46 @@ export class AppComponent implements OnInit, AfterViewInit {
 
   /**
    * ファイルがセットされたときの処理です。
+   *
    * @param filePathList
    */
-  public setFilePathList(filePathList: string[]): void {
+  setFilePathList(filePathList: string[]): void {
     const path = this.ipcService.path;
-
-    const fileLength = filePathList ? filePathList.length : 0;
-
+    const isPngFile = (name: string) => path.extname(name) === '.png';
     // 	再度アイテムがドロップされたらリセットするように調整
-    this.items = [];
-
-    for (let i = 0; i < fileLength; i++) {
-      const filePath = filePathList[i];
-
-      if (path.extname(filePath) === '.png') {
-        path.dirname(filePath);
-
-        const item: ImageData = new ImageData(
+    const items = filePathList.filter(isPngFile).map(
+      (filePath) =>
+        new ImageData(
           path.basename(filePath),
           filePath,
-          this.items.length
-        );
-
-        this.items.push(item);
-      }
-    }
-    this.numbering();
-
-    this.changeImageItems(this.items);
+          0 // changeImageItemsでセットする際にソートされるので、一旦0で登録
+        )
+    );
+    this.changeImageItems(items);
   }
 
   /**
    * 再ナンバリングします。
    */
-  public numbering(): void {
-    this.items.sort(function(a, b) {
-      const aRes = a.imageBaseName.match(/\d+/g);
-      const bRes = b.imageBaseName.match(/\d+/g);
+  private numbering(): void {
+    this.items.sort((a, b) => {
+      const aNum = getFirstNumber(a.imageBaseName) ?? 0;
+      const bNum = getFirstNumber(b.imageBaseName) ?? 0;
 
-      const aNum = aRes ? (aRes.length >= 1 ? parseInt(aRes.pop(), 10) : 0) : 0;
-      const bNum = bRes ? (bRes.length >= 1 ? parseInt(bRes.pop(), 10) : 0) : 0;
-
-      if (aNum < bNum) {
-        return -1;
+      if (aNum === bNum) {
+        return 0;
       }
-      if (aNum > bNum) {
-        return 1;
-      }
-      return 0;
+      return aNum > bNum ? 1 : -1;
     });
 
-    const length = this.items.length;
-    for (let i = 0; i < length; i++) {
-      this.items[i].frameNumber = i;
-    }
+    this.items.forEach((item, index) => {
+      item.frameNumber = index;
+    });
   }
 
-  public changeImageItems(items: ImageData[]): void {
+  changeImageItems(items: ImageData[]): void {
     this.items = items;
+    this.numbering();
     if (items.length >= 1) {
       this.checkImageSize(items);
       this.animationOptionData.imageInfo.length = items.length;
@@ -330,58 +281,25 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.isImageSelected = this.items.length >= 1;
   }
 
-  public checkImageSize(items: ImageData[]): void {
-    new Promise((resolve: Function, reject: Function) => {
-      this.apngFileSizeError = false;
-      const image = new Image();
-      image.onload = (event: Event) => {
-        this.animationOptionData.imageInfo.width = image.width;
-        this.animationOptionData.imageInfo.height = image.height;
-        resolve();
-      };
-      image.onerror = (event: Event) => {
-        reject();
-      };
-      image.src = items[0].imagePath;
-    })
-      .then(() => {
-        const promiseArr: Promise<any>[] = [];
-
-        if (items.length <= 1) {
-          return;
-        }
-        for (let i = 1; i < items.length; i++) {
-          const promise = new Promise((resolve: Function, reject: Function) => {
-            const path = items[i].imagePath;
-            const image = new Image();
-            image.onload = (event: Event) => {
-              let errorFlag = false;
-              if (
-                this.animationOptionData.imageInfo.width === image.width &&
-                this.animationOptionData.imageInfo.height === image.height
-              ) {
-                // 何もしない
-              } else {
-                // 画像サイズが異なっていることを通知する
-                alert(
-                  `${items[i].imageBaseName} ${this.localeData.VALIDATE_ImportImageSize}`
-                );
-                errorFlag = true;
-              }
-              this.apngFileSizeError = errorFlag;
-              errorFlag ? reject() : resolve();
-            };
-            image.onerror = (event: Event) => {
-              reject();
-            };
-            image.src = path;
-          });
-          promiseArr.push(promise);
-        }
-        return Promise.all(promiseArr);
-      })
-      .catch(error => {
-        // '画像読み込みエラー';
-      });
+  /**
+   * 全ての画像のサイズが一致するかチェックし、不一致があればエラーメッセージを表示します。
+   * TODO: ファイルの展開に失敗した場合にエラーなしとして処理している。適切なエラーを表示したい
+   */
+  async checkImageSize(items: ImageData[]): Promise<void> {
+    // エラーフラグをリセット
+    this.apngFileSizeError = false;
+    const { baseSize, errorItem } = await checkImagePxSizeMatched(items);
+    if (!baseSize) {
+      // サイズが取れなかったら何もしない
+      return;
+    }
+    this.animationOptionData.imageInfo.width = baseSize.w;
+    this.animationOptionData.imageInfo.height = baseSize.h;
+    if (errorItem) {
+      // 不一致ならエラーフラグを立てた上でエラーメッセージを表示
+      this.apngFileSizeError = true;
+      const msg = `${errorItem.imageBaseName} ${this.localeData.VALIDATE_ImportImageSize}`;
+      alert(msg);
+    }
   }
 }

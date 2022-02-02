@@ -16,7 +16,7 @@ var errorMessage = new error_message_1.ErrorMessage();
 var fileService;
 // メインウィンドウ
 var mainWindow;
-function createWindow() {
+var createWindow = function () {
     // メインウィンドウを作成します
     mainWindow = new electron_1.BrowserWindow({
         width: 800,
@@ -54,8 +54,8 @@ function createWindow() {
             fileService = undefined;
         });
     }
-}
-function openFileDialog(event) {
+};
+var openFileDialog = function (event) {
     var dialogOption = {
         properties: ['openFile', 'multiSelections'],
         filters: [{ name: 'Images', extensions: ['png'] }]
@@ -70,7 +70,7 @@ function openFileDialog(event) {
     })["catch"](function () {
         event.sender.send(ipc_id_1.IpcId.UNLOCK_SELECT_UI);
     });
-}
+};
 //  初期化が完了した時の処理
 electron_1.app.on('ready', createWindow);
 // 全てのウィンドウが閉じたときの処理
@@ -95,14 +95,14 @@ electron_1.app.on('will-quit', function () {
     fileService = undefined;
 });
 electron_1.ipcMain.on(ipc_id_1.IpcId.OPEN_FILE_DIALOG, openFileDialog);
-electron_1.ipcMain.on(ipc_id_1.IpcId.SET_CONFIG_DATA, function (event, localeData, appConfig) {
+electron_1.ipcMain.on(ipc_id_1.IpcId.SET_CONFIG_DATA, function (event, localeData) {
     console.log("".concat(ipc_id_1.IpcId.SET_CONFIG_DATA, " to ").concat(localeData));
     if (!mainWindow) {
         return;
     }
     fileService = new file_1["default"](mainWindow, localeData, electron_1.app.getAppPath(), sendError, errorMessage, new SaveDialog_1.SaveDialog(mainWindow, electron_1.app.getPath('desktop'), localeData.defaultFileName));
     mainWindow.setTitle(localeData.APP_NAME);
-    var menu = new application_menu_1.ApplicationMenu(appConfig, localeData);
+    var menu = new application_menu_1.ApplicationMenu(localeData);
     menu.createMenu(electron_1.app);
 });
 electron_1.ipcMain.on(ipc_id_1.IpcId.SHOW_ERROR_MESSAGE, function (event, errorCode, inquiryCode, errorDetail, errorStack, appName) {
@@ -131,4 +131,7 @@ electron_1.ipcMain.on(ipc_id_1.IpcId.EXEC_IMAGE_EXPORT_PROCESS, function (event,
         console.log("returnValue:false");
         event.returnValue = false;
     });
+});
+electron_1.ipcMain.on(ipc_id_1.IpcId.OPEN_EXTERNAL_BROWSER, function (event, pageUrl) {
+    electron_1.shell.openExternal(pageUrl);
 });

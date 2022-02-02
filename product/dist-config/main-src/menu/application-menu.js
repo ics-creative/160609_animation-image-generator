@@ -2,16 +2,16 @@
 exports.__esModule = true;
 exports.ApplicationMenu = void 0;
 var electron_1 = require("electron");
+var app_config_1 = require("../../common-src/config/app-config");
 /**
  * アプリケーションメニューの制御クラスです。
  */
 var ApplicationMenu = /** @class */ (function () {
-    function ApplicationMenu(appConfig, localeData) {
-        this.appConfig = appConfig;
+    function ApplicationMenu(localeData) {
         this.localeData = localeData;
     }
     ApplicationMenu.prototype.createMenu = function (app) {
-        var version = this.appConfig.version;
+        var version = app_config_1.AppConfig.version;
         var name = this.localeData.APP_NAME;
         var template = [];
         // Macの場合以外のときで開発モードでなければMenuを空にする。
@@ -26,9 +26,11 @@ var ApplicationMenu = /** @class */ (function () {
                 {
                     label: this.localeData.MENU_about,
                     click: function () {
-                        alert("\u304A\u4F7F\u3044\u306E\u300C".concat(name, "\u300D\u306E\u30D0\u30FC\u30B8\u30E7\u30F3\u306F ").concat(version, " \u3067\u3059\u3002") +
-                            '\n' +
-                            "You use version ".concat(version, "."));
+                        electron_1.dialog.showMessageBox({
+                            message: "\u304A\u4F7F\u3044\u306E\u300C".concat(name, "\u300D\u306E\u30D0\u30FC\u30B8\u30E7\u30F3\u306F ").concat(version, " \u3067\u3059\u3002") +
+                                '\n' +
+                                "You use version ".concat(version, ".")
+                        });
                     }
                 },
                 {

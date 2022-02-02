@@ -11,7 +11,8 @@ const ENOENT_ERROR = 'ENOENT';
 
 /**
  * WEBP アニメーション画像を作ります。
- * @returns {Promise<T>}
+ *
+ * @returns
  * @private
  */
 export const generateWebp = async (
@@ -69,6 +70,7 @@ export const generateWebp = async (
 
 /**
  * PNG->WebPの変換を一括で行います
+ *
  * @param pngPaths
  * @param appPath
  * @param optionData
@@ -79,16 +81,17 @@ const convertPng2Webps = async (
   appPath: string,
   optionData: AnimationImageOptions
 ): Promise<GenetateError | undefined> => {
-  const promises = pngPaths.map(png =>
+  const promises = pngPaths.map((png) =>
     convertPng2Webp(png, appPath, optionData)
   );
   const errors = await Promise.all(promises);
-  const error = errors.find(result => result);
+  const error = errors.find((result) => result);
   return error;
 };
 
 /**
  * PNG->WebPの変換を行います
+ *
  * @param pngPaths
  * @param appPath
  * @param optionData
