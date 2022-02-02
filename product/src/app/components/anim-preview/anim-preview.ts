@@ -24,7 +24,6 @@ import { LineStampValidator } from '../../../../common-src/validators/LineStampV
  * アニメーションのプレビュー領域のコンポーネントです。
  */
 export class AnimPreviewComponent implements OnChanges, OnInit {
-
   @Input()
   animationOptionData = new AnimationImageOptions();
 

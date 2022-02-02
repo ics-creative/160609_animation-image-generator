@@ -16,7 +16,8 @@ const getLocale = (): 'ja' | 'en' => {
  */
 export class LocaleManager {
   public applyClientLocale(localeData: LocaleData): void {
-    const lData = getLocale() === 'ja' ? new LocaleJaData() : new LocaleEnData();
+    const lData =
+      getLocale() === 'ja' ? new LocaleJaData() : new LocaleEnData();
     this.changeLocale(localeData, lData);
   }
 

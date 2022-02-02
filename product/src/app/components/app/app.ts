@@ -4,7 +4,7 @@ import {
   ElementRef,
   Input,
   OnInit,
-  ViewChild,
+  ViewChild
 } from '@angular/core';
 import { AppConfig } from '../../../../common-src/config/app-config';
 import { LocaleData } from '../../i18n/locale-data';
@@ -30,13 +30,12 @@ const getFirstNumber = (text: string): number | undefined => {
 @Component({
   selector: 'app-main',
   templateUrl: './app.html',
-  styleUrls: ['./app.scss'],
+  styleUrls: ['./app.scss']
 })
 /**
  * アプリケーション全体領域のコンポーネントです。
  */
 export class AppComponent implements OnInit, AfterViewInit {
-  private readonly PRESET_ID = 'preset_id';
   private apngFileSizeError = false;
   readonly AppConfig = AppConfig;
 

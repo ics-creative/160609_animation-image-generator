@@ -24,7 +24,7 @@ export class SendError {
     }; // POSTメソッドで送信するデータ
     const xmlHttpRequest = new XMLHttpRequest();
 
-    xmlHttpRequest.onreadystatechange = function() {
+    xmlHttpRequest.onreadystatechange = function () {
       const READYSTATE_COMPLETED = 4;
       const HTTP_STATUS_OK = 200;
 

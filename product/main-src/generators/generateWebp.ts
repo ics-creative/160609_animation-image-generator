@@ -81,11 +81,11 @@ const convertPng2Webps = async (
   appPath: string,
   optionData: AnimationImageOptions
 ): Promise<GenetateError | undefined> => {
-  const promises = pngPaths.map(png =>
+  const promises = pngPaths.map((png) =>
     convertPng2Webp(png, appPath, optionData)
   );
   const errors = await Promise.all(promises);
-  const error = errors.find(result => result);
+  const error = errors.find((result) => result);
   return error;
 };
 

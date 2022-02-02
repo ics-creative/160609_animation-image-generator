@@ -2,8 +2,8 @@
   "scripts": {
     "build": "tsc --project main-src/tsconfig.json && ng build --configuration production",
     "start": "tsc --project main-src/tsconfig.json && concurrently \"cross-env NODE_ENV=develop electron ./dist-config\" \"ng build --watch\"",
-    "lint": "ng lint && eslint main-src/**/*.ts",
-    "format": "ng lint --fix &&  eslint --fix main-src/**/*.ts && prettier */*.{ts,scss} --write",
+    "lint": "eslint '{src,main-src}/**/*.{ts,html}' && tsc",
+    "format": "eslint --fix '{src,main-src}/**/*.{ts,html}' && prettier --write '{src,main-src}/**/*.{ts,scss,html}'",
     "release-darwin": "npm run prebuild-darwin && npm run package-darwin",
     "release-win32": "npm run prebuild-win32 && npm run package-win32",
     "release-windows-store": "npm run prebuild-win32 && npm run package-windows-store",
@@ -13,9 +13,6 @@
     "package-win32": "node build-scripts/for-windows-packaging.js",
     "package-windows-store": "node build-scripts/for-windows-store-packaging.js",
     "copy-binary-asssets": "node build-scripts/copy-binary-assets.js"
-  },
-  "prettier": {
-    "singleQuote": true
   },
   "private": true,
   "dependencies": {
@@ -61,9 +58,11 @@
     "electron-packager": "^13.1.1",
     "electron-windows-store": "^2.1.0",
     "eslint": "^8.8.0",
+    "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-import": "latest",
     "eslint-plugin-jsdoc": "latest",
     "eslint-plugin-prefer-arrow": "latest",
+    "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-react": "latest",
     "husky": "^2.7.0",
     "mkdirp": "^0.5.5",

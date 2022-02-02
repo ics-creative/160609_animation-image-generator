@@ -50,6 +50,6 @@ export const checkImagePxSizeMatched = async (
   );
   return {
     baseSize: firstSize,
-    errorItem: items[mismatchedIndex],
+    errorItem: items[mismatchedIndex]
   };
 };

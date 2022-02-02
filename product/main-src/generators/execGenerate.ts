@@ -6,11 +6,11 @@ import { AnimationImageOptions } from '../../common-src/data/animation-image-opt
 import { ImageData } from '../../common-src/data/image-data';
 import { ErrorType } from '../../common-src/error/error-type';
 import { generateApng, pngCompressAll } from './generateApng';
-import { SaveDialog } from 'dialog/SaveDialog';
 import { generateWebp } from './generateWebp';
 import { generateHtml } from './generateHtml';
 import { shell } from 'electron';
 import { GenetateError } from './GenerateError';
+import { SaveDialog } from '../dialog/SaveDialog';
 
 interface GenerateResult {
   error?: GenetateError;
@@ -24,7 +24,7 @@ const copyTemporaryDirectory = async (
   itemList: ImageData[],
   destDir: string
 ): Promise<void[]> => {
-  const tasks = itemList.map(item => {
+  const tasks = itemList.map((item) => {
     const src = item.imagePath;
     const destination = path.join(destDir, `frame${item.frameNumber}.png`);
     return fs.promises.copyFile(src, destination);

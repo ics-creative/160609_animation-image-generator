@@ -44,7 +44,7 @@ var emptyDirectory = function (dir) { return __awaiter(void 0, void 0, void 0, f
         switch (_a.label) {
             case 0:
                 _a.trys.push([0, 2, , 3]);
-                return [4 /*yield*/, fs_1.promises.rmdir(dir, { recursive: true })];
+                return [4 /*yield*/, fs_1.promises.rm(dir, { recursive: true })];
             case 1:
                 _a.sent();
                 return [3 /*break*/, 3];

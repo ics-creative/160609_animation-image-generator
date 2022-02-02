@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { AnimationImageOptions } from '../../../../common-src/data/animation-image-option';
+import { CompressionType } from '../../../../common-src/type/CompressionType';
 import { PresetType } from '../../../../common-src/type/PresetType';
 import { LocaleData } from '../../i18n/locale-data';
 
@@ -16,6 +17,7 @@ export class PropertiesComponent {
   animationOptionData = new AnimationImageOptions();
 
   PresetType = PresetType;
+  CompressionType = CompressionType;
 
   constructor(public localeData: LocaleData) {}
 }

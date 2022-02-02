@@ -1,6 +1,6 @@
 import { BrowserWindow, dialog } from 'electron';
-import { ErrorMessage } from 'error/error-message';
-import { SendError } from 'error/send-error';
+import { ErrorMessage } from './error/error-message';
+import { SendError } from './error/send-error';
 import { AnimationImageOptions } from '../common-src/data/animation-image-option';
 import { ImageData } from '../common-src/data/image-data';
 import { ILocaleData } from '../common-src/i18n/locale-data.interface';
@@ -107,7 +107,7 @@ export default class File {
         buttons: ['OK'],
         title: this.localeData.APP_NAME,
         message: message,
-        detail: detailMessage,
+        detail: detailMessage
       };
       await dialog.showMessageBox(this.mainWindow, dialogOption);
     }
