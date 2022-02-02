@@ -17,6 +17,7 @@ import { PresetWeb } from '../../../../common-src/preset/preset-web';
 import { AnimationImageOptions } from '../../../../common-src/data/animation-image-option';
 import { ImageData } from '../../../../common-src/data/image-data';
 import { checkImagePxSizeMatched } from './checkImagePxSizeMatched';
+import { loadPresetConfig, savePresetConfig } from './UserConfig';
 
 const getFirstNumber = (text: string): number | undefined => {
   const numStr = text.match(/\d+/g)?.pop();
@@ -45,6 +46,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   presetMode = PresetType.LINE;
   items: ImageData[] = [];
   gaUrl: SafeResourceUrl;
+  PresetType = PresetType;
 
   @Input()
   animationOptionData = new AnimationImageOptions();
@@ -73,7 +75,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.isImageSelected = false;
 
     // 初回プリセットの設定
-    this.presetMode = Number(localStorage.getItem(this.PRESET_ID));
+    this.presetMode = loadPresetConfig();
     this.changePreset(this.presetMode);
 
     this.ipcService.sendConfigData(this.localeData);
@@ -134,13 +136,15 @@ export class AppComponent implements OnInit, AfterViewInit {
   }
 
   handlePresetChange(presetMode: string) {
-    localStorage.setItem(this.PRESET_ID, presetMode);
-    this.presetMode = Number(presetMode);
+    const preset =
+      presetMode === PresetType.WEB ? PresetType.WEB : PresetType.LINE;
+    savePresetConfig(preset);
+    this.presetMode = preset;
 
     this.changePreset(this.presetMode);
   }
 
-  changePreset(presetMode: number) {
+  changePreset(presetMode: PresetType) {
     switch (presetMode) {
       case PresetType.LINE:
         PresetLine.setPreset(this.animationOptionData);
