@@ -1,4 +1,3 @@
-'use strict';
 import { Injectable } from '@angular/core';
 import { ILocaleData } from '../../../common-src/i18n/locale-data.interface';
 

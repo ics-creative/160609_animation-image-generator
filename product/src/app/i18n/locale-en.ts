@@ -1,5 +1,3 @@
-'use strict';
-
 import { LocaleData } from './locale-data';
 
 export class LocaleEnData extends LocaleData {
