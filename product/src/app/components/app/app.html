@@ -13,10 +13,10 @@
           #optionSelecter
           (change)="handlePresetChange(optionSelecter.value)"
         >
-          <option value="0" [selected]="presetMode === PresetType.LINE">
+          <option [value]="PresetType.LINE" [selected]="presetMode === PresetType.LINE">
             {{ localeData.PROP_useItemLine }}
           </option>
-          <option value="1" [selected]="presetMode === PresetType.WEB">
+          <option [value]="PresetType.WEB" [selected]="presetMode === PresetType.WEB">
             {{ localeData.PROP_useItemWeb }}
           </option>
         </select>
