@@ -86,8 +86,8 @@ export default class IpcService {
         itemList,
         animationOptionData
       );
-      if (result.result) {
-        console.log(result);
+      console.log(`exec finished: result=${result}`);
+      if (result) {
         resolve();
       } else {
         reject();
