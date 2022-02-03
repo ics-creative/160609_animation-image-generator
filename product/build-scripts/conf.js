@@ -23,20 +23,20 @@
     win32: [
       {
         fileName: 'webpmux.exe',
-        path: 'libwebp-1.0.0-windows-x86/bin/webpmux.exe'
+        path: 'libwebp-1.2.1-windows-x64/bin/webpmux.exe'
       },
       {
         fileName: 'cwebp.exe',
-        path: 'libwebp-1.0.0-windows-x86/bin/cwebp.exe'
+        path: 'libwebp-1.2.1-windows-x64/bin/cwebp.exe'
       },
       { fileName: 'apngasm.exe', path: 'apngasm-2.91-bin-win32/apngasm.exe' },
-      { fileName: 'pngquant.exe', path: 'pngquant-win/pngquant.exe' }
+      { fileName: 'pngquant.exe', path: 'pngquant-2.17.0-win/pngquant.exe' }
     ],
     darwin: [
-      { fileName: 'webpmux', path: 'libwebp-1.0.0-mac-10.13/bin/webpmux' },
-      { fileName: 'cwebp', path: 'libwebp-1.0.0-mac-10.13/bin/cwebp' },
+      { fileName: 'webpmux', path: 'libwebp-1.2.1-mac-10.15/bin/webpmux' },
+      { fileName: 'cwebp', path: 'libwebp-1.2.1-mac-10.15/bin/cwebp' },
       { fileName: 'apngasm', path: 'apngasm-2.91-bin-macos/apngasm' },
-      { fileName: 'pngquant', path: 'pngquant-mac/pngquant' }
+      { fileName: 'pngquant', path: 'pngquant-2.17.0-mac/pngquant' }
     ]
   }
 };
