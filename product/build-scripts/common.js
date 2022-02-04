@@ -31,8 +31,9 @@ module.exports = {
         cpx.copySync(`./resources/${resources[i].path}`, binaryDirectory);
       } else {
         // パーミッションも同じままコピーしないといけないので、macのcpコマンドでコピーしている
+        // 合わせてmac上では不要な拡張属性を落とす（com.apple.quarantineが残っていると起動できないため）
         execSync(
-          `cp -P ./resources/${resources[i].path} ${dest}`,
+          `cp -P ./resources/${resources[i].path} ${dest} && xattr -c ${dest}`,
           (err, stdout, stderr) => {
             if (err) {
               console.log(err);
