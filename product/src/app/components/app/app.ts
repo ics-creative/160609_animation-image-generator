@@ -40,7 +40,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   readonly AppConfig = AppConfig;
 
   isImageSelected = false;
-  openingDirectories = false;
+  isUiLocked = false;
   _isDragover = false;
   presetMode = PresetType.LINE;
   items: ImageData[] = [];
@@ -78,26 +78,6 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.changePreset(this.presetMode);
 
     this.ipcService.sendConfigData(this.localeData);
-
-    // 保存先の指定返却
-    this.ipcService.onSelectedOpenImages((list) => {
-      if (!list.length) {
-        return;
-      }
-      this.selectedImages(list);
-    });
-    // UIロックの解除
-    this.ipcService.onUnlockSelectUi(() => {
-      this.unlockSelectUi();
-    });
-  }
-
-  unlockSelectUi() {
-    this.openingDirectories = false;
-  }
-
-  openExternalBrowser(url: string) {
-    this.ipcService.openExternalBrowser(url);
   }
 
   ngAfterViewInit() {
@@ -119,17 +99,8 @@ export class AppComponent implements OnInit, AfterViewInit {
     // (<any>window).$('[data-toggle='tooltip']').tooltip()
   }
 
-  openDirectories() {
-    if (this.openingDirectories) {
-      return;
-    }
-    this.openingDirectories = true;
-    this.ipcService.openFileDialog();
-  }
-
-  selectedImages(filePathList: string[]) {
-    this.openingDirectories = false;
-    this.setFilePathList(filePathList);
+  openExternalBrowser(url: string) {
+    this.ipcService.openExternalBrowser(url);
   }
 
   handleDrop(event: DragEvent) {
@@ -189,7 +160,7 @@ export class AppComponent implements OnInit, AfterViewInit {
       return;
     }
 
-    this._showLockDialog();
+    this.showLockDialog();
     try {
       await this.ipcService.exec(
         AppConfig.version,
@@ -197,43 +168,49 @@ export class AppComponent implements OnInit, AfterViewInit {
         this.animationOptionData
       );
     } finally {
-      this._hideLockDialog();
+      this.hideLockDialog();
     }
   }
 
   /**
    * 画面を操作できないようにロックするモダールダイアログを開きます。
    */
-  _showLockDialog() {
+  showLockDialog() {
     const dialog: any = document.querySelector('dialog');
     dialog.showModal();
     dialog.style['display'] = 'flex'; // こんな書き方をする必要があるのか…
     document.body.style.cursor = 'progress';
 
     createjs.Ticker.paused = true;
+    this.isUiLocked = true;
   }
 
   /**
    * 画面を操作できないようにロックするモダールダイアログを閉じます。
    */
-  _hideLockDialog() {
+  hideLockDialog() {
     const dialog: any = document.querySelector('dialog');
     dialog.close();
     dialog.style['display'] = 'none'; // こんな書き方をする必要があるのか…
     document.body.style.cursor = 'auto';
 
     createjs.Ticker.paused = false;
+    this.isUiLocked = false;
   }
 
   /**
    * ファイル選択ボタンが押された時のハンドラーです。
    */
-  handleClickFileSelectButton(): void {
-    if (this.openingDirectories === true) {
-      return;
+  async handleClickFileSelectButton() {
+    this.showLockDialog();
+    try {
+      const files = await this.ipcService.openFileDialog();
+      if (files.length) {
+        this.setFilePathList(files);
+      }
+    } finally {
+      this.hideLockDialog();
     }
-    this.openingDirectories = true;
-    this.ipcService.openFileDialog();
   }
 
   /**

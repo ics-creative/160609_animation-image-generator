@@ -3,22 +3,19 @@ import {
   BrowserWindow,
   dialog,
   ipcMain,
-  IpcMainEvent,
   OpenDialogOptions,
   shell
 } from 'electron';
 import * as path from 'path';
 import * as url from 'url';
 import { AnimationImageOptions } from '../common-src/data/animation-image-option';
-import { ErrorType } from '../common-src/error/error-type';
-import { IpcId } from '../common-src/ipc-id';
+import { IpcId, IpcMainHandled } from '../common-src/ipc-id';
 import { ErrorMessage } from './error/error-message';
 import { SendError } from './error/send-error';
 import { ImageData } from '../common-src/data/image-data';
 import File from './file';
 import { ILocaleData } from '../common-src/i18n/locale-data.interface';
 import { ApplicationMenu } from './menu/application-menu';
-import { AppConfig } from '../common-src/config/app-config';
 import { SaveDialog } from './dialog/SaveDialog';
 
 // アプリケーション作成用のモジュールを読み込み
@@ -29,6 +26,10 @@ const errorMessage = new ErrorMessage();
 let fileService: File | undefined;
 // メインウィンドウ
 let mainWindow: BrowserWindow | undefined;
+// 型定義付きのイベントハンドラー： UI側からのinvokeを受け取って処理します
+const handle: IpcMainHandled = (channel, listener) => {
+  ipcMain.handle(channel, listener as any);
+};
 
 const createWindow = () => {
   // メインウィンドウを作成します
@@ -77,24 +78,6 @@ const createWindow = () => {
   }
 };
 
-const openFileDialog = (event: IpcMainEvent) => {
-  const dialogOption: OpenDialogOptions = {
-    properties: ['openFile', 'multiSelections'],
-    filters: [{ name: 'Images', extensions: ['png'] }]
-  };
-  if (!mainWindow) {
-    return;
-  }
-  dialog
-    .showOpenDialog(mainWindow, dialogOption)
-    .then((files) => {
-      event.sender.send(IpcId.SELECTED_OPEN_IMAGES, files);
-    })
-    .finally(() => {
-      event.sender.send(IpcId.UNLOCK_SELECT_UI);
-    });
-};
-
 //  初期化が完了した時の処理
 app.on('ready', createWindow);
 
@@ -121,9 +104,21 @@ app.on('will-quit', () => {
   fileService = undefined;
 });
 
-ipcMain.on(IpcId.OPEN_FILE_DIALOG, openFileDialog);
+// オープンダイアログ = 画像を選択
+handle(IpcId.OPEN_FILE_DIALOG, async () => {
+  const dialogOption: OpenDialogOptions = {
+    properties: ['openFile', 'multiSelections'],
+    filters: [{ name: 'Images', extensions: ['png'] }]
+  };
+  if (!mainWindow) {
+    return [];
+  }
+  const result = await dialog.showOpenDialog(mainWindow, dialogOption);
+  return result.filePaths;
+});
 
-ipcMain.on(IpcId.SET_CONFIG_DATA, (event, localeData: ILocaleData) => {
+// UI→メインに設定を共有する
+handle(IpcId.SET_CONFIG_DATA, async (event, localeData: ILocaleData) => {
   console.log(`${IpcId.SET_CONFIG_DATA} to ${localeData}`);
 
   if (!mainWindow) {
@@ -148,33 +143,10 @@ ipcMain.on(IpcId.SET_CONFIG_DATA, (event, localeData: ILocaleData) => {
   menu.createMenu(app);
 });
 
-ipcMain.on(
-  IpcId.SHOW_ERROR_MESSAGE,
-  (
-    event,
-    errorCode: ErrorType,
-    inquiryCode: string,
-    errorDetail: string,
-    errorStack: string,
-    appName: string
-  ) => {
-    if (!mainWindow) {
-      return;
-    }
-    errorMessage.showErrorMessage(
-      errorCode,
-      inquiryCode,
-      errorDetail,
-      errorStack,
-      appName,
-      mainWindow
-    );
-  }
-);
-
-ipcMain.on(
+// エラーを送信
+handle(
   IpcId.SEND_ERROR,
-  (
+  async (
     event,
     version: string,
     code: string,
@@ -186,9 +158,10 @@ ipcMain.on(
   }
 );
 
-ipcMain.on(
+// 保存場所を聞いて保存処理を実行
+handle(
   IpcId.EXEC_IMAGE_EXPORT_PROCESS,
-  (
+  async (
     event,
     version: string,
     itemList: ImageData[],
@@ -201,7 +174,7 @@ ipcMain.on(
       event.returnValue = false;
       return;
     }
-    fileService
+    return fileService
       .exec(app.getPath('temp'), version, itemList, animationOptionData)
       .then(() => {
         console.log(`returnValue:true`);
@@ -215,6 +188,7 @@ ipcMain.on(
   }
 );
 
-ipcMain.on(IpcId.OPEN_EXTERNAL_BROWSER, (event, pageUrl: string) => {
-  shell.openExternal(pageUrl);
+// URLを外部ブラウザーで開く
+handle(IpcId.OPEN_EXTERNAL_BROWSER, async (event, pageUrl: string) => {
+  await shell.openExternal(pageUrl);
 });

@@ -9,6 +9,14 @@ contextBridge.exposeInMainWorld('api', {
   on: (channel, listener) => {
     return ipcRenderer.on(channel, listener);
   },
+  /**
+   * @param {string} channel 
+   * @param  {...any} args 
+   * @returns Promise
+   */
+  invoke: (channel, ...args) => {
+    return ipcRenderer.invoke(channel, ...args);
+  },
   path: {
     extname: value => {
       return require('path').extname(value);
