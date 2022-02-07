@@ -1,7 +1,8 @@
+import { platform } from 'os';
+import { createHash } from 'crypto';
 export const createInquiryCode = (): string => {
-  const SHA256 = require('crypto-js/sha256');
   // お問い合わせコード生成
-  return SHA256(require('os').platform + '/' + new Date().toString())
-    .toString()
-    .slice(0, 8);
+  const hash = createHash('sha256');
+  hash.update(platform + '/' + new Date().toString());
+  return hash.digest('hex').slice(0, 8);
 };

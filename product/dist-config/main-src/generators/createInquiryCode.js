@@ -1,11 +1,12 @@
 "use strict";
 exports.__esModule = true;
 exports.createInquiryCode = void 0;
+var os_1 = require("os");
+var crypto_1 = require("crypto");
 var createInquiryCode = function () {
-    var SHA256 = require('crypto-js/sha256');
     // お問い合わせコード生成
-    return SHA256(require('os').platform + '/' + new Date().toString())
-        .toString()
-        .slice(0, 8);
+    var hash = (0, crypto_1.createHash)('sha256');
+    hash.update(os_1.platform + '/' + new Date().toString());
+    return hash.digest('hex').slice(0, 8);
 };
 exports.createInquiryCode = createInquiryCode;

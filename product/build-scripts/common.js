@@ -9,9 +9,12 @@ module.exports = {
   copyProjects: function(outPath) {
     del.sync([outPath]);
 
+    console.log('copy sources...');
     cpx.copySync(conf.distPath + '/**', path.join(outPath, '/dist/'));
     cpx.copySync('dist-config/package.json', outPath);
-    cpx.copySync('dist-config/main.js', outPath);
+    cpx.copySync('dist-config/preload.js', outPath);
+    cpx.copySync('dist-config/main-src/**', path.join(outPath, '/main-src/'));
+    cpx.copySync('dist-config/common-src/**', path.join(outPath, '/common-src/'));
     console.log(conf.distPath, outPath);
   },
   copyResources: function(resources, outPath) {

@@ -73,7 +73,7 @@ var createWindow = function () {
     if (process.env.NODE_ENV !== 'develop') {
         // 今回はdistディレクトリのindex.html
         mainWindow.loadURL(url.format({
-            pathname: path.join(__dirname, '../../dist', 'index.html'),
+            pathname: path.join(__dirname, '../dist', 'index.html'),
             protocol: 'file:',
             slashes: true
         }));
