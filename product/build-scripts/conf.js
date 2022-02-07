@@ -13,7 +13,7 @@
   },
   distPath: './dist',
   binPath: './bin',
-  projectSrcPath: './src',
+  projectSrcPath: './src',  
   projectDistConfigPath: './dist-config',
   packageTmpPath: {
     win32: 'tmpWin32',

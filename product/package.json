@@ -1,7 +1,7 @@
 {
   "scripts": {
-    "build": "tsc --project main-src/tsconfig.json && ng build --configuration production",
-    "start": "tsc --project main-src/tsconfig.json && concurrently \"cross-env NODE_ENV=develop electron ./dist-config\" \"ng build --watch\"",
+    "build": "tsc --project main-src/tsconfig.json && npm run _copy-asssets-to-dist && ng build --configuration production",
+    "start": "tsc --project main-src/tsconfig.json && npm run _copy-asssets-to-dist && concurrently \"cross-env NODE_ENV=develop electron ./dist\" \"ng build --watch\"",
     "lint": "eslint '{src,main-src}/**/*.{ts,html}' && tsc",
     "format": "eslint --fix '{src,main-src}/**/*.{ts,html}' && prettier --write '{src,main-src}/**/*.{ts,scss,html}'",
     "release-darwin": "npm run prebuild-darwin && npm run package-darwin",
@@ -12,7 +12,7 @@
     "prebuild-win32": "npm run build && node build-scripts/for-windows-prebuild.js",
     "package-win32": "node build-scripts/for-windows-packaging.js",
     "package-windows-store": "node build-scripts/for-windows-store-packaging.js",
-    "copy-binary-asssets": "node build-scripts/copy-binary-assets.js"
+    "_copy-asssets-to-dist": "node build-scripts/copy-assets-to-dist.js"
   },
   "private": true,
   "dependencies": {
