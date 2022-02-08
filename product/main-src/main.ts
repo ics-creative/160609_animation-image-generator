@@ -45,13 +45,14 @@ const createWindow = () => {
   });
 
   console.log(process.env.NODE_ENV);
+  console.log(`current dir: ${__dirname}`);
 
   // メインウィンドウに表示するURLを指定します
   if (process.env.NODE_ENV !== 'develop') {
     // 今回はdistディレクトリのindex.html
     mainWindow.loadURL(
       url.format({
-        pathname: path.join(__dirname, '../../dist', 'index.html'),
+        pathname: path.join(__dirname, '../renderer-dist', 'index.html'),
         protocol: 'file:',
         slashes: true
       })
@@ -62,7 +63,7 @@ const createWindow = () => {
   } else {
     mainWindow.loadURL(
       url.format({
-        pathname: path.join(__dirname, '../../dist', 'index.html'),
+        pathname: path.join(__dirname, '../renderer-dist', 'index.html'),
         protocol: 'file:',
         slashes: true
       })
