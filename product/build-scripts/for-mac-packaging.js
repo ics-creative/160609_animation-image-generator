@@ -78,7 +78,7 @@ electronPackager({
   appBundleId: conf.sign.bundleId,
   appVersion: conf.APP_VERSION,
   buildVersion: conf.BUILD_VERSION,
-  appCopyright: 'Copyright (C) 2018 ICS INC.'
+  appCopyright: conf.COPY_RIGHT,
 })
   .then(appPaths => {
     console.info('[electron-packager] success : ' + appPaths);
