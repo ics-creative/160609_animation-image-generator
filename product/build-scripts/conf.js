@@ -8,12 +8,15 @@
   BUILD_VERSION: '2.1.8',
   ELECTRON_VERSION: '15.3.0',
   sign: {
-    identity: '3rd Party Mac Developer Installer: ICS INC. (53YCXL8YSM)',
+    identity: 'Apple Distribution: ICS INC. (53YCXL8YSM)',
     bundleId: 'media.ics.AnimationImageConverter'
+  },
+  flat: {
+    identity: '3rd Party Mac Developer Installer: ICS INC. (53YCXL8YSM)'
   },
   distPath: './dist',
   binPath: './bin',
-  projectSrcPath: './src',  
+  projectSrcPath: './src',
   projectDistConfigPath: './dist-config',
   packageTmpPath: {
     win32: 'tmpWin32',
