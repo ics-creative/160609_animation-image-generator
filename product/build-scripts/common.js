@@ -49,7 +49,7 @@ const copyConfigToDist = () => {
  * distに出力されたビルド済ファイルをプラットフォーム別のパッケージングに使用する一時フォルダーにコピーします。
  * 合わせて、copyBinaryAssetsを呼び出し、バイナリモジュールのコピーも行います。
  * ビルド後、パッケージ化前に実行してください。
- * @param {'win32' | 'dawrin'} os
+ * @param {'win32' | 'darwin'} os
  */
 const copyDistToPackgeTmp = (os) => {
   const from = conf.distPath;
@@ -65,7 +65,7 @@ const copyDistToPackgeTmp = (os) => {
 
 /**
  * バイナリモジュールのコピーを行います。
- * @param {'win32' | 'dawrin'} os
+ * @param {'win32' | 'darwin'} os
  * @param {string} to 出力先
  */
 const copyBinaryAssets = (os, to) => {
