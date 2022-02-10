@@ -2,8 +2,8 @@
   "compilerOptions": {
     "strict": true,
     "outDir": "../dist",
-    "module": "commonjs",
     "types": [],
+    "module": "CommonJS",
     "sourceMap": false,
     "moduleResolution": "node",
     "target": "es2017",

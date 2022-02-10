@@ -1,65 +1,45 @@
-export class SendError {
-  constructor() {}
-  public exec(
-    version: string,
-    code: string,
-    category: string,
-    title: string,
-    detail: string
-  ): void {
-    const saveData = {
-      OS: require('os').platform(),
-      version: version,
-      code: code,
-      category: category,
-      title: title,
-      detail: detail
-    };
+import fetch from 'electron-fetch';
+import { URLSearchParams } from 'url';
 
-    const data = {
-      saveData: JSON.stringify(saveData),
-      action: 'append',
-      sheetName: 's0',
-      actionParam: 0
-    }; // POSTメソッドで送信するデータ
-    const xmlHttpRequest = new XMLHttpRequest();
+const HTTP_STATUS_OK = 200;
+const ERR_REPORT_ENDPOINT =
+  'https://script.google.com/macros/s/AKfycbxt8g9KxiD1hp_W1XQzw4tzmsIF1qVigRLF-v87ngWtqqU31JXu/exec';
 
-    xmlHttpRequest.onreadystatechange = function () {
-      const READYSTATE_COMPLETED = 4;
-      const HTTP_STATUS_OK = 200;
+export const sendError = async (
+  version: string,
+  code: string,
+  category: string,
+  title: string,
+  detail: string
+): Promise<void> => {
+  const saveData = {
+    OS: require('os').platform(),
+    version: version,
+    code: code,
+    category: category,
+    title: title,
+    detail: detail
+  };
 
-      if (
-        this.readyState === READYSTATE_COMPLETED &&
-        this.status === HTTP_STATUS_OK
-      ) {
-        console.log(this.responseText);
-      }
-    };
+  const data = {
+    saveData: JSON.stringify(saveData),
+    action: 'append',
+    sheetName: 's0',
+    actionParam: '0'
+  }; // POSTメソッドで送信するデータ
 
-    xmlHttpRequest.open(
-      'POST',
-      'https://script.google.com/macros/s/AKfycbxt8g9KxiD1hp_W1XQzw4tzmsIF1qVigRLF-v87ngWtqqU31JXu/exec'
-    );
-    xmlHttpRequest.setRequestHeader(
-      'Content-Type',
-      'application/x-www-form-urlencoded'
-    );
-    xmlHttpRequest.send(this.encodeHTMLForm(data));
+  const bodyText = new URLSearchParams(Object.entries(data)).toString();
+  console.log(':: sendError ::', bodyText);
+  const resp = await fetch(ERR_REPORT_ENDPOINT, {
+    method: 'post',
+    body: bodyText,
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+  });
+
+  const respText = await resp.text();
+  if (resp.status === HTTP_STATUS_OK) {
+    console.log(':: sendError done ::', respText);
+  } else {
+    console.warn(':: sendError FAILED ::', respText);
   }
-
-  private encodeHTMLForm(data: any) {
-    const params = [];
-
-    for (const name in data) {
-      if (!name.hasOwnProperty(name)) {
-        continue;
-      }
-      const value = data[name];
-      const param = encodeURIComponent(name) + '=' + encodeURIComponent(value);
-
-      params.push(param);
-    }
-
-    return params.join('&').replace(/%20/g, '+');
-  }
-}
+};
