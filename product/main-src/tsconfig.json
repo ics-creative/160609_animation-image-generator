@@ -2,11 +2,14 @@
   "compilerOptions": {
     "strict": true,
     "outDir": "../dist",
+    "module": "commonjs",
     "types": [],
     "sourceMap": false,
-    "moduleResolution": "node"
-  },
+    "moduleResolution": "node",
+    "target": "es2017",
+    "lib": ["es2017", "dom"],
+    },
   "include": ["src/**/*.d.ts", "../common-src/**/*.ts", "**/*.ts"],
-  "target": "es5",
+  "exclude": ["vite.config.ts"],
   "typeRoots": ["../node_modules/@types"]
 }

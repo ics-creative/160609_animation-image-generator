@@ -7,7 +7,7 @@ const cpx = require('cpx');
 
 /**
  * パッケージ作成作業用の一時ディレクトリのパスを返します
- * @param {'win32' | 'dawrin'} os 
+ * @param {'win32' | 'darwin'} os
  * @returns {string}
  */
 const getPackageTmpDir = (os) => {
@@ -18,6 +18,21 @@ const getPackageTmpDir = (os) => {
     );
   }
   return tmp;
+};
+
+const clearDist = () => {
+  const dist = conf.distPath;
+  if (!dist) {
+    throw new Error('distディレクトリが未設定です');
+  }
+  del.sync(dist);
+  mkdirp.sync(dist);
+};
+
+const clearPackageTmp = () => {
+  const tmpDarwin = getPackageTmpDir('darwin');
+  const tmpWin32 = getPackageTmpDir('win32');
+  [tmpDarwin, tmpWin32].filter((dir) => dir).forEach((dir) => del.sync(dir));
 };
 
 /**
@@ -34,7 +49,7 @@ const copyConfigToDist = () => {
  * distに出力されたビルド済ファイルをプラットフォーム別のパッケージングに使用する一時フォルダーにコピーします。
  * 合わせて、copyBinaryAssetsを呼び出し、バイナリモジュールのコピーも行います。
  * ビルド後、パッケージ化前に実行してください。
- * @param {'win32' | 'dawrin'} os 
+ * @param {'win32' | 'dawrin'} os
  */
 const copyDistToPackgeTmp = (os) => {
   const from = conf.distPath;
@@ -50,7 +65,7 @@ const copyDistToPackgeTmp = (os) => {
 
 /**
  * バイナリモジュールのコピーを行います。
- * @param {'win32' | 'dawrin'} os 
+ * @param {'win32' | 'dawrin'} os
  * @param {string} to 出力先
  */
 const copyBinaryAssets = (os, to) => {
@@ -84,6 +99,8 @@ const copyBinaryAssets = (os, to) => {
 };
 
 module.exports = {
+  clearDist,
+  clearPackageTmp,
   copyConfigToDist,
   copyDistToPackgeTmp,
   copyBinaryAssets
