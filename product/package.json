@@ -1,7 +1,7 @@
 {
   "scripts": {
     "build": "npm run clear-build && npm run build-main && npm run _copy-asssets-to-dist && ng build --configuration production",
-    "build-main": "cd ./main-src && vite build && cd -",
+    "build-main": "cd ./main-src && vite build && cd ../",
     "clear-build": "node build-scripts/clear-build.js",
     "start": "tsc --project main-src/tsconfig.json && npm run _copy-asssets-to-dist && concurrently \"cross-env NODE_ENV=develop electron ./dist\" \"ng build --watch\"",
     "lint": "eslint '{src,main-src}/**/*.{ts,html}' && tsc",
