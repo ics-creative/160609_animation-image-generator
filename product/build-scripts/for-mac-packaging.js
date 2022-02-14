@@ -20,7 +20,7 @@ function startFlat() {
   flat(
     {
       app: appPath,
-      identity: conf.sign.identity,
+      identity: conf.flat.identity,
       pkg: `../${pkg}`,
       platform: 'mas'
     },
@@ -45,10 +45,11 @@ function startSign() {
       entitlements: 'resources/dev/parent.plist',
       'entitlements-inherit': 'resources/dev/child.plist',
       platform: 'mas',
-      'provisioning-profile': `resources/cert/${signType}.provisionprofile`,
-      type: signType
+      'provisioning-profile': `../../cert/${signType}.provisionprofile`,
+      type: signType,
+      identity: conf.sign.identity
     },
-    function(err) {
+    function (err) {
       if (err) {
         console.error(err);
         console.error('sign failure!');
@@ -78,14 +79,14 @@ electronPackager({
   appBundleId: conf.sign.bundleId,
   appVersion: conf.APP_VERSION,
   buildVersion: conf.BUILD_VERSION,
-  appCopyright: conf.COPY_RIGHT,
+  appCopyright: conf.COPY_RIGHT
 })
-  .then(appPaths => {
+  .then((appPaths) => {
     console.info('[electron-packager] success : ' + appPaths);
     // コードサイニング証明書を付与
     startSign();
   })
-  .catch(err => {
+  .catch((err) => {
     // エラーが発生したのでログを表示して終了
     console.error('[electron-packager] failure : ' + err);
   });
