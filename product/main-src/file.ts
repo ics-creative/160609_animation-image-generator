@@ -1,6 +1,6 @@
 import { BrowserWindow, dialog } from 'electron';
 import { ErrorMessage } from './error/error-message';
-import { SendError } from './error/send-error';
+import { sendError } from './error/send-error';
 import { AnimationImageOptions } from '../common-src/data/animation-image-option';
 import { ImageData } from '../common-src/data/image-data';
 import { ILocaleData } from '../common-src/i18n/locale-data.interface';
@@ -16,21 +16,18 @@ export default class File {
     mainWindow: BrowserWindow,
     localeData: ILocaleData,
     appPath: string,
-    sendError: SendError,
     errorMessage: ErrorMessage,
     saveDialog: SaveDialog
   ) {
     this.mainWindow = mainWindow;
     this.localeData = localeData;
     this.appPath = appPath;
-    this.sendError = sendError;
     this.errorMessage = errorMessage;
     this.saveDialog = saveDialog;
   }
 
   private readonly mainWindow: BrowserWindow;
   private readonly saveDialog: SaveDialog;
-  private readonly sendError: SendError;
   private readonly errorMessage: ErrorMessage;
   private readonly appPath: string;
   private readonly localeData: ILocaleData;
@@ -65,7 +62,7 @@ export default class File {
       console.error(error);
       const errorStack = error.cause.stack;
 
-      this.sendError.exec(
+      sendError(
         version,
         inquiryCode,
         'ERROR',

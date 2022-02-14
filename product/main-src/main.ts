@@ -11,15 +11,14 @@ import * as url from 'url';
 import { AnimationImageOptions } from '../common-src/data/animation-image-option';
 import { IpcId, IpcMainHandled } from '../common-src/ipc-id';
 import { ErrorMessage } from './error/error-message';
-import { SendError } from './error/send-error';
 import { ImageData } from '../common-src/data/image-data';
 import File from './file';
 import { ILocaleData } from '../common-src/i18n/locale-data.interface';
 import { ApplicationMenu } from './menu/application-menu';
 import { SaveDialog } from './dialog/SaveDialog';
+import { sendError } from './error/send-error';
 
 // アプリケーション作成用のモジュールを読み込み
-const sendError = new SendError();
 const errorMessage = new ErrorMessage();
 
 // 画像生成サービス
@@ -130,7 +129,6 @@ handle(IpcId.SET_CONFIG_DATA, async (event, localeData: ILocaleData) => {
     mainWindow,
     localeData,
     app.getAppPath(),
-    sendError,
     errorMessage,
     new SaveDialog(
       mainWindow,
@@ -155,7 +153,7 @@ handle(
     title: string,
     detail: string
   ) => {
-    sendError.exec(version, code, category, title, detail);
+    sendError(version, code, category, title, detail);
   }
 );
 
