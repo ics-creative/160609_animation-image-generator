@@ -1,7 +1,8 @@
+import { AppConfig } from '../../../common-src/config/app-config';
 import { LocaleData } from './locale-data';
 
 export class LocaleEnData extends LocaleData {
-  APP_NAME = 'Animation Image Converter';
+  APP_NAME = AppConfig.appName;
 
   PROP_use = 'Type';
   PROP_useItemLine = 'LINE Animation Stamp';

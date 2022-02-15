@@ -17,6 +17,7 @@ import { ILocaleData } from '../common-src/i18n/locale-data.interface';
 import { ApplicationMenu } from './menu/application-menu';
 import { SaveDialog } from './dialog/SaveDialog';
 import { sendError } from './error/send-error';
+import { AppConfig } from '../common-src/config/app-config';
 
 // アプリケーション作成用のモジュールを読み込み
 const errorMessage = new ErrorMessage();
@@ -197,7 +198,9 @@ handle(IpcId.OPEN_EXTERNAL_BROWSER, async (event, pageUrl: string) => {
 //   代替としてメインプロセス側でelectronのdialogを使用してメッセージを表示する機能を提供する
 handle(IpcId.SHOW_MESSAGE, async (event, message: string, title?: string) => {
   await dialog.showMessageBox({
-    message,
-    title
-  })
+    type: 'info',
+    buttons: ['OK'],
+    title: title ?? AppConfig.appName,
+    message: message
+})
 })
