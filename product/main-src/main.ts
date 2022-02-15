@@ -191,3 +191,13 @@ handle(
 handle(IpcId.OPEN_EXTERNAL_BROWSER, async (event, pageUrl: string) => {
   await shell.openExternal(pageUrl);
 });
+
+// メッセージを表示する
+// ※ レンダラー側でalertを使用するとビルド語のWindows環境で文字化けが発生するため、
+//   代替としてメインプロセス側でelectronのdialogを使用してメッセージを表示する機能を提供する
+handle(IpcId.SHOW_MESSAGE, async (event, message: string, title?: string) => {
+  await dialog.showMessageBox({
+    message,
+    title
+  })
+})

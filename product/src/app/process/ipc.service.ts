@@ -71,4 +71,9 @@ export default class IpcService {
       animationOptionData
     );
   }
+
+  /** メッセージダイアログを表示します。alert()の代替として使用します */
+  showMessage(message: string, title?: string) {
+    return this.api.invoke(IpcId.SHOW_MESSAGE, message, title)
+  }
 }
