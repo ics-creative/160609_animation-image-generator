@@ -11,7 +11,8 @@ export const IpcId = {
   SET_CONFIG_DATA: 'set-config-data',
   SEND_ERROR: 'send-error',
   EXEC_IMAGE_EXPORT_PROCESS: 'exec-image-export-process',
-  OPEN_EXTERNAL_BROWSER: 'open-external-browser'
+  OPEN_EXTERNAL_BROWSER: 'open-external-browser',
+  SHOW_MESSAGE: 'show-message'
 } as const;
 
 // UI→メイン方向にinvokeで起動する処理の型定義
@@ -33,6 +34,7 @@ interface IpcInvokeFuncs {
     animationOptionData: AnimationImageOptions
   ) => Promise<void>;
   [IpcId.OPEN_EXTERNAL_BROWSER]: (url: string) => Promise<void>;
+  [IpcId.SHOW_MESSAGE]: (message: string, title?: string) => Promise<void>;
 }
 
 // IpcRenderer.invokeの型定義

@@ -35,7 +35,6 @@ electronPackager({
   electronVersion: conf.ELECTRON_VERSION,
   overwrite: true,
   asar: false,
-  appBundleId: conf.sign.bundleId,
   appVersion: conf.APP_VERSION,
   appCopyright: 'Copyright (C) 2018 ICS INC.'
 })

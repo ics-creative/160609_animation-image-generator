@@ -129,7 +129,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     }
   }
 
-  generateAnimImage() {
+  async generateAnimImage(): Promise<void> {
     // 	画像が選択されていないので保存しない。
     if (!this.isImageSelected) {
       return;
@@ -140,23 +140,23 @@ export class AppComponent implements OnInit, AfterViewInit {
       this.animationOptionData.enabledExportWebp === false
     ) {
       // TODO: 多言語対応
-      alert('出力画像の形式を選択ください。');
+      await this.ipcService.showMessage('出力画像の形式を選択ください。');
       return;
     }
 
-    this._exportImages();
+    await this._exportImages();
   }
 
-  showFileSizeErrorMessage(): void {
+  async showFileSizeErrorMessage(): Promise<void> {
     // TODO: 多言語対応
-    alert(
+    await this.ipcService.showMessage(
       '連番画像のサイズが異なるため、APNGファイルの保存ができません。連番画像のサイズが統一されているか確認ください。'
     );
   }
 
-  async _exportImages() {
+  async _exportImages(): Promise<void> {
     if (this.apngFileSizeError && this.animationOptionData.enabledExportApng) {
-      this.showFileSizeErrorMessage();
+      await this.showFileSizeErrorMessage();
       return;
     }
 
@@ -201,7 +201,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   /**
    * ファイル選択ボタンが押された時のハンドラーです。
    */
-  async handleClickFileSelectButton() {
+  async handleClickFileSelectButton(): Promise<void> {
     this.showLockDialog();
     try {
       const files = await this.ipcService.openFileDialog();
@@ -218,7 +218,7 @@ export class AppComponent implements OnInit, AfterViewInit {
    *
    * @param filePathList
    */
-  setFilePathList(filePathList: string[]): void {
+  async setFilePathList(filePathList: string[]): Promise<void> {
     const path = this.ipcService.path;
     const isPngFile = (name: string) => path.extname(name) === '.png';
     // 	再度アイテムがドロップされたらリセットするように調整
@@ -230,7 +230,7 @@ export class AppComponent implements OnInit, AfterViewInit {
           0 // changeImageItemsでセットする際にソートされるので、一旦0で登録
         )
     );
-    this.changeImageItems(items);
+    await this.changeImageItems(items);
   }
 
   /**
@@ -252,11 +252,11 @@ export class AppComponent implements OnInit, AfterViewInit {
     });
   }
 
-  changeImageItems(items: ImageData[]): void {
+  async changeImageItems(items: ImageData[]): Promise<void> {
     this.items = items;
     this.numbering();
     if (items.length >= 1) {
-      this.checkImageSize(items);
+      await this.checkImageSize(items);
       this.animationOptionData.imageInfo.length = items.length;
     }
     this.isImageSelected = this.items.length >= 1;
@@ -280,7 +280,7 @@ export class AppComponent implements OnInit, AfterViewInit {
       // 不一致ならエラーフラグを立てた上でエラーメッセージを表示
       this.apngFileSizeError = true;
       const msg = `${errorItem.imageBaseName} ${this.localeData.VALIDATE_ImportImageSize}`;
-      alert(msg);
+      await this.ipcService.showMessage(msg);
     }
   }
 }
