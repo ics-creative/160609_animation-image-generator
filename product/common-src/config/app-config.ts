@@ -3,9 +3,9 @@
  */
 export const AppConfig = {
   /** アプリケーションのバージョン番号を示します。 */
-  version: '2.1.8',
+  version: '3.0',
   /** アナリティクス用のバージョン表記です。 */
-  analyticsVersion: '2.1.8',
+  analyticsVersion: '3.0',
   /** （ローカライズされていない）アプリケーション名です */
   appName: 'Animation Image Converter'
 } as const;
