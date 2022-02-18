@@ -1,6 +1,6 @@
 ﻿module.exports = {
   JP_NAME: 'アニメ画像に変換する君',
-  EN_NAME: 'animationimageconverter',
+  EN_NAME: 'AnimationImageConverter',
   COPY_RIGHT: 'Copyright (C) 2018 ICS INC.',
   JP_DESCRIPTION:
     '「アニメ画像に変換する君」は連番画像をLINEアニメーションスタンプや、Web用アニメーション画像に変換するアプリケーションです。',
