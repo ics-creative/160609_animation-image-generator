@@ -9,16 +9,20 @@ function convertWindowsStore() {
 
   electronWindowsStore({
     containerVirtualization: false,
-    inputDirectory: '.',
+    inputDirectory: `../${conf.EN_NAME}-win32-ia32`,
     outputDirectory: '../windows-store',
     flatten: false,
+    devCert: null,
+    publisher: 'CN=C2CC10C5-FAD8-43B5-BD98-00BD859F41D5',
+    appVersion: conf.APP_VERSION,
     packageVersion: conf.APP_VERSION,
     packageName: 'AnimationImageConverter',
     packageDisplayName: conf.JP_NAME,
     packageDescription: conf.JP_DESCRIPTION,
-    packageExecutable: `../animation-image-converter-win32-ia32/${conf.EN_NAME}.exe`,
+    // packageExecutable: `../animation-image-converter-win32-ia32/${conf.EN_NAME}.exe`,
+    windowsKit: 'C:/Program Files (x86)/Windows Kits/10/bin/10.0.17763.0/x64',
     deploy: false,
-    finalSay: function() {
+    finalSay: function () {
       console.log('exit');
       return new Promise((resolve, reject) => resolve());
     }
@@ -38,12 +42,12 @@ electronPackager({
   appVersion: conf.APP_VERSION,
   appCopyright: 'Copyright (C) 2018 ICS INC.'
 })
-  .then(appPaths => {
+  .then((appPaths) => {
     console.info('[electron-packager] success : ' + appPaths);
     // コードサイニング証明書を付与
     convertWindowsStore();
   })
-  .catch(err => {
+  .catch((err) => {
     // エラーが発生したのでログを表示して終了
     console.error('[electron-packager] failure : ' + err);
   });
