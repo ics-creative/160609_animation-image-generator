@@ -90,10 +90,8 @@ app.on('window-all-closed', () => {
 // アプリケーションがアクティブになった時の処理(Macだと、Dockがクリックされた時）
 app.on('activate', () => {
   /// メインウィンドウが消えている場合は再度メインウィンドウを作成する
-  console.log('active-with-open-window', mainWindow);
-  if (mainWindow === undefined) {
-    createWindow();
-  } else {
+  console.log('activate-window', mainWindow);
+  if (mainWindow) {
     mainWindow.show();
   }
 });
