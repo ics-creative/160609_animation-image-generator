@@ -1,6 +1,6 @@
 # アニメ画像に変換する君
 
-このソフトは連番画像をLINEアニメーションスタンプや、Web用アニメーション画像に変換するソフトウェアです。WindowsとOS Xに対応し、無償で提供しています。
+このソフトは連番画像をLINEアニメーションスタンプや、Web用アニメーション画像に変換するソフトウェアです。Windowsとmac OSに対応し、無償で提供しています。
 
 
 ![](imgs/help-thumb.png)
@@ -23,7 +23,7 @@
 
 次のURLからソフトウェアをダウンロードください。
 
-- [Windowsはこちらから](https://github.com/ics-creative/160609_animation-image-generator/blob/master/help/Help_Windows.md)
+- [Windows 7〜8.1はこちらから](https://github.com/ics-creative/160609_animation-image-generator/blob/master/help/Help_Windows.md)
 - [Windows 10以降はこちらから(Windows Store)](https://www.microsoft.com/ja-jp/p/%E3%82%A2%E3%83%8B%E3%83%A1%E7%94%BB%E5%83%8F%E3%81%AB%E5%A4%89%E6%8F%9B%E3%81%99%E3%82%8B%E5%90%9B/9n36kvc52st9?activetab)
 - [macOSはこちらから(Mac App Store)](https://itunes.apple.com/jp/app/anime-hua-xiangni-bian-huansuru/id1127676902?mt=12)
 
@@ -113,9 +113,9 @@ http://goo.gl/forms/5DUI1UnTUXR6AmCw2
 
 ## ソフトウェアについて
 
-無償でオープンソースとなっています。個人・商用利用ともにご自由にお使いください。アプリケーションのコードは本リポジトリで公開してます。
+個人・商用利用ともにご自由にお使いください。アプリケーションのソースコードは無償のオープンソースとして、本リポジトリで公開してます。
 
 ### 使用条件＆免責事項
 
 - 本ソフトウェアをダウンロードし、インストールすることによって生じる問題について、その責を負えませんのでご了承ください。
-- 本ソフトウェアの全てまたは一部を複製・再配布することを禁じます。
+- ビルドされた本ソフトウェアの全てまたは一部を複製・再配布することを禁じます。
