@@ -44,7 +44,6 @@ export class AppComponent implements OnInit, AfterViewInit {
   _isDragover = false;
   presetMode = PresetType.LINE;
   items: ImageData[] = [];
-  readonly gaUrl = AppConfig.analyticsUrl;
   PresetType = PresetType;
 
   @Input()
