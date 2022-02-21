@@ -19,7 +19,7 @@ function convertWindowsStore() {
     packageName: 'AnimationImageConverter',
     packageDisplayName: conf.JP_NAME,
     packageDescription: conf.JP_DESCRIPTION,
-    // packageExecutable: `../animation-image-converter-win32-ia32/${conf.EN_NAME}.exe`,
+    // Windows Kitへのパスは適宜自身の環境に合わせてください。
     windowsKit: 'C:/Program Files (x86)/Windows Kits/10/bin/10.0.17763.0/x64',
     deploy: false,
     finalSay: function () {
