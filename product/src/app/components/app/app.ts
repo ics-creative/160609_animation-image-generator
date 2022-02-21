@@ -220,7 +220,7 @@ export class AppComponent implements OnInit, AfterViewInit {
    */
   async setFilePathList(filePathList: string[]): Promise<void> {
     const path = this.ipcService.path;
-    const isPngFile = (name: string) => path.extname(name) === '.png';
+    const isPngFile = (name: string) => path.extname(name).toLowerCase() === '.png';
     // 	再度アイテムがドロップされたらリセットするように調整
     const items = filePathList.filter(isPngFile).map(
       (filePath) =>
