@@ -40,7 +40,7 @@ electronPackager({
   overwrite: true,
   asar: false,
   appVersion: conf.APP_VERSION,
-  appCopyright: 'Copyright (C) 2018 ICS INC.'
+  appCopyright: conf.COPY_RIGHT
 })
   .then((appPaths) => {
     console.info('[electron-packager] success : ' + appPaths);
