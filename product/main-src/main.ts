@@ -40,6 +40,7 @@ const createWindow = () => {
       nodeIntegration: false,
       contextIsolation: true,
       backgroundThrottling: false,
+      webviewTag: true,
       preload: path.join(__dirname, '../preload.js')
     }
   });
