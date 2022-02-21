@@ -12,7 +12,6 @@ function convertWindowsStore() {
     inputDirectory: `../${conf.EN_NAME}-win32-ia32`,
     outputDirectory: '../windows-store',
     flatten: false,
-    devCert: null,
     publisher: 'CN=C2CC10C5-FAD8-43B5-BD98-00BD859F41D5',
     appVersion: conf.APP_VERSION,
     packageVersion: conf.APP_VERSION,
