@@ -9,7 +9,7 @@ import {
 import { AppConfig } from '../../../../common-src/config/app-config';
 import { LocaleData } from '../../i18n/locale-data';
 import { LocaleManager } from '../../i18n/locale-manager';
-import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { DomSanitizer } from '@angular/platform-browser';
 import IpcService from '../../process/ipc.service';
 import { PresetType } from '../../../../common-src/type/PresetType';
 import { PresetLine } from '../../../../common-src/preset/preset-line';
@@ -44,7 +44,6 @@ export class AppComponent implements OnInit, AfterViewInit {
   _isDragover = false;
   presetMode = PresetType.LINE;
   items: ImageData[] = [];
-  gaUrl: SafeResourceUrl;
   PresetType = PresetType;
 
   @Input()
@@ -61,10 +60,6 @@ export class AppComponent implements OnInit, AfterViewInit {
     sanitizer: DomSanitizer,
     private ipcService: IpcService
   ) {
-    this.gaUrl = sanitizer.bypassSecurityTrustResourceUrl(
-      'http://ics-web.jp/projects/animation-image-tool/?v=' +
-        AppConfig.analyticsVersion
-    );
     new LocaleManager().applyClientLocale(localeData);
   }
 
