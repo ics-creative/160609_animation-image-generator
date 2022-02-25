@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Package
+   xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10"
+   xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10"
+   xmlns:rescap="http://schemas.microsoft.com/appx/manifest/foundation/windows10/restrictedcapabilities">
+  <Identity Name="14242ICSINC.47036A6FE912"
+    ProcessorArchitecture="x64"
+    Publisher="CN=C2CC10C5-FAD8-43B5-BD98-00BD859F41D5"
+    Version="3.0.0.0" />
+  <Properties>
+    <DisplayName>アニメ画像に変換する君</DisplayName>
+    <PublisherDisplayName>ICS INC.</PublisherDisplayName>
+    <Description>No description entered</Description>
+    <Logo>assets\SampleAppx.50x50.png</Logo>
+  </Properties>
+  <Resources>
+    <Resource Language="en-us" />
+  </Resources>
+  <Dependencies>
+    <TargetDeviceFamily Name="Windows.Desktop" MinVersion="10.0.14316.0" MaxVersionTested="10.0.14316.0" />
+  </Dependencies>
+  <Capabilities>
+    <rescap:Capability Name="runFullTrust"/>
+  </Capabilities>
+  <Applications>
+    <Application Id="AnimationImageConverter" Executable="app\AnimationImageConverter.exe" EntryPoint="Windows.FullTrustApplication">
+      <uap:VisualElements
+       BackgroundColor="transparent"
+       DisplayName="アニメ画像に変換する君"
+       Square150x150Logo="assets\SampleAppx.150x150.png"
+       Square44x44Logo="assets\SampleAppx.44x44.png"
+       Description="「アニメ画像に変換する君」は連番画像をLINEアニメーションスタンプや、Web用アニメーション画像に変換するアプリケーションです。">
+        <uap:DefaultTile Wide310x150Logo="assets\SampleAppx.310x150.png" />
+      </uap:VisualElements>
+    </Application>
+  </Applications>
+</Package>
