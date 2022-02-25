@@ -11,9 +11,9 @@ electronPackager({
   electronVersion: conf.ELECTRON_VERSION,
   overwrite: true,
   asar: false,
-  appBundleId: conf.sign.bundleId,
   appVersion: conf.APP_VERSION,
-  appCopyright: conf.COPY_RIGH
+  buildVersion: conf.BUILD_VERSION,
+  appCopyright: conf.COPY_RIGHT,
 })
   .then(appPaths => {
     console.info('[electron-packager] success : ' + appPaths);

@@ -1,3 +1,4 @@
 {
-  "main": "main.js"
+  "author": "ICS INC.",
+  "main": "./main-src/main.js"
 }

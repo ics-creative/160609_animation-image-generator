@@ -1,26 +1,24 @@
-// electron-packager ./tmp-release-mac 'アニメ画像に変換する君' --platform=mas --overwrite  --arch=x64 --app-bundle-id='media.ics.AnimationImageConverter'  --extend-info=dev/Info.plist  --version='1.2.3'  --app-version='1.2.0' --build-version='1.2.000' --icon='resources/app.icns' --overwrite
-// electron-osx-flat 'アニメ画像に変換する君-mas-x64/アニメ画像に変換する君.app' --identity '3rd Party Mac Developer Installer: ICS INC. (53YCXL8YSM)' --verbose --pkg AnimationImageConverter.pkg
-
+const process = require('process');
 const conf = require('./conf.js');
 
 const appDirectory = `${conf.JP_NAME}-mas-x64`;
 const appPath = `${appDirectory}/${conf.JP_NAME}.app`;
 
-// 開発バージョン
-// const signType = 'development' ;
-// リリースバージョン
-const signType = 'distribution';
+// 開発バージョン:development , リリースバージョン:distribution
+const signType = process.argv[3];
+
+const signConfigStr = require('fs').readFileSync(`../../cert/${signType}.json`, 'utf-8');
+const signConfig = JSON.parse(signConfigStr);
 
 function startFlat() {
   console.log('start flat...');
   const flat = require('electron-osx-sign').flat;
-
   const pkg = `AnimationImageConverter_${signType}.pkg`;
 
   flat(
     {
       app: appPath,
-      identity: conf.sign.identity,
+      identity: signConfig.flat.identity,
       pkg: `../${pkg}`,
       platform: 'mas'
     },
@@ -41,21 +39,25 @@ function startSign() {
 
   sign(
     {
-      app: appPath,
-      entitlements: 'resources/dev/parent.plist',
+      'app': appPath,
+      'entitlements': 'resources/dev/parent.plist',
       'entitlements-inherit': 'resources/dev/child.plist',
-      platform: 'mas',
-      'provisioning-profile': `resources/cert/${signType}.provisionprofile`,
-      type: signType
+      'platform': 'mas',
+      'provisioning-profile': `../../cert/${signType}.provisionprofile`,
+      'type': signType,
+      'identity': signConfig.sign.identity
     },
-    function(err) {
+    function (err) {
       if (err) {
         console.error(err);
         console.error('sign failure!');
 
         return;
       }
-      startFlat();
+      if (signConfig.flat.enabled)
+      {
+        startFlat();
+      }
     }
   );
 }
@@ -75,17 +77,17 @@ electronPackager({
   overwrite: true,
   asar: false,
   extendInfo: './resources/dev/info.plist',
-  appBundleId: conf.sign.bundleId,
+  appBundleId: signConfig.bundleId,
   appVersion: conf.APP_VERSION,
   buildVersion: conf.BUILD_VERSION,
-  appCopyright: 'Copyright (C) 2018 ICS INC.'
+  appCopyright: conf.COPY_RIGHT
 })
-  .then(appPaths => {
+  .then((appPaths) => {
     console.info('[electron-packager] success : ' + appPaths);
     // コードサイニング証明書を付与
     startSign();
   })
-  .catch(err => {
+  .catch((err) => {
     // エラーが発生したのでログを表示して終了
     console.error('[electron-packager] failure : ' + err);
   });

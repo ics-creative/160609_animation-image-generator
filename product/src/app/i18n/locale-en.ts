@@ -1,9 +1,8 @@
-'use strict';
-
+import { AppConfig } from '../../../common-src/config/app-config';
 import { LocaleData } from './locale-data';
 
 export class LocaleEnData extends LocaleData {
-  APP_NAME = 'Animation Image Converter';
+  APP_NAME = AppConfig.appName;
 
   PROP_use = 'Type';
   PROP_useItemLine = 'LINE Animation Stamp';
@@ -32,7 +31,7 @@ export class LocaleEnData extends LocaleData {
   PROP_tabQualityHWebp = 'Export as WebP';
   PROP_tabQualityHHtml = 'Export as HTML';
 
-  ROP_tabQualityHApngTooltip = '';
+  PROP_tabQualityHApngTooltip = '';
   PROP_tabQualityHWebpTooltip = '';
   PROP_tabQualityHHtmlTooltip = '';
 

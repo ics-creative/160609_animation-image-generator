@@ -9,16 +9,14 @@ import {
   OnInit,
   Output
 } from '@angular/core';
-import { AnimationImageOptions } from '../../data/animation-image-option';
-import { ImageData } from '../../data/image-data';
-import { LineStampValidator } from '../../validators/LineStampValidator';
-import { PresetType } from '../../type/PresetType';
 import { LocaleData } from '../../i18n/locale-data';
-
-declare function require(value: String): any;
+import { PresetType } from '../../../../common-src/type/PresetType';
+import { ImageData } from '../../../../common-src/data/image-data';
+import { AnimationImageOptions } from '../../../../common-src/data/animation-image-option';
+import { LineStampValidator } from '../../../../common-src/validators/LineStampValidator';
 
 @Component({
-  selector: 'anim-preview',
+  selector: 'app-anim-preview',
   templateUrl: './anim-preview.html',
   styleUrls: ['./anim-preview.scss']
 })
@@ -27,33 +25,35 @@ declare function require(value: String): any;
  */
 export class AnimPreviewComponent implements OnChanges, OnInit {
   @Input()
-  imagePath: string;
+  animationOptionData = new AnimationImageOptions();
 
   @Input()
-  animationOptionData: AnimationImageOptions;
+  items: ImageData[] = [];
 
   @Input()
-  items: ImageData[];
+  openingDirectories = false;
 
   /** ファイル選択ダイアログのイベントです。 */
   @Output()
   public clickFileSelectButtonEvent = new EventEmitter();
 
-  private playing = false;
-  private currentFrame = 0;
-  private currentLoopCount = 0;
-  private scaleValue = 1.0;
+  imagePath = '';
+  playing = false;
+  currentFrame = 0;
+  currentLoopCount = 0;
+  scaleValue = 1.0;
+  isValidFrameSize = true;
+  isValidFrameLength = true;
+  isValidTime = true;
+  cacheClearStamp = '';
+  localeData: LocaleData;
 
-  private isValidFrameSize = true;
-  private isValidFrameLength = true;
-  private isValidTime = true;
+  constructor(localeData: LocaleData) {
+    this.localeData = localeData;
+  }
 
-  private cacheClearStamp = '';
-
-  constructor(private localeData: LocaleData) {}
-
-  private selectScaleValue(scaleValue: number): void {
-    this.scaleValue = scaleValue;
+  selectScaleValue(scaleValue: string): void {
+    this.scaleValue = Number(scaleValue);
   }
 
   ngOnInit() {
@@ -74,7 +74,7 @@ export class AnimPreviewComponent implements OnChanges, OnInit {
     this.cacheClearStamp = Date.now() + '';
   }
 
-  private openDirectories(): void {
+  openDirectories(): void {
     this.clickFileSelectButtonEvent.emit(null);
   }
 
@@ -127,7 +127,7 @@ export class AnimPreviewComponent implements OnChanges, OnInit {
     }
   }
 
-  private resume(): void {
+  resume(): void {
     if (this.items) {
       this.playing = true;
 
@@ -136,7 +136,7 @@ export class AnimPreviewComponent implements OnChanges, OnInit {
     }
   }
 
-  private pause(): void {
+  pause(): void {
     if (this.items) {
       this.playing = false;
     }
@@ -144,9 +144,10 @@ export class AnimPreviewComponent implements OnChanges, OnInit {
 
   /**
    * 指定したフレームにタイムラインを移動し、停止します。
+   *
    * @param frame
    */
-  private gotoAndStop(frame: number): void {
+  gotoAndStop(frame: number): void {
     if (this.items) {
       this.playing = false;
       this.currentFrame = frame;

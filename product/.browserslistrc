@@ -1,0 +1,2 @@
+# https://stackoverflow.com/questions/70911458/angular-13-ng-build-library-fails-ivy-partial-compilation-mode
+# Angular CLI 13.2.0 のバグ回避のため、空の.browserslistrcが必要
