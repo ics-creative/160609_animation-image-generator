@@ -13,11 +13,11 @@ import { IpcId, IpcMainHandled } from '../common-src/ipc-id';
 import { ErrorMessage } from './error/error-message';
 import { ImageData } from '../common-src/data/image-data';
 import File from './file';
-import { ILocaleData } from '../common-src/i18n/locale-data.interface';
 import { ApplicationMenu } from './menu/application-menu';
 import { SaveDialog } from './dialog/SaveDialog';
 import { sendError } from './error/send-error';
 import { AppConfig } from '../common-src/config/app-config';
+import { localeData } from './locale-manager';
 
 // アプリケーション作成用のモジュールを読み込み
 const errorMessage = new ErrorMessage();
@@ -31,11 +31,13 @@ const handle: IpcMainHandled = (channel, listener) => {
   ipcMain.handle(channel, listener as any);
 };
 
+
 const createWindow = () => {
   // メインウィンドウを作成します
   mainWindow = new BrowserWindow({
     width: 800,
     height: 600,
+    title: localeData().APP_NAME,
     webPreferences: {
       nodeIntegration: false,
       contextIsolation: true,
@@ -78,10 +80,28 @@ const createWindow = () => {
       fileService = undefined;
     });
   }
+
+  // メニューを初期化
+  const menu: ApplicationMenu = new ApplicationMenu();
+  menu.createMenu(app);
+
+  // ファイルサービスを初期化
+  fileService = new File(
+    mainWindow,
+    app.getAppPath(),
+    errorMessage,
+    new SaveDialog(
+      mainWindow,
+      app.getPath('desktop'),
+      localeData().defaultFileName
+    )
+  );
 };
 
 //  初期化が完了した時の処理
-app.on('ready', createWindow);
+app.on('ready', () => {
+  createWindow();
+});
 
 // 全てのウィンドウが閉じたときの処理
 app.on('window-all-closed', () => {
@@ -115,31 +135,6 @@ handle(IpcId.OPEN_FILE_DIALOG, async () => {
   }
   const result = await dialog.showOpenDialog(mainWindow, dialogOption);
   return result.filePaths;
-});
-
-// UI→メインに設定を共有する
-handle(IpcId.SET_CONFIG_DATA, async (event, localeData: ILocaleData) => {
-  console.log(`${IpcId.SET_CONFIG_DATA} to ${localeData}`);
-
-  if (!mainWindow) {
-    return;
-  }
-
-  fileService = new File(
-    mainWindow,
-    localeData,
-    app.getAppPath(),
-    errorMessage,
-    new SaveDialog(
-      mainWindow,
-      app.getPath('desktop'),
-      localeData.defaultFileName
-    )
-  );
-  mainWindow.setTitle(localeData.APP_NAME);
-
-  const menu: ApplicationMenu = new ApplicationMenu(localeData);
-  menu.createMenu(app);
 });
 
 // エラーを送信
@@ -201,5 +196,5 @@ handle(IpcId.SHOW_MESSAGE, async (event, message: string, title?: string) => {
     buttons: ['OK'],
     title: title ?? AppConfig.appName,
     message: message
-})
-})
+  });
+});

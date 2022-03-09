@@ -7,8 +7,6 @@ import {
   ViewChild
 } from '@angular/core';
 import { AppConfig } from '../../../../common-src/config/app-config';
-import { LocaleData } from '../../i18n/locale-data';
-import { LocaleManager } from '../../i18n/locale-manager';
 import { DomSanitizer } from '@angular/platform-browser';
 import IpcService from '../../process/ipc.service';
 import { PresetType } from '../../../../common-src/type/PresetType';
@@ -18,6 +16,7 @@ import { AnimationImageOptions } from '../../../../common-src/data/animation-ima
 import { ImageData } from '../../../../common-src/data/image-data';
 import { checkImagePxSizeMatched } from './checkImagePxSizeMatched';
 import { loadPresetConfig, savePresetConfig } from './UserConfig';
+import { localeData } from 'app/i18n/locale-manager';
 
 const getFirstNumber = (text: string): number | undefined => {
   const numStr = text.match(/\d+/g)?.pop();
@@ -45,6 +44,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   presetMode = PresetType.LINE;
   items: ImageData[] = [];
   PresetType = PresetType;
+  localeData = localeData;
 
   @Input()
   animationOptionData = new AnimationImageOptions();
@@ -56,11 +56,9 @@ export class AppComponent implements OnInit, AfterViewInit {
   optionSelecterComponent?: ElementRef;
 
   constructor(
-    public localeData: LocaleData,
     sanitizer: DomSanitizer,
     private ipcService: IpcService
   ) {
-    new LocaleManager().applyClientLocale(localeData);
   }
 
   ngOnInit() {
@@ -71,8 +69,6 @@ export class AppComponent implements OnInit, AfterViewInit {
     // 初回プリセットの設定
     this.presetMode = loadPresetConfig();
     this.changePreset(this.presetMode);
-
-    this.ipcService.sendConfigData(this.localeData);
   }
 
   ngAfterViewInit() {

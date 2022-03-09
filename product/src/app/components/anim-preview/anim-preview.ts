@@ -9,11 +9,11 @@ import {
   OnInit,
   Output
 } from '@angular/core';
-import { LocaleData } from '../../i18n/locale-data';
 import { PresetType } from '../../../../common-src/type/PresetType';
 import { ImageData } from '../../../../common-src/data/image-data';
 import { AnimationImageOptions } from '../../../../common-src/data/animation-image-option';
 import { LineStampValidator } from '../../../../common-src/validators/LineStampValidator';
+import { localeData } from 'app/i18n/locale-manager';
 
 @Component({
   selector: 'app-anim-preview',
@@ -46,10 +46,9 @@ export class AnimPreviewComponent implements OnChanges, OnInit {
   isValidFrameLength = true;
   isValidTime = true;
   cacheClearStamp = '';
-  localeData: LocaleData;
+  localeData = localeData;
 
-  constructor(localeData: LocaleData) {
-    this.localeData = localeData;
+  constructor() {
   }
 
   selectScaleValue(scaleValue: string): void {

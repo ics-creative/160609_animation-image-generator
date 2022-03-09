@@ -5,7 +5,6 @@ import { FormsModule } from '@angular/forms';
 import { AppComponent } from './components/app/app';
 import { AnimPreviewComponent } from './components/anim-preview/anim-preview';
 import { PropertiesComponent } from './components/properties/properties';
-import { LocaleData } from './i18n/locale-data';
 // Bootstrapのスタイルシート側の機能を読み込む
 import 'bootstrap/dist/css/bootstrap.min.css';
 // BootstrapのJavaScript側の機能を読み込む
@@ -20,7 +19,7 @@ import IpcService from './process/ipc.service';
 @NgModule({
   declarations: [AppComponent, AnimPreviewComponent, PropertiesComponent],
   imports: [BrowserModule, FormsModule],
-  providers: [LocaleData, IpcService],
+  providers: [IpcService],
   bootstrap: [AppComponent]
 })
 /**
