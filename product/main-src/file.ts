@@ -3,7 +3,6 @@ import { ErrorMessage } from './error/error-message';
 import { sendError } from './error/send-error';
 import { AnimationImageOptions } from '../common-src/data/animation-image-option';
 import { ImageData } from '../common-src/data/image-data';
-import { ILocaleData } from '../common-src/i18n/locale-data.interface';
 import { PresetType } from '../common-src/type/PresetType';
 import { LineStampValidator } from '../common-src/validators/LineStampValidator';
 import * as fs from 'fs';
@@ -11,16 +10,15 @@ import { createInquiryCode } from './generators/createInquiryCode';
 import { execGenerate } from './generators/execGenerate';
 import { SaveDialog } from './dialog/SaveDialog';
 import { existsPath } from './fileFunctions/existsPath';
+import { localeData } from './locale-manager';
 export default class File {
   constructor(
     mainWindow: BrowserWindow,
-    localeData: ILocaleData,
     appPath: string,
     errorMessage: ErrorMessage,
     saveDialog: SaveDialog
   ) {
     this.mainWindow = mainWindow;
-    this.localeData = localeData;
     this.appPath = appPath;
     this.errorMessage = errorMessage;
     this.saveDialog = saveDialog;
@@ -30,7 +28,6 @@ export default class File {
   private readonly saveDialog: SaveDialog;
   private readonly errorMessage: ErrorMessage;
   private readonly appPath: string;
-  private readonly localeData: ILocaleData;
 
   public async exec(
     temporaryPath: string,
@@ -75,7 +72,7 @@ export default class File {
         inquiryCode,
         error.errDetail,
         errorStack || '',
-        this.localeData.APP_NAME,
+        localeData().APP_NAME,
         this.mainWindow
       );
     }
@@ -92,17 +89,17 @@ export default class File {
     const validateArr = LineStampValidator.validate(
       stat,
       animationOptionData,
-      this.localeData
+      localeData()
     );
 
     if (validateArr.length > 0) {
-      const message = this.localeData.VALIDATE_title;
+      const message = localeData().VALIDATE_title;
       const detailMessage = '・' + validateArr.join('\n\n・');
 
       const dialogOption: Electron.MessageBoxOptions = {
         type: 'info',
         buttons: ['OK'],
-        title: this.localeData.APP_NAME,
+        title: localeData().APP_NAME,
         message: message,
         detail: detailMessage
       };
