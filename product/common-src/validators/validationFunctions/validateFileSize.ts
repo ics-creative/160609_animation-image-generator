@@ -4,14 +4,14 @@ import { ValidationResult } from '../../type/ImageValidator';
 
 export const validateFileSize = (
   bytes: number,
-  max: number
+  maxBytes: number
 ): ValidationResult =>
-  bytes <= 300 * 1024
+  bytes <= maxBytes
     ? undefined
     : {
         message: fillString(
           getLocaleData().VALIDATE_size,
-          Math.floor(max) / 1024,
+          Math.floor(maxBytes) / 1024,
           Math.ceil(bytes / 1024)
         )
       };
