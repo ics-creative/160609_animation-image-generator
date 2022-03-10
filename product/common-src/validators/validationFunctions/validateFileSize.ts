@@ -2,6 +2,12 @@ import { fillString } from '../../i18n/fillString';
 import { getLocaleData } from '../../i18n/locale-manager';
 import { ValidationResult } from '../../type/ImageValidator';
 
+/**
+ * ファイルサイズが妥当かチェックします。
+ *
+ * @param bytes 
+ * @param maxBytes 
+ */
 export const validateFileSize = (
   bytes: number,
   maxBytes: number
