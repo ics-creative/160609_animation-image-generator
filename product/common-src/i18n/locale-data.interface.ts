@@ -58,12 +58,16 @@ export interface ILocaleData {
 
   VALIDATE_ImportImageSize: string;
   VALIDATE_title: string;
+
   VALIDATE_size: string;
   VALIDATE_amount: string;
-  VALIDATE_noLoop: string;
+  VALIDATE_loopCount: string;
   VALIDATE_time: string;
-  VALIDATE_maxSize: string;
-  VALIDATE_minSize: string;
+  VALIDATE_imgSizeExactMatch: string;
+  VALIDATE_imgSizeMaxBothAndMinOneside: string;
+  VALIDATE_imgSizeExactAndMin: string;
+
+  COMMON_listingConnma: string;
 
   defaultFileName: string;
 }

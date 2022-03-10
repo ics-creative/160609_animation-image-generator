@@ -61,17 +61,23 @@ export const localeDataEn: ILocaleData = {
 
   VALIDATE_ImportImageSize: `'s width and height is different from other image.`,
   VALIDATE_title: 'Warning for LINE Stamp',
-  VALIDATE_size: 'File size is over 300KB. This file is ${1}KB.',
+
+
+  VALIDATE_size: 'Size of the file is exceeded the limit (${1}). Current size is ${2}KB.',
   VALIDATE_amount:
-    'Please set 5 to 20 illustrations. This file contains ${1} illustrations.',
-  VALIDATE_noLoop: '',
+    'Please set ${1} to ${2} illustrations. This file contains ${3} illustrations.',
+  VALIDATE_loopCount:
+    'Please set loop count from ${1} to ${2}. Current setting is ${3}.',
   VALIDATE_time:
-    'Please set in any of the 1, 2, 3, 4 seconds playback time. This file is ${1}sec.',
-  VALIDATE_maxSize:
-    'Please set image size in W320×H270px. This file is W${1}×H${2}px.',
-  VALIDATE_minSize:
-    'Please be equal to or greater than the long side either 270px for Animation stamp image.' +
-    ' Width & Height in the case of the main image, please to 240px. This file is W${1}×H${2}px.',
+    'Playback time have to be one of ${1}seconds. Current Playback time is ${2}seconds.',
+  VALIDATE_imgSizeExactMatch:
+    'Image size have to be W${1} x H${2}px. Current size is W${3} x H${4}px',
+  VALIDATE_imgSizeMaxBothAndMinOneside:
+    'Image size have to be within W${1} x H${2}px and either W or H have to be larger then ${3}px. Current size is W${4} x H${5}px',
+  VALIDATE_imgSizeExactAndMin:
+    'Image size have to be either of W${1} x H${2} to ${3}px or W${4} to ${5} x H${6}px. Current size is W${7} x H${8}px',
+
+  COMMON_listingConnma: ', ',
 
   defaultFileName: 'Untitled'
 };
