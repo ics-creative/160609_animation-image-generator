@@ -69,13 +69,13 @@ export const localeDataEn: ILocaleData = {
   VALIDATE_loopCount:
     'Please set loop count from ${1} to ${2}. Current setting is ${3}.',
   VALIDATE_time:
-    'Playback time have to be one of ${1}seconds. Current Playback time is ${2}seconds.',
+    'Playback time have to be one of ${1}seconds. Current playback time is ${2}seconds.',
   VALIDATE_imgSizeExactMatch:
-    'Image size have to be W${1} x H${2}px. Current size is W${3} x H${4}px',
+    'Image size have to be W${1} x H${2}px. Current size is W${3} x H${4}px.',
   VALIDATE_imgSizeMaxBothAndMinOneside:
-    'Image size have to be within W${1} x H${2}px and either W or H have to be larger then ${3}px. Current size is W${4} x H${5}px',
+    'Image size have to be within W${1} x H${2}px and either W or H have to be larger then ${3}px. Current size is W${4} x H${5}px.',
   VALIDATE_imgSizeExactAndMin:
-    'Image size have to be either of W${1} x H${2} to ${3}px or W${4} to ${5} x H${6}px. Current size is W${7} x H${8}px',
+    'Image size have to be either of W${1} x H${2} to ${3}px or W${4} to ${5} x H${6}px. Current size is W${7} x H${8}px.',
 
   COMMON_listingConnma: ', ',
 
