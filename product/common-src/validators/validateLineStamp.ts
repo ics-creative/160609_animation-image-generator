@@ -14,7 +14,7 @@ export const validateLineStamp = (
   const validator = lineImageValidators[validationType];
 
   return {
-    filesizeError: stat ? validator.getFilesizeError(stat.size) : undefined,
+    fileSizeError: stat ? validator.getFileSizeError(stat.size) : undefined,
     frameCountError: validator.getFrameCountError(options.imageInfo.length),
     loopCountError: validator.getLoopCountError(options.loop),
     durationError: validator.getDurationError(
@@ -29,7 +29,7 @@ export const validateLineStamp = (
 
 /** バリデーションのエラーがなかったことを示す結果を返します */
 export const validateLineStampNoError = (): ImageValidatorResult => ({
-  filesizeError: undefined,
+  fileSizeError: undefined,
   frameCountError: undefined,
   loopCountError: undefined,
   durationError: undefined,

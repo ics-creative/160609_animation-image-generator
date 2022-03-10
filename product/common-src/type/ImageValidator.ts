@@ -9,7 +9,7 @@ export type ValidationResult = ValidationError | undefined;
 /** バリデータの定義 */
 export interface ImageValidator {
   /** ファイルサイズを検証し、エラーがあれば返します */
-  getFilesizeError: (bytes: number) => ValidationResult;
+  getFileSizeError: (bytes: number) => ValidationResult;
   /** ループ回数を検証し、エラーがあれば返します */
   getLoopCountError: (count: number) => ValidationResult;
   /** フレーム数を検証し、エラーがあれば返します */
@@ -23,7 +23,7 @@ export interface ImageValidator {
 /** バリデータのバリデーションエラーの型 */
 export interface ImageValidatorResult {
   /** ファイルサイズチェックエラー */
-  filesizeError: ValidationResult;
+  fileSizeError: ValidationResult;
   /** ループ回数チェックエラー */
   loopCountError: ValidationResult;
   /** フレーム数チェックエラー */

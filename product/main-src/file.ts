@@ -92,7 +92,7 @@ export default class File {
     const stat = fs.statSync(exportFilePath);
     const result = validateLineStamp(validationType, animationOptionData, stat);
     const errors = [
-      result.filesizeError,
+      result.fileSizeError,
       result.frameCountError,
       result.loopCountError,
       result.durationError,
