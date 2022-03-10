@@ -18,6 +18,7 @@ import { SaveDialog } from './dialog/SaveDialog';
 import { sendError } from './error/send-error';
 import { AppConfig } from '../common-src/config/app-config';
 import { localeData } from './locale-manager';
+import { LineValidationType } from '../common-src/type/LineValidationType';
 
 // アプリケーション作成用のモジュールを読み込み
 const errorMessage = new ErrorMessage();
@@ -159,7 +160,8 @@ handle(
     event,
     version: string,
     itemList: ImageData[],
-    animationOptionData: AnimationImageOptions
+    animationOptionData: AnimationImageOptions,
+    validationType: LineValidationType,
   ) => {
     console.log(version, itemList, animationOptionData);
 
@@ -169,7 +171,7 @@ handle(
       return;
     }
     return fileService
-      .exec(app.getPath('temp'), version, itemList, animationOptionData)
+      .exec(app.getPath('temp'), version, itemList, animationOptionData, validationType)
       .then(() => {
         console.log(`returnValue:true`);
         event.returnValue = true;

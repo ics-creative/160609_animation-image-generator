@@ -3,7 +3,7 @@ import {
   ImageValidator,
   ValidationResult
 } from '../type/ImageValidator';
-import { ValidationType } from '../type/ValidationType';
+import { LineValidationType } from '../type/LineValidationType';
 
 // メッセージ
 // TODO: localDataにマージする
@@ -160,10 +160,10 @@ const emojiDef: ImageValidator = {
   getImageSizeErrorExactMatch(w, h, 180, 180)
 };
 
-export const valifationDefinitions = {
-  [ValidationType.ANIMATION_MAIN]: animMainDef,
-  [ValidationType.ANIMATION_STAMP]: animStampDef,
-  [ValidationType.EFFECT]: effectAndPopupDef,
-  [ValidationType.POPUP]: effectAndPopupDef,
-  [ValidationType.EMOJI]: emojiDef
+export const lineImageValidators = {
+  [LineValidationType.ANIMATION_MAIN]: animMainDef,
+  [LineValidationType.ANIMATION_STAMP]: animStampDef,
+  [LineValidationType.EFFECT]: effectAndPopupDef,
+  [LineValidationType.POPUP]: effectAndPopupDef,
+  [LineValidationType.EMOJI]: emojiDef
 };

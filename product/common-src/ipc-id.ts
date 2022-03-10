@@ -1,6 +1,7 @@
 import { IpcMainInvokeEvent } from 'electron';
 import { AnimationImageOptions } from './data/animation-image-option';
 import { ImageData } from './data/image-data';
+import { LineValidationType } from './type/LineValidationType';
 
 // プロセス間通信のchannel名の定数定義です
 export const IpcId = {
@@ -27,7 +28,8 @@ interface IpcInvokeFuncs {
   [IpcId.EXEC_IMAGE_EXPORT_PROCESS]: (
     version: string,
     itemList: ImageData[],
-    animationOptionData: AnimationImageOptions
+    animationOptionData: AnimationImageOptions,
+    validationType: LineValidationType,
   ) => Promise<void>;
   [IpcId.OPEN_EXTERNAL_BROWSER]: (url: string) => Promise<void>;
   [IpcId.SHOW_MESSAGE]: (message: string, title?: string) => Promise<void>;

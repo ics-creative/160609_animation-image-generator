@@ -19,3 +19,17 @@ export interface ImageValidator {
   /** 画像サイズを検証し、エラーがあれば返します */
   getImageSizeError: (w: number, h: number) => ValidationResult;
 }
+
+/** バリデータのバリデーションエラーの型 */
+export interface ImageValidatorResult {
+  /** ファイルサイズチェックエラー */
+  filesizeError: ValidationResult;
+  /** ループ回数チェックエラー */
+  loopCountError: ValidationResult;
+  /** フレーム数チェックエラー */
+  frameCountError: ValidationResult;
+  /** 再生時間チェックエラー */
+  durationError: ValidationResult;
+  /** 画像サイズチェックエラー */
+  imageSizeError: ValidationResult;
+}
