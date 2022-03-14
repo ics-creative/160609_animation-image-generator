@@ -20,7 +20,7 @@ export interface ImageValidator {
   getImageSizeError: (w: number, h: number) => ValidationResult;
 }
 
-/** バリデータのバリデーションエラーの型 */
+/** バリデータのバリデーション結果の型 */
 export interface ImageValidatorResult {
   /** ファイルサイズチェックエラー */
   fileSizeError: ValidationResult;
