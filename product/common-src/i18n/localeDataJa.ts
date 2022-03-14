@@ -66,19 +66,35 @@ export const localeDataJa: ILocaleData = {
   VALIDATE_title:
     'APNGファイルを作成しましたが、LINEアニメーションスタンプのガイドラインに適しない箇所がありました。次の項目を再確認ください。',
 
-  VALIDATE_size: '出力した画像の容量が${1}KBを超えました(現在は${2}KBです)。',
-  VALIDATE_amount:
-    'イラストは最低${1}~最大${2}枚で設定ください(現在は${3}枚です)。',
-  VALIDATE_loopCount:
-    'ループ回数は${1}〜${2}の間で指定してください(現在は${3}回です)。',
-  VALIDATE_time:
-    '再生時間は${1}秒のいずれかで設定ください。現在の${2}秒は設定できません。',
-  VALIDATE_imgSizeExactMatch:
-    '画像サイズはW${1}×H${2}pxで制作ください。現在の画像サイズはW${3}×H${4}pxです。',
-  VALIDATE_imgSizeMaxBothAndMinOneside:
-    '画像サイズはW${1}×H${2}px以内かつ縦横どちらかは${3}px以上となるように制作ください。現在の画像サイズはW${4}×H${5}pxです。',
-  VALIDATE_imgSizeExactAndMin:
-    '画像サイズはW${1}×H${2}〜${3}pxまたはW${4}〜${5}×H${6}pxのいずれかで制作ください。現在の画像サイズはW${7}×H${8}pxです。',
+  VALIDATE_size: ({ max, current }) =>
+    `出力した画像の容量が${max}KBを超えました(現在は${current}KBです)。`,
+  VALIDATE_amount: ({ min, max, current }) =>
+    `イラストは最低${min}~最大${max}枚で設定ください(現在は${current}枚です)。`,
+  VALIDATE_loopCount: ({ min, max, current }) =>
+    `ループ回数は${min}〜${max}の間で指定してください(現在は${current}回です)。`,
+  VALIDATE_time: ({ valids, current }) =>
+    `再生時間は${valids}秒のいずれかで設定ください。現在の${current}秒は設定できません。`,
+  VALIDATE_imgSizeExactMatch: ({ exactW, exactH, currentW, currentH }) =>
+    `画像サイズはW${exactW}×H${exactH}pxで制作ください。現在の画像サイズはW${currentW}×H${currentH}pxです。`,
+  VALIDATE_imgSizeMaxBothAndMinOneside: ({
+    min,
+    maxW,
+    maxH,
+    currentW,
+    currentH
+  }) =>
+    `画像サイズはW${maxW}×H${maxH}px以内かつ縦横どちらかは${min}px以上となるように制作ください。現在の画像サイズはW${currentW}×H${currentH}pxです。`,
+  VALIDATE_imgSizeExactAndMin: ({
+    size1_exactW,
+    size1_minH,
+    size1_maxH,
+    size2_minW,
+    size2_maxW,
+    size2_exactH,
+    currentW,
+    currentH
+  }) =>
+    `画像サイズはW${size1_exactW}×H${size1_minH}〜${size1_maxH}pxまたはW${size2_minW}〜${size2_maxW}×H${size2_exactH}pxのいずれかで制作ください。現在の画像サイズはW${currentW}×H${currentH}pxです。`,
 
   COMMON_listingConnma: '、',
 

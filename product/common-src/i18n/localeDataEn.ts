@@ -62,20 +62,35 @@ export const localeDataEn: ILocaleData = {
   VALIDATE_ImportImageSize: `'s width and height is different from other image.`,
   VALIDATE_title: 'Warning for LINE Stamp',
 
-
-  VALIDATE_size: 'Size of the file is exceeded the limit (${1}). Current size is ${2}KB.',
-  VALIDATE_amount:
-    'Please set ${1} to ${2} illustrations. This file contains ${3} illustrations.',
-  VALIDATE_loopCount:
-    'Please set loop count from ${1} to ${2}. Current setting is ${3}.',
-  VALIDATE_time:
-    'Playback time have to be one of ${1}seconds. Current playback time is ${2}seconds.',
-  VALIDATE_imgSizeExactMatch:
-    'Image size have to be W${1} x H${2}px. Current size is W${3} x H${4}px.',
-  VALIDATE_imgSizeMaxBothAndMinOneside:
-    'Image size have to be within W${1} x H${2}px and either W or H have to be larger then ${3}px. Current size is W${4} x H${5}px.',
-  VALIDATE_imgSizeExactAndMin:
-    'Image size have to be either of W${1} x H${2} to ${3}px or W${4} to ${5} x H${6}px. Current size is W${7} x H${8}px.',
+  VALIDATE_size: ({ max, current }) =>
+    `Size of the file is exceeded the limit (${max}). Current size is ${current}KB.`,
+  VALIDATE_amount: ({ min, max, current }) =>
+    `Please set ${min} to ${max} illustrations. This file contains ${current} illustrations.`,
+  VALIDATE_loopCount: ({ min, max, current }) =>
+    `Please set loop count from ${min} to ${max}. Current setting is ${current}.`,
+  VALIDATE_time: ({ valids, current }) =>
+    `Playback time have to be one of ${valids}seconds. Current playback time is ${current}seconds.`,
+  VALIDATE_imgSizeExactMatch: ({ exactW, exactH, currentW, currentH }) =>
+    `Image size have to be W${exactW} x H${exactH}px. Current size is W${currentW} x H${currentH}px.`,
+  VALIDATE_imgSizeMaxBothAndMinOneside: ({
+    min,
+    maxW,
+    maxH,
+    currentW,
+    currentH
+  }) =>
+    `Image size have to be within W${maxW} x H${maxH}px and either W or H have to be larger then ${min}px. Current size is W${currentW} x H${currentH}px.`,
+  VALIDATE_imgSizeExactAndMin: ({
+    size1_exactW,
+    size1_minH,
+    size1_maxH,
+    size2_minW,
+    size2_maxW,
+    size2_exactH,
+    currentW,
+    currentH
+  }) =>
+    `Image size have to be either of W${size1_exactW} x H${size1_minH} to ${size1_maxH}px or W${size2_minW} to ${size2_maxW} x H${size2_exactH}px. Current size is W${currentW} x H${currentH}px.`,
 
   COMMON_listingConnma: ', ',
 

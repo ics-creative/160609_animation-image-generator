@@ -1,4 +1,3 @@
-import { fillString } from '../../i18n/fillString';
 import { getLocaleData } from '../../i18n/locale-manager';
 import { ValidationResult } from '../../type/ImageValidator';
 
@@ -15,13 +14,12 @@ export const validateImageSizeMaxBothAndMinOneside = (
   return isValidMax && isValidMin
     ? undefined
     : {
-        message: fillString(
-          getLocaleData().VALIDATE_imgSizeMaxBothAndMinOneside,
+        message: getLocaleData().VALIDATE_imgSizeMaxBothAndMinOneside({
           maxW,
           maxH,
           min,
-          w,
-          h
-        )
+          currentW: w,
+          currentH: h
+        })
       };
 };

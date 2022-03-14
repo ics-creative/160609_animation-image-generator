@@ -1,4 +1,3 @@
-import { fillString } from '../../i18n/fillString';
 import { getLocaleData } from '../../i18n/locale-manager';
 import { ValidationResult } from '../../type/ImageValidator';
 
@@ -28,19 +27,15 @@ export const validateImageSizeExactAndMin = (
   return isValidMax && (isValidExactW || isValidExactH)
     ? undefined
     : {
-        message: fillString(
-          getLocaleData().VALIDATE_imgSizeExactAndMin,
-          // W${1}×H${2}〜${3}px
-          exact,
-          minH,
-          exact,
-          // W${4}〜${5}×H${6}px
-          minW,
-          exact,
-          exact,
-          // W${7}×H${8}px
-          w,
-          h
-        )
+        message: getLocaleData().VALIDATE_imgSizeExactAndMin({
+          size1_exactW: exact,
+          size1_minH: minH,
+          size1_maxH: exact,
+          size2_minW: minW,
+          size2_maxW: exact,
+          size2_exactH: exact,
+          currentW: w,
+          currentH: h
+        })
       };
 };
