@@ -19,7 +19,6 @@
     ],
     "esModuleInterop": true
   },
-  "exclude": ["**/*.test.ts"],
   "angularCompilerOptions": {
     "strictTemplates": true
   }
