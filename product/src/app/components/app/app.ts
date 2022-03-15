@@ -113,6 +113,10 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.changePreset(this.presetMode);
   }
 
+  handleCheckRuleChange(rule:string){
+    console.log(rule)
+  }
+
   changePreset(presetMode: PresetType) {
     switch (presetMode) {
       case PresetType.LINE:
