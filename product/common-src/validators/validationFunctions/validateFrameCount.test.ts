@@ -24,7 +24,6 @@ describe('test framecount validator', () => {
   });
 
   test('should return error message in ja', () => {
-    const SIZE10KB = 10 * 1024;
     setLang('ja');
     const result = validateFrameCount(1, 5, 20);
     expect(result?.message).toBe(
@@ -33,7 +32,6 @@ describe('test framecount validator', () => {
   });
 
   test('should return error message in en', () => {
-    const SIZE10KB = 10 * 1024;
     setLang('en');
     const result = validateFrameCount(1, 5, 20);
     expect(result?.message).toBe(
