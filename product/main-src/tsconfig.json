@@ -8,8 +8,9 @@
     "moduleResolution": "node",
     "target": "es2017",
     "lib": ["es2017", "dom"],
-    },
+    "esModuleInterop": true
+  },
   "include": ["src/**/*.d.ts", "../common-src/**/*.ts", "**/*.ts"],
-  "exclude": ["vite.config.ts"],
+  "exclude": ["vite.config.ts", "**/*.test.ts", "../common-src/**/*.test.ts"],
   "typeRoots": ["../node_modules/@types"]
 }

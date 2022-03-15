@@ -16,8 +16,10 @@
     "lib": [
       "es2017",
       "dom"
-    ]
+    ],
+    "esModuleInterop": true
   },
+  "exclude": ["**/*.test.ts"],
   "angularCompilerOptions": {
     "strictTemplates": true
   }

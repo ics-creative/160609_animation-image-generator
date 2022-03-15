@@ -15,7 +15,8 @@
     "prebuild-win32": "npm run build && node build-scripts/for-windows-prebuild.js",
     "package-win32": "node build-scripts/for-windows-packaging.js",
     "package-windows-store": "node build-scripts/for-windows-store-packaging.js",
-    "_copy-asssets-to-dist": "node build-scripts/copy-assets-to-dist.js"
+    "_copy-asssets-to-dist": "node build-scripts/copy-assets-to-dist.js",
+    "test": "vitest"
   },
   "private": true,
   "dependencies": {
@@ -72,7 +73,8 @@
     "husky": "^2.7.0",
     "mkdirp": "^0.5.5",
     "prettier": "^2.5.1",
-    "typescript": "4.5.4"
+    "typescript": "4.5.4",
+    "vitest": "0.6.1"
   },
   "husky": {
     "hooks": {
