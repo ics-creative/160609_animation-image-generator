@@ -12,8 +12,13 @@ import {
 import { PresetType } from '../../../../common-src/type/PresetType';
 import { ImageData } from '../../../../common-src/data/image-data';
 import { AnimationImageOptions } from '../../../../common-src/data/animation-image-option';
-import { LineStampValidator } from '../../../../common-src/validators/LineStampValidator';
+import {
+  validateLineStamp,
+  validateLineStampNoError
+} from '../../../../common-src/validators/validateLineStamp';
 import { localeData } from 'app/i18n/locale-manager';
+import { ImageValidatorResult } from '../../../../common-src/type/ImageValidator';
+import { LineValidationType } from '../../../../common-src/type/LineValidationType';
 
 @Component({
   selector: 'app-anim-preview',
@@ -42,14 +47,11 @@ export class AnimPreviewComponent implements OnChanges, OnInit {
   currentFrame = 0;
   currentLoopCount = 0;
   scaleValue = 1.0;
-  isValidFrameSize = true;
-  isValidFrameLength = true;
-  isValidTime = true;
+  validationErrors: ImageValidatorResult = validateLineStampNoError();
   cacheClearStamp = '';
   localeData = localeData;
 
-  constructor() {
-  }
+  constructor() {}
 
   selectScaleValue(scaleValue: string): void {
     this.scaleValue = Number(scaleValue);
@@ -102,19 +104,10 @@ export class AnimPreviewComponent implements OnChanges, OnInit {
 
     // ここでバリデートするのは間違っていると思うが・・・・
     if (this.animationOptionData.preset === PresetType.LINE) {
-      this.isValidFrameSize =
-        LineStampValidator.validateFrameMaxSize(this.animationOptionData) &&
-        LineStampValidator.validateFrameMinSize(this.animationOptionData);
-      this.isValidFrameLength = LineStampValidator.validateFrameLength(
-        this.animationOptionData
-      );
-      this.isValidTime = LineStampValidator.validateTime(
-        this.animationOptionData
-      );
+      // TODO: バリデーションの種類をUIで指定できるようにする
+      this.validationErrors = validateLineStamp(LineValidationType.ANIMATION_STAMP, this.animationOptionData);
     } else {
-      this.isValidFrameSize = true;
-      this.isValidFrameLength = true;
-      this.isValidTime = true;
+      this.validationErrors = validateLineStampNoError();
     }
 
     if (!this.items || !this.playing) {
@@ -154,9 +147,5 @@ export class AnimPreviewComponent implements OnChanges, OnInit {
 
       this.imagePath = this.items[this.currentFrame].imagePath;
     }
-  }
-
-  private check(): boolean {
-    return false;
   }
 }

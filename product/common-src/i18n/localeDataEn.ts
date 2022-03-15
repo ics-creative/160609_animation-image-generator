@@ -61,17 +61,38 @@ export const localeDataEn: ILocaleData = {
 
   VALIDATE_ImportImageSize: `'s width and height is different from other image.`,
   VALIDATE_title: 'Warning for LINE Stamp',
-  VALIDATE_size: 'File size is over 300KB. This file is ${1}KB.',
-  VALIDATE_amount:
-    'Please set 5 to 20 illustrations. This file contains ${1} illustrations.',
-  VALIDATE_noLoop: '',
-  VALIDATE_time:
-    'Please set in any of the 1, 2, 3, 4 seconds playback time. This file is ${1}sec.',
-  VALIDATE_maxSize:
-    'Please set image size in W320×H270px. This file is W${1}×H${2}px.',
-  VALIDATE_minSize:
-    'Please be equal to or greater than the long side either 270px for Animation stamp image.' +
-    ' Width & Height in the case of the main image, please to 240px. This file is W${1}×H${2}px.',
+
+  VALIDATE_size: ({ max, current }) =>
+    `Size of the file is exceeded the limit (${max}). Current size is ${current}KB.`,
+  VALIDATE_amount: ({ min, max, current }) =>
+    `Please set ${min} to ${max} illustrations. This file contains ${current} illustrations.`,
+  VALIDATE_loopCount: ({ min, max, current }) =>
+    `Please set loop count from ${min} to ${max}. Current setting is ${current}.`,
+  VALIDATE_time: ({ valids, current }) =>
+    `Playback time have to be one of ${valids}seconds. Current playback time is ${current}seconds.`,
+  VALIDATE_imgSizeExactMatch: ({ exactW, exactH, currentW, currentH }) =>
+    `Image size have to be W${exactW} x H${exactH}px. Current size is W${currentW} x H${currentH}px.`,
+  VALIDATE_imgSizeMaxBothAndMinOneside: ({
+    min,
+    maxW,
+    maxH,
+    currentW,
+    currentH
+  }) =>
+    `Image size have to be within W${maxW} x H${maxH}px and either W or H have to be larger then ${min}px. Current size is W${currentW} x H${currentH}px.`,
+  VALIDATE_imgSizeExactAndMin: ({
+    size1_exactW,
+    size1_minH,
+    size1_maxH,
+    size2_minW,
+    size2_maxW,
+    size2_exactH,
+    currentW,
+    currentH
+  }) =>
+    `Image size have to be either of W${size1_exactW} x H${size1_minH} to ${size1_maxH}px or W${size2_minW} to ${size2_maxW} x H${size2_exactH}px. Current size is W${currentW} x H${currentH}px.`,
+
+  COMMON_listingConnma: ', ',
 
   defaultFileName: 'Untitled'
 };

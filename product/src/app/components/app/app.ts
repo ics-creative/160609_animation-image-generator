@@ -17,6 +17,7 @@ import { ImageData } from '../../../../common-src/data/image-data';
 import { checkImagePxSizeMatched } from './checkImagePxSizeMatched';
 import { loadPresetConfig, savePresetConfig } from './UserConfig';
 import { localeData } from 'app/i18n/locale-manager';
+import { LineValidationType } from '../../../../common-src/type/LineValidationType';
 
 const getFirstNumber = (text: string): number | undefined => {
   const numStr = text.match(/\d+/g)?.pop();
@@ -156,7 +157,9 @@ export class AppComponent implements OnInit, AfterViewInit {
       await this.ipcService.exec(
         AppConfig.version,
         this.items,
-        this.animationOptionData
+        this.animationOptionData,
+        // TODO: バリデーションの種類はUIから指定できるようにする
+        LineValidationType.ANIMATION_STAMP
       );
     } finally {
       this.hideLockDialog();

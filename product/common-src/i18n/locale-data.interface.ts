@@ -1,3 +1,10 @@
+/**
+ * メッセージ定義を関数として定義する場合の型定義です。
+ * 型引数に'key1' | 'key2'のようなstringのユニオン型を与えることでメッセージのパラメータを指定できます。
+ */
+type MsgFactory<K extends string> = (vals: {
+  [key in K]: number | string;
+}) => string;
 export interface ILocaleData {
   APP_NAME: string;
 
@@ -58,12 +65,29 @@ export interface ILocaleData {
 
   VALIDATE_ImportImageSize: string;
   VALIDATE_title: string;
-  VALIDATE_size: string;
-  VALIDATE_amount: string;
-  VALIDATE_noLoop: string;
-  VALIDATE_time: string;
-  VALIDATE_maxSize: string;
-  VALIDATE_minSize: string;
+
+  VALIDATE_size: MsgFactory<'max' | 'current'>;
+  VALIDATE_amount: MsgFactory<'min' | 'max' | 'current'>;
+  VALIDATE_loopCount: MsgFactory<'min' | 'max' | 'current'>;
+  VALIDATE_time: MsgFactory<'valids' | 'current'>;
+  VALIDATE_imgSizeExactMatch: MsgFactory<
+    'exactW' | 'exactH' | 'currentW' | 'currentH'
+  >;
+  VALIDATE_imgSizeMaxBothAndMinOneside: MsgFactory<
+    'min' | 'maxW' | 'maxH' | 'currentW' | 'currentH'
+  >;
+  VALIDATE_imgSizeExactAndMin: MsgFactory<
+    | 'size1_exactW'
+    | 'size1_minH'
+    | 'size1_maxH'
+    | 'size2_minW'
+    | 'size2_maxW'
+    | 'size2_exactH'
+    | 'currentW'
+    | 'currentH'
+  >;
+
+  COMMON_listingConnma: string;
 
   defaultFileName: string;
 }

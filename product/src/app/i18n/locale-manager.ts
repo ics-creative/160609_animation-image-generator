@@ -1,4 +1,7 @@
-import { localeDataFor } from "../../../common-src/i18n/getLocaleData";
+import { getLocaleData, setLang } from "../../../common-src/i18n/locale-manager";
+
+// レンダラープロセス側でメッセージ定義の言語を切り替えるモジュールです
+// レンダラー側では初期化時点で言語が取得できるため、メッセージ定義は静的に参照できます。
 
 /**
  * ユーザーの言語を判定します。
@@ -9,4 +12,5 @@ const getLocale = (): 'ja' | 'en' => {
   return nav.language.startsWith('ja') ? 'ja' : 'en';
 };
 
-export const localeData = localeDataFor(getLocale())
+setLang(getLocale())
+export const localeData = getLocaleData()
