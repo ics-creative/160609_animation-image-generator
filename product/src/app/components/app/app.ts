@@ -18,6 +18,11 @@ import { AnimationImageOptions } from '../../../../common-src/data/animation-ima
 import { ImageData } from '../../../../common-src/data/image-data';
 import { checkImagePxSizeMatched } from './checkImagePxSizeMatched';
 import { loadPresetConfig, savePresetConfig } from './UserConfig';
+import { CheckRuleType } from '../../../../common-src/type/checkRuleType';
+import {
+  checkRuleLabel,
+  checkRuleList
+} from '../../../../common-src/checkRule/checkRule';
 
 const getFirstNumber = (text: string): number | undefined => {
   const numStr = text.match(/\d+/g)?.pop();
@@ -45,6 +50,9 @@ export class AppComponent implements OnInit, AfterViewInit {
   presetMode = PresetType.LINE;
   items: ImageData[] = [];
   PresetType = PresetType;
+
+  readonly checkRuleList = checkRuleList;
+  readonly checkRuleLabel = checkRuleLabel;
 
   @Input()
   animationOptionData = new AnimationImageOptions();
@@ -113,8 +121,8 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.changePreset(this.presetMode);
   }
 
-  handleCheckRuleChange(rule:string){
-    console.log(rule)
+  handleCheckRuleChange(rule: CheckRuleType) {
+    console.log(rule);
   }
 
   changePreset(presetMode: PresetType) {

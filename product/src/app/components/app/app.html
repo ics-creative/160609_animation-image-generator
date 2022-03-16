@@ -35,19 +35,19 @@
     ></app-properties>
     <hr />
 
-
     <!-- チェックルール -->
     <div class="checkRule">
       <p class="checkRule_title">チェックルール</p>
-      <select #checkRuleSelector (change)="handleCheckRuleChange(checkRuleSelector.value)" class="form-control checkRule_selector">
-        <option [value]="'アニメーションスタンプ画像'">アニメーションスタンプ画像</option>
-        <option [value]="'アニメーションスタンプメイン画像'">アニメーションスタンプメイン画像</option>
-        <option [value]="'ポップアップスタンプ画像'">ポップアップスタンプ画像</option>
-        <option [value]="'エフェクトスタンプ画像'">エフェクトスタンプ画像</option>
-        <option [value]="'アニメーション絵文字'">アニメーション絵文字</option>
+      <select
+        #checkRuleSelector
+        (change)="handleCheckRuleChange(checkRuleSelector.value)"
+        class="form-control checkRule_selector"
+      >
+        <option *ngFor="let checkRule of checkRuleList" [value]="checkRule">
+          {{ checkRuleLabel[checkRule] }}
+        </option>
       </select>
     </div>
-
 
     <!-- アニメ画像を保存するボタン -->
     <div class="text-center">
