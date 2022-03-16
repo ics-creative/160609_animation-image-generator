@@ -55,3 +55,13 @@
   padding-right: 0;
   padding-left: 0;
 }
+
+.checkRule{
+  &_title{
+    margin: 24px 0 8px;
+  }
+  &_selector{
+    font-size: 14px;
+    margin-bottom: 48px;
+  }
+}
