@@ -63,7 +63,7 @@ export const localeDataEn: ILocaleData = {
   VALIDATE_title: 'Warning for LINE Stamp',
 
   VALIDATE_size: ({ max, current }) =>
-    `Size of the file is exceeded the limit (${max}). Current size is ${current}KB.`,
+    `Size of the file is exceeded the limit (${max}KB). Current size is ${current}KB.`,
   VALIDATE_amount: ({ min, max, current }) =>
     `Please set ${min} to ${max} illustrations. This file contains ${current} illustrations.`,
   VALIDATE_loopCount: ({ min, max, current }) =>

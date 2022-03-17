@@ -4,7 +4,7 @@
     "build-main": "cd ./main-src && vite build && cd ../",
     "clear-build": "node build-scripts/clear-build.js",
     "start": "tsc --project main-src/tsconfig.json && npm run _copy-asssets-to-dist && concurrently \"cross-env NODE_ENV=develop electron ./dist\" \"ng build --watch\"",
-    "lint": "eslint '{src,main-src}/**/*.{ts,html}' && tsc",
+    "lint": "eslint '{src,main-src}/**/*.{ts,html}' && tsc --project main-src/tsconfig.json",
     "format": "eslint --fix '{src,main-src}/**/*.{ts,html}' && prettier --write '{src,main-src}/**/*.{ts,scss,html}'",
     "release-darwin": "npm run prebuild-darwin && npm run package-darwin",
     "release-win32": "npm run prebuild-win32 && npm run package-win32",
@@ -15,7 +15,8 @@
     "prebuild-win32": "npm run build && node build-scripts/for-windows-prebuild.js",
     "package-win32": "node build-scripts/for-windows-packaging.js",
     "package-windows-store": "node build-scripts/for-windows-store-packaging.js",
-    "_copy-asssets-to-dist": "node build-scripts/copy-assets-to-dist.js"
+    "_copy-asssets-to-dist": "node build-scripts/copy-assets-to-dist.js",
+    "test": "vitest"
   },
   "private": true,
   "dependencies": {
@@ -72,7 +73,8 @@
     "husky": "^2.7.0",
     "mkdirp": "^0.5.5",
     "prettier": "^2.5.1",
-    "typescript": "4.5.4"
+    "typescript": "4.5.4",
+    "vitest": "0.6.1"
   },
   "husky": {
     "hooks": {
