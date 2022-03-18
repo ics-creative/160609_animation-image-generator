@@ -1,12 +1,14 @@
 /**
  * チェックルールのリストです
  */
+import {LineValidationType} from "../type/LineValidationType";
+
 export const checkRuleList = [
-  'animationStamp',
-  'animationStampMain',
-  'popupStamp',
-  'effectStamp',
-  'animationEmoji'
+  LineValidationType.ANIMATION_STAMP,
+  LineValidationType.ANIMATION_MAIN,
+  LineValidationType.POPUP,
+  LineValidationType.EFFECT,
+  LineValidationType.EMOJI
 ] as const;
 
 /**
