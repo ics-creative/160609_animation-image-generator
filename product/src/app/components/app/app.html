@@ -35,18 +35,20 @@
     ></app-properties>
     <hr />
 
-    <!-- チェックルール -->
-    <div class="checkRule mod-select-preset">
-      <p class="mb-2">チェックルール</p>
-      <select
-        #checkRuleSelector
-        (change)="handleCheckRuleChange(checkRuleSelector.value)"
-        class="form-control mb-4"
-      >
-        <option *ngFor="let checkRule of checkRuleList" [value]="checkRule">
-          {{ checkRuleLabel[checkRule] }}
-        </option>
-      </select>
+    <div *ngIf="animationOptionData.preset === PresetType.LINE">
+      <!-- チェックルール -->
+      <div class="checkRule mod-select-preset">
+        <p class="mb-2">チェックルール</p>
+        <select
+          #checkRuleSelector
+          (change)="handleCheckRuleChange(checkRuleSelector.value)"
+          class="form-control mb-4"
+        >
+          <option *ngFor="let checkRule of checkRuleList" [value]="checkRule">
+            {{ checkRuleLabel[checkRule] }}
+          </option>
+        </select>
+      </div>
     </div>
 
     <!-- アニメ画像を保存するボタン -->
