@@ -20,8 +20,8 @@
     <span
       class="badge"
       [ngClass]="{
-        'badge-success': isValidFrameSize,
-        'badge-danger': !isValidFrameSize
+        'badge-success': !validationErrors.imageSizeError,
+        'badge-danger': validationErrors.imageSizeError
       }"
       >W{{ animationOptionData.imageInfo.width }}×H{{
         animationOptionData.imageInfo.height
@@ -31,8 +31,8 @@
     <span
       class="badge"
       [ngClass]="{
-        'badge-success': isValidFrameLength,
-        'badge-danger': !isValidFrameLength
+        'badge-success': !validationErrors.frameCountError,
+        'badge-danger': validationErrors.frameCountError
       }"
       >{{ items.length }}</span
     >
@@ -41,8 +41,8 @@
       <span
         class="badge badge-success"
         [ngClass]="{
-          'badge-success': isValidTime,
-          'badge-danger': !isValidTime
+          'badge-success': !validationErrors.durationError,
+          'badge-danger': validationErrors.durationError
         }"
         >{{ (items.length * animationOptionData.loop) / animationOptionData.fps
         }}{{ localeData.PREV_infoTimeUnit }}</span

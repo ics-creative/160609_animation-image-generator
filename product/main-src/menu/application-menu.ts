@@ -1,16 +1,16 @@
 import { dialog, Menu, shell } from 'electron';
 import { AppConfig } from '../../common-src/config/app-config';
-import { ILocaleData } from '../../common-src/i18n/locale-data.interface';
+import { localeData } from '../locale-manager';
 
 /**
  * アプリケーションメニューの制御クラスです。
  */
 export class ApplicationMenu {
-  constructor(private localeData: ILocaleData) {}
+  constructor() {}
 
   public createMenu(app: Electron.App): void {
     const version = AppConfig.version;
-    const name = this.localeData.APP_NAME;
+    const name = localeData().APP_NAME;
     const template: any[] = [];
 
     // Macの場合以外のときで開発モードでなければMenuを空にする。
@@ -23,7 +23,7 @@ export class ApplicationMenu {
       label: name,
       submenu: [
         {
-          label: this.localeData.MENU_about,
+          label: localeData().MENU_about,
           click: () => {
             dialog.showMessageBox({
               message:
@@ -34,7 +34,7 @@ export class ApplicationMenu {
           }
         },
         {
-          label: this.localeData.MENU_quit,
+          label: localeData().MENU_quit,
           accelerator: 'Command+Q',
           click: () => {
             app.quit();
@@ -45,7 +45,7 @@ export class ApplicationMenu {
 
     const helpMenu: any[] = [
       {
-        label: this.localeData.MENU_helpOnline,
+        label: localeData().MENU_helpOnline,
         click: () => {
           shell.openExternal(
             'https://github.com/ics-creative/160609_animation-image-generator/tree/master/help'
@@ -53,14 +53,14 @@ export class ApplicationMenu {
         }
       },
       {
-        label: this.localeData.MENU_helpQuestion,
+        label: localeData().MENU_helpQuestion,
         click: () => {
           shell.openExternal('http://goo.gl/forms/5DUI1UnTUXR6AmCw2');
         }
       }
     ];
     template.push({
-      label: this.localeData.MENU_help,
+      label: localeData().MENU_help,
       submenu: helpMenu
     });
 
