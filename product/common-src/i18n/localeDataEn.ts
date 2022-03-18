@@ -94,5 +94,11 @@ export const localeDataEn: ILocaleData = {
 
   COMMON_listingConnma: ', ',
 
-  defaultFileName: 'Untitled'
+  defaultFileName: 'Untitled',
+
+  RULE_animation_stamp: 'Animation Stamp Image',
+  RULE_animation_main: 'Animation Stamp Main Image',
+  RULE_popup: 'Popup Stamp Image',
+  RULE_effect: 'Effect Stamp Image',
+  RULE_emoji: 'Animation Emoji'
 };

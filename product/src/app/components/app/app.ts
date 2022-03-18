@@ -18,11 +18,7 @@ import { checkImagePxSizeMatched } from './checkImagePxSizeMatched';
 import { loadPresetConfig, savePresetConfig } from './UserConfig';
 import { localeData } from 'app/i18n/locale-manager';
 import { LineValidationType } from '../../../../common-src/type/LineValidationType';
-import { CheckRuleType } from '../../../../common-src/type/checkRuleType';
-import {
-  checkRuleLabel,
-  checkRuleList
-} from '../../../../common-src/checkRule/checkRule';
+import { checkRuleList } from '../../../../common-src/checkRule/checkRule';
 
 const getFirstNumber = (text: string): number | undefined => {
   const numStr = text.match(/\d+/g)?.pop();
@@ -53,7 +49,13 @@ export class AppComponent implements OnInit, AfterViewInit {
   localeData = localeData;
 
   readonly checkRuleList = checkRuleList;
-  readonly checkRuleLabel = checkRuleLabel;
+  readonly checkRuleLabel = {
+    [LineValidationType.ANIMATION_STAMP]: localeData.RULE_animation_stamp,
+    [LineValidationType.ANIMATION_MAIN]: localeData.RULE_animation_main,
+    [LineValidationType.EFFECT]: localeData.RULE_effect,
+    [LineValidationType.POPUP]: localeData.RULE_popup,
+    [LineValidationType.EMOJI]: localeData.RULE_emoji
+  };
 
   @Input()
   animationOptionData = new AnimationImageOptions();
@@ -64,11 +66,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   @ViewChild('optionSelecter', { static: true })
   optionSelecterComponent?: ElementRef;
 
-  constructor(
-    sanitizer: DomSanitizer,
-    private ipcService: IpcService
-  ) {
-  }
+  constructor(sanitizer: DomSanitizer, private ipcService: IpcService) {}
 
   ngOnInit() {
     this.animationOptionData = new AnimationImageOptions();
@@ -118,7 +116,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.changePreset(this.presetMode);
   }
 
-  handleCheckRuleChange(rule: CheckRuleType) {
+  handleCheckRuleChange(rule: string) {
     console.log(rule);
   }
 
@@ -226,7 +224,8 @@ export class AppComponent implements OnInit, AfterViewInit {
    */
   async setFilePathList(filePathList: string[]): Promise<void> {
     const path = this.ipcService.path;
-    const isPngFile = (name: string) => path.extname(name).toLowerCase() === '.png';
+    const isPngFile = (name: string) =>
+      path.extname(name).toLowerCase() === '.png';
     // 	再度アイテムがドロップされたらリセットするように調整
     const items = filePathList.filter(isPngFile).map(
       (filePath) =>
