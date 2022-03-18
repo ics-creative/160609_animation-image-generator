@@ -137,8 +137,8 @@ const buildUniversal = async () => {
 
   // 再度binをコピー
   cpx.copySync(
-    `conf.packageTmpPath.darwin/bin`,
-    `${appPathUniversal}/Contents/Resources/app/`
+    `${conf.packageTmpPath.darwin}/bin/*`,
+    `${appPathUniversal}/Contents/Resources/app/bin/`
   );
 
   // x64, armの各ビルドを削除
