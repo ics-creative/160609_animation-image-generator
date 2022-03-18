@@ -36,12 +36,12 @@
     <hr />
 
     <!-- チェックルール -->
-    <div class="checkRule">
-      <p class="checkRule_title">チェックルール</p>
+    <div class="checkRule mod-select-preset">
+      <p class="mb-2">チェックルール</p>
       <select
         #checkRuleSelector
         (change)="handleCheckRuleChange(checkRuleSelector.value)"
-        class="form-control checkRule_selector"
+        class="form-control mb-4"
       >
         <option *ngFor="let checkRule of checkRuleList" [value]="checkRule">
           {{ checkRuleLabel[checkRule] }}
