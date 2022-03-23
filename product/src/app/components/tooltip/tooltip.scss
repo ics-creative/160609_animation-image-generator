@@ -1,0 +1,21 @@
+.optimise-tip{
+  background-color: #fff;
+  width: 270px;
+  padding: 16px;
+  position: relative;
+  left: 400px;
+  top: 60px;
+  border-radius: 8px;
+  filter: drop-shadow(0px 0px 4px rgba(0,0,0,0.25));
+  &:after{
+    position: absolute;
+    top: 16px;
+    left: -10px;
+    width: 10px;
+    height: 14px;
+    content: '';
+    background-image: url("../../../assets/imgs/hukidashi-triangle.png");
+    background-repeat: no-repeat;
+  }
+
+}
