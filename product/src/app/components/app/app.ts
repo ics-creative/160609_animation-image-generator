@@ -48,6 +48,8 @@ export class AppComponent implements OnInit, AfterViewInit {
   PresetType = PresetType;
   localeData = localeData;
 
+  tooltip=""
+
   readonly checkRuleList = checkRuleList;
   readonly checkRuleLabel = {
     [LineValidationType.ANIMATION_STAMP]: localeData.RULE_animation_stamp,

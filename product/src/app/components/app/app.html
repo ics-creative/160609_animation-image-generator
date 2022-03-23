@@ -32,8 +32,11 @@
     <!-- プロパティ変更画面 -->
     <app-properties
       [animationOptionData]="animationOptionData"
+      (showTooltipEvent)="tooltip = $event"
     ></app-properties>
     <hr />
+
+    tooltip:{{tooltip}}
 
     <div *ngIf="animationOptionData.preset === PresetType.LINE">
       <!-- チェックルール -->
@@ -75,7 +78,7 @@
   </div>
 
   <!-- ツールチップ -->
-  <div class="fixed-top">
+  <div class="fixed-top" style="pointer-events: none">
     <app-tooltip></app-tooltip>
   </div>
 </div>
