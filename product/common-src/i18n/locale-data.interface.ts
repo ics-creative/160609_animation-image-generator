@@ -63,6 +63,14 @@ export interface ILocaleData {
   MENU_helpOnline: string;
   MENU_helpQuestion: string;
 
+  HTML_lang: string;
+  HTML_availableFirefoxSafariChrome: string;
+  HTML_cantAnimateOnIE: string;
+  HTML_cantViewOnIE: string;
+  HTML_forWebpSupportedBrowsers: string;
+  HTML_forWebpUnsupportedBrowsers: string;
+  HTML_backgroundCssComment: string;
+
   VALIDATE_ImportImageSize: string;
   VALIDATE_title: string;
 

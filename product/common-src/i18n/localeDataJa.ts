@@ -61,6 +61,14 @@ export const localeDataJa: ILocaleData = {
   MENU_helpOnline: 'オンラインヘルプ',
   MENU_helpQuestion: '不具合報告＆機能要望',
 
+  HTML_lang: 'ja',
+  HTML_availableFirefoxSafariChrome: 'Firefox, Safari, Chromeで再生可能',
+  HTML_cantAnimateOnIE: 'IEではアニメは再生できません',
+  HTML_cantViewOnIE: 'IEでは表示できません',
+  HTML_forWebpSupportedBrowsers: 'webp対応ブラウザ用',
+  HTML_forWebpUnsupportedBrowsers: 'webp非対応ブラウザ用',
+  HTML_backgroundCssComment: 'プレビュー背景のチェック模様をCSSで表示する',
+
   VALIDATE_ImportImageSize:
     'の幅・高さが他の画像と異なっています。連番画像のサイズが統一されているか確認ください。',
   VALIDATE_title:
