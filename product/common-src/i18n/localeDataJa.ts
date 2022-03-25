@@ -33,8 +33,8 @@ export const localeDataJa: ILocaleData = {
   PROP_tabQualityHWebp: 'WebPファイル出力',
   PROP_tabQualityHHtml: 'HTMLファイル出力',
 
-  PROP_tabQualityHApngTooltip: 'APNGはFirefoxやSafari用のアニメ画像形式です',
-  PROP_tabQualityHWebpTooltip: 'WebPはChromeブラウザ用のアニメ画像形式です',
+  PROP_tabQualityHApngTooltip: 'APNGはほとんどの主要ブラウザーで利用できるアニメ画像形式です',
+  PROP_tabQualityHWebpTooltip: 'WebPはAPNGよりも新しいアニメ画像形式です。古いブラウザー等では表示や再生ができないことがあります',
   PROP_tabQualityHHtmlTooltip: 'アニメ画像を表示するためのHTMLを作成します',
 
   PROP_btnSave: 'アニメ画像を保存する',

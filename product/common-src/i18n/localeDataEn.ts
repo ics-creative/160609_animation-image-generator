@@ -31,9 +31,9 @@ export const localeDataEn: ILocaleData = {
   PROP_tabQualityHWebp: 'Export as WebP',
   PROP_tabQualityHHtml: 'Export as HTML',
 
-  PROP_tabQualityHApngTooltip: '',
-  PROP_tabQualityHWebpTooltip: '',
-  PROP_tabQualityHHtmlTooltip: '',
+  PROP_tabQualityHApngTooltip: 'APNG is an animated image format that supported by most of major browsers.',
+  PROP_tabQualityHWebpTooltip: 'WebP is a newer format for animated image. Some old browsers don\'t support to display or play.',
+  PROP_tabQualityHHtmlTooltip: 'generate html file for preview output images.',
 
   PROP_btnSave: 'Export',
 
