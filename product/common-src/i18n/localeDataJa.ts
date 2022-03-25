@@ -65,8 +65,8 @@ export const localeDataJa: ILocaleData = {
   HTML_availableFirefoxSafariChrome: 'Firefox, Safari, Chromeで再生可能',
   HTML_cantAnimateOnIE: 'IEではアニメは再生できません',
   HTML_cantViewOnIE: 'IEでは表示できません',
-  HTML_forWebpSupportedBrowsers: 'webp対応ブラウザ用',
-  HTML_forWebpUnsupportedBrowsers: 'webp非対応ブラウザ用',
+  HTML_forWebpSupportedBrowsers: 'WebP対応ブラウザ用',
+  HTML_forWebpUnsupportedBrowsers: 'WebP非対応ブラウザ用',
   HTML_backgroundCssComment: 'プレビュー背景のチェック模様をCSSで表示する',
 
   VALIDATE_ImportImageSize:
