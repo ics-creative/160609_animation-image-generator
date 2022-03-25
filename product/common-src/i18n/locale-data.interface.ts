@@ -91,6 +91,7 @@ export interface ILocaleData {
 
   defaultFileName: string;
 
+  CHECK_RULE: string;
   RULE_animation_stamp: string;
   RULE_animation_main: string;
   RULE_popup: string;

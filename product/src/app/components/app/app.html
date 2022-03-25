@@ -38,7 +38,7 @@
     <div *ngIf="animationOptionData.preset === PresetType.LINE">
       <!-- チェックルール -->
       <div class="checkRule mod-select-preset">
-        <p class="mb-2">チェックルール</p>
+        <p class="mb-2">{{ localeData.CHECK_RULE }}</p>
         <select
           #checkRuleSelector
           (change)="handleCheckRuleChange(checkRuleSelector.value)"
