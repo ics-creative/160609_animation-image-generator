@@ -31,9 +31,9 @@ export const localeDataEn: ILocaleData = {
   PROP_tabQualityHWebp: 'Export as WebP',
   PROP_tabQualityHHtml: 'Export as HTML',
 
-  PROP_tabQualityHApngTooltip: '',
-  PROP_tabQualityHWebpTooltip: '',
-  PROP_tabQualityHHtmlTooltip: '',
+  PROP_tabQualityHApngTooltip: 'APNG is an animated image format that supported by most of major browsers.',
+  PROP_tabQualityHWebpTooltip: 'WebP is a newer format for animated image. Some old browsers don\'t support to display or play.',
+  PROP_tabQualityHHtmlTooltip: 'generate html file for preview output images.',
 
   PROP_btnSave: 'Export',
 
@@ -58,6 +58,14 @@ export const localeDataEn: ILocaleData = {
   MENU_help: 'Help',
   MENU_helpOnline: 'Online Help',
   MENU_helpQuestion: 'Report Issues',
+
+  HTML_lang: 'en',
+  HTML_availableFirefoxSafariChrome: 'Animation available on Firefox, Safari and Chrome',
+  HTML_cantAnimateOnIE: 'IE does not support to play the animation',
+  HTML_cantViewOnIE: 'IE does not support to display the image',
+  HTML_forWebpSupportedBrowsers: 'for WebP supported browsers',
+  HTML_forWebpUnsupportedBrowsers: 'for WebP unsupported browsers',
+  HTML_backgroundCssComment: 'Paint checkerboard pattern for preview background using CSS',
 
   VALIDATE_ImportImageSize: `'s width and height is different from other image.`,
   VALIDATE_title: 'Warning for LINE Stamp',

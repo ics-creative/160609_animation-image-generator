@@ -33,8 +33,8 @@ export const localeDataJa: ILocaleData = {
   PROP_tabQualityHWebp: 'WebPファイル出力',
   PROP_tabQualityHHtml: 'HTMLファイル出力',
 
-  PROP_tabQualityHApngTooltip: 'APNGはFirefoxやSafari用のアニメ画像形式です',
-  PROP_tabQualityHWebpTooltip: 'WebPはChromeブラウザ用のアニメ画像形式です',
+  PROP_tabQualityHApngTooltip: 'APNGはほとんどの主要ブラウザーで利用できるアニメ画像形式です',
+  PROP_tabQualityHWebpTooltip: 'WebPはAPNGよりも新しいアニメ画像形式です。古いブラウザー等では表示や再生ができないことがあります',
   PROP_tabQualityHHtmlTooltip: 'アニメ画像を表示するためのHTMLを作成します',
 
   PROP_btnSave: 'アニメ画像を保存する',
@@ -60,6 +60,14 @@ export const localeDataJa: ILocaleData = {
   MENU_help: 'ヘルプ',
   MENU_helpOnline: 'オンラインヘルプ',
   MENU_helpQuestion: '不具合報告＆機能要望',
+
+  HTML_lang: 'ja',
+  HTML_availableFirefoxSafariChrome: 'Firefox, Safari, Chromeで再生可能',
+  HTML_cantAnimateOnIE: 'IEではアニメは再生できません',
+  HTML_cantViewOnIE: 'IEでは表示できません',
+  HTML_forWebpSupportedBrowsers: 'WebP対応ブラウザ用',
+  HTML_forWebpUnsupportedBrowsers: 'WebP非対応ブラウザ用',
+  HTML_backgroundCssComment: 'プレビュー背景のチェック模様をCSSで表示する',
 
   VALIDATE_ImportImageSize:
     'の幅・高さが他の画像と異なっています。連番画像のサイズが統一されているか確認ください。',
