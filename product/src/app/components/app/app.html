@@ -1,4 +1,4 @@
-<div class="app-component" #myComponent [ngClass]="{ isDragOver: _isDragover }">
+<div class="app-component"  #myComponent [ngClass]="{ isDragOver: _isDragover }">
   <div class="mod-setting p-3">
     <!-- プリセット切り替え -->
     <div class="row mb-4 align-items-center mod-select-preset">
@@ -32,7 +32,7 @@
     <!-- プロパティ変更画面 -->
     <app-properties
       [animationOptionData]="animationOptionData"
-      (showTooltipEvent)="tooltip = $event"
+      (showTooltipEvent)="changeTooltipShowing($event)"
     ></app-properties>
     <hr />
 
@@ -78,8 +78,8 @@
   </div>
 
   <!-- ツールチップ -->
-  <div class="fixed-top" style="pointer-events: none">
-    <app-tooltip></app-tooltip>
+  <div>
+    <app-tooltip [showingTooltip]="tooltip" (changeTooltipShowing)="changeTooltipShowing($event)"></app-tooltip>
   </div>
 </div>
 

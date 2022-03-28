@@ -48,7 +48,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   PresetType = PresetType;
   localeData = localeData;
 
-  tooltip=""
+  tooltip = '';
 
   readonly checkRuleList = checkRuleList;
   readonly checkRuleLabel = {
@@ -289,5 +289,15 @@ export class AppComponent implements OnInit, AfterViewInit {
       const msg = `${errorItem.imageBaseName} ${this.localeData.VALIDATE_ImportImageSize}`;
       await this.ipcService.showMessage(msg);
     }
+  }
+
+  changeTooltipShowing(message: string) {
+    console.log(message);
+    if (this.tooltip !== '') {
+      this.tooltip = '';
+    } else {
+      this.tooltip = message;
+    }
+    console.log(this.tooltip);
   }
 }

@@ -1,6 +1,6 @@
-<div>
-  <div class="optimise-tip">
-    <h3 class="h4">容量最適化とは...？</h3>
+<div (click)="hideTooltip($event)"  class="fixed-top">
+  <div class="optimise-tip"  #element *ngIf="showingTooltip === 'optimise' ">
+    <h3 class="h4">容量最適化とは...？{{showingTooltip}}</h3>
     <p>
       ファイルを圧縮し容量を最適化します。圧縮方式により処理時間や容量が変わります。
     </p>

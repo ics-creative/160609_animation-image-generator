@@ -27,6 +27,6 @@ export class PropertiesComponent {
 
   showTooltip(){
     console.log("showTooltip")
-    this.showTooltipEvent.emit("最適化")
+    this.showTooltipEvent.emit("optimise")
   }
 }
