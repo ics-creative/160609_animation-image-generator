@@ -102,5 +102,12 @@ export const localeDataEn: ILocaleData = {
 
   COMMON_listingConnma: ', ',
 
-  defaultFileName: 'Untitled'
+  defaultFileName: 'Untitled',
+
+  RULE_title: 'Check Rule',
+  RULE_animation_stamp: 'Animated Stickers Images',
+  RULE_animation_main: 'Animated Stickers Main Image',
+  RULE_popup: 'Pop-up stickers Image',
+  RULE_effect: 'Effect stickers Image',
+  RULE_emoji: 'Animated emoji'
 };

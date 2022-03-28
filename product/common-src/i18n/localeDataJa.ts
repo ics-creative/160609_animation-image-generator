@@ -106,5 +106,12 @@ export const localeDataJa: ILocaleData = {
 
   COMMON_listingConnma: '、',
 
-  defaultFileName: '名称未設定'
+  defaultFileName: '名称未設定',
+
+  RULE_title: 'チェックルール',
+  RULE_animation_stamp: 'アニメーションスタンプ画像',
+  RULE_animation_main: 'アニメーションスタンプメイン画像',
+  RULE_popup: 'ポップアップスタンプ画像',
+  RULE_effect: 'エフェクトスタンプ画像',
+  RULE_emoji: 'アニメーション絵文字'
 };

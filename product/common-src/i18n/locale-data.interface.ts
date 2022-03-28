@@ -98,4 +98,11 @@ export interface ILocaleData {
   COMMON_listingConnma: string;
 
   defaultFileName: string;
+
+  RULE_title: string;
+  RULE_animation_stamp: string;
+  RULE_animation_main: string;
+  RULE_popup: string;
+  RULE_effect: string;
+  RULE_emoji: string;
 }
