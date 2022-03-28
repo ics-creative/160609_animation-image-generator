@@ -1,4 +1,10 @@
-import {Component, EventEmitter, Input, Output, ViewChild} from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  Output,
+  ViewChild
+} from '@angular/core';
 
 @Component({
   selector: 'app-tooltip',
@@ -7,21 +13,24 @@ import {Component, EventEmitter, Input, Output, ViewChild} from '@angular/core';
 })
 export class TooltipComponent {
   @ViewChild('element')
-  element:any;
+  element: any;
   @Input()
   showingTooltip = '';
 
   @Output()
-  changeTooltipShowing =  new EventEmitter<string>()
+  changeTooltipShowing = new EventEmitter<string>();
 
   hideTooltip(event: MouseEvent) {
-    console.log(event.target, this.element.nativeElement,!this.element.nativeElement.contains(event.target));
+    console.log(
+      event.target,
+      this.element.nativeElement,
+      !this.element.nativeElement.contains(event.target)
+    );
     if (!(event.target instanceof HTMLElement)) {
       return;
     }
-    if(!this.element.nativeElement.contains(event.target)){
-      this.changeTooltipShowing.emit("")
+    if (!this.element.nativeElement.contains(event.target)) {
+      this.changeTooltipShowing.emit('');
     }
-
   }
 }

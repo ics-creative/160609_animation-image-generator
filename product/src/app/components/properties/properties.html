@@ -111,19 +111,21 @@
         class="card card-block p-4 mb-4"
       >
         <!-- 圧縮方法 -->
-        <div class="checkbox">
+        <div class="checkbox d-flex align-items-start">
           <label
+            class="d-flex align-items-center"
             data-toggle="tooltip"
             data-placement="right"
             title="{{ localeData.PROP_tabQualityApngOptTooltip }}"
           >
             <input
               type="checkbox"
+              class="mr-1"
               [(ngModel)]="animationOptionData.enabledPngCompress"
             />
             {{ localeData.PROP_tabQualityApngOpt }}
           </label>
-          <button (click)="showTooltip()">?</button>
+          <i class="fa fa-question-circle ml-2" (click)="showTooltip()"></i>
         </div>
 
         <!-- 圧縮方式 -->

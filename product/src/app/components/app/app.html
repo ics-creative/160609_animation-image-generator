@@ -36,8 +36,6 @@
     ></app-properties>
     <hr />
 
-    tooltip:{{tooltip}}
-
     <div *ngIf="animationOptionData.preset === PresetType.LINE">
       <!-- チェックルール -->
       <div class="checkRule mod-select-preset">
@@ -79,7 +77,10 @@
 
   <!-- ツールチップ -->
   <div>
-    <app-tooltip [showingTooltip]="tooltip" (changeTooltipShowing)="changeTooltipShowing($event)"></app-tooltip>
+    <app-tooltip
+      [showingTooltip]="tooltip"
+      (changeTooltipShowing)="changeTooltipShowing($event)"
+    ></app-tooltip>
   </div>
 </div>
 
