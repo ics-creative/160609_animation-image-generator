@@ -108,7 +108,7 @@ export const localeDataJa: ILocaleData = {
 
   defaultFileName: '名称未設定',
 
-  CHECK_RULE: 'チェックルール',
+  RULE_title: 'チェックルール',
   RULE_animation_stamp: 'アニメーションスタンプ画像',
   RULE_animation_main: 'アニメーションスタンプメイン画像',
   RULE_popup: 'ポップアップスタンプ画像',

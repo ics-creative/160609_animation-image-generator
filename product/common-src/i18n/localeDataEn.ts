@@ -104,7 +104,7 @@ export const localeDataEn: ILocaleData = {
 
   defaultFileName: 'Untitled',
 
-  CHECK_RULE: 'チェックルール',
+  RULE_title: 'Check Rule',
   RULE_animation_stamp: 'Animated Stickers Images',
   RULE_animation_main: 'Animated Stickers Main Image',
   RULE_popup: 'Pop-up stickers Image',
