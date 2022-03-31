@@ -19,6 +19,7 @@ import { loadPresetConfig, savePresetConfig } from './UserConfig';
 import { localeData } from 'app/i18n/locale-manager';
 import { LineValidationType } from '../../../../common-src/type/LineValidationType';
 import { checkRuleList } from '../../../../common-src/checkRule/checkRule';
+import { Tooltip } from '../../../../common-src/type/TooltipType';
 
 const getFirstNumber = (text: string): number | undefined => {
   const numStr = text.match(/\d+/g)?.pop();
@@ -48,7 +49,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   PresetType = PresetType;
   localeData = localeData;
 
-  tooltip = '';
+  showingTooltip: Tooltip | null = null;
 
   readonly checkRuleList = checkRuleList;
   readonly checkRuleLabel = {
@@ -291,13 +292,16 @@ export class AppComponent implements OnInit, AfterViewInit {
     }
   }
 
-  changeTooltipShowing(message: string) {
+  /**
+   *
+   * @param message
+   */
+  changeTooltipShowing(message: Tooltip | null) {
     console.log(message);
-    if (this.tooltip !== '') {
-      this.tooltip = '';
+    if (this.showingTooltip !== null) {
+      this.showingTooltip = null;
     } else {
-      this.tooltip = message;
+      this.showingTooltip = message;
     }
-    console.log(this.tooltip);
   }
 }

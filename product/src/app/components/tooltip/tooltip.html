@@ -1,12 +1,12 @@
 <div
   (click)="hideTooltip($event)"
   class="fixed-top tooltipWrapper"
-  [ngClass]="{ active: showingTooltip !== '' }"
+  [ngClass]="{ active: showingTooltip !== null }"
 >
   <div
     class="optimise-tip"
     #element
-    [ngClass]="{ active: showingTooltip === 'optimise' }"
+    [ngClass]="{ active: isShowingOptimiseTooltip }"
   >
     <h3 class="h5">容量最適化とは...？</h3>
     <p>

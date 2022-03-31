@@ -3,6 +3,7 @@ import { localeData } from 'app/i18n/locale-manager';
 import { AnimationImageOptions } from '../../../../common-src/data/animation-image-option';
 import { CompressionType } from '../../../../common-src/type/CompressionType';
 import { PresetType } from '../../../../common-src/type/PresetType';
+import { Tooltip } from '../../../../common-src/type/TooltipType';
 
 @Component({
   selector: 'app-properties',
@@ -17,7 +18,7 @@ export class PropertiesComponent {
   animationOptionData = new AnimationImageOptions();
 
   @Output()
-  showTooltipEvent = new EventEmitter<string>();
+  showTooltipEvent = new EventEmitter<Tooltip>();
 
   PresetType = PresetType;
   CompressionType = CompressionType;
@@ -26,6 +27,6 @@ export class PropertiesComponent {
   constructor() {}
 
   showTooltip() {
-    this.showTooltipEvent.emit('optimise');
+    this.showTooltipEvent.emit(Tooltip.OPTIMISE);
   }
 }

@@ -5,6 +5,7 @@ import {
   Output,
   ViewChild
 } from '@angular/core';
+import { Tooltip } from '../../../../common-src/type/TooltipType';
 
 @Component({
   selector: 'app-tooltip',
@@ -15,22 +16,21 @@ export class TooltipComponent {
   @ViewChild('element')
   element: any;
   @Input()
-  showingTooltip = '';
+  showingTooltip: Tooltip | null = null;
 
   @Output()
-  changeTooltipShowing = new EventEmitter<string>();
+  changeTooltipShowing = new EventEmitter<Tooltip | null>();
 
   hideTooltip(event: MouseEvent) {
-    console.log(
-      event.target,
-      this.element.nativeElement,
-      !this.element.nativeElement.contains(event.target)
-    );
     if (!(event.target instanceof HTMLElement)) {
       return;
     }
     if (!this.element.nativeElement.contains(event.target)) {
-      this.changeTooltipShowing.emit('');
+      this.changeTooltipShowing.emit(null);
     }
+  }
+
+  get isShowingOptimiseTooltip() {
+    return this.showingTooltip === Tooltip.OPTIMISE;
   }
 }
