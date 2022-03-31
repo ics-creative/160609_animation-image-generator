@@ -19,6 +19,7 @@ import {
 import { localeData } from 'app/i18n/locale-manager';
 import { ImageValidatorResult } from '../../../../common-src/type/ImageValidator';
 import { LineValidationType } from '../../../../common-src/type/LineValidationType';
+import { Tooltip } from '../../../../common-src/type/TooltipType';
 
 @Component({
   selector: 'app-anim-preview',
@@ -41,6 +42,9 @@ export class AnimPreviewComponent implements OnChanges, OnInit {
   /** ファイル選択ダイアログのイベントです。 */
   @Output()
   public clickFileSelectButtonEvent = new EventEmitter();
+
+  @Output()
+  showTooltipEvent = new EventEmitter<Tooltip>();
 
   imagePath = '';
   playing = false;
@@ -105,7 +109,10 @@ export class AnimPreviewComponent implements OnChanges, OnInit {
     // ここでバリデートするのは間違っていると思うが・・・・
     if (this.animationOptionData.preset === PresetType.LINE) {
       // TODO: バリデーションの種類をUIで指定できるようにする
-      this.validationErrors = validateLineStamp(LineValidationType.ANIMATION_STAMP, this.animationOptionData);
+      this.validationErrors = validateLineStamp(
+        LineValidationType.ANIMATION_STAMP,
+        this.animationOptionData
+      );
     } else {
       this.validationErrors = validateLineStampNoError();
     }
@@ -147,5 +154,9 @@ export class AnimPreviewComponent implements OnChanges, OnInit {
 
       this.imagePath = this.items[this.currentFrame].imagePath;
     }
+  }
+
+  showTooltip() {
+    this.showTooltipEvent.emit(Tooltip.LINE_STAMP_ALERT);
   }
 }

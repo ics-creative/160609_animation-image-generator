@@ -1,4 +1,4 @@
-<div class="app-component"  #myComponent [ngClass]="{ isDragOver: _isDragover }">
+<div class="app-component" #myComponent [ngClass]="{ isDragOver: _isDragover }">
   <div class="mod-setting p-3">
     <!-- プリセット切り替え -->
     <div class="row mb-4 align-items-center mod-select-preset">
@@ -71,6 +71,7 @@
       [items]="items"
       [openingDirectories]="isUiLocked"
       (clickFileSelectButtonEvent)="handleClickFileSelectButton()"
+      (showTooltipEvent)="changeTooltipShowing($event)"
     >
     </app-anim-preview>
   </div>

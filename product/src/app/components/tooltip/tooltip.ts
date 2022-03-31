@@ -33,4 +33,8 @@ export class TooltipComponent {
   get isShowingOptimiseTooltip() {
     return this.showingTooltip === Tooltip.OPTIMISE;
   }
+
+  get isShowingLineStampAlertTooltip() {
+    return this.showingTooltip === Tooltip.LINE_STAMP_ALERT;
+  }
 }
