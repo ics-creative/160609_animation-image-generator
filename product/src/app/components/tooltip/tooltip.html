@@ -8,7 +8,7 @@
     #element
     [ngClass]="{ active: isShowingOptimiseTooltip }"
   >
-    <h3 class="h5">容量最適化とは...？</h3>
+    <h3 class="h6 font-weight-bold">容量最適化とは...？</h3>
     <p>
       ファイルを圧縮し容量を最適化します。圧縮方式により処理時間や容量が変わります。
     </p>
@@ -23,10 +23,9 @@
     #element
     [ngClass]="{ active: isShowingLineStampAlertTooltip }"
   >
-    <h3 class="h5">以下のエラーがあります</h3>
-    <p>
-      ファイルを圧縮し容量を最適化します。圧縮方式により処理時間や容量が変わります。
-    </p>
+    <h3 class="h6 font-weight-bold">
+      以下の<span class="text-danger">エラー</span>があります
+    </h3>
     <ul>
       <li>再生時間が規定を超えています</li>
       <li>サイズが不一致です</li>

@@ -7,10 +7,17 @@
     width: 100%;
     height: 100%;
   }
+  ul {
+    padding-left: 1.3em;
+    margin-bottom: 0;
+    li {
+      margin-bottom: 0.5em;
+    }
+  }
 }
-.tooltip{
+.tooltip {
   background-color: #fff;
-  position: relative;
+  position: absolute;
   border-radius: 8px;
   transition: visibility 0.2s, opacity 0.2s;
   visibility: hidden;
@@ -37,5 +44,22 @@
     background-image: url('../../../assets/imgs/hukidashi-triangle.png');
     background-repeat: no-repeat;
   }
+}
 
+.line-stamp-alert-tip {
+  width: 270px;
+  height: auto;
+  top: 52px;
+  left: 503px;
+  &:after {
+    position: absolute;
+    top: -12px;
+    transform: rotate(90deg);
+    left: 240px;
+    width: 10px;
+    height: 14px;
+    content: '';
+    background-image: url('../../../assets/imgs/hukidashi-triangle.png');
+    background-repeat: no-repeat;
+  }
 }
