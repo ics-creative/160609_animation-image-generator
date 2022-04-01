@@ -62,3 +62,26 @@
 .badge {
   vertical-align: text-bottom;
 }
+
+.error-tooltip{
+  position: relative;
+  text-align: center;
+  display: block;
+  width: 22px;
+  height: 22px;
+  cursor: pointer;
+  border-radius: 50%;
+  font-size: 12px;
+  line-height: 22px;
+  &:after{
+    content: '';
+    position: absolute;
+    display: block;
+    width: 17px;
+    height: 17px;
+    border: 1px solid #ffffff;
+    border-radius: 50%;
+    top: 2px;
+    left: 2px;
+  }
+}

@@ -15,40 +15,53 @@
 </div>
 
 <div class="anim-preview p-3" *ngIf="items.length > 0">
-  <p>
-    {{ localeData.PREV_infoFrameSize }}
-    <span
-      class="badge"
-      [ngClass]="{
-        'badge-success': !validationErrors.imageSizeError,
-        'badge-danger': validationErrors.imageSizeError
-      }"
-      >W{{ animationOptionData.imageInfo.width }}×H{{
-        animationOptionData.imageInfo.height
-      }}px</span
-    >
-    / {{ localeData.PREV_infoFrameNum }}
-    <span
-      class="badge"
-      [ngClass]="{
-        'badge-success': !validationErrors.frameCountError,
-        'badge-danger': validationErrors.frameCountError
-      }"
-      >{{ items.length }}</span
-    >
-    <span *ngIf="animationOptionData.noLoop === false">
-      / {{ localeData.PREV_infoTime }}
+  <p class="d-flex align-items-center">
+    <span>
+      {{ localeData.PREV_infoFrameSize }}
       <span
-        class="badge badge-success"
+        class="badge"
         [ngClass]="{
-          'badge-success': !validationErrors.durationError,
-          'badge-danger': validationErrors.durationError
+          'badge-success': !validationErrors.imageSizeError,
+          'badge-danger': validationErrors.imageSizeError
         }"
-        >{{ (items.length * animationOptionData.loop) / animationOptionData.fps
-        }}{{ localeData.PREV_infoTimeUnit }}</span
+        >W{{ animationOptionData.imageInfo.width }}×H{{
+          animationOptionData.imageInfo.height
+        }}px</span
       >
     </span>
-    <i class="fa fa-question-circle ml-2" (click)="showTooltip()"></i>
+    <span class="ml-2">/</span>
+    <span class="ml-2">
+      {{ localeData.PREV_infoFrameNum }}
+      <span
+        class="badge"
+        [ngClass]="{
+          'badge-success': !validationErrors.frameCountError,
+          'badge-danger': validationErrors.frameCountError
+        }"
+        >{{ items.length }}</span
+      ></span
+    >
+    <span class="ml-2">/</span>
+    <span class="ml-2">
+      <span *ngIf="animationOptionData.noLoop === false">
+        {{ localeData.PREV_infoTime }}
+        <span
+          class="badge badge-success"
+          [ngClass]="{
+            'badge-success': !validationErrors.durationError,
+            'badge-danger': validationErrors.durationError
+          }"
+          >{{
+            (items.length * animationOptionData.loop) / animationOptionData.fps
+          }}{{ localeData.PREV_infoTimeUnit }}</span
+        >
+      </span></span
+    >
+
+    <i
+      class="fa fa-exclamation text-white ml-2 error-tooltip bg-danger"
+      (click)="showTooltip()"
+    ></i>
   </p>
 
   <div class="preview-area mb-3">
