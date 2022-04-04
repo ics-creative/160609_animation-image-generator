@@ -19,6 +19,7 @@ import { loadPresetConfig, savePresetConfig } from './UserConfig';
 import { localeData } from 'app/i18n/locale-manager';
 import { LineValidationType } from '../../../../common-src/type/LineValidationType';
 import { checkRuleList } from '../../../../common-src/checkRule/checkRule';
+import { Tooltip } from '../../../../common-src/type/TooltipType';
 
 const getFirstNumber = (text: string): number | undefined => {
   const numStr = text.match(/\d+/g)?.pop();
@@ -47,6 +48,12 @@ export class AppComponent implements OnInit, AfterViewInit {
   items: ImageData[] = [];
   PresetType = PresetType;
   localeData = localeData;
+
+  showingTooltip: Tooltip | null = null;
+  lineStampAlertButtonPos: { x: number; y: number } = {
+    x: 0,
+    y: 0
+  };
 
   readonly checkRuleList = checkRuleList;
   readonly checkRuleLabel = {
@@ -287,5 +294,23 @@ export class AppComponent implements OnInit, AfterViewInit {
       const msg = `${errorItem.imageBaseName} ${this.localeData.VALIDATE_ImportImageSize}`;
       await this.ipcService.showMessage(msg);
     }
+  }
+
+  /**
+   * ツールチップの表示を変更します
+   */
+  changeTooltipShowing(message: Tooltip | null) {
+    if (this.showingTooltip !== null) {
+      this.showingTooltip = null;
+    } else {
+      this.showingTooltip = message;
+    }
+  }
+
+  /**
+   * ラインスタンプの警告ツールチップの位置をセットします
+   */
+  setLineStampAlertButtonPos(pos: { x: number; y: number }) {
+    this.lineStampAlertButtonPos = pos;
   }
 }

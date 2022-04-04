@@ -32,6 +32,7 @@
     <!-- プロパティ変更画面 -->
     <app-properties
       [animationOptionData]="animationOptionData"
+      (showTooltipEvent)="changeTooltipShowing($event)"
     ></app-properties>
     <hr />
 
@@ -70,8 +71,19 @@
       [items]="items"
       [openingDirectories]="isUiLocked"
       (clickFileSelectButtonEvent)="handleClickFileSelectButton()"
+      (showTooltipEvent)="changeTooltipShowing($event)"
+      (buttonPos)="setLineStampAlertButtonPos($event)"
     >
     </app-anim-preview>
+  </div>
+
+  <!-- ツールチップ -->
+  <div>
+    <app-tooltip
+      [showingTooltip]="showingTooltip"
+      [lineStampAlertButtonPos]="lineStampAlertButtonPos"
+      (changeTooltipShowing)="changeTooltipShowing($event)"
+    ></app-tooltip>
   </div>
 </div>
 

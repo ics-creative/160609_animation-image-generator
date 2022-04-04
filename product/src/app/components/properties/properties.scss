@@ -5,3 +5,27 @@
 .nav-link.active {
   cursor: default;
 }
+
+.fa-question-circle {
+  color: #63a5ed;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.optimise-tooltip {
+  display: block;
+  background: none;
+  border: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  position: relative;
+  &_inner {
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 20px;
+    height: 20px;
+  }
+}
