@@ -125,7 +125,9 @@
             />
             {{ localeData.PROP_tabQualityApngOpt }}
           </label>
-          <i class="fa fa-question-circle ml-2" (click)="showTooltip()"></i>
+          <button (click)="showTooltip()" class="ml-2 optimise-tooltip">
+            <i class="optimise-tooltip_inner fa fa-question-circle"></i>
+          </button>
         </div>
 
         <!-- 圧縮方式 -->
