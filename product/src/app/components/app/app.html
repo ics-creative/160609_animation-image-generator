@@ -72,6 +72,7 @@
       [openingDirectories]="isUiLocked"
       (clickFileSelectButtonEvent)="handleClickFileSelectButton()"
       (showTooltipEvent)="changeTooltipShowing($event)"
+      (buttonPos)="setLineStampAlertButtonPos($event)"
     >
     </app-anim-preview>
   </div>
@@ -80,6 +81,7 @@
   <div>
     <app-tooltip
       [showingTooltip]="showingTooltip"
+      [lineStampAlertButtonPos]="lineStampAlertButtonPos"
       (changeTooltipShowing)="changeTooltipShowing($event)"
     ></app-tooltip>
   </div>

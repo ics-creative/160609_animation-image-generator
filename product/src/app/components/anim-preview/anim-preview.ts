@@ -3,11 +3,13 @@
 
 import {
   Component,
+  ElementRef,
   EventEmitter,
   Input,
   OnChanges,
   OnInit,
-  Output
+  Output,
+  ViewChild
 } from '@angular/core';
 import { PresetType } from '../../../../common-src/type/PresetType';
 import { ImageData } from '../../../../common-src/data/image-data';
@@ -39,12 +41,18 @@ export class AnimPreviewComponent implements OnChanges, OnInit {
   @Input()
   openingDirectories = false;
 
+  @ViewChild('tooltipElement')
+  tooltipElement: ElementRef | undefined;
+
   /** ファイル選択ダイアログのイベントです。 */
   @Output()
   public clickFileSelectButtonEvent = new EventEmitter();
 
   @Output()
   showTooltipEvent = new EventEmitter<Tooltip>();
+
+  @Output()
+  buttonPos = new EventEmitter<{ x: number; y: number }>();
 
   imagePath = '';
   playing = false;
@@ -158,5 +166,9 @@ export class AnimPreviewComponent implements OnChanges, OnInit {
 
   showTooltip() {
     this.showTooltipEvent.emit(Tooltip.LINE_STAMP_ALERT);
+    this.buttonPos.emit({
+      x: this.tooltipElement?.nativeElement.offsetLeft,
+      y: this.tooltipElement?.nativeElement.offsetTop
+    });
   }
 }

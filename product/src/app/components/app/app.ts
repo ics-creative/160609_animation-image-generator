@@ -50,6 +50,10 @@ export class AppComponent implements OnInit, AfterViewInit {
   localeData = localeData;
 
   showingTooltip: Tooltip | null = null;
+  lineStampAlertButtonPos: { x: number; y: number } = {
+    x: 0,
+    y: 0
+  };
 
   readonly checkRuleList = checkRuleList;
   readonly checkRuleLabel = {
@@ -293,15 +297,20 @@ export class AppComponent implements OnInit, AfterViewInit {
   }
 
   /**
-   *
-   * @param message
+   * ツールチップの表示を変更します
    */
   changeTooltipShowing(message: Tooltip | null) {
-    console.log(message);
     if (this.showingTooltip !== null) {
       this.showingTooltip = null;
     } else {
       this.showingTooltip = message;
     }
+  }
+
+  /**
+   * ラインスタンプの警告ツールチップの位置をセットします
+   */
+  setLineStampAlertButtonPos(pos: { x: number; y: number }) {
+    this.lineStampAlertButtonPos = pos;
   }
 }

@@ -58,10 +58,9 @@
       </span></span
     >
 
-    <i
-      class="fa fa-exclamation text-white ml-2 error-tooltip bg-danger"
-      (click)="showTooltip()"
-    ></i>
+    <button (click)="showTooltip()" #tooltipElement class="ml-2 error-tooltip">
+      <i class="fa fa-exclamation text-white error-tooltip_inner bg-danger"></i>
+    </button>
   </p>
 
   <div class="preview-area mb-3">

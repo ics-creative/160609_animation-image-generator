@@ -22,6 +22,10 @@
     class="tooltip line-stamp-alert-tip"
     #element
     [ngClass]="{ active: isShowingLineStampAlertTooltip }"
+    [ngStyle]="{
+      'left.px': getLineStampAlertButtonPos.x,
+      'top.px': getLineStampAlertButtonPos.y
+    }"
   >
     <h3 class="h6 font-weight-bold">
       以下の<span class="text-danger">エラー</span>があります

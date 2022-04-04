@@ -1,5 +1,6 @@
 import {
   Component,
+  ElementRef,
   EventEmitter,
   Input,
   Output,
@@ -14,9 +15,12 @@ import { Tooltip } from '../../../../common-src/type/TooltipType';
 })
 export class TooltipComponent {
   @ViewChild('element')
-  element: any;
+  element: ElementRef | undefined;
   @Input()
   showingTooltip: Tooltip | null = null;
+
+  @Input()
+  lineStampAlertButtonPos = { x: 0, y: 0 };
 
   @Output()
   changeTooltipShowing = new EventEmitter<Tooltip | null>();
@@ -25,7 +29,7 @@ export class TooltipComponent {
     if (!(event.target instanceof HTMLElement)) {
       return;
     }
-    if (!this.element.nativeElement.contains(event.target)) {
+    if (!this.element?.nativeElement.contains(event.target)) {
       this.changeTooltipShowing.emit(null);
     }
   }
@@ -36,5 +40,16 @@ export class TooltipComponent {
 
   get isShowingLineStampAlertTooltip() {
     return this.showingTooltip === Tooltip.LINE_STAMP_ALERT;
+  }
+
+  get getLineStampAlertButtonPos() {
+    // ボタン位置とのx座標の差
+    const DIFF_X = -234;
+    // ボタン位置とのy座標の差
+    const DIFF_Y = 36;
+    return {
+      x: this.lineStampAlertButtonPos.x + DIFF_X,
+      y: this.lineStampAlertButtonPos.y + DIFF_Y
+    };
   }
 }
