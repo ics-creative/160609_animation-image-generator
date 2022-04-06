@@ -13,8 +13,8 @@ export const waitExecFile = (
   options: string[]
 ): Promise<ExecFileResult> =>
   new Promise((resolve) => {
-    console.log(`::exec ${file} ${options} ::`) 
+    console.log(`::exec ${file} ${options} ::`);
     execFile(file, options, (err, stdout, stderr) =>
       resolve({ err, stdout, stderr })
-    )
+    );
   });

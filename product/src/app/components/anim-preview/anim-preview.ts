@@ -42,7 +42,7 @@ export class AnimPreviewComponent implements OnChanges, OnInit {
   openingDirectories = false;
 
   @Input()
-  checkRule:LineValidationType = LineValidationType.ANIMATION_STAMP
+  checkRule: LineValidationType = LineValidationType.ANIMATION_STAMP;
 
   @ViewChild('tooltipElement')
   tooltipElement: ElementRef | undefined;

@@ -58,7 +58,7 @@ export default class IpcService {
     version: string,
     itemList: ImageData[],
     animationOptionData: AnimationImageOptions,
-    validationType: LineValidationType,
+    validationType: LineValidationType
   ) {
     return this.api.invoke(
       IpcId.EXEC_IMAGE_EXPORT_PROCESS,
@@ -71,6 +71,6 @@ export default class IpcService {
 
   /** メッセージダイアログを表示します。alert()の代替として使用します */
   showMessage(message: string, title?: string) {
-    return this.api.invoke(IpcId.SHOW_MESSAGE, message, title)
+    return this.api.invoke(IpcId.SHOW_MESSAGE, message, title);
   }
 }

@@ -20,7 +20,7 @@ import { localeData } from 'app/i18n/locale-manager';
 import { LineValidationType } from '../../../../common-src/type/LineValidationType';
 import { checkRuleList } from '../../../../common-src/checkRule/checkRule';
 import { Tooltip } from '../../../../common-src/type/TooltipType';
-import {FormControl} from "@angular/forms";
+import { FormControl } from '@angular/forms';
 
 const getFirstNumber = (text: string): number | undefined => {
   const numStr = text.match(/\d+/g)?.pop();

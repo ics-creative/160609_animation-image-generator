@@ -6,7 +6,9 @@ const createImageElementApng = (
   filePNGName: string,
   width: number,
   height: number
-) => `<!-- ${localeData().HTML_availableFirefoxSafariChrome} (${localeData().HTML_cantAnimateOnIE}) -->
+) => `<!-- ${localeData().HTML_availableFirefoxSafariChrome} (${
+  localeData().HTML_cantAnimateOnIE
+}) -->
       <img 
         src="${filePNGName}" 
         width="${width}"
@@ -19,7 +21,9 @@ const createImageElementWebP = (
   fileWebPName: string,
   width: number,
   height: number
-) => `<!-- ${localeData().HTML_availableFirefoxSafariChrome} (${localeData().HTML_cantViewOnIE}) -->
+) => `<!-- ${localeData().HTML_availableFirefoxSafariChrome} (${
+  localeData().HTML_cantViewOnIE
+}) -->
       <img
         src="${fileWebPName}"
         width="${width}"
@@ -33,7 +37,9 @@ const createImageElementWebpAndApng = (
   filePNGName: string,
   width: number,
   height: number
-) => `<!-- ${localeData().HTML_availableFirefoxSafariChrome} (${localeData().HTML_cantAnimateOnIE}) -->
+) => `<!-- ${localeData().HTML_availableFirefoxSafariChrome} (${
+  localeData().HTML_cantAnimateOnIE
+}) -->
       <picture>
         <!-- ${localeData().HTML_forWebpSupportedBrowsers} -->
         <source type="image/webp" srcset="${fileWebPName}" />

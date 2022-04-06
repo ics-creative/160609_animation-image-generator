@@ -9,7 +9,7 @@ import { getLocaleData, setLang } from '../common-src/i18n/locale-manager';
 //  初期化が完了した時の処理
 app.on('ready', () => {
   const lang = app.getLocale().startsWith('ja') ? 'ja' : 'en';
-  setLang(lang)
+  setLang(lang);
 });
 
 /**
