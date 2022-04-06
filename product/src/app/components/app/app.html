@@ -41,9 +41,8 @@
       <div class="checkRule mod-select-preset">
         <p class="mb-2">{{ localeData.RULE_title }}</p>
         <select
-          #checkRuleSelector
-          (change)="handleCheckRuleChange(checkRuleSelector.value)"
           class="form-control mb-4"
+          [formControl]="checkRule"
         >
           <option *ngFor="let checkRule of checkRuleList" [value]="checkRule">
             {{ checkRuleLabel[checkRule] }}
@@ -69,6 +68,7 @@
     <app-anim-preview
       [animationOptionData]="animationOptionData"
       [items]="items"
+      [checkRule]="checkRule.value"
       [openingDirectories]="isUiLocked"
       (clickFileSelectButtonEvent)="handleClickFileSelectButton()"
       (showTooltipEvent)="changeTooltipShowing($event)"

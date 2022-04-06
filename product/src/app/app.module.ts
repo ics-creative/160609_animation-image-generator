@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 
 import { AppComponent } from './components/app/app';
 import { AnimPreviewComponent } from './components/anim-preview/anim-preview';
@@ -19,7 +19,7 @@ import {TooltipComponent} from "./components/tooltip/tooltip";
 
 @NgModule({
   declarations: [AppComponent, AnimPreviewComponent, PropertiesComponent,TooltipComponent],
-  imports: [BrowserModule, FormsModule],
+  imports: [BrowserModule, FormsModule, ReactiveFormsModule],
   providers: [IpcService],
   bootstrap: [AppComponent]
 })
