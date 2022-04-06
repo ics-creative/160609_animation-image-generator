@@ -32,7 +32,6 @@ const handle: IpcMainHandled = (channel, listener) => {
   ipcMain.handle(channel, listener as any);
 };
 
-
 const createWindow = () => {
   // メインウィンドウを作成します
   mainWindow = new BrowserWindow({
@@ -161,7 +160,7 @@ handle(
     version: string,
     itemList: ImageData[],
     animationOptionData: AnimationImageOptions,
-    validationType: LineValidationType,
+    validationType: LineValidationType
   ) => {
     console.log(version, itemList, animationOptionData);
 
@@ -171,7 +170,13 @@ handle(
       return;
     }
     return fileService
-      .exec(app.getPath('temp'), version, itemList, animationOptionData, validationType)
+      .exec(
+        app.getPath('temp'),
+        version,
+        itemList,
+        animationOptionData,
+        validationType
+      )
       .then(() => {
         console.log(`returnValue:true`);
         event.returnValue = true;
