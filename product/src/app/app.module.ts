@@ -15,10 +15,15 @@ import 'font-awesome/css/font-awesome.css';
 import '../assets/js/createjs-1.0.0.min.js';
 import './styles/main.css';
 import IpcService from './process/ipc.service';
-import {TooltipComponent} from "./components/tooltip/tooltip";
+import { TooltipComponent } from './components/tooltip/tooltip';
 
 @NgModule({
-  declarations: [AppComponent, AnimPreviewComponent, PropertiesComponent,TooltipComponent],
+  declarations: [
+    AppComponent,
+    AnimPreviewComponent,
+    PropertiesComponent,
+    TooltipComponent
+  ],
   imports: [BrowserModule, FormsModule],
   providers: [IpcService],
   bootstrap: [AppComponent]

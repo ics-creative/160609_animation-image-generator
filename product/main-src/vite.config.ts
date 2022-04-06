@@ -1,5 +1,5 @@
-import {defineConfig} from 'vite'
-import {builtinModules} from 'module';
+import { defineConfig } from 'vite';
+import { builtinModules } from 'module';
 
 export default defineConfig({
   root: __dirname,
@@ -17,13 +17,13 @@ export default defineConfig({
         'electron',
         'electron-devtools-installer',
         ...builtinModules,
-        ...builtinModules.map(p => `node:${p}`),
+        ...builtinModules.map((p) => `node:${p}`)
       ],
       output: {
-        entryFileNames: '[name].js',
-      },
+        entryFileNames: '[name].js'
+      }
     },
     emptyOutDir: true,
-    brotliSize: false,
+    brotliSize: false
   }
-})
+});
