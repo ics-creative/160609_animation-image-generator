@@ -173,8 +173,7 @@ export class AppComponent implements OnInit, AfterViewInit {
         AppConfig.version,
         this.items,
         this.animationOptionData,
-        // TODO: バリデーションの種類はUIから指定できるようにする
-        LineValidationType.ANIMATION_STAMP
+        this.checkRule.value
       );
     } finally {
       this.hideLockDialog();
