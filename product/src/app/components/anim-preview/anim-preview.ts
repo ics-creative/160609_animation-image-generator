@@ -41,6 +41,9 @@ export class AnimPreviewComponent implements OnChanges, OnInit {
   @Input()
   openingDirectories = false;
 
+  @Input()
+  checkRule: LineValidationType = LineValidationType.ANIMATION_STAMP;
+
   @ViewChild('tooltipElement')
   tooltipElement: ElementRef | undefined;
 
@@ -113,12 +116,10 @@ export class AnimPreviewComponent implements OnChanges, OnInit {
 
   private loop(): void {
     createjs.Ticker.framerate = this.animationOptionData.fps;
-
     // ここでバリデートするのは間違っていると思うが・・・・
     if (this.animationOptionData.preset === PresetType.LINE) {
-      // TODO: バリデーションの種類をUIで指定できるようにする
       this.validationErrors = validateLineStamp(
-        LineValidationType.ANIMATION_STAMP,
+        this.checkRule,
         this.animationOptionData
       );
     } else {

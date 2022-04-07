@@ -20,6 +20,7 @@ import { localeData } from 'app/i18n/locale-manager';
 import { LineValidationType } from '../../../../common-src/type/LineValidationType';
 import { checkRuleList } from '../../../../common-src/checkRule/checkRule';
 import { Tooltip } from '../../../../common-src/type/TooltipType';
+import { FormControl } from '@angular/forms';
 
 const getFirstNumber = (text: string): number | undefined => {
   const numStr = text.match(/\d+/g)?.pop();
@@ -54,6 +55,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     x: 0,
     y: 0
   };
+  checkRule = new FormControl(LineValidationType.ANIMATION_STAMP);
 
   readonly checkRuleList = checkRuleList;
   readonly checkRuleLabel = {
@@ -123,10 +125,6 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.changePreset(this.presetMode);
   }
 
-  handleCheckRuleChange(rule: string) {
-    console.log(rule);
-  }
-
   changePreset(presetMode: PresetType) {
     switch (presetMode) {
       case PresetType.LINE:
@@ -175,8 +173,7 @@ export class AppComponent implements OnInit, AfterViewInit {
         AppConfig.version,
         this.items,
         this.animationOptionData,
-        // TODO: バリデーションの種類はUIから指定できるようにする
-        LineValidationType.ANIMATION_STAMP
+        this.checkRule.value
       );
     } finally {
       this.hideLockDialog();
