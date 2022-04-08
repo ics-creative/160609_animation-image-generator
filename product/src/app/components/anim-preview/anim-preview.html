@@ -51,7 +51,7 @@
             'badge-success': !validationErrors.loopCountError,
             'badge-danger': validationErrors.loopCountError
           }"
-        >{{ animationOptionData.loop }}</span
+          >{{ animationOptionData.loop }}</span
         >
       </span></span
     >
@@ -66,9 +66,7 @@
             'badge-success': !validationErrors.durationError,
             'badge-danger': validationErrors.durationError
           }"
-        >{{
-          (items.length * animationOptionData.loop) / animationOptionData.fps
-          }}{{ localeData.PREV_infoTimeUnit }}</span
+          >{{ durationTime }}{{ localeData.PREV_infoTimeUnit }}</span
         >
       </span></span
     >
