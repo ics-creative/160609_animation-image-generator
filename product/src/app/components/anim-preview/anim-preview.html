@@ -44,23 +44,6 @@
     <span class="ml-2" *ngIf="animationOptionData.noLoop === false">/</span>
     <span class="ml-2" *ngIf="animationOptionData.noLoop === false">
       <span>
-        {{ localeData.PREV_infoTime }}
-        <span
-          class="badge badge-success"
-          [ngClass]="{
-            'badge-success': !validationErrors.durationError,
-            'badge-danger': validationErrors.durationError
-          }"
-          >{{
-            (items.length * animationOptionData.loop) / animationOptionData.fps
-          }}{{ localeData.PREV_infoTimeUnit }}</span
-        >
-      </span></span
-    >
-
-    <span class="ml-2" *ngIf="animationOptionData.noLoop === false">/</span>
-    <span class="ml-2" *ngIf="animationOptionData.noLoop === false">
-      <span>
         {{ localeData.PROP_tabAnimLoopNum }}
         <span
           class="badge badge-success"
@@ -68,7 +51,24 @@
             'badge-success': !validationErrors.loopCountError,
             'badge-danger': validationErrors.loopCountError
           }"
-          >{{ animationOptionData.loop }}</span
+        >{{ animationOptionData.loop }}</span
+        >
+      </span></span
+    >
+
+    <span class="ml-2" *ngIf="animationOptionData.noLoop === false">/</span>
+    <span class="ml-2" *ngIf="animationOptionData.noLoop === false">
+      <span>
+        {{ localeData.PREV_infoTime }}
+        <span
+          class="badge badge-success"
+          [ngClass]="{
+            'badge-success': !validationErrors.durationError,
+            'badge-danger': validationErrors.durationError
+          }"
+        >{{
+          (items.length * animationOptionData.loop) / animationOptionData.fps
+          }}{{ localeData.PREV_infoTimeUnit }}</span
         >
       </span></span
     >
