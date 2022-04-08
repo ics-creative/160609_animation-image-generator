@@ -41,9 +41,24 @@
         >{{ items.length }}</span
       ></span
     >
-    <span class="ml-2">/</span>
-    <span class="ml-2">
-      <span *ngIf="animationOptionData.noLoop === false">
+    <span class="ml-2" *ngIf="animationOptionData.noLoop === false">/</span>
+    <span class="ml-2" *ngIf="animationOptionData.noLoop === false">
+      <span>
+        {{ localeData.PROP_tabAnimLoopNum }}
+        <span
+          class="badge badge-success"
+          [ngClass]="{
+            'badge-success': !validationErrors.loopCountError,
+            'badge-danger': validationErrors.loopCountError
+          }"
+          >{{ animationOptionData.loop }}</span
+        >
+      </span></span
+    >
+
+    <span class="ml-2" *ngIf="animationOptionData.noLoop === false">/</span>
+    <span class="ml-2" *ngIf="animationOptionData.noLoop === false">
+      <span>
         {{ localeData.PREV_infoTime }}
         <span
           class="badge badge-success"
@@ -51,14 +66,17 @@
             'badge-success': !validationErrors.durationError,
             'badge-danger': validationErrors.durationError
           }"
-          >{{
-            (items.length * animationOptionData.loop) / animationOptionData.fps
-          }}{{ localeData.PREV_infoTimeUnit }}</span
+          >{{ durationTime }}{{ localeData.PREV_infoTimeUnit }}</span
         >
       </span></span
     >
 
-    <button (click)="showTooltip()" #tooltipElement class="ml-2 error-tooltip">
+    <button
+      *ngIf="hasError"
+      (click)="showTooltip()"
+      #tooltipElement
+      class="ml-2 error-tooltip"
+    >
       <i class="fa fa-exclamation text-white error-tooltip_inner bg-danger"></i>
     </button>
   </p>

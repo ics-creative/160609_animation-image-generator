@@ -19,7 +19,10 @@ import {
   validateLineStampNoError
 } from '../../../../common-src/validators/validateLineStamp';
 import { localeData } from 'app/i18n/locale-manager';
-import { ImageValidatorResult } from '../../../../common-src/type/ImageValidator';
+import {
+  ImageValidatorResult,
+  ValidationResult
+} from '../../../../common-src/type/ImageValidator';
 import { LineValidationType } from '../../../../common-src/type/LineValidationType';
 import { Tooltip } from '../../../../common-src/type/TooltipType';
 
@@ -70,6 +73,23 @@ export class AnimPreviewComponent implements OnChanges, OnInit {
 
   selectScaleValue(scaleValue: string): void {
     this.scaleValue = Number(scaleValue);
+  }
+
+  /** バリデーションエラーがあるか返します */
+  get hasError() {
+    const errors: ValidationResult[] = Object.values(this.validationErrors);
+    return errors.some((errorMessage) => errorMessage !== undefined);
+  }
+
+  /** 再生時間を小数第二位で四捨五入して返します */
+  get durationTime() {
+    return (
+      Math.round(
+        ((this.items.length * this.animationOptionData.loop) /
+          this.animationOptionData.fps) *
+          100
+      ) / 100
+    );
   }
 
   ngOnInit() {
