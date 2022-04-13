@@ -60,6 +60,9 @@ export class AnimPreviewComponent implements OnChanges, OnInit {
   @Output()
   buttonPos = new EventEmitter<{ x: number; y: number }>();
 
+  @Output()
+  validationErrorMessages = new EventEmitter<ImageValidatorResult>();
+
   imagePath = '';
   playing = false;
   currentFrame = 0;
@@ -145,6 +148,8 @@ export class AnimPreviewComponent implements OnChanges, OnInit {
     } else {
       this.validationErrors = validateLineStampNoError();
     }
+
+    this.validationErrorMessages.emit(this.validationErrors);
 
     if (!this.items || !this.playing) {
       this.playing = false;

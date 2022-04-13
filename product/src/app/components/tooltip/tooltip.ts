@@ -22,6 +22,9 @@ export class TooltipComponent {
   @Input()
   lineStampAlertButtonPos = { x: 0, y: 0 };
 
+  @Input()
+  validationErrorsMessage: string[] = [''];
+
   @Output()
   changeTooltipShowing = new EventEmitter<Tooltip | null>();
 

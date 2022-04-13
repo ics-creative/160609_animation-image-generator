@@ -21,6 +21,10 @@ import { LineValidationType } from '../../../../common-src/type/LineValidationTy
 import { checkRuleList } from '../../../../common-src/checkRule/checkRule';
 import { Tooltip } from '../../../../common-src/type/TooltipType';
 import { FormControl } from '@angular/forms';
+import {
+  ImageValidatorResult,
+  ValidationResult
+} from '../../../../common-src/type/ImageValidator';
 
 const getFirstNumber = (text: string): number | undefined => {
   const numStr = text.match(/\d+/g)?.pop();
@@ -49,6 +53,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   items: ImageData[] = [];
   PresetType = PresetType;
   localeData = localeData;
+  validationErrorsMessage = [''];
 
   showingTooltip: Tooltip | null = null;
   lineStampAlertButtonPos: { x: number; y: number } = {
@@ -309,5 +314,11 @@ export class AppComponent implements OnInit, AfterViewInit {
    */
   setLineStampAlertButtonPos(pos: { x: number; y: number }) {
     this.lineStampAlertButtonPos = pos;
+  }
+
+  setValidationErrorMessages(errors: ImageValidatorResult) {
+    this.validationErrorsMessage = (Object.values(errors) as ValidationResult[])
+      .filter((value) => value !== undefined)
+      .map((value) => value?.message ?? '');
   }
 }

@@ -16,6 +16,6 @@ export const validateDuration = (
     : {
         message: getLocaleData().VALIDATE_time({
           valids: validSecs.join(getLocaleData().COMMON_listingConnma),
-          current: sec
+          current: Math.round(sec * 100) / 100
         })
       };

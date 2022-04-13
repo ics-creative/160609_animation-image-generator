@@ -70,6 +70,7 @@
       (clickFileSelectButtonEvent)="handleClickFileSelectButton()"
       (showTooltipEvent)="changeTooltipShowing($event)"
       (buttonPos)="setLineStampAlertButtonPos($event)"
+      (validationErrorMessages)="setValidationErrorMessages($event)"
     >
     </app-anim-preview>
   </div>
@@ -80,6 +81,7 @@
       [showingTooltip]="showingTooltip"
       [lineStampAlertButtonPos]="lineStampAlertButtonPos"
       (changeTooltipShowing)="changeTooltipShowing($event)"
+      [validationErrorsMessage]="validationErrorsMessage"
     ></app-tooltip>
   </div>
 </div>
