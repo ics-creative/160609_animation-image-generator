@@ -75,6 +75,7 @@
             data-placement="right"
             title="{{ localeData.PROP_tabAnimLoopTooltip }}"
             *ngIf="animationOptionData.preset === PresetType.LINE"
+            (blur)="avoidBlankLoopNum()"
           />
           <input
             type="number"
@@ -82,6 +83,7 @@
             [(ngModel)]="animationOptionData.loop"
             min="1"
             *ngIf="animationOptionData.preset === PresetType.WEB"
+            (blur)="avoidBlankLoopNum()"
           />
         </div>
       </div>

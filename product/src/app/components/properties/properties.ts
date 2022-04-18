@@ -26,6 +26,13 @@ export class PropertiesComponent {
 
   constructor() {}
 
+  avoidBlankLoopNum() {
+    // ループ回数が0やnullの場合は1に補正
+    if (!this.animationOptionData.loop) {
+      this.animationOptionData.loop = 1;
+    }
+  }
+
   showTooltip() {
     this.showTooltipEvent.emit(Tooltip.OPTIMISE);
   }
