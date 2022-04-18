@@ -35,8 +35,8 @@ const handle: IpcMainHandled = (channel, listener) => {
 const createWindow = () => {
   // メインウィンドウを作成します
   mainWindow = new BrowserWindow({
-    width: 800,
-    height: 600,
+    width: 880,
+    height: 660,
     title: localeData().APP_NAME,
     webPreferences: {
       nodeIntegration: false,
