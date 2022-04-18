@@ -31,6 +31,7 @@
             data-placement="right"
             title="{{ localeData.PROP_tabAnimFpsTooltip }}"
             *ngIf="animationOptionData.preset === PresetType.LINE"
+            (blur)="avoidBlankFpsNum()"
           />
           <input
             type="number"
@@ -39,6 +40,7 @@
             min="1"
             max="60"
             *ngIf="animationOptionData.preset === PresetType.WEB"
+            (blur)="avoidBlankFpsNum()"
           />
         </div>
       </div>

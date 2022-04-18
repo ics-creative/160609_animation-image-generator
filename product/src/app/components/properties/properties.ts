@@ -33,6 +33,13 @@ export class PropertiesComponent {
     }
   }
 
+  avoidBlankFpsNum() {
+    // FPS回数が0やnullの場合は1に補正
+    if (!this.animationOptionData.fps) {
+      this.animationOptionData.fps = 1;
+    }
+  }
+
   showTooltip() {
     this.showTooltipEvent.emit(Tooltip.OPTIMISE);
   }
