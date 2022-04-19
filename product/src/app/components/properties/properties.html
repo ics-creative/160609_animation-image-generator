@@ -2,14 +2,14 @@
   <ul class="nav nav-tabs">
     <li class="nav-item">
       <!-- ホントは a 要素を使うべきだが、ドラッグできる不都合があったので span 要素で回避。href 属性はご愛嬌で・・・ -->
-      <span class="nav-link active" href="#tab1" data-toggle="tab">{{
+      <a class="nav-link active" href="#tab1" data-toggle="tab" draggable="false">{{
         localeData.PROP_tabAnim
-      }}</span>
+      }}</a>
     </li>
     <li class="nav-item">
-      <span class="nav-link" href="#tab2" data-toggle="tab">{{
+      <a class="nav-link" href="#tab2" data-toggle="tab" draggable="false">{{
         localeData.PROP_tabQuality
-      }}</span>
+      }}</a>
     </li>
   </ul>
 
