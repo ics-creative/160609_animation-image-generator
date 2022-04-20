@@ -82,12 +82,7 @@
   </p>
 
   <div class="preview-area mb-3">
-    <!-- 1枚画像プレビュー -->
-    <div [ngStyle]="{ zoom: scaleValue }" class="mb-3">
-      <img data-src="file:///{{ imagePath + '?cc=' + cacheClearStamp }}" />
-    </div>
-
-    <div class="d-flex align-items-center">
+    <div class="d-flex align-items-center　mb-3">
       <!-- 再生・停止・戻るボタン -->
       <span class="mr-2 button-group" role="group">
         <button
@@ -138,6 +133,10 @@
       >
         {{ localeData.PREV_btnSelectRe }}
       </button>
+    </div>
+    <!-- 1枚画像プレビュー -->
+    <div [ngStyle]="{ zoom: scaleValue }" class="mb-3">
+      <img data-src="file:///{{ imagePath + '?cc=' + cacheClearStamp }}" />
     </div>
   </div>
 
