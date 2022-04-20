@@ -26,6 +26,20 @@ export class PropertiesComponent {
 
   constructor() {}
 
+  avoidBlankLoopNum() {
+    // ループ回数が0やnull、負数の場合は1に補正
+    if (!(this.animationOptionData.loop > 0)) {
+      this.animationOptionData.loop = 1;
+    }
+  }
+
+  avoidBlankFpsNum() {
+    // FPS回数が0やnull、負数の場合は1に補正
+    if (!(this.animationOptionData.loop > 0)) {
+      this.animationOptionData.fps = 1;
+    }
+  }
+
   showTooltip() {
     this.showTooltipEvent.emit(Tooltip.OPTIMISE);
   }
