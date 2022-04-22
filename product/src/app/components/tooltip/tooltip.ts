@@ -6,6 +6,7 @@ import {
   Output,
   ViewChild
 } from '@angular/core';
+import { localeData } from 'app/i18n/locale-manager';
 import { Tooltip } from '../../../../common-src/type/TooltipType';
 
 @Component({
@@ -27,6 +28,8 @@ export class TooltipComponent {
 
   @Output()
   changeTooltipShowing = new EventEmitter<Tooltip | null>();
+
+  localeData = localeData;
 
   hideTooltip(event: MouseEvent) {
     if (!(event.target instanceof HTMLElement)) {

@@ -23,18 +23,20 @@ export const localeDataJa: ILocaleData = {
 
   PROP_tabQualityApngOptTooltip: '画質を下げることで、容量を小さくします',
   PROP_tabQualityOptWayZopfli:
-    '容量が最も小さくなりますが、ファイル作成に最も時間がかかります',
+    '容量が最も小さくなりますが、ファイル作成が非常に長くなります。場合によっては分単位の時間がかかります',
   PROP_tabQualityOptWay7zip:
     '容量が小さくなりますが、ファイル作成に時間がかかります',
   PROP_tabQualityOptWayzlib:
-    '容量が大きくなりますが、すぐにファイルが作成されます',
+    '容量はそれほど小さくなりませんが、すぐにファイルが作成されます',
 
   PROP_tabQualityHApng: 'APNGファイル出力',
   PROP_tabQualityHWebp: 'WebPファイル出力',
   PROP_tabQualityHHtml: 'HTMLファイル出力',
 
-  PROP_tabQualityHApngTooltip: 'APNGはほとんどの主要ブラウザーで利用できるアニメ画像形式です',
-  PROP_tabQualityHWebpTooltip: 'WebPはAPNGよりも新しいアニメ画像形式です。古いブラウザー等では表示や再生ができないことがあります',
+  PROP_tabQualityHApngTooltip:
+    'APNGはほとんどの主要ブラウザーで利用できるアニメ画像形式です',
+  PROP_tabQualityHWebpTooltip:
+    'WebPはAPNGよりも新しいアニメ画像形式です。古いブラウザー等では表示や再生ができないことがあります',
   PROP_tabQualityHHtmlTooltip: 'アニメ画像を表示するためのHTMLを作成します',
 
   PROP_btnSave: 'アニメ画像を保存する',
