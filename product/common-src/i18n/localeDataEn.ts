@@ -22,6 +22,7 @@ export const localeDataEn: ILocaleData = {
   PROP_tabQualityApngOpt: 'Optimization',
   PROP_tabQualityOptWay: 'Compression Method',
 
+  PROP_tabQualityAboutOpt:"What's Optimization?",
   PROP_tabQualityApngOptTooltip: 'Reduce the image quality to reduce the file size',
   PROP_tabQualityOptWayZopfli: 'It is the smallest file size, but the file saving is very long. In some cases, it can take over a few minutes.',
   PROP_tabQualityOptWay7zip: 'Make file size smaller, but file saving takes longer.',

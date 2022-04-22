@@ -21,7 +21,9 @@ export const localeDataJa: ILocaleData = {
   PROP_tabQualityApngOpt: '容量最適化',
   PROP_tabQualityOptWay: '圧縮方式',
 
-  PROP_tabQualityApngOptTooltip: '画質を下げることで、容量を小さくします',
+  PROP_tabQualityAboutOpt: '容量最適化とは...？',
+  PROP_tabQualityApngOptTooltip:
+    'ファイルを圧縮し容量を最適化します。圧縮方式により処理時間や容量が変わります。',
   PROP_tabQualityOptWayZopfli:
     '容量が最も小さくなりますが、ファイル作成が非常に長くなります。場合によっては分単位の時間がかかります',
   PROP_tabQualityOptWay7zip:

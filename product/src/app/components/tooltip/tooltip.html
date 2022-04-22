@@ -8,9 +8,11 @@
     #element
     [ngClass]="{ active: isShowingOptimiseTooltip }"
   >
-    <h3 class="h6 font-weight-bold">容量最適化とは...？</h3>
+    <h3 class="h6 font-weight-bold">
+      {{ localeData.PROP_tabQualityAboutOpt }}
+    </h3>
     <p>
-      ファイルを圧縮し容量を最適化します。圧縮方式により処理時間や容量が変わります。
+      {{ localeData.PROP_tabQualityApngOptTooltip }}
     </p>
     <ul>
       <li>zopfli...{{ localeData.PROP_tabQualityOptWayZopfli }}</li>

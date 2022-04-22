@@ -26,6 +26,7 @@ export interface ILocaleData {
   PROP_tabQualityApngOpt: string;
   PROP_tabQualityOptWay: string;
 
+  PROP_tabQualityAboutOpt: string;
   PROP_tabQualityApngOptTooltip: string;
   PROP_tabQualityOptWayZopfli: string;
   PROP_tabQualityOptWay7zip: string;
