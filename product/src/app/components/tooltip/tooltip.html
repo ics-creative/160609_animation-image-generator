@@ -29,9 +29,10 @@
       'top.px': getLineStampAlertButtonPos.y
     }"
   >
-    <h3 class="h6 font-weight-bold">
-      以下の<span class="text-danger">エラー</span>があります
-    </h3>
+    <h3
+      class="h6 font-weight-bold"
+      [innerHTML]="localeData.TOOLTIP_error_title"
+    ></h3>
     <ul>
       <li *ngFor="let message of validationErrorsMessage">
         {{ message }}

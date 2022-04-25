@@ -117,5 +117,8 @@ export const localeDataJa: ILocaleData = {
   RULE_animation_main: 'アニメーションスタンプメイン画像',
   RULE_popup: 'ポップアップスタンプ画像',
   RULE_effect: 'エフェクトスタンプ画像',
-  RULE_emoji: 'アニメーション絵文字'
+  RULE_emoji: 'アニメーション絵文字',
+
+  // HTMLとして出力
+  TOOLTIP_error_title: "以下の<span class='text-danger'>エラー</span>があります"
 };

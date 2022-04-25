@@ -106,4 +106,6 @@ export interface ILocaleData {
   RULE_popup: string;
   RULE_effect: string;
   RULE_emoji: string;
+
+  TOOLTIP_error_title: string;
 }

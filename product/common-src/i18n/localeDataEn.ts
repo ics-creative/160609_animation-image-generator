@@ -110,5 +110,8 @@ export const localeDataEn: ILocaleData = {
   RULE_animation_main: 'Animated Stickers Main Image',
   RULE_popup: 'Pop-up stickers Image',
   RULE_effect: 'Effect stickers Image',
-  RULE_emoji: 'Animated emoji'
+  RULE_emoji: 'Animated emoji',
+
+  // Output as HTML
+  TOOLTIP_error_title: "It has some <span class='text-danger'>Errors</span>"
 };
