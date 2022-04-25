@@ -1,4 +1,11 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  EventEmitter,
+  Input,
+  Output,
+  ViewChild
+} from '@angular/core';
 import { localeData } from 'app/i18n/locale-manager';
 import { AnimationImageOptions } from '../../../../common-src/data/animation-image-option';
 import { CompressionType } from '../../../../common-src/type/CompressionType';
@@ -18,7 +25,13 @@ export class PropertiesComponent {
   animationOptionData = new AnimationImageOptions();
 
   @Output()
+  buttonPos = new EventEmitter<{ x: number; y: number }>();
+
+  @Output()
   showTooltipEvent = new EventEmitter<Tooltip>();
+
+  @ViewChild('tooltipElement')
+  tooltipElement: ElementRef | undefined;
 
   PresetType = PresetType;
   CompressionType = CompressionType;
@@ -42,5 +55,9 @@ export class PropertiesComponent {
 
   showTooltip() {
     this.showTooltipEvent.emit(Tooltip.OPTIMISE);
+    this.buttonPos.emit({
+      x: this.tooltipElement?.nativeElement.getBoundingClientRect().x,
+      y: this.tooltipElement?.nativeElement.getBoundingClientRect().y
+    });
   }
 }

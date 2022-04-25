@@ -33,6 +33,7 @@
     <app-properties
       [animationOptionData]="animationOptionData"
       (showTooltipEvent)="changeTooltipShowing($event)"
+      (buttonPos)="setShowingTooltipButtonPos($event)"
     ></app-properties>
     <hr />
 
@@ -69,7 +70,7 @@
       [openingDirectories]="isUiLocked"
       (clickFileSelectButtonEvent)="handleClickFileSelectButton()"
       (showTooltipEvent)="changeTooltipShowing($event)"
-      (buttonPos)="setLineStampAlertButtonPos($event)"
+      (buttonPos)="setShowingTooltipButtonPos($event)"
       (validationErrorMessages)="setValidationErrorMessages($event)"
     >
     </app-anim-preview>
@@ -79,7 +80,7 @@
   <div>
     <app-tooltip
       [showingTooltip]="showingTooltip"
-      [lineStampAlertButtonPos]="lineStampAlertButtonPos"
+      [showingTooltipButtonPos]="showingTooltipButtonPos"
       (changeTooltipShowing)="changeTooltipShowing($event)"
       [validationErrorsMessage]="validationErrorsMessage"
     ></app-tooltip>

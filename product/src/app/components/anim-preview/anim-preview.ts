@@ -193,8 +193,8 @@ export class AnimPreviewComponent implements OnChanges, OnInit {
   showTooltip() {
     this.showTooltipEvent.emit(Tooltip.LINE_STAMP_ALERT);
     this.buttonPos.emit({
-      x: this.tooltipElement?.nativeElement.offsetLeft,
-      y: this.tooltipElement?.nativeElement.offsetTop
+      x: this.tooltipElement?.nativeElement.getBoundingClientRect().x,
+      y: this.tooltipElement?.nativeElement.getBoundingClientRect().y
     });
   }
 }

@@ -7,6 +7,10 @@
     class="tooltip optimise-tip"
     #element
     [ngClass]="{ active: isShowingOptimiseTooltip }"
+    [ngStyle]="{
+      'left.px': getOptimiseTooltipButtonPos.x,
+      'top.px': getOptimiseTooltipButtonPos.y
+    }"
   >
     <h3 class="h6 font-weight-bold">
       {{ localeData.PROP_tabQualityAboutOpt }}
