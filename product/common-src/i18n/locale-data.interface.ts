@@ -26,6 +26,7 @@ export interface ILocaleData {
   PROP_tabQualityApngOpt: string;
   PROP_tabQualityOptWay: string;
 
+  PROP_tabQualityAboutOpt: string;
   PROP_tabQualityApngOptTooltip: string;
   PROP_tabQualityOptWayZopfli: string;
   PROP_tabQualityOptWay7zip: string;
@@ -105,4 +106,6 @@ export interface ILocaleData {
   RULE_popup: string;
   RULE_effect: string;
   RULE_emoji: string;
+
+  TOOLTIP_error_title: string;
 }

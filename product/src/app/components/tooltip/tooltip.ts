@@ -6,6 +6,7 @@ import {
   Output,
   ViewChild
 } from '@angular/core';
+import { localeData } from 'app/i18n/locale-manager';
 import { Tooltip } from '../../../../common-src/type/TooltipType';
 
 @Component({
@@ -20,13 +21,15 @@ export class TooltipComponent {
   showingTooltip: Tooltip | null = null;
 
   @Input()
-  lineStampAlertButtonPos = { x: 0, y: 0 };
+  showingTooltipButtonPos = { x: 0, y: 0 };
 
   @Input()
   validationErrorsMessage: string[] = [''];
 
   @Output()
   changeTooltipShowing = new EventEmitter<Tooltip | null>();
+
+  localeData = localeData;
 
   hideTooltip(event: MouseEvent) {
     if (!(event.target instanceof HTMLElement)) {
@@ -45,14 +48,25 @@ export class TooltipComponent {
     return this.showingTooltip === Tooltip.LINE_STAMP_ALERT;
   }
 
+  get getOptimiseTooltipButtonPos() {
+    // ボタン位置とのx座標の差
+    const DIFF_X = 36;
+    // ボタン位置とのy座標の差
+    const DIFF_Y = -14;
+    return {
+      x: this.showingTooltipButtonPos.x + DIFF_X,
+      y: this.showingTooltipButtonPos.y + DIFF_Y
+    };
+  }
+
   get getLineStampAlertButtonPos() {
     // ボタン位置とのx座標の差
     const DIFF_X = -234;
     // ボタン位置とのy座標の差
     const DIFF_Y = 36;
     return {
-      x: this.lineStampAlertButtonPos.x + DIFF_X,
-      y: this.lineStampAlertButtonPos.y + DIFF_Y
+      x: this.showingTooltipButtonPos.x + DIFF_X,
+      y: this.showingTooltipButtonPos.y + DIFF_Y
     };
   }
 }

@@ -22,10 +22,11 @@ export const localeDataEn: ILocaleData = {
   PROP_tabQualityApngOpt: 'Optimization',
   PROP_tabQualityOptWay: 'Compression Method',
 
-  PROP_tabQualityApngOptTooltip: '',
-  PROP_tabQualityOptWayZopfli: '',
-  PROP_tabQualityOptWay7zip: '',
-  PROP_tabQualityOptWayzlib: '',
+  PROP_tabQualityAboutOpt:"What's Optimization?",
+  PROP_tabQualityApngOptTooltip: 'Compress image to reduce the file size. File size and required time will be changed by the compression method.',
+  PROP_tabQualityOptWayZopfli: 'File size is smallest but saving takes very long time. In some cases, it can take over a few minutes.',
+  PROP_tabQualityOptWay7zip: 'File size is smaller but saving takes long time.',
+  PROP_tabQualityOptWayzlib: 'File size is not much smaller but saved immediately.',
 
   PROP_tabQualityHApng: 'Export as APNG',
   PROP_tabQualityHWebp: 'Export as WebP',
@@ -109,5 +110,8 @@ export const localeDataEn: ILocaleData = {
   RULE_animation_main: 'Animated Stickers Main Image',
   RULE_popup: 'Pop-up stickers Image',
   RULE_effect: 'Effect stickers Image',
-  RULE_emoji: 'Animated emoji'
+  RULE_emoji: 'Animated emoji',
+
+  // Output as HTML
+  TOOLTIP_error_title: "There are some <span class='text-danger'>Errors</span>"
 };

@@ -56,7 +56,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   validationErrorsMessage = [''];
 
   showingTooltip: Tooltip | null = null;
-  lineStampAlertButtonPos: { x: number; y: number } = {
+  showingTooltipButtonPos: { x: number; y: number } = {
     x: 0,
     y: 0
   };
@@ -310,10 +310,10 @@ export class AppComponent implements OnInit, AfterViewInit {
   }
 
   /**
-   * ラインスタンプの警告ツールチップの位置をセットします
+   * ツールチップの表示位置をセットします
    */
-  setLineStampAlertButtonPos(pos: { x: number; y: number }) {
-    this.lineStampAlertButtonPos = pos;
+  setShowingTooltipButtonPos(pos: { x: number; y: number }) {
+    this.showingTooltipButtonPos = pos;
   }
 
   setValidationErrorMessages(errors: ImageValidatorResult) {

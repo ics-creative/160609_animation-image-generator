@@ -7,15 +7,21 @@
     class="tooltip optimise-tip"
     #element
     [ngClass]="{ active: isShowingOptimiseTooltip }"
+    [ngStyle]="{
+      'left.px': getOptimiseTooltipButtonPos.x,
+      'top.px': getOptimiseTooltipButtonPos.y
+    }"
   >
-    <h3 class="h6 font-weight-bold">容量最適化とは...？</h3>
+    <h3 class="h6 font-weight-bold">
+      {{ localeData.PROP_tabQualityAboutOpt }}
+    </h3>
     <p>
-      ファイルを圧縮し容量を最適化します。圧縮方式により処理時間や容量が変わります。
+      {{ localeData.PROP_tabQualityApngOptTooltip }}
     </p>
     <ul>
-      <li>zopfli...高い圧縮率のかわり非常に長い処理時間</li>
-      <li>7zip...そこそこの圧縮率とそれなりの処理時間</li>
-      <li>zlib...圧縮率は低いが処理時間が短い</li>
+      <li>zopfli...{{ localeData.PROP_tabQualityOptWayZopfli }}</li>
+      <li>7zip...{{ localeData.PROP_tabQualityOptWay7zip }}</li>
+      <li>zlib...{{ localeData.PROP_tabQualityOptWayzlib }}</li>
     </ul>
   </div>
   <div
@@ -27,9 +33,10 @@
       'top.px': getLineStampAlertButtonPos.y
     }"
   >
-    <h3 class="h6 font-weight-bold">
-      以下の<span class="text-danger">エラー</span>があります
-    </h3>
+    <h3
+      class="h6 font-weight-bold"
+      [innerHTML]="localeData.TOOLTIP_error_title"
+    ></h3>
     <ul>
       <li *ngFor="let message of validationErrorsMessage">
         {{ message }}
