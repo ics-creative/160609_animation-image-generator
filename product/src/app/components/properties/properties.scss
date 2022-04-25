@@ -1,5 +1,6 @@
 .nav-link {
   cursor: pointer;
+  color: inherit;
 }
 
 .nav-link.active {
@@ -10,6 +11,7 @@
   color: #63a5ed;
   font-size: 20px;
   cursor: pointer;
+  line-height: 1;
 }
 
 .optimise-tooltip {
@@ -20,6 +22,10 @@
   width: 20px;
   height: 20px;
   position: relative;
+  border-radius: 50%;
+  &:focus-visible {
+    outline-offset: 1px;
+  }
   &_inner {
     display: block;
     position: absolute;
