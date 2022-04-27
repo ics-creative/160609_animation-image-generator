@@ -71,6 +71,10 @@
   position: relative;
   background: none;
   border: none;
+  border-radius: 50%;
+  &:focus-visible {
+    outline-offset: 2px;
+  }
   &_inner {
     position: absolute;
     top: 0;
