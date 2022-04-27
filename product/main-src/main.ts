@@ -44,7 +44,9 @@ const createWindow = () => {
       backgroundThrottling: false,
       webviewTag: true,
       preload: path.join(__dirname, '../preload.js')
-    }
+    },
+    minWidth: 800,
+    minHeight: 600
   });
 
   console.log(process.env.NODE_ENV);

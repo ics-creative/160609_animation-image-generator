@@ -48,7 +48,7 @@ export class PropertiesComponent {
 
   avoidBlankFpsNum() {
     // FPS回数が0やnull、負数の場合は1に補正
-    if (!(this.animationOptionData.loop > 0)) {
+    if (!(this.animationOptionData.fps > 0)) {
       this.animationOptionData.fps = 1;
     }
   }
