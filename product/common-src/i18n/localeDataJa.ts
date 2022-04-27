@@ -5,7 +5,7 @@ export const localeDataJa: ILocaleData = {
 
   PROP_use: '用途',
   PROP_useItemLine: 'LINEアニメーションスタンプ',
-  PROP_useItemWeb: 'webページ用アニメーション',
+  PROP_useItemWeb: 'Webページ用アニメーション',
 
   PROP_tabAnim: 'アニメーション設定',
   PROP_tabQuality: '画質設定',
@@ -25,11 +25,11 @@ export const localeDataJa: ILocaleData = {
   PROP_tabQualityApngOptTooltip:
     'ファイルを圧縮し容量を最適化します。圧縮方式により処理時間や容量が変わります。',
   PROP_tabQualityOptWayZopfli:
-    '容量が最も小さくなりますが、ファイル作成が非常に長くなります。場合によっては分単位の時間がかかります',
+    '容量が最も小さくなりますが、ファイル作成が非常に長くなります。場合によっては分単位の時間がかかります。',
   PROP_tabQualityOptWay7zip:
-    '容量が小さくなりますが、ファイル作成に時間がかかります',
+    '容量が小さくなりますが、ファイル作成に時間がかかります。',
   PROP_tabQualityOptWayzlib:
-    '容量はそれほど小さくなりませんが、すぐにファイルが作成されます',
+    '容量はそれほど小さくなりませんが、すぐにファイルが作成されます。',
 
   PROP_tabQualityHApng: 'APNGファイル出力',
   PROP_tabQualityHWebp: 'WebPファイル出力',
