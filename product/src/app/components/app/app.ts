@@ -7,8 +7,6 @@ import {
   ViewChild
 } from '@angular/core';
 import { AppConfig } from '../../../../common-src/config/app-config';
-import { LocaleData } from '../../i18n/locale-data';
-import { LocaleManager } from '../../i18n/locale-manager';
 import { DomSanitizer } from '@angular/platform-browser';
 import IpcService from '../../process/ipc.service';
 import { PresetType } from '../../../../common-src/type/PresetType';
@@ -18,6 +16,15 @@ import { AnimationImageOptions } from '../../../../common-src/data/animation-ima
 import { ImageData } from '../../../../common-src/data/image-data';
 import { checkImagePxSizeMatched } from './checkImagePxSizeMatched';
 import { loadPresetConfig, savePresetConfig } from './UserConfig';
+import { localeData } from 'app/i18n/locale-manager';
+import { LineValidationType } from '../../../../common-src/type/LineValidationType';
+import { checkRuleList } from '../../../../common-src/checkRule/checkRule';
+import { Tooltip } from '../../../../common-src/type/TooltipType';
+import { FormControl } from '@angular/forms';
+import {
+  ImageValidatorResult,
+  ValidationResult
+} from '../../../../common-src/type/ImageValidator';
 
 const getFirstNumber = (text: string): number | undefined => {
   const numStr = text.match(/\d+/g)?.pop();
@@ -45,6 +52,24 @@ export class AppComponent implements OnInit, AfterViewInit {
   presetMode = PresetType.LINE;
   items: ImageData[] = [];
   PresetType = PresetType;
+  localeData = localeData;
+  validationErrorsMessage = [''];
+
+  showingTooltip: Tooltip | null = null;
+  showingTooltipButtonPos: { x: number; y: number } = {
+    x: 0,
+    y: 0
+  };
+  checkRule = new FormControl(LineValidationType.ANIMATION_STAMP);
+
+  readonly checkRuleList = checkRuleList;
+  readonly checkRuleLabel = {
+    [LineValidationType.ANIMATION_STAMP]: localeData.RULE_animation_stamp,
+    [LineValidationType.ANIMATION_MAIN]: localeData.RULE_animation_main,
+    [LineValidationType.EFFECT]: localeData.RULE_effect,
+    [LineValidationType.POPUP]: localeData.RULE_popup,
+    [LineValidationType.EMOJI]: localeData.RULE_emoji
+  };
 
   @Input()
   animationOptionData = new AnimationImageOptions();
@@ -55,13 +80,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   @ViewChild('optionSelecter', { static: true })
   optionSelecterComponent?: ElementRef;
 
-  constructor(
-    public localeData: LocaleData,
-    sanitizer: DomSanitizer,
-    private ipcService: IpcService
-  ) {
-    new LocaleManager().applyClientLocale(localeData);
-  }
+  constructor(sanitizer: DomSanitizer, private ipcService: IpcService) {}
 
   ngOnInit() {
     this.animationOptionData = new AnimationImageOptions();
@@ -71,8 +90,6 @@ export class AppComponent implements OnInit, AfterViewInit {
     // 初回プリセットの設定
     this.presetMode = loadPresetConfig();
     this.changePreset(this.presetMode);
-
-    this.ipcService.sendConfigData(this.localeData);
   }
 
   ngAfterViewInit() {
@@ -160,7 +177,8 @@ export class AppComponent implements OnInit, AfterViewInit {
       await this.ipcService.exec(
         AppConfig.version,
         this.items,
-        this.animationOptionData
+        this.animationOptionData,
+        this.checkRule.value
       );
     } finally {
       this.hideLockDialog();
@@ -215,7 +233,8 @@ export class AppComponent implements OnInit, AfterViewInit {
    */
   async setFilePathList(filePathList: string[]): Promise<void> {
     const path = this.ipcService.path;
-    const isPngFile = (name: string) => path.extname(name).toLowerCase() === '.png';
+    const isPngFile = (name: string) =>
+      path.extname(name).toLowerCase() === '.png';
     // 	再度アイテムがドロップされたらリセットするように調整
     const items = filePathList.filter(isPngFile).map(
       (filePath) =>
@@ -277,5 +296,29 @@ export class AppComponent implements OnInit, AfterViewInit {
       const msg = `${errorItem.imageBaseName} ${this.localeData.VALIDATE_ImportImageSize}`;
       await this.ipcService.showMessage(msg);
     }
+  }
+
+  /**
+   * ツールチップの表示を変更します
+   */
+  changeTooltipShowing(message: Tooltip | null) {
+    if (this.showingTooltip !== null) {
+      this.showingTooltip = null;
+    } else {
+      this.showingTooltip = message;
+    }
+  }
+
+  /**
+   * ツールチップの表示位置をセットします
+   */
+  setShowingTooltipButtonPos(pos: { x: number; y: number }) {
+    this.showingTooltipButtonPos = pos;
+  }
+
+  setValidationErrorMessages(errors: ImageValidatorResult) {
+    this.validationErrorsMessage = (Object.values(errors) as ValidationResult[])
+      .filter((value) => value !== undefined)
+      .map((value) => value?.message ?? '');
   }
 }

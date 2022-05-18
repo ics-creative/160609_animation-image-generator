@@ -32,10 +32,24 @@
     <!-- プロパティ変更画面 -->
     <app-properties
       [animationOptionData]="animationOptionData"
+      (showTooltipEvent)="changeTooltipShowing($event)"
+      (buttonPos)="setShowingTooltipButtonPos($event)"
     ></app-properties>
     <hr />
-    <!-- アニメ画像を保存するボタン -->
 
+    <div *ngIf="animationOptionData.preset === PresetType.LINE">
+      <!-- チェックルール -->
+      <div class="checkRule mod-select-preset">
+        <p class="mb-2">{{ localeData.RULE_title }}</p>
+        <select class="form-control mb-4" [formControl]="checkRule">
+          <option *ngFor="let checkRule of checkRuleList" [value]="checkRule">
+            {{ checkRuleLabel[checkRule] }}
+          </option>
+        </select>
+      </div>
+    </div>
+
+    <!-- アニメ画像を保存するボタン -->
     <div class="text-center">
       <button
         (click)="generateAnimImage()"
@@ -52,10 +66,24 @@
     <app-anim-preview
       [animationOptionData]="animationOptionData"
       [items]="items"
+      [checkRule]="checkRule.value"
       [openingDirectories]="isUiLocked"
       (clickFileSelectButtonEvent)="handleClickFileSelectButton()"
+      (showTooltipEvent)="changeTooltipShowing($event)"
+      (buttonPos)="setShowingTooltipButtonPos($event)"
+      (validationErrorMessages)="setValidationErrorMessages($event)"
     >
     </app-anim-preview>
+  </div>
+
+  <!-- ツールチップ -->
+  <div>
+    <app-tooltip
+      [showingTooltip]="showingTooltip"
+      [showingTooltipButtonPos]="showingTooltipButtonPos"
+      (changeTooltipShowing)="changeTooltipShowing($event)"
+      [validationErrorsMessage]="validationErrorsMessage"
+    ></app-tooltip>
   </div>
 </div>
 

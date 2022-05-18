@@ -1,15 +1,18 @@
 <div>
   <ul class="nav nav-tabs">
     <li class="nav-item">
-      <!-- ホントは a 要素を使うべきだが、ドラッグできる不都合があったので span 要素で回避。href 属性はご愛嬌で・・・ -->
-      <span class="nav-link active" href="#tab1" data-toggle="tab">{{
-        localeData.PROP_tabAnim
-      }}</span>
+      <a
+        class="nav-link active"
+        href="#tab1"
+        data-toggle="tab"
+        draggable="false"
+        >{{ localeData.PROP_tabAnim }}</a
+      >
     </li>
     <li class="nav-item">
-      <span class="nav-link" href="#tab2" data-toggle="tab">{{
+      <a class="nav-link" href="#tab2" data-toggle="tab" draggable="false">{{
         localeData.PROP_tabQuality
-      }}</span>
+      }}</a>
     </li>
   </ul>
 
@@ -31,6 +34,7 @@
             data-placement="right"
             title="{{ localeData.PROP_tabAnimFpsTooltip }}"
             *ngIf="animationOptionData.preset === PresetType.LINE"
+            (blur)="avoidBlankFpsNum()"
           />
           <input
             type="number"
@@ -39,6 +43,7 @@
             min="1"
             max="60"
             *ngIf="animationOptionData.preset === PresetType.WEB"
+            (blur)="avoidBlankFpsNum()"
           />
         </div>
       </div>
@@ -75,6 +80,7 @@
             data-placement="right"
             title="{{ localeData.PROP_tabAnimLoopTooltip }}"
             *ngIf="animationOptionData.preset === PresetType.LINE"
+            (blur)="avoidBlankLoopNum()"
           />
           <input
             type="number"
@@ -82,6 +88,7 @@
             [(ngModel)]="animationOptionData.loop"
             min="1"
             *ngIf="animationOptionData.preset === PresetType.WEB"
+            (blur)="avoidBlankLoopNum()"
           />
         </div>
       </div>
@@ -111,18 +118,27 @@
         class="card card-block p-4 mb-4"
       >
         <!-- 圧縮方法 -->
-        <div class="checkbox">
+        <div class="checkbox d-flex align-items-start">
           <label
+            class="d-flex align-items-center"
             data-toggle="tooltip"
             data-placement="right"
             title="{{ localeData.PROP_tabQualityApngOptTooltip }}"
           >
             <input
               type="checkbox"
+              class="mr-1"
               [(ngModel)]="animationOptionData.enabledPngCompress"
             />
             {{ localeData.PROP_tabQualityApngOpt }}
           </label>
+          <button
+            (click)="showTooltip()"
+            #tooltipElement
+            class="ml-2 optimise-tooltip"
+          >
+            <i class="optimise-tooltip_inner fa fa-question-circle"></i>
+          </button>
         </div>
 
         <!-- 圧縮方式 -->
@@ -154,6 +170,7 @@
           <div class="form-check">
             <input
               class="form-check-input"
+              name="radio-stacked"
               type="radio"
               id="radio-7zip"
               (click)="animationOptionData.compression = CompressionType.zip7"

@@ -3,17 +3,28 @@
 
 import {
   Component,
+  ElementRef,
   EventEmitter,
   Input,
   OnChanges,
   OnInit,
-  Output
+  Output,
+  ViewChild
 } from '@angular/core';
-import { LocaleData } from '../../i18n/locale-data';
 import { PresetType } from '../../../../common-src/type/PresetType';
 import { ImageData } from '../../../../common-src/data/image-data';
 import { AnimationImageOptions } from '../../../../common-src/data/animation-image-option';
-import { LineStampValidator } from '../../../../common-src/validators/LineStampValidator';
+import {
+  validateLineStamp,
+  validateLineStampNoError
+} from '../../../../common-src/validators/validateLineStamp';
+import { localeData } from 'app/i18n/locale-manager';
+import {
+  ImageValidatorResult,
+  ValidationResult
+} from '../../../../common-src/type/ImageValidator';
+import { LineValidationType } from '../../../../common-src/type/LineValidationType';
+import { Tooltip } from '../../../../common-src/type/TooltipType';
 
 @Component({
   selector: 'app-anim-preview',
@@ -33,27 +44,55 @@ export class AnimPreviewComponent implements OnChanges, OnInit {
   @Input()
   openingDirectories = false;
 
+  @Input()
+  checkRule: LineValidationType = LineValidationType.ANIMATION_STAMP;
+
+  @ViewChild('tooltipElement')
+  tooltipElement: ElementRef | undefined;
+
   /** ファイル選択ダイアログのイベントです。 */
   @Output()
   public clickFileSelectButtonEvent = new EventEmitter();
+
+  @Output()
+  showTooltipEvent = new EventEmitter<Tooltip>();
+
+  @Output()
+  buttonPos = new EventEmitter<{ x: number; y: number }>();
+
+  @Output()
+  validationErrorMessages = new EventEmitter<ImageValidatorResult>();
 
   imagePath = '';
   playing = false;
   currentFrame = 0;
   currentLoopCount = 0;
   scaleValue = 1.0;
-  isValidFrameSize = true;
-  isValidFrameLength = true;
-  isValidTime = true;
+  validationErrors: ImageValidatorResult = validateLineStampNoError();
   cacheClearStamp = '';
-  localeData: LocaleData;
+  localeData = localeData;
 
-  constructor(localeData: LocaleData) {
-    this.localeData = localeData;
-  }
+  constructor() {}
 
   selectScaleValue(scaleValue: string): void {
     this.scaleValue = Number(scaleValue);
+  }
+
+  /** バリデーションエラーがあるか返します */
+  get hasError() {
+    const errors: ValidationResult[] = Object.values(this.validationErrors);
+    return errors.some((errorMessage) => errorMessage !== undefined);
+  }
+
+  /** 再生時間を小数第二位で四捨五入して返します */
+  get durationTime() {
+    return (
+      Math.round(
+        ((this.items.length * this.animationOptionData.loop) /
+          this.animationOptionData.fps) *
+          100
+      ) / 100
+    );
   }
 
   ngOnInit() {
@@ -100,23 +139,17 @@ export class AnimPreviewComponent implements OnChanges, OnInit {
 
   private loop(): void {
     createjs.Ticker.framerate = this.animationOptionData.fps;
-
     // ここでバリデートするのは間違っていると思うが・・・・
     if (this.animationOptionData.preset === PresetType.LINE) {
-      this.isValidFrameSize =
-        LineStampValidator.validateFrameMaxSize(this.animationOptionData) &&
-        LineStampValidator.validateFrameMinSize(this.animationOptionData);
-      this.isValidFrameLength = LineStampValidator.validateFrameLength(
-        this.animationOptionData
-      );
-      this.isValidTime = LineStampValidator.validateTime(
+      this.validationErrors = validateLineStamp(
+        this.checkRule,
         this.animationOptionData
       );
     } else {
-      this.isValidFrameSize = true;
-      this.isValidFrameLength = true;
-      this.isValidTime = true;
+      this.validationErrors = validateLineStampNoError();
     }
+
+    this.validationErrorMessages.emit(this.validationErrors);
 
     if (!this.items || !this.playing) {
       this.playing = false;
@@ -157,7 +190,11 @@ export class AnimPreviewComponent implements OnChanges, OnInit {
     }
   }
 
-  private check(): boolean {
-    return false;
+  showTooltip() {
+    this.showTooltipEvent.emit(Tooltip.LINE_STAMP_ALERT);
+    this.buttonPos.emit({
+      x: this.tooltipElement?.nativeElement.getBoundingClientRect().x,
+      y: this.tooltipElement?.nativeElement.getBoundingClientRect().y
+    });
   }
 }

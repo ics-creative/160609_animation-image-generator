@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { IpcId, IpcInvoke } from '../../../common-src/ipc-id';
 import { AnimationImageOptions } from '../../../common-src/data/animation-image-option';
 import { ImageData } from '../../../common-src/data/image-data';
-import { ILocaleData } from '../../../common-src/i18n/locale-data.interface';
+import { LineValidationType } from '../../../common-src/type/LineValidationType';
 
 interface Path {
   extname: (path: string) => string;
@@ -23,11 +23,6 @@ export default class IpcService {
   constructor() {
     this.api = (window as any).api;
     this.path = this.api.path;
-  }
-
-  /** UIからメインプロセス側にアプリの動作設定を共有します */
-  sendConfigData(localeData: ILocaleData) {
-    return this.api.invoke(IpcId.SET_CONFIG_DATA, localeData);
   }
 
   /** 画像選択ダイアログを開きます。結果を受け取るにはonSelectedOpenImagesにイベントハンドラーを登録します */
@@ -62,18 +57,20 @@ export default class IpcService {
   exec(
     version: string,
     itemList: ImageData[],
-    animationOptionData: AnimationImageOptions
+    animationOptionData: AnimationImageOptions,
+    validationType: LineValidationType
   ) {
     return this.api.invoke(
       IpcId.EXEC_IMAGE_EXPORT_PROCESS,
       version,
       itemList,
-      animationOptionData
+      animationOptionData,
+      validationType
     );
   }
 
   /** メッセージダイアログを表示します。alert()の代替として使用します */
   showMessage(message: string, title?: string) {
-    return this.api.invoke(IpcId.SHOW_MESSAGE, message, title)
+    return this.api.invoke(IpcId.SHOW_MESSAGE, message, title);
   }
 }

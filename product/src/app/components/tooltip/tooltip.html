@@ -1,0 +1,46 @@
+<div
+  (click)="hideTooltip($event)"
+  class="fixed-top tooltipWrapper"
+  [ngClass]="{ active: showingTooltip !== null }"
+>
+  <div
+    class="tooltip optimise-tip"
+    #element
+    [ngClass]="{ active: isShowingOptimiseTooltip }"
+    [ngStyle]="{
+      'left.px': getOptimiseTooltipButtonPos.x,
+      'top.px': getOptimiseTooltipButtonPos.y
+    }"
+  >
+    <h3 class="h6 font-weight-bold">
+      {{ localeData.PROP_tabQualityAboutOpt }}
+    </h3>
+    <p>
+      {{ localeData.PROP_tabQualityApngOptTooltip }}
+    </p>
+    <ul>
+      <li>zopfli：{{ localeData.PROP_tabQualityOptWayZopfli }}</li>
+      <li>7zip：{{ localeData.PROP_tabQualityOptWay7zip }}</li>
+      <li>zlib：{{ localeData.PROP_tabQualityOptWayzlib }}</li>
+    </ul>
+  </div>
+  <div
+    class="tooltip line-stamp-alert-tip"
+    #element
+    [ngClass]="{ active: isShowingLineStampAlertTooltip }"
+    [ngStyle]="{
+      'left.px': getLineStampAlertButtonPos.x,
+      'top.px': getLineStampAlertButtonPos.y
+    }"
+  >
+    <h3
+      class="h6 font-weight-bold"
+      [innerHTML]="localeData.TOOLTIP_error_title"
+    ></h3>
+    <ul>
+      <li *ngFor="let message of validationErrorsMessage">
+        {{ message }}
+      </li>
+    </ul>
+  </div>
+</div>

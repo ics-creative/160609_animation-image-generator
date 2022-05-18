@@ -1,7 +1,37 @@
 .nav-link {
   cursor: pointer;
+  color: inherit;
 }
 
 .nav-link.active {
   cursor: default;
+}
+
+.fa-question-circle {
+  color: #63a5ed;
+  font-size: 20px;
+  cursor: pointer;
+  line-height: 1;
+}
+
+.optimise-tooltip {
+  display: block;
+  background: none;
+  border: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  position: relative;
+  border-radius: 50%;
+  &:focus-visible {
+    outline-offset: 1px;
+  }
+  &_inner {
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 20px;
+    height: 20px;
+  }
 }

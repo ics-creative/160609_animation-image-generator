@@ -15,48 +15,74 @@
 </div>
 
 <div class="anim-preview p-3" *ngIf="items.length > 0">
-  <p>
-    {{ localeData.PREV_infoFrameSize }}
-    <span
-      class="badge"
-      [ngClass]="{
-        'badge-success': isValidFrameSize,
-        'badge-danger': !isValidFrameSize
-      }"
-      >W{{ animationOptionData.imageInfo.width }}×H{{
-        animationOptionData.imageInfo.height
-      }}px</span
-    >
-    / {{ localeData.PREV_infoFrameNum }}
-    <span
-      class="badge"
-      [ngClass]="{
-        'badge-success': isValidFrameLength,
-        'badge-danger': !isValidFrameLength
-      }"
-      >{{ items.length }}</span
-    >
-    <span *ngIf="animationOptionData.noLoop === false">
-      / {{ localeData.PREV_infoTime }}
+  <p class="d-flex align-items-center">
+    <span>
+      {{ localeData.PREV_infoFrameSize }}
       <span
-        class="badge badge-success"
+        class="badge"
         [ngClass]="{
-          'badge-success': isValidTime,
-          'badge-danger': !isValidTime
+          'badge-success': !validationErrors.imageSizeError,
+          'badge-danger': validationErrors.imageSizeError
         }"
-        >{{ (items.length * animationOptionData.loop) / animationOptionData.fps
-        }}{{ localeData.PREV_infoTimeUnit }}</span
+        >W{{ animationOptionData.imageInfo.width }}×H{{
+          animationOptionData.imageInfo.height
+        }}px</span
       >
     </span>
+    <span class="ml-2">/</span>
+    <span class="ml-2">
+      {{ localeData.PREV_infoFrameNum }}
+      <span
+        class="badge"
+        [ngClass]="{
+          'badge-success': !validationErrors.frameCountError,
+          'badge-danger': validationErrors.frameCountError
+        }"
+        >{{ items.length }}</span
+      ></span
+    >
+    <span class="ml-2" *ngIf="animationOptionData.noLoop === false">/</span>
+    <span class="ml-2" *ngIf="animationOptionData.noLoop === false">
+      <span>
+        {{ localeData.PROP_tabAnimLoopNum }}
+        <span
+          class="badge badge-success"
+          [ngClass]="{
+            'badge-success': !validationErrors.loopCountError,
+            'badge-danger': validationErrors.loopCountError
+          }"
+          >{{ animationOptionData.loop }}</span
+        >
+      </span></span
+    >
+
+    <span class="ml-2" *ngIf="animationOptionData.noLoop === false">/</span>
+    <span class="ml-2" *ngIf="animationOptionData.noLoop === false">
+      <span>
+        {{ localeData.PREV_infoTime }}
+        <span
+          class="badge badge-success"
+          [ngClass]="{
+            'badge-success': !validationErrors.durationError,
+            'badge-danger': validationErrors.durationError
+          }"
+          >{{ durationTime }}{{ localeData.PREV_infoTimeUnit }}</span
+        >
+      </span></span
+    >
+
+    <button
+      *ngIf="hasError"
+      (click)="showTooltip()"
+      #tooltipElement
+      class="ml-2 error-tooltip"
+    >
+      <i class="fa fa-exclamation text-white error-tooltip_inner bg-danger"></i>
+    </button>
   </p>
 
   <div class="preview-area mb-3">
-    <!-- 1枚画像プレビュー -->
-    <div [ngStyle]="{ zoom: scaleValue }" class="mb-3">
-      <img data-src="file:///{{ imagePath + '?cc=' + cacheClearStamp }}" />
-    </div>
-
-    <div class="d-flex align-items-center">
+    <div class="d-flex align-items-center mb-3">
       <!-- 再生・停止・戻るボタン -->
       <span class="mr-2 button-group" role="group">
         <button
@@ -107,6 +133,10 @@
       >
         {{ localeData.PREV_btnSelectRe }}
       </button>
+    </div>
+    <!-- 1枚画像プレビュー -->
+    <div [ngStyle]="{ zoom: scaleValue }" class="mb-3">
+      <img data-src="file:///{{ imagePath + '?cc=' + cacheClearStamp }}" />
     </div>
   </div>
 

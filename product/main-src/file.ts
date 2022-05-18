@@ -3,24 +3,24 @@ import { ErrorMessage } from './error/error-message';
 import { sendError } from './error/send-error';
 import { AnimationImageOptions } from '../common-src/data/animation-image-option';
 import { ImageData } from '../common-src/data/image-data';
-import { ILocaleData } from '../common-src/i18n/locale-data.interface';
 import { PresetType } from '../common-src/type/PresetType';
-import { LineStampValidator } from '../common-src/validators/LineStampValidator';
+import { validateLineStamp } from '../common-src/validators/validateLineStamp';
 import * as fs from 'fs';
 import { createInquiryCode } from './generators/createInquiryCode';
 import { execGenerate } from './generators/execGenerate';
 import { SaveDialog } from './dialog/SaveDialog';
 import { existsPath } from './fileFunctions/existsPath';
+import { localeData } from './locale-manager';
+import { notNull } from './utils/notNull';
+import { LineValidationType } from '../common-src/type/LineValidationType';
 export default class File {
   constructor(
     mainWindow: BrowserWindow,
-    localeData: ILocaleData,
     appPath: string,
     errorMessage: ErrorMessage,
     saveDialog: SaveDialog
   ) {
     this.mainWindow = mainWindow;
-    this.localeData = localeData;
     this.appPath = appPath;
     this.errorMessage = errorMessage;
     this.saveDialog = saveDialog;
@@ -30,13 +30,13 @@ export default class File {
   private readonly saveDialog: SaveDialog;
   private readonly errorMessage: ErrorMessage;
   private readonly appPath: string;
-  private readonly localeData: ILocaleData;
 
   public async exec(
     temporaryPath: string,
     version: string,
     itemList: ImageData[],
-    animationOptionData: AnimationImageOptions
+    animationOptionData: AnimationImageOptions,
+    validationType: LineValidationType
   ): Promise<void> {
     // お問い合わせコード生成
     const inquiryCode = createInquiryCode();
@@ -52,7 +52,11 @@ export default class File {
 
     // プリセットがLINEの場合、出力成功後にチェックを行い、警告があれば表示
     if (animationOptionData.preset === PresetType.LINE && result.pngPath) {
-      await this.validateLineStamp(result.pngPath, animationOptionData);
+      await this.validateLineStamp(
+        validationType,
+        result.pngPath,
+        animationOptionData
+      );
     }
 
     if (result.error) {
@@ -75,13 +79,14 @@ export default class File {
         inquiryCode,
         error.errDetail,
         errorStack || '',
-        this.localeData.APP_NAME,
+        localeData().APP_NAME,
         this.mainWindow
       );
     }
   }
 
   private async validateLineStamp(
+    validationType: LineValidationType,
     exportFilePath: string,
     animationOptionData: AnimationImageOptions
   ) {
@@ -89,20 +94,25 @@ export default class File {
       return;
     }
     const stat = fs.statSync(exportFilePath);
-    const validateArr = LineStampValidator.validate(
-      stat,
-      animationOptionData,
-      this.localeData
-    );
+    const result = validateLineStamp(validationType, animationOptionData, stat);
+    const errors = [
+      result.fileSizeError,
+      result.frameCountError,
+      result.loopCountError,
+      result.durationError,
+      result.imageSizeError
+    ]
+      .filter(notNull)
+      .map((res) => res.message);
 
-    if (validateArr.length > 0) {
-      const message = this.localeData.VALIDATE_title;
-      const detailMessage = '・' + validateArr.join('\n\n・');
+    if (errors.length > 0) {
+      const message = localeData().VALIDATE_title;
+      const detailMessage = '・' + errors.join('\n\n・');
 
       const dialogOption: Electron.MessageBoxOptions = {
         type: 'info',
         buttons: ['OK'],
-        title: this.localeData.APP_NAME,
+        title: localeData().APP_NAME,
         message: message,
         detail: detailMessage
       };
