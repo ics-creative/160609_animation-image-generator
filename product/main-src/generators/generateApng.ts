@@ -86,7 +86,7 @@ const pngCompress = async (
   outDir: string
 ): Promise<GenetateError | undefined> => {
   const options: string[] = [
-    '--quality=65-80',
+    '--quality=0-80',
     '--speed',
     '1',
     '--output',
