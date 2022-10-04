@@ -6,7 +6,7 @@
   <Identity Name="14242ICSINC.47036A6FE912"
     ProcessorArchitecture="x64"
     Publisher="CN=C2CC10C5-FAD8-43B5-BD98-00BD859F41D5"
-    Version="4.0.0.0" />
+    Version="4.1.0.0" />
   <Properties>
     <DisplayName>アニメ画像に変換する君</DisplayName>
     <PublisherDisplayName>ICS INC.</PublisherDisplayName>
