@@ -148,9 +148,10 @@ handle(
     code: string,
     category: string,
     title: string,
-    detail: string
+    detail: string,
+    stack: string
   ) => {
-    sendError(version, code, category, title, detail);
+    sendError(version, code, category, title, detail, stack);
   }
 );
 
