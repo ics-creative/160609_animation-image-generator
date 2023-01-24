@@ -64,21 +64,24 @@ export default class File {
       console.log('::catch-error::');
       // エラー内容の送信
       console.error(error);
-      const errorStack = error.cause.stack;
+      const detail = JSON.stringify({
+        detail: error.errDetail,
+        name: error.cause.name,
+        stack: error.cause.stack
+      });
 
       sendError(
         version,
         inquiryCode,
         'ERROR',
         error.errCode.toString(),
-        errorStack || ''
+        detail
       );
 
       this.errorMessage.showErrorMessage(
         error.errCode,
         inquiryCode,
         error.errDetail,
-        errorStack || '',
         localeData().APP_NAME,
         this.mainWindow
       );
