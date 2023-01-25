@@ -96,7 +96,7 @@ const buildUniversal = async () => {
     name: conf.JP_NAME,
     dir: conf.packageTmpPath.darwin,
     out: './',
-    icon: './resources/app.icons',
+    icon: './resources/app-icon/app.icons',
     platform: 'mas',
     electronVersion: conf.ELECTRON_VERSION,
     overwrite: true,
