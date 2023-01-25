@@ -33,6 +33,10 @@ const copyTemporaryDirectory = async (
   return Promise.all(tasks);
 };
 
+/** 元画像が存在するかチェックし、最初に見つかった存在しない画像を返します。全てが存在する場合は何も返しません */
+const findMissingItemFile = (itemList: ImageData[]): ImageData | undefined =>
+  itemList.find((item) => !fs.existsSync(item.imagePath));
+
 export const execGenerate = async (
   itemList: ImageData[],
   animationOptionData: AnimationImageOptions,
@@ -76,6 +80,14 @@ export const execGenerate = async (
     errorCode = ErrorType.TEMPORARY_CLEAN_ERROR;
     await emptyDirectory(temporaryPath);
     await emptyDirectory(temporaryCompressPath);
+
+    console.log('::check-input-files-exist::');
+    errorCode = ErrorType.INPUT_CHECK_FILE_NOT_FOUND_ERROR;
+    const missing = findMissingItemFile(itemList);
+    if (missing) {
+      errorDetail = 'file not found: ' + missing.imagePath;
+      throw new Error('input file is not exists.');
+    }
 
     console.log('::make-temporary::');
     errorCode = ErrorType.MAKE_TEMPORARY_ERROR;

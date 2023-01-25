@@ -108,6 +108,9 @@ export class ErrorMessage {
       // テンポラリファイルの削除
       case ErrorType.TEMPORARY_CLEAN_ERROR:
         return '一時ファイルの削除に失敗しました。';
+
+      case ErrorType.INPUT_CHECK_FILE_NOT_FOUND_ERROR:
+        return '変換元の画像が見つかりません。移動または削除された可能性があります。再度画像を選択して保存をお試しください。';
     }
     return '原因が不明なエラーが発生しました。';
   }
