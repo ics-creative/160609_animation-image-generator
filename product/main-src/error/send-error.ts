@@ -10,15 +10,22 @@ export const sendError = async (
   code: string,
   category: string,
   title: string,
-  detail: string
+  detail: string,
+  stack: string
 ): Promise<void> => {
+  const os = require('os');
+  const osPlatform: string = os.platform();
+  const osArch: string = os.arch();
+  const osRelease: string = os.release();
+
   const saveData = {
-    OS: require('os').platform(),
+    OS: [osPlatform, osArch, osRelease].join('/'),
     version: version,
     code: code,
     category: category,
     title: title,
-    detail: detail
+    detail: detail,
+    stack: stack
   };
 
   const data = {
