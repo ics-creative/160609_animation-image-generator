@@ -108,6 +108,9 @@ export class ErrorMessage {
       // テンポラリファイルの削除
       case ErrorType.TEMPORARY_CLEAN_ERROR:
         return '一時ファイルの削除に失敗しました。';
+
+      case ErrorType.FILE_MOVE_ERROR:
+        return 'ファイルの移動に失敗しました。';
     }
     return '原因が不明なエラーが発生しました。';
   }
