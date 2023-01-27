@@ -85,7 +85,8 @@ export const generateWebp = async (
   // 出力ファイルを目的地に移動＆リネーム
   // 移動先はユーザの領域・ファイル名なので、出力先ディレクトリが無くなっている・ロックされている等の場合に備えて明示的にエラーを拾う
   try {
-    fs.renameSync(outTmpFilePath, exportFilePath);
+    fs.copyFileSync(outTmpFilePath, exportFilePath);
+    fs.unlinkSync(outTmpFilePath);
   } catch (mvErr) {
     console.error(mvErr);
     errorCode = ErrorType.FILE_MOVE_ERROR;
