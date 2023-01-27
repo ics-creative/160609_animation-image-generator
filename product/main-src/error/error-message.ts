@@ -111,6 +111,9 @@ export class ErrorMessage {
 
       case ErrorType.INPUT_CHECK_FILE_NOT_FOUND_ERROR:
         return '変換元の画像が見つかりません。移動または削除された可能性があります。再度画像を選択して保存をお試しください。';
+
+      case ErrorType.FILE_MOVE_ERROR:
+        return 'ファイルの移動に失敗しました。';
     }
     return '原因が不明なエラーが発生しました。';
   }

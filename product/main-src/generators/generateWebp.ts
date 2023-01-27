@@ -38,6 +38,8 @@ export const generateWebp = async (
   // 全フレーム分の引数を作成
   const options: string[] = [];
   const frameMs = Math.round(1000 / optionData.fps);
+  const outTmpFilePath = path.join(temporaryPath, 'webpmux_out.webp');
+
   for (let i = 0; i < itemList.length; i++) {
     // フレーム数に違和感がある
     options.push(`-frame`);
@@ -51,7 +53,7 @@ export const generateWebp = async (
   }
 
   options.push(`-o`);
-  options.push(exportFilePath);
+  options.push(outTmpFilePath);
 
   // コマンド引数を一時ファイルに書き込み
   const argumentFilePath = path.join(temporaryPath, 'webpmux_arguments.txt');
@@ -68,19 +70,31 @@ export const generateWebp = async (
   // 引数ファイルを削除
   fs.unlinkSync(argumentFilePath);
 
-  if (!err) {
-    return;
+  if (err) {
+    console.error(stderr);
+    // TODO: ENOENT_ERRORの場合はErrorType.WEBPMUX_ACCESS_ERRORを返したい
+    errorCode = ErrorType.WEBPMUX_ERROR;
+    return {
+      cause: err,
+      errCode: errorCode,
+      // ファイル経由で引数を渡すとerrのメッセージから引数の内容がわからないため、エラー詳細に明示的に引数の内容を出力する
+      errDetail: err.code + ' : ' + stdout + ', arguments:' + argsText
+    };
   }
 
-  console.error(stderr);
-  // TODO: ENOENT_ERRORの場合はErrorType.WEBPMUX_ACCESS_ERRORを返したい
-  errorCode = ErrorType.WEBPMUX_ERROR;
-  return {
-    cause: err,
-    errCode: errorCode,
-    // ファイル経由で引数を渡すとerrのメッセージから引数の内容がわからないため、エラー詳細に明示的に引数の内容を出力する
-    errDetail: err.code + ' : ' + stdout + ', arguments:' + argsText
-  };
+  // 出力ファイルを目的地に移動＆リネーム
+  // 移動先はユーザの領域・ファイル名なので、出力先ディレクトリが無くなっている・ロックされている等の場合に備えて明示的にエラーを拾う
+  try {
+    fs.renameSync(outTmpFilePath, exportFilePath);
+  } catch (mvErr) {
+    console.error(mvErr);
+    errorCode = ErrorType.FILE_MOVE_ERROR;
+    return {
+      cause: mvErr as Error,
+      errCode: errorCode,
+      errDetail: `move failed: ${outTmpFilePath} -> ${exportFilePath}`
+    };
+  }
 };
 
 /**
