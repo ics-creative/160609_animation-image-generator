@@ -64,12 +64,13 @@ export const generateWebp = async (
     `${appPath}/bin/webpmux${getExeExt()}`,
     [argumentFilePath]
   );
-  if (!err) {
-    return;
-  }
 
   // 引数ファイルを削除
   fs.unlinkSync(argumentFilePath);
+
+  if (!err) {
+    return;
+  }
 
   console.error(stderr);
   // TODO: ENOENT_ERRORの場合はErrorType.WEBPMUX_ACCESS_ERRORを返したい
