@@ -3,17 +3,18 @@ const icongen = require('icon-gen');
 const sharp = require('sharp');
 
 const root = './resources/app-icon';
+const assetsDir = `${root}/app-icon-assets`
 const tmpDir = `${root}/tmp`;
 
 const settings = {
   mac: {
-    inPng: `${root}/mac-1024.png`,
+    inPng: `${assetsDir}/mac-1024.png`,
     iconSizes: [16, 32, 64, 128, 256, 512, 1024],
     outName: 'app',
     format: 'icns'
   },
   win: {
-    inPng: `${root}/win-1024.png`,
+    inPng: `${assetsDir}/win-1024.png`,
     iconSizes: [16, 24, 32, 48, 64, 128, 256],
     outName: 'app',
     format: 'ico'
