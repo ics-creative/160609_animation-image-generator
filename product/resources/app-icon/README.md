@@ -14,7 +14,7 @@
 ## 更新方法
 
 1. `app-icon.psd`を編集・保存します
-   1. `app-icon-assets`の画像が更新されてことを確認してください
+   1. `app-icon-assets`の画像が更新されたことを確認してください
 2. `npm run make-icon`を実行します
    1. `app.icns`, `app.ico`が更新されたことを確認してください
 
