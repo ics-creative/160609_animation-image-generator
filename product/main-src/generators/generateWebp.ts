@@ -1,4 +1,5 @@
 import * as path from 'path';
+import * as fs from 'fs';
 import { AnimationImageOptions } from '../../common-src/data/animation-image-option';
 import { ErrorType } from '../../common-src/error/error-type';
 import { ImageData } from '../../common-src/data/image-data';
@@ -22,17 +23,28 @@ export const generateWebp = async (
   itemList: ImageData[],
   optionData: AnimationImageOptions
 ): Promise<GenetateError | undefined> => {
-  const pngPath = path.join(temporaryPath);
+  const pngDirPath = path.join(temporaryPath);
+
+  // 各フレームをpng -> webp変換
+  const pngFiles = itemList.map(
+    (item, index) => `${pngDirPath}/frame${index}.png`
+  );
+  const error = await convertPng2Webps(pngFiles, appPath, optionData);
+  if (error) {
+    return error;
+  }
+  await waitImmediate();
+
+  // 全フレーム分の引数を作成
   const options: string[] = [];
   const frameMs = Math.round(1000 / optionData.fps);
-  const pngFiles: string[] = [];
+  const outTmpFilePath = path.join(temporaryPath, 'webpmux_out.webp');
 
   for (let i = 0; i < itemList.length; i++) {
     // フレーム数に違和感がある
     options.push(`-frame`);
-    options.push(`${pngPath}/frame${i}.png.webp`);
+    options.push(`${pngDirPath}/frame${i}.png.webp`);
     options.push(`+${frameMs}+0+0+1`);
-    pngFiles.push(`${pngPath}/frame${i}.png`);
   }
 
   if (optionData.noLoop === false) {
@@ -41,31 +53,49 @@ export const generateWebp = async (
   }
 
   options.push(`-o`);
-  options.push(exportFilePath);
+  options.push(outTmpFilePath);
 
-  const error = await convertPng2Webps(pngFiles, appPath, optionData);
-  if (error) {
-    return error;
-  }
-  await waitImmediate();
+  // コマンド引数を一時ファイルに書き込み
+  const argumentFilePath = path.join(temporaryPath, 'webpmux_arguments.txt');
+  const argsText = options.join(' ');
+  fs.writeFileSync(argumentFilePath, argsText);
 
+  // 引数ファイルを使ってwebpmuxを実行
   let errorCode = ErrorType.CWEBP_OTHER_ERROR;
   const { err, stdout, stderr } = await waitExecFile(
     `${appPath}/bin/webpmux${getExeExt()}`,
-    options
+    [argumentFilePath]
   );
-  if (!err) {
-    return;
+
+  // 引数ファイルを削除
+  fs.unlinkSync(argumentFilePath);
+
+  if (err) {
+    console.error(stderr);
+    // TODO: ENOENT_ERRORの場合はErrorType.WEBPMUX_ACCESS_ERRORを返したい
+    errorCode = ErrorType.WEBPMUX_ERROR;
+    return {
+      cause: err,
+      errCode: errorCode,
+      // ファイル経由で引数を渡すとerrのメッセージから引数の内容がわからないため、エラー詳細に明示的に引数の内容を出力する
+      errDetail: err.code + ' : ' + stdout + ', arguments:' + argsText
+    };
   }
 
-  console.error(stderr);
-  // TODO: ENOENT_ERRORの場合はErrorType.WEBPMUX_ACCESS_ERRORを返したい
-  errorCode = ErrorType.WEBPMUX_ERROR;
-  return {
-    cause: err,
-    errCode: errorCode,
-    errDetail: err.code + ' : ' + stdout + ', message:' + err.message
-  };
+  // 出力ファイルを目的地に移動＆リネーム
+  // 移動先はユーザの領域・ファイル名なので、出力先ディレクトリが無くなっている・ロックされている等の場合に備えて明示的にエラーを拾う
+  try {
+    fs.copyFileSync(outTmpFilePath, exportFilePath);
+    fs.unlinkSync(outTmpFilePath);
+  } catch (mvErr) {
+    console.error(mvErr);
+    errorCode = ErrorType.FILE_MOVE_ERROR;
+    return {
+      cause: mvErr as Error,
+      errCode: errorCode,
+      errDetail: `move failed: ${outTmpFilePath} -> ${exportFilePath}`
+    };
+  }
 };
 
 /**
