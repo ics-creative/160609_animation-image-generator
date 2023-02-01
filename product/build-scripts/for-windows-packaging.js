@@ -5,7 +5,7 @@ electronPackager({
   name: conf.EN_NAME,
   dir: conf.packageTmpPath.win32,
   out: '../',
-  icon: './resources/app.ico',
+  icon: './resources/app-icon/app.ico',
   platform: 'win32',
   arch: 'ia32',
   electronVersion: conf.ELECTRON_VERSION,
