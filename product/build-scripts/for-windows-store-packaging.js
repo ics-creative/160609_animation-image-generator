@@ -12,7 +12,7 @@ function convertWindowsStore() {
     inputDirectory: `../${conf.EN_NAME}-win32-ia32`,
     outputDirectory: '../windows-store',
     flatten: false,
-    assets: './resources/win-icon',
+    assets: './resources/app-icon/win-icon',
     packageName: `${conf.EN_NAME}`,
     manifest: './AppXmanifest.xml',
     // Windows Kitへのパスは適宜自身の環境に合わせてください。

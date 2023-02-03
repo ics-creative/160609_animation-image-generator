@@ -5,7 +5,7 @@ const sharp = require('sharp');
 const root = './resources/app-icon';
 const assetsDir = `${root}/app-icon-assets`;
 const tmpDir = `${root}/tmp`;
-const windowsStoreIconDir = './resources/win-icon';
+const windowsStoreIconDir = `${root}/win-icon`;
 
 const settings = {
   mac: {
