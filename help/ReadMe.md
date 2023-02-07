@@ -116,7 +116,7 @@ LINEアニメーションスタンプの[ガイドライン](https://creator.lin
 #### 解決方法
 Windowsをお使いの場合、以下の手順で復旧できる可能性があります。
 
-1. Microsoftの[Visual Studio 2015 の Visual C++ ](https://www.microsoft.com/ja-jp/download/details.aspx?id=48145)再頒布可能パッケージへアクセス
+1. Microsoftの[Visual Studio 2015 の Visual C\+\+ 再頒布可能パッケージ](https://www.microsoft.com/ja-jp/download/details.aspx?id=48145)へアクセス
 2. ［ダウンロード］ボタンをクリック
 3. ［vc_redist.x64.exe］にチェックする（Windows 64ビットの場合はvc_redist.x64.exe、32ビットの場合はvc_redist.x86.exeを選択）
 4. ［次へ］ボタンをクリック
