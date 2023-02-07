@@ -23,7 +23,8 @@ interface IpcInvokeFuncs {
     code: string,
     category: string,
     title: string,
-    detail: string
+    detail: string,
+    stack: string,
   ) => Promise<void>;
   [IpcId.EXEC_IMAGE_EXPORT_PROCESS]: (
     version: string,

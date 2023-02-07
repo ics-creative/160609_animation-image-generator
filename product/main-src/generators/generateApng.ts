@@ -49,7 +49,7 @@ export const generateApng = async (
     return {
       cause: err,
       errCode: errorCode,
-      errDetail: stdout
+      errDetail: stdout // stderrの内容はerrに含まれるので、エラー詳細としてはstdoutを返却
     };
   }
 };
@@ -86,6 +86,7 @@ const pngCompress = async (
   outDir: string
 ): Promise<GenetateError | undefined> => {
   const options: string[] = [
+    '--verbose',
     '--quality=0-80',
     '--speed',
     '1',
@@ -117,6 +118,6 @@ const pngCompress = async (
   return {
     cause: err,
     errCode: errorCode,
-    errDetail: stdout
+    errDetail: stdout // stderrの内容はerrに含まれるので、エラー詳細としてはstdoutを返却
   };
 };

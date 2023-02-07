@@ -36,7 +36,8 @@ export default class IpcService {
     code: string,
     category: string,
     title: string,
-    detail: string
+    detail: string,
+    stack: string
   ) {
     return this.api.invoke(
       IpcId.SEND_ERROR,
@@ -44,7 +45,8 @@ export default class IpcService {
       code,
       category,
       title,
-      detail
+      detail,
+      stack
     );
   }
 

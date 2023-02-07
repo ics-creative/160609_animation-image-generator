@@ -3,13 +3,22 @@ import { ErrorType } from '../../common-src/error/error-type';
 
 declare function require(value: string): any;
 
+/**
+ * 文字列長をmax以内に収めます
+ *
+ * @param text 対象文字列
+ * @param max 最大長
+ * @returns 末尾を切り捨てて"..."を追加した文字列
+ */
+const omitText = (text: string, max: number) =>
+  text.length <= max ? text : text.substring(0, max - 3) + '...';
+
 export class ErrorMessage {
   constructor() {}
   public showErrorMessage(
     errorCode: ErrorType,
     inquiryCode: string,
     errorDetail: string,
-    errorStack: string,
     appName: string,
     window: BrowserWindow
   ): void {
@@ -35,7 +44,7 @@ export class ErrorMessage {
   ): string {
     const errorPhaseMessage = this.getErrorPhaseMessage(errorCode);
     const errorDetailMessage = errorDetail
-      ? '\n\nエラー詳細：' + errorDetail
+      ? '\n\nエラー詳細：' + omitText(errorDetail, 200)
       : '';
     return `${errorPhaseMessage}${errorDetailMessage}
 
@@ -99,6 +108,12 @@ export class ErrorMessage {
       // テンポラリファイルの削除
       case ErrorType.TEMPORARY_CLEAN_ERROR:
         return '一時ファイルの削除に失敗しました。';
+
+      case ErrorType.INPUT_CHECK_FILE_NOT_FOUND_ERROR:
+        return '変換元の画像が見つかりません。移動または削除された可能性があります。再度画像を選択して保存をお試しください。';
+
+      case ErrorType.FILE_MOVE_ERROR:
+        return 'ファイルの移動に失敗しました。';
     }
     return '原因が不明なエラーが発生しました。';
   }

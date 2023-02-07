@@ -1,4 +1,4 @@
-const version = '4.1'
+const version = '4.2'
 /**
  * アプリケーションの情報を提供します。
  */

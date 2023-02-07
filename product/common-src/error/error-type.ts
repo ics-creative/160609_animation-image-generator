@@ -19,6 +19,8 @@ export enum ErrorType {
 
   MAKE_TEMPORARY_ERROR = 60,
   TEMPORARY_CLEAN_ERROR,
+  INPUT_CHECK_FILE_NOT_FOUND_ERROR, // 入力チェック：ファイルが存在しない
+  FILE_MOVE_ERROR,
 
   PNG_COMPRESS_ERROR = 70,
   PNG_COMPRESS_ACCESS_ERROR, // 実行ファイルのアクセスに失敗
