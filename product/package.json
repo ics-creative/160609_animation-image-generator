@@ -72,7 +72,7 @@
     "eslint-plugin-prefer-arrow": "latest",
     "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-react": "latest",
-    "husky": "^2.7.0",
+    "husky": "^8.0.3",
     "icon-gen": "3.0.1",
     "mkdirp": "^0.5.5",
     "prettier": "^2.5.1",
