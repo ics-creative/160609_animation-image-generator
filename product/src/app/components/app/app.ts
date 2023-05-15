@@ -20,7 +20,7 @@ import { localeData } from 'app/i18n/locale-manager';
 import { LineValidationType } from '../../../../common-src/type/LineValidationType';
 import { checkRuleList } from '../../../../common-src/checkRule/checkRule';
 import { Tooltip } from '../../../../common-src/type/TooltipType';
-import { FormControl } from '@angular/forms';
+import { UntypedFormControl } from '@angular/forms';
 import {
   ImageValidatorResult,
   ValidationResult
@@ -60,7 +60,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     x: 0,
     y: 0
   };
-  checkRule = new FormControl(LineValidationType.ANIMATION_STAMP);
+  checkRule = new UntypedFormControl(LineValidationType.ANIMATION_STAMP);
 
   readonly checkRuleList = checkRuleList;
   readonly checkRuleLabel = {
