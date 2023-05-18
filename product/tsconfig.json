@@ -9,7 +9,7 @@
     "declaration": false,
     "moduleResolution": "node",
     "experimentalDecorators": true,
-    "target": "ES2022",
+    "target": "ES2020",
     "typeRoots": [
       "node_modules/@types"
     ],
