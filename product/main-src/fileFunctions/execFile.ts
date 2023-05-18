@@ -1,8 +1,8 @@
-import { ExecException, execFile } from 'child_process';
+import { ExecFileException, execFile } from 'child_process';
 
 /** execFileの実行結果 */
 interface ExecFileResult {
-  err: ExecException | null;
+  err: ExecFileException | null;
   stdout: string;
   stderr: string;
 }
