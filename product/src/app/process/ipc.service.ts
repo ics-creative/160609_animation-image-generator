@@ -75,4 +75,12 @@ export default class IpcService {
   showMessage(message: string, title?: string) {
     return this.api.invoke(IpcId.SHOW_MESSAGE, message, title);
   }
+
+  
+  /** 
+   * 使用できるパスのみをフィルタして返却します
+   */
+  getImageDataList(filePathLiist:string[]) {
+    return this.api.invoke(IpcId.GET_IMAGE_DATA_LIST, filePathLiist);
+  }
 }

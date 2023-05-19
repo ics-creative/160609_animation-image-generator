@@ -16,16 +16,5 @@ contextBridge.exposeInMainWorld('api', {
    */
   invoke: (channel, ...args) => {
     return ipcRenderer.invoke(channel, ...args);
-  },
-  path: {
-    extname: value => {
-      return require('path').extname(value);
-    },
-    dirname: value => {
-      return require('path').dirname(value);
-    },
-    basename: value => {
-      return require('path').basename(value);
-    }
   }
 });
