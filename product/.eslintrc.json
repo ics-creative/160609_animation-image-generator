@@ -14,12 +14,13 @@
         ],
         "createDefaultProgram": true
       },
+      "parser": "@typescript-eslint/parser",
       "extends": [
         "plugin:@angular-eslint/template/process-inline-templates",
         "prettier"
       ],
       "plugins": [
-        "eslint-plugin-react"
+        "@typescript-eslint"
       ],
       "rules": {
         "@typescript-eslint/consistent-type-definitions": "error",
@@ -50,16 +51,6 @@
         "no-irregular-whitespace": "off",
         "no-underscore-dangle": "off",
         "quote-props": "off",
-        "react/jsx-curly-spacing": "off",
-        "react/jsx-equals-spacing": "off",
-        "react/jsx-tag-spacing": [
-          "off",
-          {
-            "afterOpening": "allow",
-            "closingSlash": "allow"
-          }
-        ],
-        "react/jsx-wrap-multilines": "off",
         "space-before-function-paren": "off",
         "space-in-parens": [
           "off",
