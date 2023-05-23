@@ -10,7 +10,8 @@ export const IpcId = {
   SEND_ERROR: 'send-error',
   EXEC_IMAGE_EXPORT_PROCESS: 'exec-image-export-process',
   OPEN_EXTERNAL_BROWSER: 'open-external-browser',
-  SHOW_MESSAGE: 'show-message'
+  SHOW_MESSAGE: 'show-message',
+  GET_IMAGE_DATA_LIST: 'get-image-data-list'
 } as const;
 
 // UI→メイン方向にinvokeで起動する処理の型定義
@@ -34,6 +35,7 @@ interface IpcInvokeFuncs {
   ) => Promise<void>;
   [IpcId.OPEN_EXTERNAL_BROWSER]: (url: string) => Promise<void>;
   [IpcId.SHOW_MESSAGE]: (message: string, title?: string) => Promise<void>;
+  [IpcId.GET_IMAGE_DATA_LIST]: (filePathList: string[]) => Promise<ImageData[]>;
 }
 
 // IpcRenderer.invokeの型定義

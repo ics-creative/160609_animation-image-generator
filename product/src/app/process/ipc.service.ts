@@ -4,30 +4,27 @@ import { AnimationImageOptions } from '../../../common-src/data/animation-image-
 import { ImageData } from '../../../common-src/data/image-data';
 import { LineValidationType } from '../../../common-src/type/LineValidationType';
 
-interface Path {
-  extname: (path: string) => string;
-  dirname: (path: string) => string;
-  basename: (path: string) => string;
+interface IElectronAPI {
+  invoke: IpcInvoke;
 }
 
-interface Api {
-  path: Path;
-  invoke: IpcInvoke;
+declare global {
+  interface Window {
+    electronApi: IElectronAPI
+  }
 }
 
 @Injectable()
 export default class IpcService {
-  private api: Api;
-  public path: Path;
+  private electronApi: IElectronAPI;
 
   constructor() {
-    this.api = (window as any).api;
-    this.path = this.api.path;
+    this.electronApi = window.electronApi;
   }
 
   /** 画像選択ダイアログを開きます。結果を受け取るにはonSelectedOpenImagesにイベントハンドラーを登録します */
   openFileDialog() {
-    return this.api.invoke(IpcId.OPEN_FILE_DIALOG);
+    return this.electronApi.invoke(IpcId.OPEN_FILE_DIALOG);
   }
 
   /** エラーを送信します */
@@ -39,7 +36,7 @@ export default class IpcService {
     detail: string,
     stack: string
   ) {
-    return this.api.invoke(
+    return this.electronApi.invoke(
       IpcId.SEND_ERROR,
       version,
       code,
@@ -52,7 +49,7 @@ export default class IpcService {
 
   /** 指定のURLを外部ブラウザで開きます */
   openExternalBrowser(url: string) {
-    return this.api.invoke(IpcId.OPEN_EXTERNAL_BROWSER, url);
+    return this.electronApi.invoke(IpcId.OPEN_EXTERNAL_BROWSER, url);
   }
 
   /** 画像の変換・保存処理を実行します */
@@ -62,7 +59,7 @@ export default class IpcService {
     animationOptionData: AnimationImageOptions,
     validationType: LineValidationType
   ) {
-    return this.api.invoke(
+    return this.electronApi.invoke(
       IpcId.EXEC_IMAGE_EXPORT_PROCESS,
       version,
       itemList,
@@ -73,6 +70,14 @@ export default class IpcService {
 
   /** メッセージダイアログを表示します。alert()の代替として使用します */
   showMessage(message: string, title?: string) {
-    return this.api.invoke(IpcId.SHOW_MESSAGE, message, title);
+    return this.electronApi.invoke(IpcId.SHOW_MESSAGE, message, title);
+  }
+
+  
+  /** 
+   * 使用できるパスのみをフィルタして返却します
+   */
+  getImageDataList(filePathLiist:string[]) {
+    return this.electronApi.invoke(IpcId.GET_IMAGE_DATA_LIST, filePathLiist);
   }
 }

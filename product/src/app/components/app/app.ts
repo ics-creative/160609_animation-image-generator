@@ -227,23 +227,12 @@ export class AppComponent implements OnInit, AfterViewInit {
   }
 
   /**
-   * ファイルがセットされたときの処理です。
+   * ファイルセット時の処理です。
    *
    * @param filePathList
    */
   async setFilePathList(filePathList: string[]): Promise<void> {
-    const path = this.ipcService.path;
-    const isPngFile = (name: string) =>
-      path.extname(name).toLowerCase() === '.png';
-    // 	再度アイテムがドロップされたらリセットするように調整
-    const items = filePathList.filter(isPngFile).map(
-      (filePath) =>
-        new ImageData(
-          path.basename(filePath),
-          filePath,
-          0 // changeImageItemsでセットする際にソートされるので、一旦0で登録
-        )
-    );
+    const items = await this.ipcService.getImageDataList(filePathList);
     await this.changeImageItems(items);
   }
 
