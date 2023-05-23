@@ -88,6 +88,8 @@
     border-radius: 50%;
     font-size: 12px;
     line-height: 22px;
+    // ウィンドウリサイズで！がズレることがあるのでレンダリングモードを変更させる
+    will-change: transform;
     &:after {
       content: '';
       position: absolute;
