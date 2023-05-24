@@ -87,15 +87,15 @@
     cursor: pointer;
     border-radius: 50%;
     font-size: 12px;
-    line-height: 22px;
+    line-height: 24px;
     // ウィンドウリサイズで！がズレることがあるのでレンダリングモードを変更させる
     will-change: transform;
     &:after {
       content: '';
       position: absolute;
       display: block;
-      width: 17px;
-      height: 17px;
+      width: 18px;
+      height: 18px;
       border: 1px solid #ffffff;
       border-radius: 50%;
       top: 2px;
