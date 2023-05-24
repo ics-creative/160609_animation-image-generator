@@ -10,7 +10,7 @@ interface IElectronAPI {
 
 declare global {
   interface Window {
-    electronApi: IElectronAPI
+    electronApi: IElectronAPI;
   }
 }
 
@@ -73,11 +73,10 @@ export default class IpcService {
     return this.electronApi.invoke(IpcId.SHOW_MESSAGE, message, title);
   }
 
-  
-  /** 
+  /**
    * 使用できるパスのみをフィルタして返却します
    */
-  getImageDataList(filePathLiist:string[]) {
+  getImageDataList(filePathLiist: string[]) {
     return this.electronApi.invoke(IpcId.GET_IMAGE_DATA_LIST, filePathLiist);
   }
 }

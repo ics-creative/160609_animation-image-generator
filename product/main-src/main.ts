@@ -209,18 +209,18 @@ handle(IpcId.SHOW_MESSAGE, async (event, message: string, title?: string) => {
   });
 });
 
-
 // 画像パス一覧をpngのみでフィルターして、操作しやすいImageDataに変換して返却する
-handle(IpcId.GET_IMAGE_DATA_LIST, async (event, filePathList:string[]) => {
-    const isPngFile = (name: string) => path.extname(name).toLowerCase() === '.png';
-    // 	再度アイテムがドロップされたらリセットするように調整
-    const items = filePathList.filter(isPngFile).map(
-      (filePath) =>
-        new ImageData(
-          path.basename(filePath),
-          filePath,
-          0 // changeImageItemsでセットする際にソートされるので、一旦0で登録
-        )
-    );
-    return items;
+handle(IpcId.GET_IMAGE_DATA_LIST, async (event, filePathList: string[]) => {
+  const isPngFile = (name: string) =>
+    path.extname(name).toLowerCase() === '.png';
+  // 	再度アイテムがドロップされたらリセットするように調整
+  const items = filePathList.filter(isPngFile).map(
+    (filePath) =>
+      new ImageData(
+        path.basename(filePath),
+        filePath,
+        0 // changeImageItemsでセットする際にソートされるので、一旦0で登録
+      )
+  );
+  return items;
 });
