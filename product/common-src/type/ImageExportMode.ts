@@ -1,36 +1,38 @@
 /**
- * プリセットオプションを定義したENUMです。
+ * 画像出力方法を定義したENUMです。
  */
 export enum ImageExportMode {
   LINE = 'line',
   WEB = 'web'
 }
 
-/** Preset名とID(number)の対応表 */
-const PRESET_NUM = {
+/** 画像出力方法名とID(number)の対応表 */
+const IMAGE_EXPORT_MODE_NUM = {
   [ImageExportMode.LINE]: 0,
   [ImageExportMode.WEB]: 1
 } as const;
 
 /**
- * presetを数値に変換します。
+ * 画像出力方法を数値に変換します。
  * この機能はpresetをnumber型で入出力する古い機能との互換性確保のために残されています。
  * 必要な場合のみ使用してください。
  *
- * @param preset
+ * @param mode
  */
-export const presetToNumber = (preset: ImageExportMode) => PRESET_NUM[preset];
+export function modeToNumber(mode: ImageExportMode) {
+  return IMAGE_EXPORT_MODE_NUM[mode];
+}
 
 /**
- * 数値をpreset名に変換します。
- * この機能はpresetをnumber型で入出力する古い機能との互換性確保のために残されています。
+ * 数値を画像出力方法名に変換します。
+ * この機能は画像出力方法をnumber型で入出力する古い機能との互換性確保のために残されています。
  * 必要な場合のみ使用してください。
  *
- * @param presetNum
+ * @param num
  * @returns
  */
-export const numberToPreset = (presetNum: number) => {
-  if (presetNum === PRESET_NUM[ImageExportMode.LINE]) return ImageExportMode.LINE;
-  if (presetNum === PRESET_NUM[ImageExportMode.WEB]) return ImageExportMode.WEB;
+export const numberToMode = (num: number) => {
+  if (num === IMAGE_EXPORT_MODE_NUM[ImageExportMode.LINE]) return ImageExportMode.LINE;
+  if (num === IMAGE_EXPORT_MODE_NUM[ImageExportMode.WEB]) return ImageExportMode.WEB;
   return undefined;
 };

@@ -94,7 +94,7 @@ export class AppComponent implements OnInit, AfterViewInit {
 
     this.isImageSelected = false;
 
-    // 初回プリセットの設定
+    // 設定の読み込み
     this.imageExportMode = loadImageExportMode();
     this.changeImageExportMode(this.imageExportMode);
   }
@@ -139,24 +139,28 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.changeImageExportMode(this.imageExportMode);
   }
 
+  /**
+   * 画像出力方法を変更
+   * @param imageExportMode
+   */
   changeImageExportMode(imageExportMode: ImageExportMode) {
     let loadedOptions = loadAnimationImageOptions(imageExportMode);
     let presetData;
     switch (imageExportMode) {
-      case ImageExportMode.LINE:
-        presetData = PresetLine.getPreset();
-        break;
       case ImageExportMode.WEB:
         presetData = PresetWeb.getPreset();
         break;
+      case ImageExportMode.LINE:
       default:
         presetData = PresetLine.getPreset();
     }
 
+    // データがなければプリセットを使用する
     if (loadedOptions === undefined || loadedOptions === null) {
       this.animationOptionData = presetData;
       return;
     }
+    // 保存されているオプションを優先で、設定がなければプリセットを使用する
     this.animationOptionData = { ...presetData, ...loadedOptions };
   }
 

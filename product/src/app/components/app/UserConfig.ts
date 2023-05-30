@@ -1,17 +1,17 @@
 import { AnimationImageOptions } from '../../../../common-src/data/animation-image-option';
 import {
   ImageExportMode,
-  numberToPreset,
-  presetToNumber
+  numberToMode,
+  modeToNumber
 } from '../../../../common-src/type/ImageExportMode';
 
-const PRESET_ID = 'preset_id';
+const IMAGE_EXPORT_MODE = 'preset_id';
 export const loadImageExportMode = (): ImageExportMode => {
-  const presetNum = Number(localStorage.getItem(PRESET_ID));
-  return numberToPreset(presetNum) ?? ImageExportMode.LINE;
+  const presetNum = Number(localStorage.getItem(IMAGE_EXPORT_MODE));
+  return numberToMode(presetNum) ?? ImageExportMode.LINE;
 };
 export const saveImageExportMode = (mode: ImageExportMode) => {
-  localStorage.setItem(PRESET_ID, String(presetToNumber(mode)));
+  localStorage.setItem(IMAGE_EXPORT_MODE, String(modeToNumber(mode)));
 };
 
 export const loadAnimationImageOptions = (imageExportMode: ImageExportMode) => {

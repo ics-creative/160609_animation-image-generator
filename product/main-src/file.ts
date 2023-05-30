@@ -50,7 +50,7 @@ export default class File {
       this.saveDialog
     );
 
-    // プリセットがLINEの場合、出力成功後にチェックを行い、警告があれば表示
+    // 出力がLINE向けの場合、出力成功後にチェックを行い、警告があれば表示
     if (
       animationOptionData.imageExportMode === ImageExportMode.LINE &&
       result.pngPath
