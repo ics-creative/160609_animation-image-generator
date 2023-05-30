@@ -6,7 +6,9 @@ import { ImageExportMode } from '../type/ImageExportMode';
  * LINEアニメーションスタンプのプリセット設定です。
  */
 export class PresetLine {
-  static setPreset(data: AnimationImageOptions) {
+
+  static getPreset() {
+    const data = new AnimationImageOptions();
     data.noLoop = false;
     data.loop = 4;
     // data.iterations = 15;
@@ -19,5 +21,6 @@ export class PresetLine {
     data.enabledExportHtml = false;
 
     data.imageExportMode = ImageExportMode.LINE;
+    return data;
   }
 }

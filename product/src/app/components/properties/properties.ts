@@ -30,6 +30,9 @@ export class PropertiesComponent {
   @Output()
   showTooltipEvent = new EventEmitter<Tooltip>();
 
+  @Output()
+  changeAnimationOptionEvent = new EventEmitter<AnimationImageOptions>();
+
   @ViewChild('tooltipElement')
   tooltipElement: ElementRef | undefined;
 
@@ -61,5 +64,9 @@ export class PropertiesComponent {
       x: this.tooltipElement?.nativeElement.getBoundingClientRect().x,
       y: this.tooltipElement?.nativeElement.getBoundingClientRect().y
     });
+  }
+  
+  changeAnimationOption() {
+    this.changeAnimationOptionEvent.emit(this.animationOptionData);
   }
 }
