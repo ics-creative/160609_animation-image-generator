@@ -52,7 +52,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   isImageSelected = false;
   isUiLocked = false;
   _isDragover = false;
-  presetMode = ImageExportMode.LINE;
+  imageExportMode = ImageExportMode.LINE;
   items: ImageData[] = [];
   localeData = localeData;
   validationErrorsMessage = [''];
@@ -90,8 +90,8 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.isImageSelected = false;
 
     // 初回プリセットの設定
-    this.presetMode = loadPresetConfig();
-    this.changePreset(this.presetMode);
+    this.imageExportMode = loadPresetConfig();
+    this.changePreset(this.imageExportMode);
   }
 
   ngAfterViewInit() {
@@ -123,17 +123,17 @@ export class AppComponent implements OnInit, AfterViewInit {
     event.preventDefault();
   }
 
-  handlePresetChange(presetMode: string) {
-    const preset =
-      presetMode === ImageExportMode.WEB ? ImageExportMode.WEB : ImageExportMode.LINE;
-    savePresetConfig(preset);
-    this.presetMode = preset;
+  handlePresetChange(imageExportMode: string) {
+    const imageExport =
+    imageExportMode === ImageExportMode.WEB ? ImageExportMode.WEB : ImageExportMode.LINE;
+    savePresetConfig(imageExport);
+    this.imageExportMode = imageExport;
 
-    this.changePreset(this.presetMode);
+    this.changePreset(this.imageExportMode);
   }
 
-  changePreset(presetMode: ImageExportMode) {
-    switch (presetMode) {
+  changePreset(imageExportMode: ImageExportMode) {
+    switch (imageExportMode) {
       case ImageExportMode.LINE:
         PresetLine.setPreset(this.animationOptionData);
         break;

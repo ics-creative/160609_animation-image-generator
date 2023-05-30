@@ -140,7 +140,7 @@ export class AnimPreviewComponent implements OnChanges, OnInit {
   private loop(): void {
     createjs.Ticker.framerate = this.animationOptionData.fps;
     // ここでバリデートするのは間違っていると思うが・・・・
-    if (this.animationOptionData.preset === ImageExportMode.LINE) {
+    if (this.animationOptionData.imageExportMode === ImageExportMode.LINE) {
       this.validationErrors = validateLineStamp(
         this.checkRule,
         this.animationOptionData

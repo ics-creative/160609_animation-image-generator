@@ -18,6 +18,6 @@ export class PresetWeb {
     data.enabledExportWebp = true;
     data.enabledExportHtml = true;
 
-    data.preset = ImageExportMode.WEB;
+    data.imageExportMode = ImageExportMode.WEB;
   }
 }

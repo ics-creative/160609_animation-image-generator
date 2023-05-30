@@ -18,6 +18,6 @@ export class PresetLine {
     data.enabledExportWebp = false;
     data.enabledExportHtml = false;
 
-    data.preset = ImageExportMode.LINE;
+    data.imageExportMode = ImageExportMode.LINE;
   }
 }

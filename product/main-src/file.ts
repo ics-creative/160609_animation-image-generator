@@ -51,7 +51,7 @@ export default class File {
     );
 
     // プリセットがLINEの場合、出力成功後にチェックを行い、警告があれば表示
-    if (animationOptionData.preset === ImageExportMode.LINE && result.pngPath) {
+    if (animationOptionData.imageExportMode === ImageExportMode.LINE && result.pngPath) {
       await this.validateLineStamp(
         validationType,
         result.pngPath,

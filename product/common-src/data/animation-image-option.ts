@@ -5,7 +5,7 @@ import { ImageExportMode } from '../type/ImageExportMode';
  * アニメーション画像のオプション指定を指定するクラスです。
  */
 export class AnimationImageOptions {
-  preset: ImageExportMode = ImageExportMode.WEB;
+  imageExportMode: ImageExportMode = ImageExportMode.WEB;
 
   noLoop = false;
   loop = 0;
