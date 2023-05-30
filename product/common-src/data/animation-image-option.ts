@@ -1,11 +1,11 @@
 import { CompressionType } from '../type/CompressionType';
-import { PresetType } from '../type/PresetType';
+import { ImageExportMode } from '../type/ImageExportMode';
 
 /**
  * アニメーション画像のオプション指定を指定するクラスです。
  */
 export class AnimationImageOptions {
-  preset: PresetType = PresetType.WEB;
+  preset: ImageExportMode = ImageExportMode.WEB;
 
   noLoop = false;
   loop = 0;

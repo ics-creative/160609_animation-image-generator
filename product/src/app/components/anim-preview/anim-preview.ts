@@ -11,7 +11,7 @@ import {
   Output,
   ViewChild
 } from '@angular/core';
-import { PresetType } from '../../../../common-src/type/PresetType';
+import { ImageExportMode } from '../../../../common-src/type/ImageExportMode';
 import { ImageData } from '../../../../common-src/data/image-data';
 import { AnimationImageOptions } from '../../../../common-src/data/animation-image-option';
 import {
@@ -140,7 +140,7 @@ export class AnimPreviewComponent implements OnChanges, OnInit {
   private loop(): void {
     createjs.Ticker.framerate = this.animationOptionData.fps;
     // ここでバリデートするのは間違っていると思うが・・・・
-    if (this.animationOptionData.preset === PresetType.LINE) {
+    if (this.animationOptionData.preset === ImageExportMode.LINE) {
       this.validationErrors = validateLineStamp(
         this.checkRule,
         this.animationOptionData

@@ -1,6 +1,6 @@
 import { AnimationImageOptions } from '../data/animation-image-option';
 import { CompressionType } from '../type/CompressionType';
-import { PresetType } from '../type/PresetType';
+import { ImageExportMode } from '../type/ImageExportMode';
 
 /**
  * LINEアニメーションスタンプのプリセット設定です。
@@ -18,6 +18,6 @@ export class PresetLine {
     data.enabledExportWebp = false;
     data.enabledExportHtml = false;
 
-    data.preset = PresetType.LINE;
+    data.preset = ImageExportMode.LINE;
   }
 }

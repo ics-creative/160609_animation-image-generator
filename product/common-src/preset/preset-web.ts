@@ -1,6 +1,6 @@
 import { CompressionType } from '../type/CompressionType';
 import { AnimationImageOptions } from '../data/animation-image-option';
-import { PresetType } from '../type/PresetType';
+import { ImageExportMode } from '../type/ImageExportMode';
 
 /**
  * Webページ用アニメーションのプリセット設定です。
@@ -18,6 +18,6 @@ export class PresetWeb {
     data.enabledExportWebp = true;
     data.enabledExportHtml = true;
 
-    data.preset = PresetType.WEB;
+    data.preset = ImageExportMode.WEB;
   }
 }

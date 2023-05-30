@@ -14,14 +14,14 @@
           (change)="handlePresetChange(optionSelecter.value)"
         >
           <option
-            [value]="PresetType.LINE"
-            [selected]="presetMode === PresetType.LINE"
+            [value]="ImageExportMode.LINE"
+            [selected]="presetMode === ImageExportMode.LINE"
           >
             {{ localeData.PROP_useItemLine }}
           </option>
           <option
-            [value]="PresetType.WEB"
-            [selected]="presetMode === PresetType.WEB"
+            [value]="ImageExportMode.WEB"
+            [selected]="presetMode === ImageExportMode.WEB"
           >
             {{ localeData.PROP_useItemWeb }}
           </option>
@@ -37,7 +37,7 @@
     ></app-properties>
     <hr />
 
-    <div *ngIf="animationOptionData.preset === PresetType.LINE">
+    <div *ngIf="animationOptionData.preset === ImageExportMode.LINE">
       <!-- チェックルール -->
       <div class="checkRule mod-select-preset">
         <p class="mb-2">{{ localeData.RULE_title }}</p>

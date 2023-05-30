@@ -9,7 +9,7 @@ import {
 import { AppConfig } from '../../../../common-src/config/app-config';
 import { DomSanitizer } from '@angular/platform-browser';
 import IpcService from '../../process/ipc.service';
-import { PresetType } from '../../../../common-src/type/PresetType';
+import { ImageExportMode } from '../../../../common-src/type/ImageExportMode';
 import { PresetLine } from '../../../../common-src/preset/preset-line';
 import { PresetWeb } from '../../../../common-src/preset/preset-web';
 import { AnimationImageOptions } from '../../../../common-src/data/animation-image-option';
@@ -46,12 +46,14 @@ export class AppComponent implements OnInit, AfterViewInit {
   private apngFileSizeError = false;
   readonly AppConfig = AppConfig;
 
+  // クラス名を.htmlから使用できるようにする
+  ImageExportMode = ImageExportMode;
+
   isImageSelected = false;
   isUiLocked = false;
   _isDragover = false;
-  presetMode = PresetType.LINE;
+  presetMode = ImageExportMode.LINE;
   items: ImageData[] = [];
-  PresetType = PresetType;
   localeData = localeData;
   validationErrorsMessage = [''];
 
@@ -123,19 +125,19 @@ export class AppComponent implements OnInit, AfterViewInit {
 
   handlePresetChange(presetMode: string) {
     const preset =
-      presetMode === PresetType.WEB ? PresetType.WEB : PresetType.LINE;
+      presetMode === ImageExportMode.WEB ? ImageExportMode.WEB : ImageExportMode.LINE;
     savePresetConfig(preset);
     this.presetMode = preset;
 
     this.changePreset(this.presetMode);
   }
 
-  changePreset(presetMode: PresetType) {
+  changePreset(presetMode: ImageExportMode) {
     switch (presetMode) {
-      case PresetType.LINE:
+      case ImageExportMode.LINE:
         PresetLine.setPreset(this.animationOptionData);
         break;
-      case PresetType.WEB:
+      case ImageExportMode.WEB:
         PresetWeb.setPreset(this.animationOptionData);
         break;
     }

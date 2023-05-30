@@ -1,14 +1,14 @@
 import {
-  PresetType,
+  ImageExportMode,
   numberToPreset,
   presetToNumber
-} from '../../../../common-src/type/PresetType';
+} from '../../../../common-src/type/ImageExportMode';
 
 const PRESET_ID = 'preset_id';
-export const loadPresetConfig = (): PresetType => {
+export const loadPresetConfig = (): ImageExportMode => {
   const presetNum = Number(localStorage.getItem(PRESET_ID));
-  return numberToPreset(presetNum) ?? PresetType.LINE;
+  return numberToPreset(presetNum) ?? ImageExportMode.LINE;
 };
-export const savePresetConfig = (preset: PresetType) => {
+export const savePresetConfig = (preset: ImageExportMode) => {
   localStorage.setItem(PRESET_ID, String(presetToNumber(preset)));
 };

@@ -1,15 +1,15 @@
 /**
  * プリセットオプションを定義したENUMです。
  */
-export enum PresetType {
+export enum ImageExportMode {
   LINE = 'line',
   WEB = 'web'
 }
 
 /** Preset名とID(number)の対応表 */
 const PRESET_NUM = {
-  [PresetType.LINE]: 0,
-  [PresetType.WEB]: 1
+  [ImageExportMode.LINE]: 0,
+  [ImageExportMode.WEB]: 1
 } as const;
 
 /**
@@ -19,7 +19,7 @@ const PRESET_NUM = {
  *
  * @param preset
  */
-export const presetToNumber = (preset: PresetType) => PRESET_NUM[preset];
+export const presetToNumber = (preset: ImageExportMode) => PRESET_NUM[preset];
 
 /**
  * 数値をpreset名に変換します。
@@ -30,7 +30,7 @@ export const presetToNumber = (preset: PresetType) => PRESET_NUM[preset];
  * @returns
  */
 export const numberToPreset = (presetNum: number) => {
-  if (presetNum === PRESET_NUM[PresetType.LINE]) return PresetType.LINE;
-  if (presetNum === PRESET_NUM[PresetType.WEB]) return PresetType.WEB;
+  if (presetNum === PRESET_NUM[ImageExportMode.LINE]) return ImageExportMode.LINE;
+  if (presetNum === PRESET_NUM[ImageExportMode.WEB]) return ImageExportMode.WEB;
   return undefined;
 };

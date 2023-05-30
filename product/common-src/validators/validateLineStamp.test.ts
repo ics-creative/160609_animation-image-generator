@@ -1,7 +1,7 @@
 import { describe, expect, test } from 'vitest';
 import { AnimationImageOptions } from '../data/animation-image-option';
 import { LineValidationType } from '../type/LineValidationType';
-import { PresetType } from '../type/PresetType';
+import { ImageExportMode } from '../type/ImageExportMode';
 import { lineImageValidators } from './lineImageValidators';
 import { validateLineStamp } from './validateLineStamp';
 
@@ -10,7 +10,7 @@ describe('test linestamp validation', () => {
 
   test('should pass for min animation main', () => {
     const option: AnimationImageOptions = new AnimationImageOptions();
-    option.preset = PresetType.LINE;
+    option.preset = ImageExportMode.LINE;
     option.fps = 5;
     option.loop = 1;
     option.imageInfo.width = 240;
@@ -26,7 +26,7 @@ describe('test linestamp validation', () => {
 
   test('should pass for max animation main', () => {
     const option: AnimationImageOptions = new AnimationImageOptions();
-    option.preset = PresetType.LINE;
+    option.preset = ImageExportMode.LINE;
     option.fps = 20;
     option.loop = 4;
     option.imageInfo.width = 240;
@@ -44,7 +44,7 @@ describe('test linestamp validation', () => {
 
   test('should pass for min animation stamp', () => {
     const option: AnimationImageOptions = new AnimationImageOptions();
-    option.preset = PresetType.LINE;
+    option.preset = ImageExportMode.LINE;
     option.fps = 5;
     option.loop = 1;
     option.imageInfo.width = 270;
@@ -63,7 +63,7 @@ describe('test linestamp validation', () => {
 
   test('should pass for max animation stamp', () => {
     const option: AnimationImageOptions = new AnimationImageOptions();
-    option.preset = PresetType.LINE;
+    option.preset = ImageExportMode.LINE;
     option.fps = 20;
     option.loop = 4;
     option.imageInfo.width = 320;
@@ -84,7 +84,7 @@ describe('test linestamp validation', () => {
 
   test('should pass for min effect stamp', () => {
     const option: AnimationImageOptions = new AnimationImageOptions();
-    option.preset = PresetType.LINE;
+    option.preset = ImageExportMode.LINE;
     option.fps = 5;
     option.loop = 1;
     option.imageInfo.width = 200;
@@ -100,7 +100,7 @@ describe('test linestamp validation', () => {
 
   test('should pass for max effect stamp', () => {
     const option: AnimationImageOptions = new AnimationImageOptions();
-    option.preset = PresetType.LINE;
+    option.preset = ImageExportMode.LINE;
     option.fps = 20;
     option.loop = 3;
     option.imageInfo.width = 480;
@@ -118,7 +118,7 @@ describe('test linestamp validation', () => {
 
   test('should pass for min popup stamp', () => {
     const option: AnimationImageOptions = new AnimationImageOptions();
-    option.preset = PresetType.LINE;
+    option.preset = ImageExportMode.LINE;
     option.fps = 5;
     option.loop = 1;
     option.imageInfo.width = 200;
@@ -134,7 +134,7 @@ describe('test linestamp validation', () => {
 
   test('should pass for max popup stamp', () => {
     const option: AnimationImageOptions = new AnimationImageOptions();
-    option.preset = PresetType.LINE;
+    option.preset = ImageExportMode.LINE;
     option.fps = 20;
     option.loop = 3;
     option.imageInfo.width = 480;
@@ -152,7 +152,7 @@ describe('test linestamp validation', () => {
 
   test('should pass for min emoji', () => {
     const option: AnimationImageOptions = new AnimationImageOptions();
-    option.preset = PresetType.LINE;
+    option.preset = ImageExportMode.LINE;
     option.fps = 5;
     option.loop = 1;
     option.imageInfo.width = 180;
@@ -168,7 +168,7 @@ describe('test linestamp validation', () => {
 
   test('should pass for max emoji', () => {
     const option: AnimationImageOptions = new AnimationImageOptions();
-    option.preset = PresetType.LINE;
+    option.preset = ImageExportMode.LINE;
     option.fps = 20;
     option.loop = 4;
     option.imageInfo.width = 180;

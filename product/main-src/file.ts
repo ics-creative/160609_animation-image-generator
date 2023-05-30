@@ -3,7 +3,7 @@ import { ErrorMessage } from './error/error-message';
 import { sendError } from './error/send-error';
 import { AnimationImageOptions } from '../common-src/data/animation-image-option';
 import { ImageData } from '../common-src/data/image-data';
-import { PresetType } from '../common-src/type/PresetType';
+import { ImageExportMode } from '../common-src/type/ImageExportMode';
 import { validateLineStamp } from '../common-src/validators/validateLineStamp';
 import * as fs from 'fs';
 import { createInquiryCode } from './generators/createInquiryCode';
@@ -51,7 +51,7 @@ export default class File {
     );
 
     // プリセットがLINEの場合、出力成功後にチェックを行い、警告があれば表示
-    if (animationOptionData.preset === PresetType.LINE && result.pngPath) {
+    if (animationOptionData.preset === ImageExportMode.LINE && result.pngPath) {
       await this.validateLineStamp(
         validationType,
         result.pngPath,

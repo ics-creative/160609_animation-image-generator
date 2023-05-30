@@ -33,7 +33,7 @@
             data-toggle="tooltip"
             data-placement="right"
             title="{{ localeData.PROP_tabAnimFpsTooltip }}"
-            *ngIf="animationOptionData.preset === PresetType.LINE"
+            *ngIf="animationOptionData.preset === ImageExportMode.LINE"
             (blur)="avoidBlankFpsNum()"
           />
           <input
@@ -42,7 +42,7 @@
             [(ngModel)]="animationOptionData.fps"
             min="1"
             max="60"
-            *ngIf="animationOptionData.preset === PresetType.WEB"
+            *ngIf="animationOptionData.preset === ImageExportMode.WEB"
             (blur)="avoidBlankFpsNum()"
           />
         </div>
@@ -50,7 +50,7 @@
 
       <div
         class="form-group row"
-        *ngIf="animationOptionData.preset === PresetType.WEB"
+        *ngIf="animationOptionData.preset === ImageExportMode.WEB"
       >
         <label class="col-sm-6 form-control-label">{{
           localeData.PROP_tabAnimLoop
@@ -79,7 +79,7 @@
             data-toggle="tooltip"
             data-placement="right"
             title="{{ localeData.PROP_tabAnimLoopTooltip }}"
-            *ngIf="animationOptionData.preset === PresetType.LINE"
+            *ngIf="animationOptionData.preset === ImageExportMode.LINE"
             (blur)="avoidBlankLoopNum()"
           />
           <input
@@ -87,7 +87,7 @@
             class="form-control"
             [(ngModel)]="animationOptionData.loop"
             min="1"
-            *ngIf="animationOptionData.preset === PresetType.WEB"
+            *ngIf="animationOptionData.preset === ImageExportMode.WEB"
             (blur)="avoidBlankLoopNum()"
           />
         </div>
@@ -98,7 +98,7 @@
       <!-- APNGファイル出力 -->
       <div
         class="checkbox"
-        *ngIf="animationOptionData.preset === PresetType.WEB"
+        *ngIf="animationOptionData.preset === ImageExportMode.WEB"
       >
         <label
           data-toggle="tooltip"
@@ -213,7 +213,7 @@
         </div>
       </div>
 
-      <div *ngIf="animationOptionData.preset === PresetType.WEB">
+      <div *ngIf="animationOptionData.preset === ImageExportMode.WEB">
         <!-- WebPファイル出力 -->
         <div class="checkbox">
           <label
