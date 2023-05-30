@@ -11,17 +11,17 @@
           class="form-control"
           style="width: 100%"
           #optionSelecter
-          (change)="handlePresetChange(optionSelecter.value)"
+          (change)="handleImageExportChange(optionSelecter.value)"
         >
           <option
             [value]="ImageExportMode.LINE"
-            [selected]="presetMode === ImageExportMode.LINE"
+            [selected]="imageExportMode === ImageExportMode.LINE"
           >
             {{ localeData.PROP_useItemLine }}
           </option>
           <option
             [value]="ImageExportMode.WEB"
-            [selected]="presetMode === ImageExportMode.WEB"
+            [selected]="imageExportMode === ImageExportMode.WEB"
           >
             {{ localeData.PROP_useItemWeb }}
           </option>
@@ -37,9 +37,9 @@
     ></app-properties>
     <hr />
 
-    <div *ngIf="animationOptionData.preset === ImageExportMode.LINE">
+    <div *ngIf="animationOptionData.imageExportMode === ImageExportMode.LINE">
       <!-- チェックルール -->
-      <div class="checkRule mod-select-preset">
+      <div class="checkRule mod-select-imageExportMode">
         <p class="mb-2">{{ localeData.RULE_title }}</p>
         <select class="form-control mb-4" [formControl]="checkRule">
           <option *ngFor="let checkRule of checkRuleList" [value]="checkRule">

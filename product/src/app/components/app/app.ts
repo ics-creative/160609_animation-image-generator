@@ -15,7 +15,7 @@ import { PresetWeb } from '../../../../common-src/preset/preset-web';
 import { AnimationImageOptions } from '../../../../common-src/data/animation-image-option';
 import { ImageData } from '../../../../common-src/data/image-data';
 import { checkImagePxSizeMatched } from './checkImagePxSizeMatched';
-import { loadPresetConfig, savePresetConfig } from './UserConfig';
+import { loadImageExportMode, saveImageExportMode } from './UserConfig';
 import { localeData } from 'app/i18n/locale-manager';
 import { LineValidationType } from '../../../../common-src/type/LineValidationType';
 import { checkRuleList } from '../../../../common-src/checkRule/checkRule';
@@ -90,8 +90,8 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.isImageSelected = false;
 
     // 初回プリセットの設定
-    this.imageExportMode = loadPresetConfig();
-    this.changePreset(this.imageExportMode);
+    this.imageExportMode = loadImageExportMode();
+    this.changeImageExportMode(this.imageExportMode);
   }
 
   ngAfterViewInit() {
@@ -123,16 +123,16 @@ export class AppComponent implements OnInit, AfterViewInit {
     event.preventDefault();
   }
 
-  handlePresetChange(imageExportMode: string) {
+  handleImageExportChange(imageExportMode: string) {
     const imageExport =
     imageExportMode === ImageExportMode.WEB ? ImageExportMode.WEB : ImageExportMode.LINE;
-    savePresetConfig(imageExport);
+    saveImageExportMode(imageExport);
     this.imageExportMode = imageExport;
 
-    this.changePreset(this.imageExportMode);
+    this.changeImageExportMode(this.imageExportMode);
   }
 
-  changePreset(imageExportMode: ImageExportMode) {
+  changeImageExportMode(imageExportMode: ImageExportMode) {
     switch (imageExportMode) {
       case ImageExportMode.LINE:
         PresetLine.setPreset(this.animationOptionData);
