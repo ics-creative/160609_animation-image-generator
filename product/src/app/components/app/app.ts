@@ -15,7 +15,12 @@ import { PresetWeb } from '../../../../common-src/preset/preset-web';
 import { AnimationImageOptions } from '../../../../common-src/data/animation-image-option';
 import { ImageData } from '../../../../common-src/data/image-data';
 import { checkImagePxSizeMatched } from './checkImagePxSizeMatched';
-import { loadImageExportMode, saveImageExportMode, loadAnimationImageOptions, saveAnimationImageOptions } from './UserConfig';
+import {
+  loadImageExportMode,
+  saveImageExportMode,
+  loadAnimationImageOptions,
+  saveAnimationImageOptions
+} from './UserConfig';
 import { localeData } from 'app/i18n/locale-manager';
 import { LineValidationType } from '../../../../common-src/type/LineValidationType';
 import { checkRuleList } from '../../../../common-src/checkRule/checkRule';
@@ -82,7 +87,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   @ViewChild('optionSelecter', { static: true })
   optionSelecterComponent?: ElementRef;
 
-  constructor(sanitizer: DomSanitizer, private ipcService: IpcService) { }
+  constructor(sanitizer: DomSanitizer, private ipcService: IpcService) {}
 
   ngOnInit() {
     this.animationOptionData = new AnimationImageOptions();
@@ -125,7 +130,9 @@ export class AppComponent implements OnInit, AfterViewInit {
 
   handleImageExportChange(imageExportMode: string) {
     const imageExport =
-      imageExportMode === ImageExportMode.WEB ? ImageExportMode.WEB : ImageExportMode.LINE;
+      imageExportMode === ImageExportMode.WEB
+        ? ImageExportMode.WEB
+        : ImageExportMode.LINE;
     saveImageExportMode(imageExport);
     this.imageExportMode = imageExport;
 

@@ -39,7 +39,7 @@ export class PropertiesComponent {
   // クラス名を.html内から使用できるようにする
   ImageExportMode = ImageExportMode;
   CompressionType = CompressionType;
-  
+
   localeData = localeData;
 
   constructor() {}
@@ -65,7 +65,7 @@ export class PropertiesComponent {
       y: this.tooltipElement?.nativeElement.getBoundingClientRect().y
     });
   }
-  
+
   changeAnimationOption() {
     this.changeAnimationOptionEvent.emit(this.animationOptionData);
   }
