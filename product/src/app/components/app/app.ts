@@ -16,10 +16,9 @@ import { AnimationImageOptions } from '../../../../common-src/data/animation-ima
 import { ImageData } from '../../../../common-src/data/image-data';
 import { checkImagePxSizeMatched } from './checkImagePxSizeMatched';
 import {
-  loadImageExportMode,
-  saveImageExportMode,
-  loadAnimationImageOptions,
-  saveAnimationImageOptions
+  loadUserConfigs,
+  saveUserConfigs,
+  UserConfigs
 } from './UserConfig';
 import { localeData } from 'app/i18n/locale-manager';
 import { LineValidationType } from '../../../../common-src/type/LineValidationType';
@@ -61,6 +60,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   items: ImageData[] = [];
   localeData = localeData;
   validationErrorsMessage = [''];
+  userConfigs: UserConfigs | null = null;
 
   showingTooltip: Tooltip | null = null;
   showingTooltipButtonPos: { x: number; y: number } = {
@@ -87,15 +87,19 @@ export class AppComponent implements OnInit, AfterViewInit {
   @ViewChild('optionSelecter', { static: true })
   optionSelecterComponent?: ElementRef;
 
-  constructor(sanitizer: DomSanitizer, private ipcService: IpcService) {}
+  constructor(sanitizer: DomSanitizer, private ipcService: IpcService) { }
 
   ngOnInit() {
     this.animationOptionData = new AnimationImageOptions();
 
     this.isImageSelected = false;
 
+    this.userConfigs = loadUserConfigs();
+
     // 設定の読み込み
-    this.imageExportMode = loadImageExportMode();
+    this.imageExportMode = this.userConfigs.imageExportMode;
+    this.checkRule.setValue(this.userConfigs.lineConfig.lineValidationType, { emitEvent: false });
+
     this.changeImageExportMode(this.imageExportMode);
   }
 
@@ -133,36 +137,36 @@ export class AppComponent implements OnInit, AfterViewInit {
       imageExportMode === ImageExportMode.WEB
         ? ImageExportMode.WEB
         : ImageExportMode.LINE;
-    saveImageExportMode(imageExport);
+        
     this.imageExportMode = imageExport;
 
     this.changeImageExportMode(this.imageExportMode);
+    this.saveConfig();
   }
 
   /**
-   * 画像出力方法を変更
+   * 画像出力方法を変更します
    * @param imageExportMode
    */
   changeImageExportMode(imageExportMode: ImageExportMode) {
-    let loadedOptions = loadAnimationImageOptions(imageExportMode);
-    let presetData;
-    switch (imageExportMode) {
-      case ImageExportMode.WEB:
-        presetData = PresetWeb.getPreset();
-        break;
-      case ImageExportMode.LINE:
-      default:
-        presetData = PresetLine.getPreset();
+
+    if (!this.userConfigs) {
+      // 想定しない挙動なのでエラー発生でOK
+      throw new Error('userConfigs is null');
     }
 
-    // データがなければプリセットを使用する
-    if (loadedOptions === undefined || loadedOptions === null) {
-      this.animationOptionData = presetData;
-      return;
+    switch (imageExportMode) {
+      case ImageExportMode.LINE:
+        this.animationOptionData = this.userConfigs.lineConfig.animationOption;
+        this.checkRule.setValue(this.userConfigs.lineConfig.lineValidationType, { emitEvent: false });
+        break;
+      case ImageExportMode.WEB:
+        this.animationOptionData = this.userConfigs.webConfig.animationOption;
+        break;
     }
-    // 保存されているオプションを優先で、設定がなければプリセットを使用する
-    this.animationOptionData = { ...presetData, ...loadedOptions };
+    this.userConfigs.imageExportMode = imageExportMode;
   }
+
 
   async generateAnimImage(): Promise<void> {
     // 	画像が選択されていないので保存しない。
@@ -334,7 +338,29 @@ export class AppComponent implements OnInit, AfterViewInit {
       .map((value) => value?.message ?? '');
   }
 
+
   handleChangeAnimationOption(animationOptionData: AnimationImageOptions) {
-    saveAnimationImageOptions(animationOptionData);
+    this.saveConfig();
+  }
+
+  handleChangeCheckRule(): void {
+    this.saveConfig()
+  }
+
+  saveConfig() {
+    if (!this.userConfigs) {
+      throw new Error('userConfigs is null');
+    }
+
+    switch (this.animationOptionData.imageExportMode) {
+      case ImageExportMode.LINE:
+        this.userConfigs.lineConfig = { animationOption: this.animationOptionData, lineValidationType: this.checkRule.value };
+        break;
+      case ImageExportMode.WEB:
+        this.userConfigs.webConfig = { animationOption: this.animationOptionData };
+        break;
+    }
+
+    saveUserConfigs(this.userConfigs);
   }
 }

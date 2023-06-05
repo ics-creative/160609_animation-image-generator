@@ -6,7 +6,13 @@ import { ImageExportMode } from '../type/ImageExportMode';
  * Webページ用アニメーションのプリセット設定です。
  */
 export class PresetWeb {
-  static getPreset() {
+  static getPresetVer1() {
+    return {
+      animationOption: PresetWeb.getAnimationOptionVer1(),
+    }
+  }
+
+  static getAnimationOptionVer1() {
     const data = new AnimationImageOptions();
     data.noLoop = true;
     data.loop = 4;
