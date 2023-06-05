@@ -42,9 +42,11 @@
       <!-- チェックルール -->
       <div class="checkRule mod-select-imageExportMode">
         <p class="mb-2">{{ localeData.RULE_title }}</p>
-        <select class="form-control mb-4" 
-        [formControl]="checkRule"
-        (ngModelChange)="handleChangeCheckRule()" >
+        <select
+          class="form-control mb-4"
+          [formControl]="checkRule"
+          (ngModelChange)="handleChangeCheckRule()"
+        >
           <option *ngFor="let checkRule of checkRuleList" [value]="checkRule">
             {{ checkRuleLabel[checkRule] }}
           </option>

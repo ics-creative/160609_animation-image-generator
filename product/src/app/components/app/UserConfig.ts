@@ -7,19 +7,19 @@ import {
 } from '../../../../common-src/type/ImageExportMode';
 import { LineValidationType } from '../../../../common-src/type/LineValidationType';
 
-type LineConfig = {
+interface LineConfig {
   animationOption: AnimationImageOptions;
   lineValidationType: LineValidationType;
 }
-type WebConfig = {
+interface WebConfig {
   animationOption: AnimationImageOptions;
 }
 
-export type UserConfigsVer0 = {
+export interface UserConfigsVer0 {
   imageExportNumber: number;
 }
 
-export type UserConfigsVer1 = {
+export interface UserConfigsVer1 {
   version: number;
   imageExportMode: ImageExportMode;
   lineConfig: LineConfig;
@@ -56,14 +56,16 @@ const migrationUserConfig = (): UserConfigs => {
 
   const loadedUserConfig = localStorage.getItem(USER_CONFIGS);
   // UserConfigsが存在しない場合はプリセットを返す
-  const userConfigs = loadedUserConfig ? JSON.parse(loadedUserConfig) : undefined;
+  const userConfigs = loadedUserConfig
+    ? JSON.parse(loadedUserConfig)
+    : undefined;
   if (userConfigs === undefined) {
     const configs = {
       version: CURRENT_VERSION,
       imageExportMode: ImageExportMode.LINE,
       lineConfig: PresetLine.getPresetVer1(),
-      webConfig: PresetWeb.getPresetVer1(),
-    }
+      webConfig: PresetWeb.getPresetVer1()
+    };
     // 新バージョンの設定を保存する
     saveUserConfigs(configs);
     return configs;
@@ -72,18 +74,21 @@ const migrationUserConfig = (): UserConfigs => {
   // ver1以降マイグレーションが必要な場合ここで対応する
 
   return userConfigs;
-}
+};
 
 /**
  * ver0設定から最新Ver設定に移行する
- * @param configVer0 
- * @returns 
+ * @param configVer0
+ * @returns
  */
-const migrationUserConfigFromVer0 = (configVer0: UserConfigsVer0): UserConfigs => {
+const migrationUserConfigFromVer0 = (
+  configVer0: UserConfigsVer0
+): UserConfigs => {
   return {
     version: CURRENT_VERSION,
-    imageExportMode: numberToMode(configVer0.imageExportNumber) ?? ImageExportMode.LINE,
+    imageExportMode:
+      numberToMode(configVer0.imageExportNumber) ?? ImageExportMode.LINE,
     lineConfig: PresetLine.getPresetVer1(),
-    webConfig: PresetWeb.getPresetVer1(),
-  }
-}
+    webConfig: PresetWeb.getPresetVer1()
+  };
+};

@@ -15,11 +15,7 @@ import { PresetWeb } from '../../../../common-src/preset/preset-web';
 import { AnimationImageOptions } from '../../../../common-src/data/animation-image-option';
 import { ImageData } from '../../../../common-src/data/image-data';
 import { checkImagePxSizeMatched } from './checkImagePxSizeMatched';
-import {
-  loadUserConfigs,
-  saveUserConfigs,
-  UserConfigs
-} from './UserConfig';
+import { loadUserConfigs, saveUserConfigs, UserConfigs } from './UserConfig';
 import { localeData } from 'app/i18n/locale-manager';
 import { LineValidationType } from '../../../../common-src/type/LineValidationType';
 import { checkRuleList } from '../../../../common-src/checkRule/checkRule';
@@ -87,7 +83,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   @ViewChild('optionSelecter', { static: true })
   optionSelecterComponent?: ElementRef;
 
-  constructor(sanitizer: DomSanitizer, private ipcService: IpcService) { }
+  constructor(sanitizer: DomSanitizer, private ipcService: IpcService) {}
 
   ngOnInit() {
     this.animationOptionData = new AnimationImageOptions();
@@ -98,7 +94,9 @@ export class AppComponent implements OnInit, AfterViewInit {
 
     // 設定の読み込み
     this.imageExportMode = this.userConfigs.imageExportMode;
-    this.checkRule.setValue(this.userConfigs.lineConfig.lineValidationType, { emitEvent: false });
+    this.checkRule.setValue(this.userConfigs.lineConfig.lineValidationType, {
+      emitEvent: false
+    });
 
     this.changeImageExportMode(this.imageExportMode);
   }
@@ -137,7 +135,7 @@ export class AppComponent implements OnInit, AfterViewInit {
       imageExportMode === ImageExportMode.WEB
         ? ImageExportMode.WEB
         : ImageExportMode.LINE;
-        
+
     this.imageExportMode = imageExport;
 
     this.changeImageExportMode(this.imageExportMode);
@@ -149,7 +147,6 @@ export class AppComponent implements OnInit, AfterViewInit {
    * @param imageExportMode
    */
   changeImageExportMode(imageExportMode: ImageExportMode) {
-
     if (!this.userConfigs) {
       // 想定しない挙動なのでエラー発生でOK
       throw new Error('userConfigs is null');
@@ -158,7 +155,10 @@ export class AppComponent implements OnInit, AfterViewInit {
     switch (imageExportMode) {
       case ImageExportMode.LINE:
         this.animationOptionData = this.userConfigs.lineConfig.animationOption;
-        this.checkRule.setValue(this.userConfigs.lineConfig.lineValidationType, { emitEvent: false });
+        this.checkRule.setValue(
+          this.userConfigs.lineConfig.lineValidationType,
+          { emitEvent: false }
+        );
         break;
       case ImageExportMode.WEB:
         this.animationOptionData = this.userConfigs.webConfig.animationOption;
@@ -166,7 +166,6 @@ export class AppComponent implements OnInit, AfterViewInit {
     }
     this.userConfigs.imageExportMode = imageExportMode;
   }
-
 
   async generateAnimImage(): Promise<void> {
     // 	画像が選択されていないので保存しない。
@@ -338,13 +337,12 @@ export class AppComponent implements OnInit, AfterViewInit {
       .map((value) => value?.message ?? '');
   }
 
-
   handleChangeAnimationOption(animationOptionData: AnimationImageOptions) {
     this.saveConfig();
   }
 
   handleChangeCheckRule(): void {
-    this.saveConfig()
+    this.saveConfig();
   }
 
   saveConfig() {
@@ -354,10 +352,15 @@ export class AppComponent implements OnInit, AfterViewInit {
 
     switch (this.animationOptionData.imageExportMode) {
       case ImageExportMode.LINE:
-        this.userConfigs.lineConfig = { animationOption: this.animationOptionData, lineValidationType: this.checkRule.value };
+        this.userConfigs.lineConfig = {
+          animationOption: this.animationOptionData,
+          lineValidationType: this.checkRule.value
+        };
         break;
       case ImageExportMode.WEB:
-        this.userConfigs.webConfig = { animationOption: this.animationOptionData };
+        this.userConfigs.webConfig = {
+          animationOption: this.animationOptionData
+        };
         break;
     }
 
