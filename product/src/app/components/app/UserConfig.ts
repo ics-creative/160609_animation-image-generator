@@ -1,4 +1,3 @@
-import { UserConfig } from 'vitest';
 import { AnimationImageOptions } from '../../../../common-src/data/animation-image-option';
 import { PresetLine } from '../../../../common-src/preset/preset-line';
 import { PresetWeb } from '../../../../common-src/preset/preset-web';
