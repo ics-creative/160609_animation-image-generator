@@ -29,7 +29,7 @@ export interface UserConfigsVer1 {
 export type UserConfigs = UserConfigsVer1;
 
 const USER_CONFIGS = 'user-configs'; // ユーザー設定
-const IMAGE_EXPORT_MODE = 'preset_id'; // 旧バージョンの設定
+const OLD_USER_CONFIGS = 'preset_id'; // 旧バージョンの設定
 const CURRENT_VERSION = 1;
 
 export const loadUserConfigs = (): UserConfigs => {
@@ -43,9 +43,9 @@ export const saveUserConfigs = (data: UserConfigs) => {
 // 旧バージョンのユーザー設定を新バージョンに移行する
 const migrationUserConfig = (): UserConfigs => {
   // 旧バージョンのユーザー設定を読み込む
-  const imagePresetMode = localStorage.getItem(IMAGE_EXPORT_MODE);
+  const imagePresetMode = localStorage.getItem(OLD_USER_CONFIGS);
   if (imagePresetMode) {
-    localStorage.removeItem(IMAGE_EXPORT_MODE); // 旧バージョンの設定を削除する
+    localStorage.removeItem(OLD_USER_CONFIGS); // 旧バージョンの設定を削除する
     const configs = migrationUserConfigFromVer0({
       imageExportNumber: Number(imagePresetMode)
     });
