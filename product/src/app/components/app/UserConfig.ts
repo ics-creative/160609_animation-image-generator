@@ -4,8 +4,7 @@ import { PresetLine } from '../../../../common-src/preset/preset-line';
 import { PresetWeb } from '../../../../common-src/preset/preset-web';
 import {
   ImageExportMode,
-  numberToMode,
-  modeToNumber
+  numberToMode
 } from '../../../../common-src/type/ImageExportMode';
 import { LineValidationType } from '../../../../common-src/type/LineValidationType';
 

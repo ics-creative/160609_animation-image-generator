@@ -13,17 +13,6 @@ const IMAGE_EXPORT_MODE_NUM = {
 } as const;
 
 /**
- * 画像出力方法を数値に変換します。
- * この機能はpresetをnumber型で入出力する古い機能との互換性確保のために残されています。
- * 必要な場合のみ使用してください。
- *
- * @param mode
- */
-export function modeToNumber(mode: ImageExportMode) {
-  return IMAGE_EXPORT_MODE_NUM[mode];
-}
-
-/**
  * 数値を画像出力方法名に変換します。
  * この機能は画像出力方法をnumber型で入出力する古い機能との互換性確保のために残されています。
  * 必要な場合のみ使用してください。
