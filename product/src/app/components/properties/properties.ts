@@ -9,7 +9,7 @@ import {
 import { localeData } from 'app/i18n/locale-manager';
 import { AnimationImageOptions } from '../../../../common-src/data/animation-image-option';
 import { CompressionType } from '../../../../common-src/type/CompressionType';
-import { PresetType } from '../../../../common-src/type/PresetType';
+import { ImageExportMode } from '../../../../common-src/type/ImageExportMode';
 import { Tooltip } from '../../../../common-src/type/TooltipType';
 
 @Component({
@@ -30,11 +30,16 @@ export class PropertiesComponent {
   @Output()
   showTooltipEvent = new EventEmitter<Tooltip>();
 
+  @Output()
+  changeAnimationOptionEvent = new EventEmitter<AnimationImageOptions>();
+
   @ViewChild('tooltipElement')
   tooltipElement: ElementRef | undefined;
 
-  PresetType = PresetType;
+  // クラス名を.html内から使用できるようにする
+  ImageExportMode = ImageExportMode;
   CompressionType = CompressionType;
+
   localeData = localeData;
 
   constructor() {}
@@ -59,5 +64,9 @@ export class PropertiesComponent {
       x: this.tooltipElement?.nativeElement.getBoundingClientRect().x,
       y: this.tooltipElement?.nativeElement.getBoundingClientRect().y
     });
+  }
+
+  changeAnimationOption() {
+    this.changeAnimationOptionEvent.emit(this.animationOptionData);
   }
 }

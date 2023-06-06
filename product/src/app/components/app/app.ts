@@ -9,13 +9,13 @@ import {
 import { AppConfig } from '../../../../common-src/config/app-config';
 import { DomSanitizer } from '@angular/platform-browser';
 import IpcService from '../../process/ipc.service';
-import { PresetType } from '../../../../common-src/type/PresetType';
+import { ImageExportMode } from '../../../../common-src/type/ImageExportMode';
 import { PresetLine } from '../../../../common-src/preset/preset-line';
 import { PresetWeb } from '../../../../common-src/preset/preset-web';
 import { AnimationImageOptions } from '../../../../common-src/data/animation-image-option';
 import { ImageData } from '../../../../common-src/data/image-data';
 import { checkImagePxSizeMatched } from './checkImagePxSizeMatched';
-import { loadPresetConfig, savePresetConfig } from './UserConfig';
+import { loadUserConfigs, saveUserConfigs, UserConfigs } from './UserConfig';
 import { localeData } from 'app/i18n/locale-manager';
 import { LineValidationType } from '../../../../common-src/type/LineValidationType';
 import { checkRuleList } from '../../../../common-src/checkRule/checkRule';
@@ -46,14 +46,17 @@ export class AppComponent implements OnInit, AfterViewInit {
   private apngFileSizeError = false;
   readonly AppConfig = AppConfig;
 
+  // クラス名を.htmlから使用できるようにする
+  ImageExportMode = ImageExportMode;
+
   isImageSelected = false;
   isUiLocked = false;
   _isDragover = false;
-  presetMode = PresetType.LINE;
+  imageExportMode = ImageExportMode.LINE;
   items: ImageData[] = [];
-  PresetType = PresetType;
   localeData = localeData;
   validationErrorsMessage = [''];
+  userConfigs: UserConfigs | null = null;
 
   showingTooltip: Tooltip | null = null;
   showingTooltipButtonPos: { x: number; y: number } = {
@@ -87,9 +90,15 @@ export class AppComponent implements OnInit, AfterViewInit {
 
     this.isImageSelected = false;
 
-    // 初回プリセットの設定
-    this.presetMode = loadPresetConfig();
-    this.changePreset(this.presetMode);
+    this.userConfigs = loadUserConfigs();
+
+    // 設定の読み込み
+    this.imageExportMode = this.userConfigs.imageExportMode;
+    this.checkRule.setValue(this.userConfigs.lineConfig.lineValidationType, {
+      emitEvent: false
+    });
+
+    this.changeImageExportMode(this.imageExportMode);
   }
 
   ngAfterViewInit() {
@@ -121,24 +130,41 @@ export class AppComponent implements OnInit, AfterViewInit {
     event.preventDefault();
   }
 
-  handlePresetChange(presetMode: string) {
-    const preset =
-      presetMode === PresetType.WEB ? PresetType.WEB : PresetType.LINE;
-    savePresetConfig(preset);
-    this.presetMode = preset;
+  handleImageExportChange(imageExportMode: string) {
+    const imageExport =
+      imageExportMode === ImageExportMode.WEB
+        ? ImageExportMode.WEB
+        : ImageExportMode.LINE;
 
-    this.changePreset(this.presetMode);
+    this.imageExportMode = imageExport;
+
+    this.changeImageExportMode(this.imageExportMode);
+    this.saveConfig();
   }
 
-  changePreset(presetMode: PresetType) {
-    switch (presetMode) {
-      case PresetType.LINE:
-        PresetLine.setPreset(this.animationOptionData);
+  /**
+   * 画像出力方法を変更します
+   * @param imageExportMode
+   */
+  changeImageExportMode(imageExportMode: ImageExportMode) {
+    if (!this.userConfigs) {
+      // 想定しない挙動なのでエラー発生でOK
+      throw new Error('userConfigs is null');
+    }
+
+    switch (imageExportMode) {
+      case ImageExportMode.LINE:
+        this.animationOptionData = this.userConfigs.lineConfig.animationOption;
+        this.checkRule.setValue(
+          this.userConfigs.lineConfig.lineValidationType,
+          { emitEvent: false }
+        );
         break;
-      case PresetType.WEB:
-        PresetWeb.setPreset(this.animationOptionData);
+      case ImageExportMode.WEB:
+        this.animationOptionData = this.userConfigs.webConfig.animationOption;
         break;
     }
+    this.userConfigs.imageExportMode = imageExportMode;
   }
 
   async generateAnimImage(): Promise<void> {
@@ -309,5 +335,35 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.validationErrorsMessage = (Object.values(errors) as ValidationResult[])
       .filter((value) => value !== undefined)
       .map((value) => value?.message ?? '');
+  }
+
+  handleChangeAnimationOption(animationOptionData: AnimationImageOptions) {
+    this.saveConfig();
+  }
+
+  handleChangeCheckRule(): void {
+    this.saveConfig();
+  }
+
+  saveConfig() {
+    if (!this.userConfigs) {
+      throw new Error('userConfigs is null');
+    }
+
+    switch (this.animationOptionData.imageExportMode) {
+      case ImageExportMode.LINE:
+        this.userConfigs.lineConfig = {
+          animationOption: this.animationOptionData,
+          lineValidationType: this.checkRule.value
+        };
+        break;
+      case ImageExportMode.WEB:
+        this.userConfigs.webConfig = {
+          animationOption: this.animationOptionData
+        };
+        break;
+    }
+
+    saveUserConfigs(this.userConfigs);
   }
 }

@@ -33,16 +33,17 @@
             data-toggle="tooltip"
             data-placement="right"
             title="{{ localeData.PROP_tabAnimFpsTooltip }}"
-            *ngIf="animationOptionData.preset === PresetType.LINE"
+            *ngIf="animationOptionData.imageExportMode === ImageExportMode.LINE"
             (blur)="avoidBlankFpsNum()"
           />
           <input
             type="number"
             class="form-control"
             [(ngModel)]="animationOptionData.fps"
+            (ngModelChange)="changeAnimationOption()"
             min="1"
             max="60"
-            *ngIf="animationOptionData.preset === PresetType.WEB"
+            *ngIf="animationOptionData.imageExportMode === ImageExportMode.WEB"
             (blur)="avoidBlankFpsNum()"
           />
         </div>
@@ -50,7 +51,7 @@
 
       <div
         class="form-group row"
-        *ngIf="animationOptionData.preset === PresetType.WEB"
+        *ngIf="animationOptionData.imageExportMode === ImageExportMode.WEB"
       >
         <label class="col-sm-6 form-control-label">{{
           localeData.PROP_tabAnimLoop
@@ -58,7 +59,11 @@
         <div class="col-sm-6">
           <div class="checkbox">
             <label>
-              <input type="checkbox" [(ngModel)]="animationOptionData.noLoop" />
+              <input
+                type="checkbox"
+                [(ngModel)]="animationOptionData.noLoop"
+                (ngModelChange)="changeAnimationOption()"
+              />
               {{ localeData.PROP_tabAnimLoopInitiny }}
             </label>
           </div>
@@ -74,20 +79,22 @@
             type="number"
             class="form-control"
             [(ngModel)]="animationOptionData.loop"
+            (ngModelChange)="changeAnimationOption()"
             min="1"
             max="4"
             data-toggle="tooltip"
             data-placement="right"
             title="{{ localeData.PROP_tabAnimLoopTooltip }}"
-            *ngIf="animationOptionData.preset === PresetType.LINE"
+            *ngIf="animationOptionData.imageExportMode === ImageExportMode.LINE"
             (blur)="avoidBlankLoopNum()"
           />
           <input
             type="number"
             class="form-control"
             [(ngModel)]="animationOptionData.loop"
+            (ngModelChange)="changeAnimationOption()"
             min="1"
-            *ngIf="animationOptionData.preset === PresetType.WEB"
+            *ngIf="animationOptionData.imageExportMode === ImageExportMode.WEB"
             (blur)="avoidBlankLoopNum()"
           />
         </div>
@@ -98,7 +105,7 @@
       <!-- APNGファイル出力 -->
       <div
         class="checkbox"
-        *ngIf="animationOptionData.preset === PresetType.WEB"
+        *ngIf="animationOptionData.imageExportMode === ImageExportMode.WEB"
       >
         <label
           data-toggle="tooltip"
@@ -108,6 +115,7 @@
           <input
             type="checkbox"
             [(ngModel)]="animationOptionData.enabledExportApng"
+            (ngModelChange)="changeAnimationOption()"
           />
           {{ localeData.PROP_tabQualityHApng }}
         </label>
@@ -129,6 +137,7 @@
               type="checkbox"
               class="mr-1"
               [(ngModel)]="animationOptionData.enabledPngCompress"
+              (ngModelChange)="changeAnimationOption()"
             />
             {{ localeData.PROP_tabQualityApngOpt }}
           </label>
@@ -151,7 +160,10 @@
               type="radio"
               id="radio-zopfli"
               data-html="true"
-              (click)="animationOptionData.compression = CompressionType.zopfli"
+              (click)="
+                animationOptionData.compression = CompressionType.zopfli;
+                changeAnimationOption()
+              "
               [checked]="
                 animationOptionData.compression === CompressionType.zopfli
               "
@@ -173,7 +185,10 @@
               name="radio-stacked"
               type="radio"
               id="radio-7zip"
-              (click)="animationOptionData.compression = CompressionType.zip7"
+              (click)="
+                animationOptionData.compression = CompressionType.zip7;
+                changeAnimationOption()
+              "
               [checked]="
                 animationOptionData.compression === CompressionType.zip7
               "
@@ -195,7 +210,10 @@
               name="radio-stacked"
               type="radio"
               id="radio-zlib"
-              (click)="animationOptionData.compression = CompressionType.zlib"
+              (click)="
+                animationOptionData.compression = CompressionType.zlib;
+                changeAnimationOption()
+              "
               [checked]="
                 animationOptionData.compression === CompressionType.zlib
               "
@@ -213,7 +231,7 @@
         </div>
       </div>
 
-      <div *ngIf="animationOptionData.preset === PresetType.WEB">
+      <div *ngIf="animationOptionData.imageExportMode === ImageExportMode.WEB">
         <!-- WebPファイル出力 -->
         <div class="checkbox">
           <label
@@ -224,6 +242,7 @@
             <input
               type="checkbox"
               [(ngModel)]="animationOptionData.enabledExportWebp"
+              (ngModelChange)="changeAnimationOption()"
             />
             {{ localeData.PROP_tabQualityHWebp }}
           </label>
@@ -243,6 +262,7 @@
               <input
                 type="checkbox"
                 [(ngModel)]="animationOptionData.enabledWebpCompress"
+                (ngModelChange)="changeAnimationOption()"
               />
               {{ localeData.PROP_tabQualityApngOpt }}
             </label>
@@ -259,6 +279,7 @@
             <input
               type="checkbox"
               [(ngModel)]="animationOptionData.enabledExportHtml"
+              (ngModelChange)="changeAnimationOption()"
             />
             {{ localeData.PROP_tabQualityHHtml }}
           </label>
