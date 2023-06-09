@@ -63,3 +63,8 @@ product/src/*.js
 windows-store
 *.bat
 win-cer
+
+# cert周りのファイルが誤ってコミットされないように設定
+*.provisionprofile
+distribusion.json
+development.json
