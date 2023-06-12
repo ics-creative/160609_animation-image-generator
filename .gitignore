@@ -64,6 +64,9 @@ windows-store
 *.bat
 win-cer
 
+# 個人ごとの環境設定ファイル
+.env
+
 # cert周りのファイルが誤ってコミットされないように設定
 *.provisionprofile
 distribusion.json

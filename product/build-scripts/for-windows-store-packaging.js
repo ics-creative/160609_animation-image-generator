@@ -1,13 +1,14 @@
 const electronPackager = require('electron-packager');
 const conf = require('./conf.js');
+require('dotenv').config();
 
 function convertWindowsStore() {
   const electronWindowsStore = require('electron-windows-store');
 
   // パスはインストール先で変わるので環境変数から取得する
   if (!process.env.WINDOWS_KIT_PATH) {
-    console.error(`[convert-windows-store] error : WINDOWS_KIT_PATH is not defined. Please set environment variable. 
-      Example:'C:\\Program Files (x86)\\Windows Kits\\10\\bin\\10.0.22000.0\\x64'`);
+    console.error(`[convert-windows-store] error : "WINDOWS_KIT_PATH" is not set.
+    Please set WINDOWS_KIT_PATH to .env file.`);
     return ;
   }
 
@@ -22,7 +23,7 @@ function convertWindowsStore() {
     windowsKit: process.env.WINDOWS_KIT_PATH,
     deploy: false,
     finalSay: function () {
-      console.log('exit');
+      console.log('[convert-windows-store] exit');
       return new Promise((resolve, reject) => resolve());
     }
   });
