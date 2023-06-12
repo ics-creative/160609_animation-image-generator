@@ -1,11 +1,13 @@
 const electronPackager = require('electron-packager');
 const conf = require('./conf.js');
+
+// .envから環境変数設定を取り込み
 require('dotenv').config();
 
 function convertWindowsStore() {
   const electronWindowsStore = require('electron-windows-store');
 
-  // パスはインストール先で変わるので環境変数から取得する
+  // パスはインストール先で変わるので環境変数(or .env)から取得する
   if (!process.env.WINDOWS_KIT_PATH) {
     console.error(`[convert-windows-store] error : "WINDOWS_KIT_PATH" is not set.
     Please set WINDOWS_KIT_PATH to .env file.`);
