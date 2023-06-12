@@ -1,6 +1,6 @@
 ## アニメ画像に変換する君
 
-ビルドコマンド等のはmacOSを前提で作成しています。
+一部のビルドコマンドはビルド先のOS前提で作成しています。
 
 ## インストール
 `npm install`
@@ -18,5 +18,4 @@
 `npm run release-darwin`
 
 ### Windows
-
 `npm run release-win32`
