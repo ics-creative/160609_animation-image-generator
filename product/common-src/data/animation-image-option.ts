@@ -17,11 +17,4 @@ export class AnimationImageOptions {
   enabledExportApng = false;
   enabledExportWebp = false;
   enabledExportHtml = false;
-
-  /** 画像の情報です。 */
-  imageInfo = {
-    width: 0,
-    height: 0,
-    length: 0
-  };
 }

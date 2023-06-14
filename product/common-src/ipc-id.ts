@@ -2,6 +2,7 @@ import { IpcMainInvokeEvent } from 'electron';
 import { AnimationImageOptions } from './data/animation-image-option';
 import { ImageData } from './data/image-data';
 import { LineValidationType } from './type/LineValidationType';
+import { ImageInfo } from './data/image-info';
 
 // プロセス間通信のchannel名の定数定義です
 export const IpcId = {
@@ -29,6 +30,7 @@ interface IpcInvokeFuncs {
   ) => Promise<void>;
   [IpcId.EXEC_IMAGE_EXPORT_PROCESS]: (
     version: string,
+    imageInfo: ImageInfo,
     itemList: ImageData[],
     animationOptionData: AnimationImageOptions,
     validationType: LineValidationType,

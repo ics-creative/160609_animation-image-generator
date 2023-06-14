@@ -1,4 +1,5 @@
 import { AnimationImageOptions } from '../data/animation-image-option';
+import { ImageInfo } from '../data/image-info';
 import { ImageValidatorResult } from '../type/ImageValidator';
 import { LineValidationType } from '../type/LineValidationType';
 import { lineImageValidators } from './lineImageValidators';
@@ -8,6 +9,7 @@ import { lineImageValidators } from './lineImageValidators';
  */
 export const validateLineStamp = (
   validationType: LineValidationType,
+  imageInfo: ImageInfo,
   options: AnimationImageOptions,
   stat?: { size: number }
 ): ImageValidatorResult => {
@@ -15,14 +17,14 @@ export const validateLineStamp = (
 
   return {
     fileSizeError: stat ? validator.getFileSizeError(stat.size) : undefined,
-    frameCountError: validator.getFrameCountError(options.imageInfo.length),
+    frameCountError: validator.getFrameCountError(imageInfo.length),
     loopCountError: validator.getLoopCountError(options.loop),
     durationError: validator.getDurationError(
-      (options.imageInfo.length / options.fps) * options.loop
+      (imageInfo.length / options.fps) * options.loop
     ),
     imageSizeError: validator.getImageSizeError(
-      options.imageInfo.width,
-      options.imageInfo.height
+      imageInfo.width,
+      imageInfo.height
     )
   };
 };

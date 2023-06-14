@@ -9,14 +9,12 @@ describe('test linestamp validation', () => {
   // アニメーションスタンプ メイン
 
   test('should pass for min animation main', () => {
+    const imageInfo = {width: 240, height: 240, length: 5};
     const option: AnimationImageOptions = new AnimationImageOptions();
     option.imageExportMode = ImageExportMode.LINE;
     option.fps = 5;
     option.loop = 1;
-    option.imageInfo.width = 240;
-    option.imageInfo.height = 240;
-    option.imageInfo.length = 5;
-    const result = validateLineStamp(LineValidationType.ANIMATION_MAIN, option);
+    const result = validateLineStamp(LineValidationType.ANIMATION_MAIN, imageInfo, option);
     const isValid = Object.values(result).every((r) => r === undefined);
     if (!isValid) {
       console.warn(result);
@@ -25,14 +23,12 @@ describe('test linestamp validation', () => {
   });
 
   test('should pass for max animation main', () => {
+    const imageInfo = {width: 240, height: 240, length: 20};
     const option: AnimationImageOptions = new AnimationImageOptions();
     option.imageExportMode = ImageExportMode.LINE;
     option.fps = 20;
     option.loop = 4;
-    option.imageInfo.width = 240;
-    option.imageInfo.height = 240;
-    option.imageInfo.length = 20;
-    const result = validateLineStamp(LineValidationType.ANIMATION_MAIN, option, {size: 300 * 1024});
+    const result = validateLineStamp(LineValidationType.ANIMATION_MAIN, imageInfo, option, {size: 300 * 1024});
     const isValid = Object.values(result).every((r) => r === undefined);
     if (!isValid) {
       console.warn(result);
@@ -43,15 +39,14 @@ describe('test linestamp validation', () => {
   // アニメーションスタンプ スタンプ
 
   test('should pass for min animation stamp', () => {
+    const imageInfo = {width: 270, height: 270, length: 5};
     const option: AnimationImageOptions = new AnimationImageOptions();
     option.imageExportMode = ImageExportMode.LINE;
     option.fps = 5;
     option.loop = 1;
-    option.imageInfo.width = 270;
-    option.imageInfo.height = 270;
-    option.imageInfo.length = 5;
     const result = validateLineStamp(
       LineValidationType.ANIMATION_STAMP,
+      imageInfo,
       option
     );
     const isValid = Object.values(result).every((r) => r === undefined);
@@ -62,16 +57,14 @@ describe('test linestamp validation', () => {
   });
 
   test('should pass for max animation stamp', () => {
+    const imageInfo = {width: 320, height: 270, length: 20};
     const option: AnimationImageOptions = new AnimationImageOptions();
     option.imageExportMode = ImageExportMode.LINE;
     option.fps = 20;
     option.loop = 4;
-    option.imageInfo.width = 320;
-    option.imageInfo.height = 270;
-    option.imageInfo.length = 20;
     const result = validateLineStamp(
       LineValidationType.ANIMATION_STAMP,
-      option, {size: 300 * 1024}
+      imageInfo, option, {size: 300 * 1024}
     );
     const isValid = Object.values(result).every((r) => r === undefined);
     if (!isValid) {
@@ -83,14 +76,12 @@ describe('test linestamp validation', () => {
   // エフェクトスタンプ
 
   test('should pass for min effect stamp', () => {
+    const imageInfo = {width: 200, height: 480, length: 5};
     const option: AnimationImageOptions = new AnimationImageOptions();
     option.imageExportMode = ImageExportMode.LINE;
     option.fps = 5;
     option.loop = 1;
-    option.imageInfo.width = 200;
-    option.imageInfo.height = 480;
-    option.imageInfo.length = 5;
-    const result = validateLineStamp(LineValidationType.EFFECT, option, {size: 500 * 1024});
+    const result = validateLineStamp(LineValidationType.EFFECT, imageInfo, option, {size: 500 * 1024});
     const isValid = Object.values(result).every((r) => r === undefined);
     if (!isValid) {
       console.warn(result);
@@ -99,14 +90,12 @@ describe('test linestamp validation', () => {
   });
 
   test('should pass for max effect stamp', () => {
+    const imageInfo = {width: 480, height: 480, length: 20};
     const option: AnimationImageOptions = new AnimationImageOptions();
     option.imageExportMode = ImageExportMode.LINE;
     option.fps = 20;
     option.loop = 3;
-    option.imageInfo.width = 480;
-    option.imageInfo.height = 480;
-    option.imageInfo.length = 20;
-    const result = validateLineStamp(LineValidationType.EFFECT, option);
+    const result = validateLineStamp(LineValidationType.EFFECT, imageInfo, option);
     const isValid = Object.values(result).every((r) => r === undefined);
     if (!isValid) {
       console.warn(result);
@@ -117,14 +106,12 @@ describe('test linestamp validation', () => {
   // ポップアップスタンプ
 
   test('should pass for min popup stamp', () => {
+    const imageInfo = {width: 200, height: 480, length: 5};
     const option: AnimationImageOptions = new AnimationImageOptions();
     option.imageExportMode = ImageExportMode.LINE;
     option.fps = 5;
     option.loop = 1;
-    option.imageInfo.width = 200;
-    option.imageInfo.height = 480;
-    option.imageInfo.length = 5;
-    const result = validateLineStamp(LineValidationType.POPUP, option, {size: 500 * 1024});
+    const result = validateLineStamp(LineValidationType.POPUP, imageInfo, option, {size: 500 * 1024});
     const isValid = Object.values(result).every((r) => r === undefined);
     if (!isValid) {
       console.warn(result);
@@ -133,14 +120,12 @@ describe('test linestamp validation', () => {
   });
 
   test('should pass for max popup stamp', () => {
+    const imageInfo = {width: 480, height: 480, length: 20};
     const option: AnimationImageOptions = new AnimationImageOptions();
     option.imageExportMode = ImageExportMode.LINE;
     option.fps = 20;
     option.loop = 3;
-    option.imageInfo.width = 480;
-    option.imageInfo.height = 480;
-    option.imageInfo.length = 20;
-    const result = validateLineStamp(LineValidationType.POPUP, option);
+    const result = validateLineStamp(LineValidationType.POPUP, imageInfo, option);
     const isValid = Object.values(result).every((r) => r === undefined);
     if (!isValid) {
       console.warn(result);
@@ -151,14 +136,12 @@ describe('test linestamp validation', () => {
   // アニメーション絵文字
 
   test('should pass for min emoji', () => {
+    const imageInfo = {width: 180, height: 180, length: 5};
     const option: AnimationImageOptions = new AnimationImageOptions();
     option.imageExportMode = ImageExportMode.LINE;
     option.fps = 5;
     option.loop = 1;
-    option.imageInfo.width = 180;
-    option.imageInfo.height = 180;
-    option.imageInfo.length = 5;
-    const result = validateLineStamp(LineValidationType.EMOJI, option, {size: 300 * 1024});
+    const result = validateLineStamp(LineValidationType.EMOJI, imageInfo, option, {size: 300 * 1024});
     const isValid = Object.values(result).every((r) => r === undefined);
     if (!isValid) {
       console.warn(result);
@@ -167,14 +150,12 @@ describe('test linestamp validation', () => {
   });
 
   test('should pass for max emoji', () => {
+    const imageInfo = {width: 180, height: 180, length: 20};
     const option: AnimationImageOptions = new AnimationImageOptions();
     option.imageExportMode = ImageExportMode.LINE;
     option.fps = 20;
     option.loop = 4;
-    option.imageInfo.width = 180;
-    option.imageInfo.height = 180;
-    option.imageInfo.length = 20;
-    const result = validateLineStamp(LineValidationType.EMOJI, option);
+    const result = validateLineStamp(LineValidationType.EMOJI, imageInfo, option);
     const isValid = Object.values(result).every((r) => r === undefined);
     if (!isValid) {
       console.warn(result);

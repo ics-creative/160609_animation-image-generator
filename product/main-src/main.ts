@@ -19,6 +19,7 @@ import { sendError } from './error/send-error';
 import { AppConfig } from '../common-src/config/app-config';
 import { localeData } from './locale-manager';
 import { LineValidationType } from '../common-src/type/LineValidationType';
+import { ImageInfo } from '../common-src/data/image-info';
 
 // アプリケーション作成用のモジュールを読み込み
 const errorMessage = new ErrorMessage();
@@ -161,6 +162,7 @@ handle(
   async (
     event,
     version: string,
+    imageInfo: ImageInfo,
     itemList: ImageData[],
     animationOptionData: AnimationImageOptions,
     validationType: LineValidationType
@@ -176,6 +178,7 @@ handle(
       .exec(
         app.getPath('temp'),
         version,
+        imageInfo,
         itemList,
         animationOptionData,
         validationType
