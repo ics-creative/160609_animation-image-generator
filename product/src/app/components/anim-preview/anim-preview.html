@@ -24,9 +24,7 @@
           'badge-success': !validationErrors.imageSizeError,
           'badge-danger': validationErrors.imageSizeError
         }"
-        >W{{ animationOptionData.imageInfo.width }}×H{{
-          animationOptionData.imageInfo.height
-        }}px</span
+        >W{{ imageInfo.width }}×H{{ imageInfo.height }}px</span
       >
     </span>
     <span class="ml-2">/</span>
@@ -38,7 +36,7 @@
           'badge-success': !validationErrors.frameCountError,
           'badge-danger': validationErrors.frameCountError
         }"
-        >{{ items.length }}</span
+        >{{ imageInfo.length }}</span
       ></span
     >
     <span class="ml-2" *ngIf="animationOptionData.noLoop === false">/</span>

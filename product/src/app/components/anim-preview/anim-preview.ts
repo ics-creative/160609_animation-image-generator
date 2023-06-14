@@ -25,6 +25,7 @@ import {
 } from '../../../../common-src/type/ImageValidator';
 import { LineValidationType } from '../../../../common-src/type/LineValidationType';
 import { Tooltip } from '../../../../common-src/type/TooltipType';
+import { ImageInfo } from '../../../../common-src/data/image-info';
 
 @Component({
   selector: 'app-anim-preview',
@@ -37,6 +38,9 @@ import { Tooltip } from '../../../../common-src/type/TooltipType';
 export class AnimPreviewComponent implements OnChanges, OnInit {
   @Input()
   animationOptionData = new AnimationImageOptions();
+
+  @Input()
+  imageInfo = new ImageInfo();
 
   @Input()
   items: ImageData[] = [];
@@ -143,6 +147,7 @@ export class AnimPreviewComponent implements OnChanges, OnInit {
     if (this.animationOptionData.imageExportMode === ImageExportMode.LINE) {
       this.validationErrors = validateLineStamp(
         this.checkRule,
+        this.imageInfo,
         this.animationOptionData
       );
     } else {

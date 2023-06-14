@@ -1,6 +1,7 @@
 import * as fs from 'fs';
 import { AnimationImageOptions } from '../../common-src/data/animation-image-option';
 import { localeData } from '../locale-manager';
+import { ImageInfo } from '../../common-src/data/image-info';
 
 const createImageElementApng = (
   filePNGName: string,
@@ -62,6 +63,7 @@ const createImageElementWebpAndApng = (
 /* tslint:disable:quotemark */
 export const generateHtml = (
   exportFilePath: string,
+  imageInfo: ImageInfo,
   optionData: AnimationImageOptions,
   filePNGName?: string,
   fileWebPName?: string
@@ -71,7 +73,7 @@ export const generateHtml = (
   const isIncludeApng = optionData.enabledExportApng && filePNGName;
   const isIncludeWebP = optionData.enabledExportWebp && fileWebPName;
 
-  const { width, height } = optionData.imageInfo;
+  const { width, height } = imageInfo;
   if (isIncludeApng && isIncludeWebP) {
     imageElement = createImageElementWebpAndApng(
       fileWebPName,

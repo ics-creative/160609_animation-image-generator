@@ -25,6 +25,7 @@ import {
   ImageValidatorResult,
   ValidationResult
 } from '../../../../common-src/type/ImageValidator';
+import { ImageInfo } from '../../../../common-src/data/image-info';
 
 const getFirstNumber = (text: string): number | undefined => {
   const numStr = text.match(/\d+/g)?.pop();
@@ -64,6 +65,12 @@ export class AppComponent implements OnInit, AfterViewInit {
     y: 0
   };
   checkRule = new UntypedFormControl(LineValidationType.ANIMATION_STAMP);
+
+  imageInfo: ImageInfo = {
+    width: 0,
+    height: 0,
+    length: 0
+  };
 
   readonly checkRuleList = checkRuleList;
   readonly checkRuleLabel = {
@@ -202,6 +209,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     try {
       await this.ipcService.exec(
         AppConfig.version,
+        this.imageInfo,
         this.items,
         this.animationOptionData,
         this.checkRule.value
@@ -286,7 +294,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.numbering();
     if (items.length >= 1) {
       await this.checkImageSize(items);
-      this.animationOptionData.imageInfo.length = items.length;
+      this.imageInfo.length = items.length;
     }
     this.isImageSelected = this.items.length >= 1;
   }
@@ -303,8 +311,9 @@ export class AppComponent implements OnInit, AfterViewInit {
       // サイズが取れなかったら何もしない
       return;
     }
-    this.animationOptionData.imageInfo.width = baseSize.w;
-    this.animationOptionData.imageInfo.height = baseSize.h;
+
+    this.imageInfo.width = baseSize.w;
+    this.imageInfo.height = baseSize.h;
     if (errorItem) {
       // 不一致ならエラーフラグを立てた上でエラーメッセージを表示
       this.apngFileSizeError = true;

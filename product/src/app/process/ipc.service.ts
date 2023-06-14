@@ -3,6 +3,7 @@ import { IpcId, IpcInvoke } from '../../../common-src/ipc-id';
 import { AnimationImageOptions } from '../../../common-src/data/animation-image-option';
 import { ImageData } from '../../../common-src/data/image-data';
 import { LineValidationType } from '../../../common-src/type/LineValidationType';
+import { ImageInfo } from '../../../common-src/data/image-info';
 
 interface IElectronAPI {
   invoke: IpcInvoke;
@@ -55,6 +56,7 @@ export default class IpcService {
   /** 画像の変換・保存処理を実行します */
   exec(
     version: string,
+    imageInfo: ImageInfo,
     itemList: ImageData[],
     animationOptionData: AnimationImageOptions,
     validationType: LineValidationType
@@ -62,6 +64,7 @@ export default class IpcService {
     return this.electronApi.invoke(
       IpcId.EXEC_IMAGE_EXPORT_PROCESS,
       version,
+      imageInfo,
       itemList,
       animationOptionData,
       validationType

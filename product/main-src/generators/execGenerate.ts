@@ -11,6 +11,7 @@ import { generateHtml } from './generateHtml';
 import { shell } from 'electron';
 import { GenetateError } from './GenerateError';
 import { SaveDialog } from '../dialog/SaveDialog';
+import { ImageInfo } from '../../common-src/data/image-info';
 
 interface GenerateResult {
   error?: GenetateError;
@@ -38,6 +39,7 @@ const findMissingItemFile = (itemList: ImageData[]): ImageData | undefined =>
   itemList.find((item) => !fs.existsSync(item.imagePath));
 
 export const execGenerate = async (
+  imageInfo: ImageInfo,
   itemList: ImageData[],
   animationOptionData: AnimationImageOptions,
   appPath: string,
@@ -170,6 +172,7 @@ export const execGenerate = async (
           path.relative(selectedHTMLDirectoryPath, selectedWebPPath);
         generateHtml(
           selectedHTMLPath,
+          imageInfo,
           animationOptionData,
           relativePNGName,
           relativeWebPName
