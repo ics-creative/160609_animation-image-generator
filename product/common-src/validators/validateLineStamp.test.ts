@@ -14,9 +14,6 @@ describe('test linestamp validation', () => {
     option.imageExportMode = ImageExportMode.LINE;
     option.fps = 5;
     option.loop = 1;
-    imageInfo.width = 240;
-    imageInfo.height = 240;
-    imageInfo.length = 5;
     const result = validateLineStamp(LineValidationType.ANIMATION_MAIN, imageInfo, option);
     const isValid = Object.values(result).every((r) => r === undefined);
     if (!isValid) {
