@@ -2,6 +2,8 @@ const process = require('process');
 const fs = require('fs');
 const cpx = require('cpx');
 const del = require('del');
+const path = require('path');
+
 const { join, resolve } = require('path');
 const electronPackager = require('electron-packager');
 const { makeUniversalApp } = require('@electron/universal');
@@ -17,6 +19,7 @@ const appPathX64 = `${appDirectoryX64}/${conf.JP_NAME}.app`;
 const appPathArm = `${appDirectoryArm}/${conf.JP_NAME}.app`;
 const appPathUniversal = `${appDirectoryUniversal}/${conf.JP_NAME}.app`;
 const certConfigPath = `../../cert/${signType}.json`;
+const provisioningProfilePath = `../../cert/${signType}.provisionprofile`;
 
 const loadCertConfig = () => {
   if (!fs.existsSync(certConfigPath)) return undefined;
@@ -60,7 +63,13 @@ const execFlat = () => {
 const execSign = () => {
   console.log('start sign...');
   if (!signConfig) {
-    console.error('No cert config. aborted.');
+    console.error(`No cert config found. aborted. 
+    Please place the config at "${path.join(__dirname, certConfigPath)}"`);
+    return;
+  }
+  if (!fs.existsSync(provisioningProfilePath)) {
+    console.error(`No provisioning profile found. aborted. 
+    Please place the config at "${path.join(__dirname, provisioningProfilePath)}"`);
     return;
   }
   const sign = require('electron-osx-sign');
@@ -72,7 +81,7 @@ const execSign = () => {
         entitlements: 'resources/dev/parent.plist',
         'entitlements-inherit': 'resources/dev/child.plist',
         platform: 'mas',
-        'provisioning-profile': `../../cert/${signType}.provisionprofile`,
+        'provisioning-profile': provisioningProfilePath,
         type: signType,
         identity: signConfig.sign.identity
       },

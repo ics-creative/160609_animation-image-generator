@@ -3,7 +3,7 @@ import { ErrorMessage } from './error/error-message';
 import { sendError } from './error/send-error';
 import { AnimationImageOptions } from '../common-src/data/animation-image-option';
 import { ImageData } from '../common-src/data/image-data';
-import { PresetType } from '../common-src/type/PresetType';
+import { ImageExportMode } from '../common-src/type/ImageExportMode';
 import { validateLineStamp } from '../common-src/validators/validateLineStamp';
 import * as fs from 'fs';
 import { createInquiryCode } from './generators/createInquiryCode';
@@ -13,6 +13,7 @@ import { existsPath } from './fileFunctions/existsPath';
 import { localeData } from './locale-manager';
 import { notNull } from './utils/notNull';
 import { LineValidationType } from '../common-src/type/LineValidationType';
+import { ImageInfo } from '../common-src/data/image-info';
 export default class File {
   constructor(
     mainWindow: BrowserWindow,
@@ -34,6 +35,7 @@ export default class File {
   public async exec(
     temporaryPath: string,
     version: string,
+    imageInfo: ImageInfo,
     itemList: ImageData[],
     animationOptionData: AnimationImageOptions,
     validationType: LineValidationType
@@ -43,6 +45,7 @@ export default class File {
 
     // 出力処理を実行
     const result = await execGenerate(
+      imageInfo,
       itemList,
       animationOptionData,
       this.appPath,
@@ -50,11 +53,15 @@ export default class File {
       this.saveDialog
     );
 
-    // プリセットがLINEの場合、出力成功後にチェックを行い、警告があれば表示
-    if (animationOptionData.preset === PresetType.LINE && result.pngPath) {
+    // 出力がLINE向けの場合、出力成功後にチェックを行い、警告があれば表示
+    if (
+      animationOptionData.imageExportMode === ImageExportMode.LINE &&
+      result.pngPath
+    ) {
       await this.validateLineStamp(
         validationType,
         result.pngPath,
+        imageInfo,
         animationOptionData
       );
     }
@@ -87,13 +94,19 @@ export default class File {
   private async validateLineStamp(
     validationType: LineValidationType,
     exportFilePath: string,
+    imageInfo: ImageInfo,
     animationOptionData: AnimationImageOptions
   ) {
     if (!existsPath(exportFilePath)) {
       return;
     }
     const stat = fs.statSync(exportFilePath);
-    const result = validateLineStamp(validationType, animationOptionData, stat);
+    const result = validateLineStamp(
+      validationType,
+      imageInfo,
+      animationOptionData,
+      stat
+    );
     const errors = [
       result.fileSizeError,
       result.frameCountError,

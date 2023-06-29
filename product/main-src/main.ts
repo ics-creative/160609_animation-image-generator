@@ -19,6 +19,7 @@ import { sendError } from './error/send-error';
 import { AppConfig } from '../common-src/config/app-config';
 import { localeData } from './locale-manager';
 import { LineValidationType } from '../common-src/type/LineValidationType';
+import { ImageInfo } from '../common-src/data/image-info';
 
 // アプリケーション作成用のモジュールを読み込み
 const errorMessage = new ErrorMessage();
@@ -161,6 +162,7 @@ handle(
   async (
     event,
     version: string,
+    imageInfo: ImageInfo,
     itemList: ImageData[],
     animationOptionData: AnimationImageOptions,
     validationType: LineValidationType
@@ -176,6 +178,7 @@ handle(
       .exec(
         app.getPath('temp'),
         version,
+        imageInfo,
         itemList,
         animationOptionData,
         validationType
@@ -207,4 +210,20 @@ handle(IpcId.SHOW_MESSAGE, async (event, message: string, title?: string) => {
     title: title ?? AppConfig.appName,
     message: message
   });
+});
+
+// 画像パス一覧をpngのみでフィルターして、操作しやすいImageDataに変換して返却する
+handle(IpcId.GET_IMAGE_DATA_LIST, async (event, filePathList: string[]) => {
+  const isPngFile = (name: string) =>
+    path.extname(name).toLowerCase() === '.png';
+  // 	再度アイテムがドロップされたらリセットするように調整
+  const items = filePathList.filter(isPngFile).map(
+    (filePath) =>
+      new ImageData(
+        path.basename(filePath),
+        filePath,
+        0 // changeImageItemsでセットする際にソートされるので、一旦0で登録
+      )
+  );
+  return items;
 });

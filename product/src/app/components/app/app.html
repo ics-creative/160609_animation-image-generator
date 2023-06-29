@@ -11,17 +11,17 @@
           class="form-control"
           style="width: 100%"
           #optionSelecter
-          (change)="handlePresetChange(optionSelecter.value)"
+          (change)="handleImageExportChange(optionSelecter.value)"
         >
           <option
-            [value]="PresetType.LINE"
-            [selected]="presetMode === PresetType.LINE"
+            [value]="ImageExportMode.LINE"
+            [selected]="imageExportMode === ImageExportMode.LINE"
           >
             {{ localeData.PROP_useItemLine }}
           </option>
           <option
-            [value]="PresetType.WEB"
-            [selected]="presetMode === PresetType.WEB"
+            [value]="ImageExportMode.WEB"
+            [selected]="imageExportMode === ImageExportMode.WEB"
           >
             {{ localeData.PROP_useItemWeb }}
           </option>
@@ -34,14 +34,19 @@
       [animationOptionData]="animationOptionData"
       (showTooltipEvent)="changeTooltipShowing($event)"
       (buttonPos)="setShowingTooltipButtonPos($event)"
+      (changeAnimationOptionEvent)="handleChangeAnimationOption($event)"
     ></app-properties>
     <hr />
 
-    <div *ngIf="animationOptionData.preset === PresetType.LINE">
+    <div *ngIf="animationOptionData.imageExportMode === ImageExportMode.LINE">
       <!-- チェックルール -->
-      <div class="checkRule mod-select-preset">
+      <div class="checkRule mod-select-imageExportMode">
         <p class="mb-2">{{ localeData.RULE_title }}</p>
-        <select class="form-control mb-4" [formControl]="checkRule">
+        <select
+          class="form-control mb-4"
+          [formControl]="checkRule"
+          (ngModelChange)="handleChangeCheckRule()"
+        >
           <option *ngFor="let checkRule of checkRuleList" [value]="checkRule">
             {{ checkRuleLabel[checkRule] }}
           </option>
@@ -64,6 +69,7 @@
   <!-- アニメーションプレビュー画面 -->
   <div class="mod-preview bg-dark text-white">
     <app-anim-preview
+      [imageInfo]="imageInfo"
       [animationOptionData]="animationOptionData"
       [items]="items"
       [checkRule]="checkRule.value"

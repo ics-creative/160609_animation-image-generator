@@ -1,12 +1,22 @@
 import { AnimationImageOptions } from '../data/animation-image-option';
 import { CompressionType } from '../type/CompressionType';
-import { PresetType } from '../type/PresetType';
+import { ImageExportMode } from '../type/ImageExportMode';
+import { LineValidationType } from '../type/LineValidationType';
 
 /**
  * LINEアニメーションスタンプのプリセット設定です。
  */
 export class PresetLine {
-  static setPreset(data: AnimationImageOptions) {
+
+  static getPresetVer1() {
+    return {
+      animationOption: PresetLine.getAnimationOptionVer1(),
+      lineValidationType: LineValidationType.ANIMATION_STAMP,
+    }
+  }
+  
+  static getAnimationOptionVer1() {
+    const data = new AnimationImageOptions();
     data.noLoop = false;
     data.loop = 4;
     // data.iterations = 15;
@@ -18,6 +28,7 @@ export class PresetLine {
     data.enabledExportWebp = false;
     data.enabledExportHtml = false;
 
-    data.preset = PresetType.LINE;
+    data.imageExportMode = ImageExportMode.LINE;
+    return data;
   }
 }

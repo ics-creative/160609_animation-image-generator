@@ -11,7 +11,7 @@ import {
   Output,
   ViewChild
 } from '@angular/core';
-import { PresetType } from '../../../../common-src/type/PresetType';
+import { ImageExportMode } from '../../../../common-src/type/ImageExportMode';
 import { ImageData } from '../../../../common-src/data/image-data';
 import { AnimationImageOptions } from '../../../../common-src/data/animation-image-option';
 import {
@@ -25,6 +25,7 @@ import {
 } from '../../../../common-src/type/ImageValidator';
 import { LineValidationType } from '../../../../common-src/type/LineValidationType';
 import { Tooltip } from '../../../../common-src/type/TooltipType';
+import { ImageInfo } from '../../../../common-src/data/image-info';
 
 @Component({
   selector: 'app-anim-preview',
@@ -37,6 +38,9 @@ import { Tooltip } from '../../../../common-src/type/TooltipType';
 export class AnimPreviewComponent implements OnChanges, OnInit {
   @Input()
   animationOptionData = new AnimationImageOptions();
+
+  @Input()
+  imageInfo = new ImageInfo();
 
   @Input()
   items: ImageData[] = [];
@@ -140,9 +144,10 @@ export class AnimPreviewComponent implements OnChanges, OnInit {
   private loop(): void {
     createjs.Ticker.framerate = this.animationOptionData.fps;
     // ここでバリデートするのは間違っていると思うが・・・・
-    if (this.animationOptionData.preset === PresetType.LINE) {
+    if (this.animationOptionData.imageExportMode === ImageExportMode.LINE) {
       this.validationErrors = validateLineStamp(
         this.checkRule,
+        this.imageInfo,
         this.animationOptionData
       );
     } else {

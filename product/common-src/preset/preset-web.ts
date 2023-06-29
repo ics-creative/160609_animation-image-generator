@@ -1,12 +1,19 @@
 import { CompressionType } from '../type/CompressionType';
 import { AnimationImageOptions } from '../data/animation-image-option';
-import { PresetType } from '../type/PresetType';
+import { ImageExportMode } from '../type/ImageExportMode';
 
 /**
  * Webページ用アニメーションのプリセット設定です。
  */
 export class PresetWeb {
-  static setPreset(data: AnimationImageOptions) {
+  static getPresetVer1() {
+    return {
+      animationOption: PresetWeb.getAnimationOptionVer1(),
+    }
+  }
+
+  static getAnimationOptionVer1() {
+    const data = new AnimationImageOptions();
     data.noLoop = true;
     data.loop = 4;
     data.fps = 30;
@@ -18,6 +25,7 @@ export class PresetWeb {
     data.enabledExportWebp = true;
     data.enabledExportHtml = true;
 
-    data.preset = PresetType.WEB;
+    data.imageExportMode = ImageExportMode.WEB;
+    return data;
   }
 }
