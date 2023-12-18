@@ -1,5 +1,6 @@
 import { BrowserWindow, dialog } from 'electron';
 import { ErrorType } from '../../common-src/error/error-type';
+import { MessageBoxOptions } from 'electron/main';
 
 declare function require(value: string): any;
 
@@ -28,7 +29,7 @@ export class ErrorMessage {
       errorDetail
     );
 
-    const options = {
+    const options: MessageBoxOptions = {
       type: 'info',
       buttons: ['OK'],
       title: appName,

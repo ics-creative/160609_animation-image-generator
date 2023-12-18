@@ -34,7 +34,7 @@ interface IpcInvokeFuncs {
     itemList: ImageData[],
     animationOptionData: AnimationImageOptions,
     validationType: LineValidationType,
-  ) => Promise<void>;
+  ) => Promise<boolean>;
   [IpcId.OPEN_EXTERNAL_BROWSER]: (url: string) => Promise<void>;
   [IpcId.SHOW_MESSAGE]: (message: string, title?: string) => Promise<void>;
   [IpcId.GET_IMAGE_DATA_LIST]: (filePathList: string[]) => Promise<ImageData[]>;
