@@ -3,7 +3,8 @@ const mkdirp = require('mkdirp');
 const del = require('del');
 const execSync = require('child_process').execSync;
 const path = require('path');
-const cpx = require('cpx');
+const { copyRecursiveSync } = require('../build-scripts/copy-recursive-sync.js');
+const fs = require('fs');
 
 /**
  * パッケージ作成作業用の一時ディレクトリのパスを返します
@@ -42,7 +43,7 @@ const clearPackageTmp = () => {
 const copyConfigToDist = () => {
   const from = conf.projectDistConfigPath;
   const to = conf.distPath;
-  cpx.copySync(from + '/**', to);
+  copyRecursiveSync(from, to);
 };
 
 /**
@@ -57,7 +58,7 @@ const copyDistToPackgeTmp = (os) => {
 
   del.sync([to]);
   console.log(`copy project sources: ${from} --> ${to}`);
-  cpx.copySync(from + '/**', to);
+  copyRecursiveSync(from, to);
 
   const binTo = path.join(getPackageTmpDir(os), 'bin');
   copyBinaryAssets(os, binTo);
@@ -79,7 +80,8 @@ const copyBinaryAssets = (os, to) => {
   for (let i = 0; i < resources.length; i++) {
     const dest = path.join(to, resources[i].fileName);
     if (isWindows) {
-      cpx.copySync(`${from}/${resources[i].path}`, to);
+      const basename = path.basename(resources[i].path);
+      fs.copyFileSync(`${from}/${resources[i].path}`, `${to}/${basename}`);
     } else {
       // パーミッションも同じままコピーしないといけないので、macのcpコマンドでコピーしている
       // 合わせてmac上では不要な拡張属性を落とす（com.apple.quarantineが残っていると起動できないため）

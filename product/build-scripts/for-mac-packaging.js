@@ -1,8 +1,8 @@
 const process = require('process');
 const fs = require('fs');
-const cpx = require('cpx');
 const del = require('del');
 const path = require('path');
+const { copyRecursiveSync } = require('./copy-recursive-sync.js');
 
 const { join, resolve } = require('path');
 const electronPackager = require('electron-packager');
@@ -63,12 +63,12 @@ const execFlat = () => {
 const execSign = () => {
   console.log('start sign...');
   if (!signConfig) {
-    console.error(`No cert config found. aborted. 
+    console.error(`No cert config found. aborted.
     Please place the config at "${path.join(__dirname, certConfigPath)}"`);
     return;
   }
   if (!fs.existsSync(provisioningProfilePath)) {
-    console.error(`No provisioning profile found. aborted. 
+    console.error(`No provisioning profile found. aborted.
     Please place the config at "${path.join(__dirname, provisioningProfilePath)}"`);
     return;
   }
@@ -145,8 +145,8 @@ const buildUniversal = async () => {
   });
 
   // 再度binをコピー
-  cpx.copySync(
-    `${conf.packageTmpPath.darwin}/bin/*`,
+  copyRecursiveSync(
+    `${conf.packageTmpPath.darwin}/bin/`,
     `${appPathUniversal}/Contents/Resources/app/bin/`
   );
 
