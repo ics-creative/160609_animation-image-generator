@@ -8,7 +8,6 @@ import { ImageInfo } from './data/image-info';
 export const IpcId = {
   OPEN_FILE_DIALOG: 'open-file-dialog',
   OPEN_SAVE_DIALOG: 'open-save-dialog',
-  SEND_ERROR: 'send-error',
   EXEC_IMAGE_EXPORT_PROCESS: 'exec-image-export-process',
   OPEN_EXTERNAL_BROWSER: 'open-external-browser',
   SHOW_MESSAGE: 'show-message',
@@ -20,14 +19,6 @@ export const IpcId = {
 interface IpcInvokeFuncs {
   [IpcId.OPEN_FILE_DIALOG]: () => Promise<string[]>;
   [IpcId.OPEN_SAVE_DIALOG]: () => Promise<void>;
-  [IpcId.SEND_ERROR]: (
-    version: string,
-    code: string,
-    category: string,
-    title: string,
-    detail: string,
-    stack: string,
-  ) => Promise<void>;
   [IpcId.EXEC_IMAGE_EXPORT_PROCESS]: (
     version: string,
     imageInfo: ImageInfo,

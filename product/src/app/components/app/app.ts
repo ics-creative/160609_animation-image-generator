@@ -219,7 +219,8 @@ export class AppComponent implements OnInit, AfterViewInit {
         this.imageInfo,
         this.items,
         this.animationOptionData,
-        this.checkRule.value
+        this.checkRule.value,
+        !this.userConfigs?.isTrackingDisabled
       );
     } finally {
       this.hideLockDialog();
