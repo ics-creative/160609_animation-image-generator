@@ -26,6 +26,7 @@ import {
   ValidationResult
 } from '../../../../common-src/type/ImageValidator';
 import { ImageInfo } from '../../../../common-src/data/image-info';
+import { loadAnalytics } from './loadAnalytics';
 
 const getFirstNumber = (text: string): number | undefined => {
   const numStr = text.match(/\d+/g)?.pop();
@@ -106,7 +107,13 @@ export class AppComponent implements OnInit, AfterViewInit {
     });
 
     this.changeImageExportMode(this.imageExportMode);
+
+    // トラッキング設定が有効な場合のみアナリティクスを読み込む（未指定の場合やundefined や false の場合は読み込む）
+    if (this.userConfigs.isTrackingDisabled !== true) {
+      loadAnalytics(AppConfig.analyticsUrl);
+    }
   }
+
 
   ngAfterViewInit() {
     const component = this.myComponent?.nativeElement;

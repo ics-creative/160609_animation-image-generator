@@ -140,22 +140,6 @@ handle(IpcId.OPEN_FILE_DIALOG, async () => {
   return result.filePaths;
 });
 
-// エラーを送信
-handle(
-  IpcId.SEND_ERROR,
-  async (
-    event,
-    version: string,
-    code: string,
-    category: string,
-    title: string,
-    detail: string,
-    stack: string
-  ) => {
-    sendError(version, code, category, title, detail, stack);
-  }
-);
-
 // 保存場所を聞いて保存処理を実行
 handle(
   IpcId.EXEC_IMAGE_EXPORT_PROCESS,
@@ -165,7 +149,8 @@ handle(
     imageInfo: ImageInfo,
     itemList: ImageData[],
     animationOptionData: AnimationImageOptions,
-    validationType: LineValidationType
+    validationType: LineValidationType,
+    enableTracking: boolean,
   ) => {
     console.log(version, itemList, animationOptionData);
 
@@ -180,7 +165,8 @@ handle(
         imageInfo,
         itemList,
         animationOptionData,
-        validationType
+        validationType,
+        enableTracking,
       )
       .then(() => {
         return true;

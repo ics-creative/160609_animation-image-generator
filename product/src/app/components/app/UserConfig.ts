@@ -20,10 +20,16 @@ export interface UserConfigsVer0 {
 }
 
 export interface UserConfigsVer1 {
+  /* 保存バージョン */
   version: number;
+  /* 選択されている画像出力方法 */
   imageExportMode: ImageExportMode;
+  /* LINE出力設定 */
   lineConfig: LineConfig;
+  /* ウェブ出力設定 */
   webConfig: WebConfig;
+  /** アクセス解析やエラー送信設定を拒否するか */
+  isTrackingDisabled: boolean | undefined;
 }
 
 export type UserConfigs = UserConfigsVer1;
@@ -60,11 +66,12 @@ const migrationUserConfig = (): UserConfigs => {
     ? JSON.parse(loadedUserConfig)
     : undefined;
   if (userConfigs === undefined) {
-    const configs = {
+    const configs: UserConfigs = {
       version: CURRENT_VERSION,
       imageExportMode: ImageExportMode.LINE,
       lineConfig: PresetLine.getPresetVer1(),
-      webConfig: PresetWeb.getPresetVer1()
+      webConfig: PresetWeb.getPresetVer1(),
+      isTrackingDisabled: false,
     };
     // 新バージョンの設定を保存する
     saveUserConfigs(configs);
@@ -89,6 +96,7 @@ const migrationUserConfigFromVer0 = (
     imageExportMode:
       numberToMode(configVer0.imageExportNumber) ?? ImageExportMode.LINE,
     lineConfig: PresetLine.getPresetVer1(),
-    webConfig: PresetWeb.getPresetVer1()
+    webConfig: PresetWeb.getPresetVer1(),
+    isTrackingDisabled: false,
   };
 };
