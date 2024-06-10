@@ -12,7 +12,8 @@
           "builder": "@angular/build:application",
           "options": {
             "outputPath": {
-              "base": "dist/renderer-dist"
+              "base": "dist/renderer-dist",
+              "browser": ""
             },
             "index": "src/index.html",
             "tsConfig": "src/tsconfig.app.json",
