@@ -1,11 +1,11 @@
 const process = require('process');
 const fs = require('fs');
-const cpx = require('cpx');
 const del = require('del');
 const path = require('path');
+const { copyRecursiveSync } = require('./copy-recursive-sync.js');
 
 const { join, resolve } = require('path');
-const electronPackager = require('electron-packager');
+const electronPackager = require('@electron/packager');
 const { makeUniversalApp } = require('@electron/universal');
 
 const conf = require('./conf.js');
@@ -35,67 +35,48 @@ const execFlat = () => {
     console.error('No cert config. aborted.');
     return;
   }
-  const flat = require('electron-osx-sign').flat;
+  const { flatAsync } = require('@electron/osx-sign');
   const pkg = `AnimationImageConverter_${signType}.pkg`;
 
-  return new Promise((resolve, reject) => {
-    flat(
-      {
-        app: appPathUniversal,
-        identity: signConfig.flat.identity,
-        pkg: `../${pkg}`,
-        platform: 'mas'
-      },
-      (err) => {
-        if (err) {
-          console.error(err);
-          console.error('flat failure!');
-          reject();
-        } else {
-          console.info('flat done!');
-          resolve();
-        }
-      }
-    );
+  return flatAsync({
+    app: appPathUniversal,
+    identity: signConfig.flat.identity,
+    pkg: `../${pkg}`,
+    platform: 'mas'
+  }).catch((e) => {
+    console.error(e);
+    console.error('flat failure!');
   });
 };
 
 const execSign = () => {
   console.log('start sign...');
   if (!signConfig) {
-    console.error(`No cert config found. aborted. 
+    console.error(`No cert config found. aborted.
     Please place the config at "${path.join(__dirname, certConfigPath)}"`);
     return;
   }
   if (!fs.existsSync(provisioningProfilePath)) {
-    console.error(`No provisioning profile found. aborted. 
-    Please place the config at "${path.join(__dirname, provisioningProfilePath)}"`);
+    console.error(`No provisioning profile found. aborted.
+    Please place the config at "${path.join(
+      __dirname,
+      provisioningProfilePath
+    )}"`);
     return;
   }
-  const sign = require('electron-osx-sign');
+  const { signAsync } = require('@electron/osx-sign');
 
-  return new Promise((resolve, reject) => {
-    sign(
-      {
-        app: appPathUniversal,
-        entitlements: 'resources/dev/parent.plist',
-        'entitlements-inherit': 'resources/dev/child.plist',
-        platform: 'mas',
-        'provisioning-profile': provisioningProfilePath,
-        type: signType,
-        identity: signConfig.sign.identity
-      },
-      (err) => {
-        if (err) {
-          console.error(err);
-          console.error('sign failure!');
-          reject();
-        } else {
-          console.info('sign done!');
-          resolve();
-        }
-      }
-    );
+  return signAsync({
+    app: appPathUniversal,
+    entitlements: 'resources/dev/parent.plist',
+    'entitlements-inherit': 'resources/dev/child.plist',
+    platform: 'mas',
+    'provisioning-profile': provisioningProfilePath,
+    type: signType,
+    identity: signConfig.sign.identity
+  }).catch((e) => {
+    console.error(e);
+    console.error('sign failure!');
   });
 };
 
@@ -145,8 +126,8 @@ const buildUniversal = async () => {
   });
 
   // 再度binをコピー
-  cpx.copySync(
-    `${conf.packageTmpPath.darwin}/bin/*`,
+  copyRecursiveSync(
+    `${conf.packageTmpPath.darwin}/bin/`,
     `${appPathUniversal}/Contents/Resources/app/bin/`
   );
 

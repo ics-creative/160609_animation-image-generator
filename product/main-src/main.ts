@@ -170,11 +170,10 @@ handle(
     console.log(version, itemList, animationOptionData);
 
     if (!fileService) {
-      console.error('fileService has not inited');
-      event.returnValue = false;
-      return;
+      console.error('fileService has not initialized');
+      return false;
     }
-    return fileService
+    const result = await fileService
       .exec(
         app.getPath('temp'),
         version,
@@ -184,14 +183,13 @@ handle(
         validationType
       )
       .then(() => {
-        console.log(`returnValue:true`);
-        event.returnValue = true;
+        return true;
       })
       .catch(() => {
         // 失敗時の処理
-        console.log(`returnValue:false`);
-        event.returnValue = false;
+        return false;
       });
+    return result;
   }
 );
 
