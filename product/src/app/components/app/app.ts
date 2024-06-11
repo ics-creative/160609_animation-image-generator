@@ -10,8 +10,6 @@ import { AppConfig } from '../../../../common-src/config/app-config';
 import { DomSanitizer } from '@angular/platform-browser';
 import IpcService from '../../process/ipc.service';
 import { ImageExportMode } from '../../../../common-src/type/ImageExportMode';
-import { PresetLine } from '../../../../common-src/preset/preset-line';
-import { PresetWeb } from '../../../../common-src/preset/preset-web';
 import { AnimationImageOptions } from '../../../../common-src/data/animation-image-option';
 import { ImageData } from '../../../../common-src/data/image-data';
 import { checkImagePxSizeMatched } from './checkImagePxSizeMatched';
@@ -27,6 +25,8 @@ import {
 } from '../../../../common-src/type/ImageValidator';
 import { ImageInfo } from '../../../../common-src/data/image-info';
 import { loadAnalytics, removeAnalytics } from './loadAnalytics';
+import { UserSettingModalComponent } from '../user-setting-modal/user-setting-modal';
+import { TrackingMode } from '../../../../common-src/type/TrackingMode';
 
 const getFirstNumber = (text: string): number | undefined => {
   const numStr = text.match(/\d+/g)?.pop();
@@ -91,6 +91,9 @@ export class AppComponent implements OnInit, AfterViewInit {
   @ViewChild('optionSelecter', { static: true })
   optionSelecterComponent?: ElementRef;
 
+  @ViewChild('userSettingModal', { static: true })
+  useSettingModal?: UserSettingModalComponent;
+
   constructor(sanitizer: DomSanitizer, private ipcService: IpcService) {}
 
   ngOnInit() {
@@ -108,7 +111,7 @@ export class AppComponent implements OnInit, AfterViewInit {
 
     this.changeImageExportMode(this.imageExportMode);
 
-    // トラッキング設定が有効な場合のみアナリティクスを読み込む（未指定の場合や'tracking'の場合は読み込む）
+    // トラッキング設定が有効な場合のみアナリティクスを読み込む
     if (this.userConfigs.trackingMode === 'enableTracking') {
       loadAnalytics(AppConfig.analyticsUrl);
     }
@@ -129,8 +132,6 @@ export class AppComponent implements OnInit, AfterViewInit {
       this._isDragover = false;
       this.handleDrop(event);
     });
-
-    // (<any>window).$('[data-toggle='tooltip']').tooltip()
   }
 
   openExternalBrowser(url: string) {
@@ -384,18 +385,15 @@ export class AppComponent implements OnInit, AfterViewInit {
     saveUserConfigs(this.userConfigs);
   }
 
-  async handleClickTrackingSettings() {
+  handleClickUserSettingModal() {
+    this.useSettingModal?.show();
+  }
+
+  async handleChangeSetting(result: { trackingMode: TrackingMode }) {
     if (!this.userConfigs) {
       throw new Error('userConfigs is null');
     }
-    const result =
-      this.userConfigs.trackingMode === 'enableTracking'
-        ? 'disableTracking'
-        : 'enableTracking';
-
-    // TODO: ダイアログ表示
-
-    switch (result) {
+    switch (result.trackingMode) {
       case 'enableTracking':
         // トラッキングを再開するため、埋め込みアナリティクスを読み込む
         loadAnalytics(AppConfig.analyticsUrl);
@@ -404,7 +402,7 @@ export class AppComponent implements OnInit, AfterViewInit {
         // トラッキングを停止するため、埋め込みアナリティクスを削除する
         removeAnalytics();
     }
-    this.userConfigs.trackingMode = result;
+    this.userConfigs.trackingMode = result.trackingMode;
     saveUserConfigs(this.userConfigs);
   }
 }

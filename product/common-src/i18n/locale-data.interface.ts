@@ -102,6 +102,8 @@ export interface ILocaleData {
   defaultFileName: string;
 
   TRACKING_dialogCheckboxLabel: string;
+  TRACKING_dialogClose: string;
+  TRACKING_dialogTitle: string;
 
   RULE_title: string;
   RULE_animation_stamp: string;

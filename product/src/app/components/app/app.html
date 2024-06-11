@@ -1,5 +1,12 @@
 <div class="app-component" #myComponent [ngClass]="{ isDragOver: _isDragover }">
   <div class="mod-setting p-3">
+    <!-- 設定モーダル -->
+    <app-user-setting-modal
+      #userSettingModal
+      [userSetting]="userSetting"
+      (changeSettingEvent)="handleChangeSetting($event)"
+    ></app-user-setting-modal>
+
     <!-- プリセット切り替え -->
     <div class="row mb-4 align-items-center mod-select-preset">
       <!--用途-->
@@ -103,11 +110,10 @@
 
       <div class="col-6 text-right">
         <a
-          (click)="handleClickTrackingSettings()"
           data-toggle="tooltip"
           data-placement="left"
           title="{{ localeData.TOP_trackingSettingsTooltip }}"
-          target="_blank"
+          (click)="handleClickUserSettingModal()"
         >
           <i class="fa fa-cog"></i>
         </a>

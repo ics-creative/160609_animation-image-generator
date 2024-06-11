@@ -1,0 +1,33 @@
+<div
+  class="modal fade"
+  id="user-settings-modal"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="{{ localeData.TRACKING_dialogTitle }}"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-body">
+        <form>
+          <div class="form-check">
+            <input
+              type="checkbox"
+              class="form-check-input"
+              (change)="handleChange()"
+              id="trackingCheckBox"
+              #trackingCheckbox
+            /><label class="form-check-label" for="trackingCheckBox">{{
+              localeData.TRACKING_dialogCheckboxLabel
+            }}</label>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" (click)="handleClose()">
+          {{ localeData.TRACKING_dialogClose }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

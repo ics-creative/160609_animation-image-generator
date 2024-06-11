@@ -107,6 +107,8 @@ export const localeDataEn: ILocaleData = {
   defaultFileName: 'Untitled',
 
   TRACKING_dialogCheckboxLabel: 'Always send usage and crash reports.',
+  TRACKING_dialogClose: 'Close',
+  TRACKING_dialogTitle: 'Settings',
 
   RULE_title: 'Check Rule',
   RULE_animation_stamp: 'Animated Stickers Images',

@@ -113,7 +113,9 @@ export const localeDataJa: ILocaleData = {
 
   defaultFileName: '名称未設定',
 
-  TRACKING_dialogCheckboxLabel: 'ユーザー情報の送信を有効にする',
+  TRACKING_dialogCheckboxLabel: '利用状況とクラッシュレポートを送信する',
+  TRACKING_dialogClose: 'とじる',
+  TRACKING_dialogTitle: '設定',
 
   RULE_title: 'チェックルール',
   RULE_animation_stamp: 'アニメーションスタンプ画像',
