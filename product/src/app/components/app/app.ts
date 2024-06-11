@@ -26,7 +26,7 @@ import {
   ValidationResult
 } from '../../../../common-src/type/ImageValidator';
 import { ImageInfo } from '../../../../common-src/data/image-info';
-import { loadAnalytics } from './loadAnalytics';
+import { loadAnalytics, removeAnalytics } from './loadAnalytics';
 
 const getFirstNumber = (text: string): number | undefined => {
   const numStr = text.match(/\d+/g)?.pop();
@@ -108,12 +108,11 @@ export class AppComponent implements OnInit, AfterViewInit {
 
     this.changeImageExportMode(this.imageExportMode);
 
-    // トラッキング設定が有効な場合のみアナリティクスを読み込む（未指定の場合やundefined や false の場合は読み込む）
-    if (this.userConfigs.isTrackingDisabled !== true) {
+    // トラッキング設定が有効な場合のみアナリティクスを読み込む（未指定の場合や'tracking'の場合は読み込む）
+    if (this.userConfigs.trackingMode === 'enableTracking') {
       loadAnalytics(AppConfig.analyticsUrl);
     }
   }
-
 
   ngAfterViewInit() {
     const component = this.myComponent?.nativeElement;
@@ -213,6 +212,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     }
 
     this.showLockDialog();
+
     try {
       await this.ipcService.exec(
         AppConfig.version,
@@ -220,7 +220,7 @@ export class AppComponent implements OnInit, AfterViewInit {
         this.items,
         this.animationOptionData,
         this.checkRule.value,
-        !this.userConfigs?.isTrackingDisabled
+        this.userConfigs?.trackingMode ?? 'enableTracking'
       );
     } finally {
       this.hideLockDialog();
@@ -381,6 +381,30 @@ export class AppComponent implements OnInit, AfterViewInit {
         break;
     }
 
+    saveUserConfigs(this.userConfigs);
+  }
+
+  async handleClickTrackingSettings() {
+    if (!this.userConfigs) {
+      throw new Error('userConfigs is null');
+    }
+    const result =
+      this.userConfigs.trackingMode === 'enableTracking'
+        ? 'disableTracking'
+        : 'enableTracking';
+
+    // TODO: ダイアログ表示
+
+    switch (result) {
+      case 'enableTracking':
+        // トラッキングを再開するため、埋め込みアナリティクスを読み込む
+        loadAnalytics(AppConfig.analyticsUrl);
+        break;
+      case 'disableTracking':
+        // トラッキングを停止するため、埋め込みアナリティクスを削除する
+        removeAnalytics();
+    }
+    this.userConfigs.trackingMode = result;
     saveUserConfigs(this.userConfigs);
   }
 }

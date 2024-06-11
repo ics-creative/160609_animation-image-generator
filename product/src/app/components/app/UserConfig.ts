@@ -1,3 +1,4 @@
+import { config } from 'dotenv';
 import { AnimationImageOptions } from '../../../../common-src/data/animation-image-option';
 import { PresetLine } from '../../../../common-src/preset/preset-line';
 import { PresetWeb } from '../../../../common-src/preset/preset-web';
@@ -6,6 +7,7 @@ import {
   numberToMode
 } from '../../../../common-src/type/ImageExportMode';
 import { LineValidationType } from '../../../../common-src/type/LineValidationType';
+import { TrackingMode } from '../../../../common-src/type/TrackingMode';
 
 interface LineConfig {
   animationOption: AnimationImageOptions;
@@ -28,8 +30,8 @@ export interface UserConfigsVer1 {
   lineConfig: LineConfig;
   /* ウェブ出力設定 */
   webConfig: WebConfig;
-  /** アクセス解析やエラー送信設定を拒否するか */
-  isTrackingDisabled: boolean | undefined;
+  /** トラッキング設定 */
+  trackingMode: TrackingMode;
 }
 
 export type UserConfigs = UserConfigsVer1;
@@ -71,11 +73,15 @@ const migrationUserConfig = (): UserConfigs => {
       imageExportMode: ImageExportMode.LINE,
       lineConfig: PresetLine.getPresetVer1(),
       webConfig: PresetWeb.getPresetVer1(),
-      isTrackingDisabled: false,
+      trackingMode: 'enableTracking'
     };
     // 新バージョンの設定を保存する
     saveUserConfigs(configs);
     return configs;
+  }
+  // 未定義時は有効にする
+  if (userConfigs.trackingMode === undefined) {
+    userConfigs.trackingMode = 'enableTracking';
   }
 
   // ver1以降マイグレーションが必要な場合ここで対応する
@@ -97,6 +103,6 @@ const migrationUserConfigFromVer0 = (
       numberToMode(configVer0.imageExportNumber) ?? ImageExportMode.LINE,
     lineConfig: PresetLine.getPresetVer1(),
     webConfig: PresetWeb.getPresetVer1(),
-    isTrackingDisabled: false,
+    trackingMode: 'enableTracking'
   };
 };

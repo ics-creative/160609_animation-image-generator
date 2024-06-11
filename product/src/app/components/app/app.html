@@ -100,7 +100,17 @@
       <div class="col-6 text-left">
         {{ localeData.TOP_version }} {{ AppConfig.version }}
       </div>
+
       <div class="col-6 text-right">
+        <a
+          (click)="handleClickTrackingSettings()"
+          data-toggle="tooltip"
+          data-placement="left"
+          title="{{ localeData.TOP_trackingSettingsTooltip }}"
+          target="_blank"
+        >
+          <i class="fa fa-cog"></i>
+        </a>
         <a
           (click)="openExternalBrowser('https://ics.media/')"
           data-toggle="tooltip"

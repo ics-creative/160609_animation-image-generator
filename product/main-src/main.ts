@@ -20,6 +20,7 @@ import { AppConfig } from '../common-src/config/app-config';
 import { localeData } from './locale-manager';
 import { LineValidationType } from '../common-src/type/LineValidationType';
 import { ImageInfo } from '../common-src/data/image-info';
+import { TrackingMode } from '../common-src/type/TrackingMode';
 
 // アプリケーション作成用のモジュールを読み込み
 const errorMessage = new ErrorMessage();
@@ -150,7 +151,7 @@ handle(
     itemList: ImageData[],
     animationOptionData: AnimationImageOptions,
     validationType: LineValidationType,
-    enableTracking: boolean,
+    trackingMode: TrackingMode
   ) => {
     console.log(version, itemList, animationOptionData);
 
@@ -166,7 +167,7 @@ handle(
         itemList,
         animationOptionData,
         validationType,
-        enableTracking,
+        trackingMode
       )
       .then(() => {
         return true;
@@ -185,7 +186,7 @@ handle(IpcId.OPEN_EXTERNAL_BROWSER, async (event, pageUrl: string) => {
 });
 
 // メッセージを表示する
-// ※ レンダラー側でalertを使用するとビルド語のWindows環境で文字化けが発生するため、
+// ※ レンダラー側でalertを使用するとビルド後のWindows環境で文字化けが発生するため、
 //   代替としてメインプロセス側でelectronのdialogを使用してメッセージを表示する機能を提供する
 handle(IpcId.SHOW_MESSAGE, async (event, message: string, title?: string) => {
   await dialog.showMessageBox({

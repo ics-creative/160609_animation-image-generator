@@ -4,6 +4,7 @@ import { AnimationImageOptions } from '../../../common-src/data/animation-image-
 import { ImageData } from '../../../common-src/data/image-data';
 import { LineValidationType } from '../../../common-src/type/LineValidationType';
 import { ImageInfo } from '../../../common-src/data/image-info';
+import { TrackingMode } from '../../../common-src/type/TrackingMode';
 
 interface IElectronAPI {
   invoke: IpcInvoke;
@@ -40,7 +41,7 @@ export default class IpcService {
     itemList: ImageData[],
     animationOptionData: AnimationImageOptions,
     validationType: LineValidationType,
-    sendError: boolean,
+    trackingMode: TrackingMode
   ) {
     return this.electronApi.invoke(
       IpcId.EXEC_IMAGE_EXPORT_PROCESS,
@@ -49,7 +50,7 @@ export default class IpcService {
       itemList,
       animationOptionData,
       validationType,
-      sendError
+      trackingMode
     );
   }
 

@@ -24,11 +24,7 @@ export class ErrorMessage {
     appName: string,
     window: BrowserWindow
   ): void {
-    const errorMessage = this.getErrorMessage(
-      errorCode,
-      inquiry,
-      errorDetail,
-    );
+    const errorMessage = this.getErrorMessage(errorCode, inquiry, errorDetail);
 
     const options: MessageBoxOptions = {
       type: 'info',
@@ -41,14 +37,16 @@ export class ErrorMessage {
 
   private getErrorMessage(
     errorCode: ErrorType,
-    inquiry: { enabled: true, code: string } | { enabled: false },
-    errorDetail: string,
+    inquiry: { enabled: true; code: string } | { enabled: false },
+    errorDetail: string
   ): string {
     const errorPhaseMessage = this.getErrorPhaseMessage(errorCode);
 
-    const inquiryCodeMessage = inquiry.enabled ? `
+    const inquiryCodeMessage = inquiry.enabled
+      ? `
 
-お問い合わせコード：${inquiry.code}` : '';
+お問い合わせコード：${inquiry.code}`
+      : '';
 
     const errorDetailMessage = errorDetail
       ? '\n\nエラー詳細：' + omitText(errorDetail, 200)
@@ -58,7 +56,6 @@ export class ErrorMessage {
 何度も同じエラーが発生する場合は、お手数ですがサポートページまでお問い合わせください。
   ${inquiryCodeMessage}
 		`;
-
   }
 
   private getErrorPhaseMessage(errorCode: ErrorType): string {

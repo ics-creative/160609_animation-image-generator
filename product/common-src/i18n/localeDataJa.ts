@@ -58,6 +58,7 @@ export const localeDataJa: ILocaleData = {
   TOP_version: 'バージョン',
   TOP_icsTooltip: '開発会社のウェブサイト',
   TOP_onlineHelpTooltip: '不具合報告＆機能要望',
+  TOP_trackingSettingsTooltip: '設定',
 
   MENU_about: 'アニメ画像を変換する君について',
   MENU_quit: 'アニメ画像を変換する君を終了する',
@@ -111,6 +112,8 @@ export const localeDataJa: ILocaleData = {
   COMMON_listingConnma: '、',
 
   defaultFileName: '名称未設定',
+
+  TRACKING_dialogCheckboxLabel: 'ユーザー情報の送信を有効にする',
 
   RULE_title: 'チェックルール',
   RULE_animation_stamp: 'アニメーションスタンプ画像',
