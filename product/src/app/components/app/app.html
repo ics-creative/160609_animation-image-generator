@@ -110,14 +110,6 @@
 
       <div class="col-6 text-right">
         <a
-          data-toggle="tooltip"
-          data-placement="left"
-          title="{{ localeData.TOP_trackingSettingsTooltip }}"
-          (click)="handleClickUserSettingModal()"
-        >
-          <i class="fa fa-cog"></i>
-        </a>
-        <a
           (click)="openExternalBrowser('https://ics.media/')"
           data-toggle="tooltip"
           data-placement="left"
@@ -138,6 +130,14 @@
           title="{{ localeData.TOP_onlineHelpTooltip }}"
         >
           <i class="fa fa-smile-o"></i>
+        </a>
+        <a
+          data-toggle="tooltip"
+          data-placement="left"
+          title="{{ localeData.TOP_trackingSettingsTooltip }}"
+          (click)="handleClickUserSettingModal()"
+        >
+          <i class="fa fa-cog"></i>
         </a>
       </div>
     </div>
