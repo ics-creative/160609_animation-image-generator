@@ -9,6 +9,7 @@ import {
 import { localeData } from 'app/i18n/locale-manager';
 import $ from 'jquery';
 import { TrackingMode } from '../../../../common-src/type/TrackingMode';
+import { UserSettings } from '../app/UserConfig';
 
 @Component({
   selector: 'app-user-settings-modal',
@@ -24,8 +25,8 @@ export class UserSettingsModalComponent {
   changeSettings = new EventEmitter<{ trackingMode: TrackingMode }>();
 
   @Input()
-  userSettings: { trackingMode: TrackingMode } = {
-    trackingMode: 'enableTracking'
+  userSettings: UserSettings = {
+    trackingMode: true
   };
 
   @ViewChild('trackingCheckbox', { static: true })
@@ -44,7 +45,7 @@ export class UserSettingsModalComponent {
 
   handleChange(event: Event) {
     const trackingChecked = this.trackingCheckbox?.nativeElement.checked;
-    const trackingMode = trackingChecked ? 'enableTracking' : 'disableTracking';
+    const trackingMode: TrackingMode = trackingChecked;
     this.changeSettings.emit({ trackingMode: trackingMode });
   }
 }

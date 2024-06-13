@@ -44,10 +44,9 @@ export default class File {
     trackingMode: TrackingMode
   ): Promise<void> {
     // お問い合わせコード生成
-    const inquiry: InquiryState =
-      trackingMode === 'enableTracking'
-        ? { enabled: true, code: createInquiryCode() }
-        : { enabled: false };
+    const inquiry: InquiryState = trackingMode
+      ? { enabled: true, code: createInquiryCode() }
+      : { enabled: false };
 
     // 出力処理を実行
     const result = await execGenerate(

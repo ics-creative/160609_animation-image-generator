@@ -13,7 +13,12 @@ import { ImageExportMode } from '../../../../common-src/type/ImageExportMode';
 import { AnimationImageOptions } from '../../../../common-src/data/animation-image-option';
 import { ImageData } from '../../../../common-src/data/image-data';
 import { checkImagePxSizeMatched } from './checkImagePxSizeMatched';
-import { loadUserConfigs, saveUserConfigs, UserConfigs } from './UserConfig';
+import {
+  loadUserConfigs,
+  saveUserConfigs,
+  UserConfigs,
+  UserSettings
+} from './UserConfig';
 import { localeData } from 'app/i18n/locale-manager';
 import { LineValidationType } from '../../../../common-src/type/LineValidationType';
 import { checkRuleList } from '../../../../common-src/checkRule/checkRule';
@@ -59,7 +64,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   localeData = localeData;
   validationErrorsMessage = [''];
   userConfigs: UserConfigs | null = null;
-
+  userSettings: UserSettings = { trackingMode: true };
   showingTooltip: Tooltip | null = null;
   showingTooltipButtonPos: { x: number; y: number } = {
     x: 0,
@@ -102,6 +107,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.isImageSelected = false;
 
     this.userConfigs = loadUserConfigs();
+    this.userSettings = { trackingMode: this.userConfigs.trackingMode };
 
     // 設定の読み込み
     this.imageExportMode = this.userConfigs.imageExportMode;
@@ -112,7 +118,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.changeImageExportMode(this.imageExportMode);
 
     // トラッキング設定が有効な場合のみアナリティクスを読み込む
-    if (this.userConfigs.trackingMode === 'enableTracking') {
+    if (this.userSettings.trackingMode) {
       loadAnalytics(AppConfig.analyticsUrl);
     }
   }
@@ -221,7 +227,7 @@ export class AppComponent implements OnInit, AfterViewInit {
         this.items,
         this.animationOptionData,
         this.checkRule.value,
-        this.userConfigs?.trackingMode ?? 'enableTracking'
+        this.userSettings.trackingMode
       );
     } finally {
       this.hideLockDialog();
@@ -368,6 +374,8 @@ export class AppComponent implements OnInit, AfterViewInit {
       throw new Error('userConfigs is null');
     }
 
+    this.userConfigs.trackingMode = this.userSettings.trackingMode;
+
     switch (this.animationOptionData.imageExportMode) {
       case ImageExportMode.LINE:
         this.userConfigs.lineConfig = {
@@ -389,20 +397,17 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.userSettingsModal?.show();
   }
 
-  async handleChangeSettings(result: { trackingMode: TrackingMode }) {
-    if (!this.userConfigs) {
-      throw new Error('userConfigs is null');
-    }
+  async handleChangeSettings(result: UserSettings) {
     switch (result.trackingMode) {
-      case 'enableTracking':
+      case true:
         // トラッキングを再開するため、埋め込みアナリティクスを読み込む
         loadAnalytics(AppConfig.analyticsUrl);
         break;
-      case 'disableTracking':
+      case false:
         // トラッキングを停止するため、埋め込みアナリティクスを削除する
         removeAnalytics();
     }
-    this.userConfigs.trackingMode = result.trackingMode;
-    saveUserConfigs(this.userConfigs);
+    this.userSettings.trackingMode = result.trackingMode;
+    this.saveConfig();
   }
 }

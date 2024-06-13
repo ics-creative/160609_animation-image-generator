@@ -19,6 +19,8 @@
               (change)="handleChange()"
               id="trackingCheckBox"
               #trackingCheckbox
+              [ngModelOptions]="{ standalone: true }"
+              [(ngModel)]="userSettings.trackingMode"
             /><label class="form-check-label" for="trackingCheckBox">{{
               localeData.SETTINGS_trackingCheckboxLabel
             }}</label>
