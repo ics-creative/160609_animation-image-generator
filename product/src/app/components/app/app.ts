@@ -10,8 +10,6 @@ import { AppConfig } from '../../../../common-src/config/app-config';
 import { DomSanitizer } from '@angular/platform-browser';
 import IpcService from '../../process/ipc.service';
 import { ImageExportMode } from '../../../../common-src/type/ImageExportMode';
-import { PresetLine } from '../../../../common-src/preset/preset-line';
-import { PresetWeb } from '../../../../common-src/preset/preset-web';
 import { AnimationImageOptions } from '../../../../common-src/data/animation-image-option';
 import { ImageData } from '../../../../common-src/data/image-data';
 import { checkImagePxSizeMatched } from './checkImagePxSizeMatched';

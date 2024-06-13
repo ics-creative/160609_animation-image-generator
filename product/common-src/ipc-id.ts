@@ -26,14 +26,14 @@ interface IpcInvokeFuncs {
     category: string,
     title: string,
     detail: string,
-    stack: string,
+    stack: string
   ) => Promise<void>;
   [IpcId.EXEC_IMAGE_EXPORT_PROCESS]: (
     version: string,
     imageInfo: ImageInfo,
     itemList: ImageData[],
     animationOptionData: AnimationImageOptions,
-    validationType: LineValidationType,
+    validationType: LineValidationType
   ) => Promise<boolean>;
   [IpcId.OPEN_EXTERNAL_BROWSER]: (url: string) => Promise<void>;
   [IpcId.SHOW_MESSAGE]: (message: string, title?: string) => Promise<void>;
@@ -41,13 +41,16 @@ interface IpcInvokeFuncs {
 }
 
 // IpcRenderer.invokeの型定義
-export type IpcInvoke = <K extends typeof IpcId[keyof typeof IpcId]>(
+export type IpcInvoke = <K extends (typeof IpcId)[keyof typeof IpcId]>(
   channel: K,
   ...params: Parameters<IpcInvokeFuncs[K]>
 ) => ReturnType<IpcInvokeFuncs[K]>;
 
 // IpcMain.handleの型定義
-export type IpcMainHandled = <K extends typeof IpcId[keyof typeof IpcId]>(
+export type IpcMainHandled = <K extends (typeof IpcId)[keyof typeof IpcId]>(
   channel: K,
-  listener: (event: IpcMainInvokeEvent, ...params: Parameters<IpcInvokeFuncs[K]>) => ReturnType<IpcInvokeFuncs[K]>
+  listener: (
+    event: IpcMainInvokeEvent,
+    ...params: Parameters<IpcInvokeFuncs[K]>
+  ) => ReturnType<IpcInvokeFuncs[K]>
 ) => void;

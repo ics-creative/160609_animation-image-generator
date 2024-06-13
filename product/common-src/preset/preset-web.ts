@@ -8,8 +8,8 @@ import { ImageExportMode } from '../type/ImageExportMode';
 export class PresetWeb {
   static getPresetVer1() {
     return {
-      animationOption: PresetWeb.getAnimationOptionVer1(),
-    }
+      animationOption: PresetWeb.getAnimationOptionVer1()
+    };
   }
 
   static getAnimationOptionVer1() {

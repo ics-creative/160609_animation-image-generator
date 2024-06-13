@@ -22,18 +22,23 @@ export const localeDataEn: ILocaleData = {
   PROP_tabQualityApngOpt: 'Optimization',
   PROP_tabQualityOptWay: 'Compression Method',
 
-  PROP_tabQualityAboutOpt:"What's Optimization?",
-  PROP_tabQualityApngOptTooltip: 'Compress image to reduce the file size. File size and required time will be changed by the compression method.',
-  PROP_tabQualityOptWayZopfli: 'File size is smallest but saving takes very long time. In some cases, it can take over a few minutes.',
+  PROP_tabQualityAboutOpt: "What's Optimization?",
+  PROP_tabQualityApngOptTooltip:
+    'Compress image to reduce the file size. File size and required time will be changed by the compression method.',
+  PROP_tabQualityOptWayZopfli:
+    'File size is smallest but saving takes very long time. In some cases, it can take over a few minutes.',
   PROP_tabQualityOptWay7zip: 'File size is smaller but saving takes long time.',
-  PROP_tabQualityOptWayzlib: 'File size is not much smaller but saved immediately.',
+  PROP_tabQualityOptWayzlib:
+    'File size is not much smaller but saved immediately.',
 
   PROP_tabQualityHApng: 'Export as APNG',
   PROP_tabQualityHWebp: 'Export as WebP',
   PROP_tabQualityHHtml: 'Export as HTML',
 
-  PROP_tabQualityHApngTooltip: 'APNG is an animated image format that supported by most of major browsers.',
-  PROP_tabQualityHWebpTooltip: 'WebP is a newer format for animated image. Some old browsers don\'t support to display or play.',
+  PROP_tabQualityHApngTooltip:
+    'APNG is an animated image format that supported by most of major browsers.',
+  PROP_tabQualityHWebpTooltip:
+    "WebP is a newer format for animated image. Some old browsers don't support to display or play.",
   PROP_tabQualityHHtmlTooltip: 'generate html file for preview output images.',
 
   PROP_btnSave: 'Export',
@@ -61,12 +66,14 @@ export const localeDataEn: ILocaleData = {
   MENU_helpQuestion: 'Report Issues',
 
   HTML_lang: 'en',
-  HTML_availableFirefoxSafariChrome: 'Animation available on Firefox, Safari and Chrome',
+  HTML_availableFirefoxSafariChrome:
+    'Animation available on Firefox, Safari and Chrome',
   HTML_cantAnimateOnIE: 'IE does not support to play the animation',
   HTML_cantViewOnIE: 'IE does not support to display the image',
   HTML_forWebpSupportedBrowsers: 'for WebP supported browsers',
   HTML_forWebpUnsupportedBrowsers: 'for WebP unsupported browsers',
-  HTML_backgroundCssComment: 'Paint checkerboard pattern for preview background using CSS',
+  HTML_backgroundCssComment:
+    'Paint checkerboard pattern for preview background using CSS',
 
   VALIDATE_ImportImageSize: `'s width and height is different from other image.`,
   VALIDATE_title: 'Warning for LINE Stamp',
