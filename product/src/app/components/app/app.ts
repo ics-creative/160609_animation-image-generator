@@ -25,7 +25,7 @@ import {
 } from '../../../../common-src/type/ImageValidator';
 import { ImageInfo } from '../../../../common-src/data/image-info';
 import { loadAnalytics, removeAnalytics } from './loadAnalytics';
-import { UserSettingModalComponent } from '../user-setting-modal/user-setting-modal';
+import { UserSettingsModalComponent } from '../user-settings-modal/user-settings-modal';
 import { TrackingMode } from '../../../../common-src/type/TrackingMode';
 
 const getFirstNumber = (text: string): number | undefined => {
@@ -91,8 +91,8 @@ export class AppComponent implements OnInit, AfterViewInit {
   @ViewChild('optionSelecter', { static: true })
   optionSelecterComponent?: ElementRef;
 
-  @ViewChild('userSettingModal', { static: true })
-  useSettingModal?: UserSettingModalComponent;
+  @ViewChild('userSettingsModal', { static: true })
+  userSettingsModal?: UserSettingsModalComponent;
 
   constructor(sanitizer: DomSanitizer, private ipcService: IpcService) {}
 
@@ -385,11 +385,11 @@ export class AppComponent implements OnInit, AfterViewInit {
     saveUserConfigs(this.userConfigs);
   }
 
-  handleClickUserSettingModal() {
-    this.useSettingModal?.show();
+  handleClickUserSettingsModal() {
+    this.userSettingsModal?.show();
   }
 
-  async handleChangeSetting(result: { trackingMode: TrackingMode }) {
+  async handleChangeSettings(result: { trackingMode: TrackingMode }) {
     if (!this.userConfigs) {
       throw new Error('userConfigs is null');
     }

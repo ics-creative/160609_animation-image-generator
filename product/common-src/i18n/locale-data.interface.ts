@@ -57,7 +57,7 @@ export interface ILocaleData {
   TOP_version: string;
   TOP_icsTooltip: string;
   TOP_onlineHelpTooltip: string;
-  TOP_settingTooltip: string;
+  TOP_settingsTooltip: string;
 
   MENU_about: string;
   MENU_quit: string;
@@ -101,9 +101,9 @@ export interface ILocaleData {
 
   defaultFileName: string;
 
-  TRACKING_dialogCheckboxLabel: string;
-  TRACKING_dialogClose: string;
-  TRACKING_dialogTitle: string;
+  SETTINGS_trackingCheckboxLabel: string;
+  SETTINGS_Close: string;
+  SETTINGS_Title: string;
 
   RULE_title: string;
   RULE_animation_stamp: string;

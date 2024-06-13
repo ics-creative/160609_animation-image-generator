@@ -58,7 +58,7 @@ export const localeDataJa: ILocaleData = {
   TOP_version: 'バージョン',
   TOP_icsTooltip: '開発会社のウェブサイト',
   TOP_onlineHelpTooltip: '不具合報告＆機能要望',
-  TOP_settingTooltip: '設定',
+  TOP_settingsTooltip: '設定',
 
   MENU_about: 'アニメ画像を変換する君について',
   MENU_quit: 'アニメ画像を変換する君を終了する',
@@ -113,9 +113,9 @@ export const localeDataJa: ILocaleData = {
 
   defaultFileName: '名称未設定',
 
-  TRACKING_dialogCheckboxLabel: '利用状況とクラッシュレポートを送信する',
-  TRACKING_dialogClose: 'とじる',
-  TRACKING_dialogTitle: '設定',
+  SETTINGS_trackingCheckboxLabel: '利用状況とクラッシュレポートを送信する',
+  SETTINGS_Close: 'とじる',
+  SETTINGS_Title: '設定',
 
   RULE_title: 'チェックルール',
   RULE_animation_stamp: 'アニメーションスタンプ画像',

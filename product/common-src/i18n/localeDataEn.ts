@@ -53,7 +53,7 @@ export const localeDataEn: ILocaleData = {
   TOP_version: 'Version',
   TOP_icsTooltip: 'Go Production Website',
   TOP_onlineHelpTooltip: 'Report Issues',
-  TOP_settingTooltip: 'Settings',
+  TOP_settingsTooltip: 'Settings',
 
   MENU_about: 'About Animation Image Converter',
   MENU_quit: 'Quit Animation Image Converter',
@@ -106,9 +106,9 @@ export const localeDataEn: ILocaleData = {
 
   defaultFileName: 'Untitled',
 
-  TRACKING_dialogCheckboxLabel: 'Always send usage and crash reports.',
-  TRACKING_dialogClose: 'Close',
-  TRACKING_dialogTitle: 'Settings',
+  SETTINGS_trackingCheckboxLabel: 'Always send usage and crash reports.',
+  SETTINGS_Close: 'Close',
+  SETTINGS_Title: 'Settings',
 
   RULE_title: 'Check Rule',
   RULE_animation_stamp: 'Animated Stickers Images',

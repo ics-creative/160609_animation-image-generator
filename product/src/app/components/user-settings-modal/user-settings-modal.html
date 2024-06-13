@@ -8,7 +8,7 @@
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title">{{ localeData.TRACKING_dialogTitle }}</h5>
+        <h5 class="modal-title">{{ localeData.SETTINGS_Title }}</h5>
       </div>
       <div class="modal-body">
         <form>
@@ -20,14 +20,14 @@
               id="trackingCheckBox"
               #trackingCheckbox
             /><label class="form-check-label" for="trackingCheckBox">{{
-              localeData.TRACKING_dialogCheckboxLabel
+              localeData.SETTINGS_trackingCheckboxLabel
             }}</label>
           </div>
         </form>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" (click)="handleClose()">
-          {{ localeData.TRACKING_dialogClose }}
+          {{ localeData.SETTINGS_Close }}
         </button>
       </div>
     </div>

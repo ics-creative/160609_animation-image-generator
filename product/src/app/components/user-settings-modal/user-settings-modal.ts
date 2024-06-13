@@ -11,20 +11,20 @@ import $ from 'jquery';
 import { TrackingMode } from '../../../../common-src/type/TrackingMode';
 
 @Component({
-  selector: 'app-user-setting-modal',
-  templateUrl: './user-setting-modal.html',
-  styleUrls: ['./user-setting-modal.scss']
+  selector: 'app-user-settings-modal',
+  templateUrl: './user-settings-modal.html',
+  styleUrls: ['./user-settings-modal.scss']
 })
 
 /**
  * 設定ダイアログのコンポーネントです。
  */
-export class UserSettingModalComponent {
+export class UserSettingsModalComponent {
   @Output()
-  changeSettingEvent = new EventEmitter<{ trackingMode: TrackingMode }>();
+  changeSettings = new EventEmitter<{ trackingMode: TrackingMode }>();
 
   @Input()
-  userSetting: { trackingMode: TrackingMode } = {
+  userSettings: { trackingMode: TrackingMode } = {
     trackingMode: 'enableTracking'
   };
 
@@ -45,6 +45,6 @@ export class UserSettingModalComponent {
   handleChange(event: Event) {
     const trackingChecked = this.trackingCheckbox?.nativeElement.checked;
     const trackingMode = trackingChecked ? 'enableTracking' : 'disableTracking';
-    this.changeSettingEvent.emit({ trackingMode: trackingMode });
+    this.changeSettings.emit({ trackingMode: trackingMode });
   }
 }
