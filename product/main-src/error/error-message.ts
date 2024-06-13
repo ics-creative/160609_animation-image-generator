@@ -37,15 +37,13 @@ export class ErrorMessage {
 
   private getErrorMessage(
     errorCode: ErrorType,
-    inquiry: { enabled: true; code: string } | { enabled: false },
+    inquiry: InquiryState,
     errorDetail: string
   ): string {
     const errorPhaseMessage = this.getErrorPhaseMessage(errorCode);
 
     const inquiryCodeMessage = inquiry.enabled
-      ? `
-
-お問い合わせコード：${inquiry.code}`
+      ? `\n\nお問い合わせコード：${inquiry.code}`
       : '';
 
     const errorDetailMessage = errorDetail
@@ -53,9 +51,7 @@ export class ErrorMessage {
       : '';
     return `${errorPhaseMessage}${errorDetailMessage}
 
-何度も同じエラーが発生する場合は、お手数ですがサポートページまでお問い合わせください。
-  ${inquiryCodeMessage}
-		`;
+何度も同じエラーが発生する場合は、お手数ですがサポートページまでお問い合わせください。${inquiryCodeMessage}`;
   }
 
   private getErrorPhaseMessage(errorCode: ErrorType): string {
