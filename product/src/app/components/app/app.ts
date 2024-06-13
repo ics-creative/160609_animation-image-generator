@@ -398,7 +398,12 @@ export class AppComponent implements OnInit, AfterViewInit {
   }
 
   async handleChangeSettings(result: UserSettings) {
-    switch (result.trackingMode) {
+    this.userSettings.trackingMode = result.trackingMode;
+    this.saveConfig();
+  }
+
+  handleCloseSettingModal() {
+    switch (this.userSettings.trackingMode) {
       case true:
         // トラッキングを再開するため、埋め込みアナリティクスを読み込む
         loadAnalytics(AppConfig.analyticsUrl);
@@ -407,7 +412,5 @@ export class AppComponent implements OnInit, AfterViewInit {
         // トラッキングを停止するため、埋め込みアナリティクスを削除する
         removeAnalytics();
     }
-    this.userSettings.trackingMode = result.trackingMode;
-    this.saveConfig();
   }
 }

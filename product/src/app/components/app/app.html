@@ -5,6 +5,7 @@
       #userSettingsModal
       [userSettings]="userSettings"
       (changeSettings)="handleChangeSettings($event)"
+      (close)="handleCloseSettingModal()"
     ></app-user-settings-modal>
 
     <!-- プリセット切り替え -->

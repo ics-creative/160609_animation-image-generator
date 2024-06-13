@@ -24,6 +24,9 @@ export class UserSettingsModalComponent {
   @Output()
   changeSettings = new EventEmitter<{ trackingMode: TrackingMode }>();
 
+  @Output()
+  close = new EventEmitter<void>();
+
   @Input()
   userSettings: UserSettings = {
     trackingMode: true
@@ -41,6 +44,7 @@ export class UserSettingsModalComponent {
 
   handleClose(event: MouseEvent) {
     $('#user-settings-modal').modal('hide');
+    this.close.emit();
   }
 
   handleChange(event: Event) {
