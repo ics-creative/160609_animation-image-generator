@@ -73,6 +73,7 @@
     "eslint-plugin-jsdoc": "latest",
     "eslint-plugin-prefer-arrow": "latest",
     "eslint-plugin-prettier": "^4.0.0",
+    "eslint-plugin-unused-imports": "^3.2.0",
     "husky": "^8.0.3",
     "icon-gen": "^4.0.0",
     "mkdirp": "^0.5.5",
