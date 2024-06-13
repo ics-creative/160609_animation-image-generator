@@ -57,7 +57,7 @@ export interface ILocaleData {
   TOP_version: string;
   TOP_icsTooltip: string;
   TOP_onlineHelpTooltip: string;
-  TOP_trackingSettingsTooltip: string;
+  TOP_settingTooltip: string;
 
   MENU_about: string;
   MENU_quit: string;

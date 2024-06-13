@@ -53,7 +53,7 @@ export const localeDataEn: ILocaleData = {
   TOP_version: 'Version',
   TOP_icsTooltip: 'Go Production Website',
   TOP_onlineHelpTooltip: 'Report Issues',
-  TOP_trackingSettingsTooltip: 'Settings',
+  TOP_settingTooltip: 'Settings',
 
   MENU_about: 'About Animation Image Converter',
   MENU_quit: 'Quit Animation Image Converter',
