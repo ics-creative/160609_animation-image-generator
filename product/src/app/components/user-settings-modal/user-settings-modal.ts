@@ -42,12 +42,12 @@ export class UserSettingsModalComponent {
     $('#user-settings-modal').modal('show');
   }
 
-  handleClose(event: MouseEvent) {
+  handleClose() {
     $('#user-settings-modal').modal('hide');
     this.close.emit();
   }
 
-  handleChange(event: Event) {
+  handleChange() {
     const trackingChecked = this.trackingCheckbox?.nativeElement.checked;
     const trackingMode: TrackingMode = trackingChecked;
     this.changeSettings.emit({ trackingMode: trackingMode });
