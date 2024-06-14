@@ -7,14 +7,13 @@ import { LineValidationType } from '../type/LineValidationType';
  * LINEアニメーションスタンプのプリセット設定です。
  */
 export class PresetLine {
-
   static getPresetVer1() {
     return {
       animationOption: PresetLine.getAnimationOptionVer1(),
-      lineValidationType: LineValidationType.ANIMATION_STAMP,
-    }
+      lineValidationType: LineValidationType.ANIMATION_STAMP
+    };
   }
-  
+
   static getAnimationOptionVer1() {
     const data = new AnimationImageOptions();
     data.noLoop = false;
