@@ -1,5 +1,13 @@
 <div class="app-component" #myComponent [ngClass]="{ isDragOver: _isDragover }">
   <div class="mod-setting p-3">
+    <!-- 設定モーダル -->
+    <app-user-settings-modal
+      #userSettingsModal
+      [userSettings]="userSettings"
+      (changeSettings)="handleChangeSettings($event)"
+      (close)="handleCloseSettingModal()"
+    ></app-user-settings-modal>
+
     <!-- プリセット切り替え -->
     <div class="row mb-4 align-items-center mod-select-preset">
       <!--用途-->
@@ -100,6 +108,7 @@
       <div class="col-6 text-left">
         {{ localeData.TOP_version }} {{ AppConfig.version }}
       </div>
+
       <div class="col-6 text-right">
         <a
           (click)="openExternalBrowser('https://ics.media/')"
@@ -122,6 +131,14 @@
           title="{{ localeData.TOP_onlineHelpTooltip }}"
         >
           <i class="fa fa-smile-o"></i>
+        </a>
+        <a
+          data-toggle="tooltip"
+          data-placement="left"
+          title="{{ localeData.TOP_settingsTooltip }}"
+          (click)="handleClickUserSettingsModal()"
+        >
+          <i class="fa fa-cog"></i>
         </a>
       </div>
     </div>

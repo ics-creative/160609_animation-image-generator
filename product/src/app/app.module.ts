@@ -11,13 +11,15 @@ import 'bootstrap';
 import '../assets/js/createjs-1.0.0.min.js';
 import IpcService from './process/ipc.service';
 import { TooltipComponent } from './components/tooltip/tooltip';
+import { UserSettingsModalComponent } from './components/user-settings-modal/user-settings-modal';
 
 @NgModule({
   declarations: [
     AppComponent,
     AnimPreviewComponent,
     PropertiesComponent,
-    TooltipComponent
+    TooltipComponent,
+    UserSettingsModalComponent
   ],
   imports: [BrowserModule, FormsModule, ReactiveFormsModule],
   providers: [IpcService],

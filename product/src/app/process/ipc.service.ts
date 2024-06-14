@@ -4,6 +4,7 @@ import { AnimationImageOptions } from '../../../common-src/data/animation-image-
 import { ImageData } from '../../../common-src/data/image-data';
 import { LineValidationType } from '../../../common-src/type/LineValidationType';
 import { ImageInfo } from '../../../common-src/data/image-info';
+import { TrackingEnabled } from '../../../common-src/type/TrackingEnabled';
 
 interface IElectronAPI {
   invoke: IpcInvoke;
@@ -28,26 +29,6 @@ export default class IpcService {
     return this.electronApi.invoke(IpcId.OPEN_FILE_DIALOG);
   }
 
-  /** エラーを送信します */
-  sendError(
-    version: string,
-    code: string,
-    category: string,
-    title: string,
-    detail: string,
-    stack: string
-  ) {
-    return this.electronApi.invoke(
-      IpcId.SEND_ERROR,
-      version,
-      code,
-      category,
-      title,
-      detail,
-      stack
-    );
-  }
-
   /** 指定のURLを外部ブラウザで開きます */
   openExternalBrowser(url: string) {
     return this.electronApi.invoke(IpcId.OPEN_EXTERNAL_BROWSER, url);
@@ -59,7 +40,8 @@ export default class IpcService {
     imageInfo: ImageInfo,
     itemList: ImageData[],
     animationOptionData: AnimationImageOptions,
-    validationType: LineValidationType
+    validationType: LineValidationType,
+    trackingEnabled: TrackingEnabled
   ) {
     return this.electronApi.invoke(
       IpcId.EXEC_IMAGE_EXPORT_PROCESS,
@@ -67,7 +49,8 @@ export default class IpcService {
       imageInfo,
       itemList,
       animationOptionData,
-      validationType
+      validationType,
+      trackingEnabled
     );
   }
 

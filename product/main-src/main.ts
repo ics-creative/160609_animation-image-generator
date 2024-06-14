@@ -15,11 +15,11 @@ import { ImageData } from '../common-src/data/image-data';
 import File from './file';
 import { ApplicationMenu } from './menu/application-menu';
 import { SaveDialog } from './dialog/SaveDialog';
-import { sendError } from './error/send-error';
 import { AppConfig } from '../common-src/config/app-config';
 import { localeData } from './locale-manager';
 import { LineValidationType } from '../common-src/type/LineValidationType';
 import { ImageInfo } from '../common-src/data/image-info';
+import { TrackingEnabled } from '../common-src/type/TrackingEnabled';
 
 // アプリケーション作成用のモジュールを読み込み
 const errorMessage = new ErrorMessage();
@@ -140,22 +140,6 @@ handle(IpcId.OPEN_FILE_DIALOG, async () => {
   return result.filePaths;
 });
 
-// エラーを送信
-handle(
-  IpcId.SEND_ERROR,
-  async (
-    event,
-    version: string,
-    code: string,
-    category: string,
-    title: string,
-    detail: string,
-    stack: string
-  ) => {
-    sendError(version, code, category, title, detail, stack);
-  }
-);
-
 // 保存場所を聞いて保存処理を実行
 handle(
   IpcId.EXEC_IMAGE_EXPORT_PROCESS,
@@ -165,7 +149,8 @@ handle(
     imageInfo: ImageInfo,
     itemList: ImageData[],
     animationOptionData: AnimationImageOptions,
-    validationType: LineValidationType
+    validationType: LineValidationType,
+    trackingEnabled: TrackingEnabled
   ) => {
     console.log(version, itemList, animationOptionData);
 
@@ -180,7 +165,8 @@ handle(
         imageInfo,
         itemList,
         animationOptionData,
-        validationType
+        validationType,
+        trackingEnabled
       )
       .then(() => {
         return true;
@@ -199,7 +185,7 @@ handle(IpcId.OPEN_EXTERNAL_BROWSER, async (event, pageUrl: string) => {
 });
 
 // メッセージを表示する
-// ※ レンダラー側でalertを使用するとビルド語のWindows環境で文字化けが発生するため、
+// ※ レンダラー側でalertを使用するとビルド後のWindows環境で文字化けが発生するため、
 //   代替としてメインプロセス側でelectronのdialogを使用してメッセージを表示する機能を提供する
 handle(IpcId.SHOW_MESSAGE, async (event, message: string, title?: string) => {
   await dialog.showMessageBox({

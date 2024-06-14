@@ -1,0 +1,37 @@
+<div
+  class="modal fade"
+  id="user-settings-modal"
+  tabindex="-1"
+  role="dialog"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">{{ localeData.SETTINGS_Title }}</h5>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="form-check">
+            <input
+              type="checkbox"
+              class="form-check-input"
+              (change)="handleChange()"
+              id="trackingCheckBox"
+              #trackingCheckbox
+              [ngModelOptions]="{ standalone: true }"
+              [(ngModel)]="userSettings.trackingEnabled"
+            /><label class="form-check-label" for="trackingCheckBox">{{
+              localeData.SETTINGS_trackingCheckboxLabel
+            }}</label>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="handleClose()">
+          {{ localeData.SETTINGS_Close }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
