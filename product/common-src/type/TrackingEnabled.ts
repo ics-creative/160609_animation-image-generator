@@ -1,4 +1,4 @@
 /**
  * トラッキング設定の状態
  */
-export type TrackingMode = boolean;
+export type TrackingEnabled = boolean;

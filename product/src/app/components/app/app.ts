@@ -63,7 +63,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   localeData = localeData;
   validationErrorsMessage = [''];
   userConfigs: UserConfigs | null = null;
-  userSettings: UserSettings = { trackingMode: true };
+  userSettings: UserSettings = { trackingEnabled: true };
   showingTooltip: Tooltip | null = null;
   showingTooltipButtonPos: { x: number; y: number } = {
     x: 0,
@@ -106,7 +106,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.isImageSelected = false;
 
     this.userConfigs = loadUserConfigs();
-    this.userSettings = { trackingMode: this.userConfigs.trackingMode };
+    this.userSettings = { trackingEnabled: this.userConfigs.trackingEnabled };
 
     // 設定の読み込み
     this.imageExportMode = this.userConfigs.imageExportMode;
@@ -117,7 +117,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.changeImageExportMode(this.imageExportMode);
 
     // トラッキング設定が有効な場合のみアナリティクスを読み込む
-    if (this.userSettings.trackingMode) {
+    if (this.userSettings.trackingEnabled) {
       loadAnalytics(AppConfig.analyticsUrl);
     }
   }
@@ -226,7 +226,7 @@ export class AppComponent implements OnInit, AfterViewInit {
         this.items,
         this.animationOptionData,
         this.checkRule.value,
-        this.userSettings.trackingMode
+        this.userSettings.trackingEnabled
       );
     } finally {
       this.hideLockDialog();
@@ -373,7 +373,7 @@ export class AppComponent implements OnInit, AfterViewInit {
       throw new Error('userConfigs is null');
     }
 
-    this.userConfigs.trackingMode = this.userSettings.trackingMode;
+    this.userConfigs.trackingEnabled = this.userSettings.trackingEnabled;
 
     switch (this.animationOptionData.imageExportMode) {
       case ImageExportMode.LINE:
@@ -397,12 +397,12 @@ export class AppComponent implements OnInit, AfterViewInit {
   }
 
   async handleChangeSettings(result: UserSettings) {
-    this.userSettings.trackingMode = result.trackingMode;
+    this.userSettings.trackingEnabled = result.trackingEnabled;
     this.saveConfig();
   }
 
   handleCloseSettingModal() {
-    switch (this.userSettings.trackingMode) {
+    switch (this.userSettings.trackingEnabled) {
       case true:
         // トラッキングを再開するため、埋め込みアナリティクスを読み込む
         loadAnalytics(AppConfig.analyticsUrl);

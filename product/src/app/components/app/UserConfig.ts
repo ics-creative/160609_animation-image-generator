@@ -29,7 +29,7 @@ export interface UserConfigsVer1 {
   /* ウェブ出力設定 */
   webConfig: WebConfig;
   /** トラッキング設定 */
-  trackingMode: boolean;
+  trackingEnabled: boolean;
 }
 
 /**
@@ -40,7 +40,7 @@ export type UserConfigs = UserConfigsVer1;
 /**
  * ユーザーが任意で変更できる設定
  */
-export type UserSettings = Pick<UserConfigs, 'trackingMode'>;
+export type UserSettings = Pick<UserConfigs, 'trackingEnabled'>;
 
 const USER_CONFIGS = 'user-configs'; // ユーザー設定
 const OLD_USER_CONFIGS = 'preset_id'; // 旧バージョンの設定
@@ -79,15 +79,15 @@ const migrationUserConfig = (): UserConfigs => {
       imageExportMode: ImageExportMode.LINE,
       lineConfig: PresetLine.getPresetVer1(),
       webConfig: PresetWeb.getPresetVer1(),
-      trackingMode: true
+      trackingEnabled: true
     };
     // 新バージョンの設定を保存する
     saveUserConfigs(configs);
     return configs;
   }
   // 未定義時は有効にする
-  if (userConfigs.trackingMode === undefined) {
-    userConfigs.trackingMode = true;
+  if (userConfigs.trackingEnabled === undefined) {
+    userConfigs.trackingEnabled = true;
   }
 
   // ver1以降マイグレーションが必要な場合ここで対応する
@@ -109,6 +109,6 @@ const migrationUserConfigFromVer0 = (
       numberToMode(configVer0.imageExportNumber) ?? ImageExportMode.LINE,
     lineConfig: PresetLine.getPresetVer1(),
     webConfig: PresetWeb.getPresetVer1(),
-    trackingMode: true
+    trackingEnabled: true
   };
 };

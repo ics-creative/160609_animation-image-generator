@@ -15,7 +15,7 @@ import { notNull } from './utils/notNull';
 import { LineValidationType } from '../common-src/type/LineValidationType';
 import { ImageInfo } from '../common-src/data/image-info';
 import { InquiryState } from '../common-src/type/InquiryState';
-import { TrackingMode } from '../common-src/type/TrackingMode';
+import { TrackingEnabled } from '../common-src/type/TrackingEnabled';
 export default class File {
   constructor(
     mainWindow: BrowserWindow,
@@ -41,10 +41,10 @@ export default class File {
     itemList: ImageData[],
     animationOptionData: AnimationImageOptions,
     validationType: LineValidationType,
-    trackingMode: TrackingMode
+    trackingEnabled: TrackingEnabled
   ): Promise<void> {
     // お問い合わせコード生成
-    const inquiry: InquiryState = trackingMode
+    const inquiry: InquiryState = trackingEnabled
       ? { enabled: true, code: createInquiryCode() }
       : { enabled: false };
 

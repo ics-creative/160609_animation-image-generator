@@ -19,7 +19,7 @@ import { AppConfig } from '../common-src/config/app-config';
 import { localeData } from './locale-manager';
 import { LineValidationType } from '../common-src/type/LineValidationType';
 import { ImageInfo } from '../common-src/data/image-info';
-import { TrackingMode } from '../common-src/type/TrackingMode';
+import { TrackingEnabled } from '../common-src/type/TrackingEnabled';
 
 // アプリケーション作成用のモジュールを読み込み
 const errorMessage = new ErrorMessage();
@@ -150,7 +150,7 @@ handle(
     itemList: ImageData[],
     animationOptionData: AnimationImageOptions,
     validationType: LineValidationType,
-    trackingMode: TrackingMode
+    trackingEnabled: TrackingEnabled
   ) => {
     console.log(version, itemList, animationOptionData);
 
@@ -166,7 +166,7 @@ handle(
         itemList,
         animationOptionData,
         validationType,
-        trackingMode
+        trackingEnabled
       )
       .then(() => {
         return true;

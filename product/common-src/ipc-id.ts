@@ -3,7 +3,7 @@ import { AnimationImageOptions } from './data/animation-image-option';
 import { ImageData } from './data/image-data';
 import { LineValidationType } from './type/LineValidationType';
 import { ImageInfo } from './data/image-info';
-import { TrackingMode } from './type/TrackingMode';
+import { TrackingEnabled } from './type/TrackingEnabled';
 
 // プロセス間通信のchannel名の定数定義です
 export const IpcId = {
@@ -26,7 +26,7 @@ interface IpcInvokeFuncs {
     itemList: ImageData[],
     animationOptionData: AnimationImageOptions,
     validationType: LineValidationType,
-    trackingMode: TrackingMode
+    trackingEnabled: TrackingEnabled
   ) => Promise<boolean>;
   [IpcId.OPEN_EXTERNAL_BROWSER]: (url: string) => Promise<void>;
   [IpcId.SHOW_MESSAGE]: (message: string, title?: string) => Promise<void>;

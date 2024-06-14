@@ -8,7 +8,7 @@ import {
 } from '@angular/core';
 import { localeData } from 'app/i18n/locale-manager';
 import $ from 'jquery';
-import { TrackingMode } from '../../../../common-src/type/TrackingMode';
+import { TrackingEnabled } from '../../../../common-src/type/TrackingEnabled';
 import { UserSettings } from '../app/UserConfig';
 
 @Component({
@@ -22,14 +22,14 @@ import { UserSettings } from '../app/UserConfig';
  */
 export class UserSettingsModalComponent {
   @Output()
-  changeSettings = new EventEmitter<{ trackingMode: TrackingMode }>();
+  changeSettings = new EventEmitter<{ trackingEnabled: TrackingEnabled }>();
 
   @Output()
   close = new EventEmitter<void>();
 
   @Input()
   userSettings: UserSettings = {
-    trackingMode: true
+    trackingEnabled: true
   };
 
   @ViewChild('trackingCheckbox', { static: true })
@@ -49,7 +49,7 @@ export class UserSettingsModalComponent {
 
   handleChange() {
     const trackingChecked = this.trackingCheckbox?.nativeElement.checked;
-    const trackingMode: TrackingMode = trackingChecked;
-    this.changeSettings.emit({ trackingMode: trackingMode });
+    const trackingEnabled: TrackingEnabled = trackingChecked;
+    this.changeSettings.emit({ trackingEnabled: trackingEnabled });
   }
 }
