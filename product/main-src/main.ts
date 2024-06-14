@@ -15,7 +15,6 @@ import { ImageData } from '../common-src/data/image-data';
 import File from './file';
 import { ApplicationMenu } from './menu/application-menu';
 import { SaveDialog } from './dialog/SaveDialog';
-import { sendError } from './error/send-error';
 import { AppConfig } from '../common-src/config/app-config';
 import { localeData } from './locale-manager';
 import { LineValidationType } from '../common-src/type/LineValidationType';

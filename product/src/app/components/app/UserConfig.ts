@@ -6,7 +6,6 @@ import {
   numberToMode
 } from '../../../../common-src/type/ImageExportMode';
 import { LineValidationType } from '../../../../common-src/type/LineValidationType';
-import { TrackingMode } from '../../../../common-src/type/TrackingMode';
 
 interface LineConfig {
   animationOption: AnimationImageOptions;

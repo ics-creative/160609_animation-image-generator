@@ -31,7 +31,6 @@ import {
 import { ImageInfo } from '../../../../common-src/data/image-info';
 import { loadAnalytics, removeAnalytics } from './loadAnalytics';
 import { UserSettingsModalComponent } from '../user-settings-modal/user-settings-modal';
-import { TrackingMode } from '../../../../common-src/type/TrackingMode';
 
 const getFirstNumber = (text: string): number | undefined => {
   const numStr = text.match(/\d+/g)?.pop();
