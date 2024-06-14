@@ -34,13 +34,16 @@ interface IpcInvokeFuncs {
 }
 
 // IpcRenderer.invokeの型定義
-export type IpcInvoke = <K extends typeof IpcId[keyof typeof IpcId]>(
+export type IpcInvoke = <K extends (typeof IpcId)[keyof typeof IpcId]>(
   channel: K,
   ...params: Parameters<IpcInvokeFuncs[K]>
 ) => ReturnType<IpcInvokeFuncs[K]>;
 
 // IpcMain.handleの型定義
-export type IpcMainHandled = <K extends typeof IpcId[keyof typeof IpcId]>(
+export type IpcMainHandled = <K extends (typeof IpcId)[keyof typeof IpcId]>(
   channel: K,
-  listener: (event: IpcMainInvokeEvent, ...params: Parameters<IpcInvokeFuncs[K]>) => ReturnType<IpcInvokeFuncs[K]>
+  listener: (
+    event: IpcMainInvokeEvent,
+    ...params: Parameters<IpcInvokeFuncs[K]>
+  ) => ReturnType<IpcInvokeFuncs[K]>
 ) => void;

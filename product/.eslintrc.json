@@ -20,7 +20,8 @@
         "prettier"
       ],
       "plugins": [
-        "@typescript-eslint"
+        "@typescript-eslint",
+        "unused-imports"
       ],
       "rules": {
         "@typescript-eslint/consistent-type-definitions": "error",
@@ -55,7 +56,8 @@
         "space-in-parens": [
           "off",
           "never"
-        ]
+        ],
+        "unused-imports/no-unused-imports": "error"
       }
     },
     {

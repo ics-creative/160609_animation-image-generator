@@ -19,14 +19,17 @@ describe('test filesize validator', () => {
     const SIZE10KB = 10 * 1024;
     setLang('ja');
     const result = validateFileSize(SIZE10KB + 1, SIZE10KB);
-    expect(result?.message).toBe(`出力した画像の容量が10KBを超えました(現在は11KBです)。`);
+    expect(result?.message).toBe(
+      `出力した画像の容量が10KBを超えました(現在は11KBです)。`
+    );
   });
 
   test('should return error message in en', () => {
     const SIZE10KB = 10 * 1024;
     setLang('en');
     const result = validateFileSize(SIZE10KB + 1, SIZE10KB);
-    expect(result?.message).toBe(`Size of the file is exceeded the limit (10KB). Current size is 11KB.`);
+    expect(result?.message).toBe(
+      `Size of the file is exceeded the limit (10KB). Current size is 11KB.`
+    );
   });
-
 });
