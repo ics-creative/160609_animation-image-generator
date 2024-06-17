@@ -4,12 +4,12 @@
   [ngClass]="{ active: showingTooltip !== null }"
 >
   <div
-    class="tooltip optimise-tip"
+    class="tooltip optimize-tip"
     #element
-    [ngClass]="{ active: isShowingOptimiseTooltip }"
+    [ngClass]="{ active: isShowingOptimizeTooltip }"
     [ngStyle]="{
-      'left.px': getOptimiseTooltipButtonPos.x,
-      'top.px': getOptimiseTooltipButtonPos.y
+      'left.px': getOptimizeTooltipButtonPos.x,
+      'top.px': getOptimizeTooltipButtonPos.y
     }"
   >
     <h3 class="h6 font-weight-bold">
@@ -18,8 +18,11 @@
     <p>
       {{ localeData.PROP_tabQualityApngOptTooltip }}
     </p>
+    <h3 class="h6 font-weight-bold">
+      {{ localeData.PROP_tabQualityAboutCompression }}
+    </h3>
     <ul>
-      <li>zopfli：{{ localeData.PROP_tabQualityOptWayZopfli }}</li>
+      <li>zopfli：{{ localeData.PROP_tabCompressionWayZopfli }}</li>
       <li>7zip：{{ localeData.PROP_tabQualityOptWay7zip }}</li>
       <li>zlib：{{ localeData.PROP_tabQualityOptWayzlib }}</li>
     </ul>

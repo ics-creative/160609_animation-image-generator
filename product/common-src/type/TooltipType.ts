@@ -2,6 +2,6 @@
  * ツールチップを識別するためのEnumです
  */
 export enum Tooltip {
-  OPTIMISE,
+  OPTIMIZE,
   LINE_STAMP_ALERT
 }

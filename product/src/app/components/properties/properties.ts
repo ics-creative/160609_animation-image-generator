@@ -59,7 +59,7 @@ export class PropertiesComponent {
   }
 
   showTooltip() {
-    this.showTooltipEvent.emit(Tooltip.OPTIMISE);
+    this.showTooltipEvent.emit(Tooltip.OPTIMIZE);
     this.buttonPos.emit({
       x: this.tooltipElement?.nativeElement.getBoundingClientRect().x,
       y: this.tooltipElement?.nativeElement.getBoundingClientRect().y

@@ -40,15 +40,15 @@ export class TooltipComponent {
     }
   }
 
-  get isShowingOptimiseTooltip() {
-    return this.showingTooltip === Tooltip.OPTIMISE;
+  get isShowingOptimizeTooltip() {
+    return this.showingTooltip === Tooltip.OPTIMIZE;
   }
 
   get isShowingLineStampAlertTooltip() {
     return this.showingTooltip === Tooltip.LINE_STAMP_ALERT;
   }
 
-  get getOptimiseTooltipButtonPos() {
+  get getOptimizeTooltipButtonPos() {
     // ボタン位置とのx座標の差
     const DIFF_X = 36;
     // ボタン位置とのy座標の差
