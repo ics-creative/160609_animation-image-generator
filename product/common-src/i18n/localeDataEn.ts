@@ -20,15 +20,21 @@ export const localeDataEn: ILocaleData = {
   PROP_tabAnimLoopTooltip: '1 to 4 Loops',
 
   PROP_tabQualityApngOpt: 'Optimization',
-  PROP_tabQualityOptWay: 'Compression Method',
+  PROP_tabQualityAboutCompression: 'Compression',
+  PROP_tabQualityCompressionWay: 'Compression Method',
 
   PROP_tabQualityAboutOpt: "What's Optimization?",
   PROP_tabQualityApngOptTooltip:
-    'Compress image to reduce the file size. File size and required time will be changed by the compression method.',
-  PROP_tabQualityOptWayZopfli:
+    'Compress the image to reduce the file size. The compression reduces the image quality to an imperceptible degree.',
+
+  PROP_tabQualityCompressTooltip:
+    'File size and required time will be changed by the compression method.',
+
+  PROP_tabQualityCompressWayZopfli:
     'File size is smallest but saving takes very long time. In some cases, it can take over a few minutes.',
-  PROP_tabQualityOptWay7zip: 'File size is smaller but saving takes long time.',
-  PROP_tabQualityOptWayzlib:
+  PROP_tabQualityCompressWay7zip:
+    'File size is smaller but saving takes long time.',
+  PROP_tabQualityCompressWayzlib:
     'File size is not much smaller but saved immediately.',
 
   PROP_tabQualityHApng: 'Export as APNG',

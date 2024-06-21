@@ -125,7 +125,7 @@
         *ngIf="animationOptionData.enabledExportApng === true"
         class="card card-block p-4 mb-4"
       >
-        <!-- 圧縮方法 -->
+        <!-- 容量最適化 -->
         <div class="checkbox d-flex align-items-start">
           <label
             class="d-flex align-items-center"
@@ -142,8 +142,8 @@
             {{ localeData.PROP_tabQualityApngOpt }}
           </label>
           <button
-            (click)="showTooltip()"
-            #tooltipElement
+            (click)="showTooltipOptimize()"
+            #tooltipOptimizeElement
             class="ml-2 optimize-tooltip"
           >
             <i class="optimize-tooltip_inner fa fa-question-circle"></i>
@@ -151,7 +151,18 @@
         </div>
 
         <!-- 圧縮方式 -->
-        <h6 class="mt-2">{{ localeData.PROP_tabQualityOptWay }}</h6>
+        <div class="d-flex align-items-center">
+          <h6 class="mt-2">{{ localeData.PROP_tabQualityCompressionWay }}</h6>
+
+          <button
+            (click)="showTooltipCompression()"
+            #tooltipCompressionElement
+            class="ml-2 optimize-tooltip"
+          >
+            <i class="optimize-tooltip_inner fa fa-question-circle"></i>
+          </button>
+        </div>
+
         <div class="radio">
           <div class="form-check">
             <input
@@ -253,7 +264,7 @@
           *ngIf="animationOptionData.enabledExportWebp === true"
           class="card card-block p-4 mb-4"
         >
-          <div class="checkbox">
+          <div class="checkbox d-flex align-items-start">
             <label
               data-toggle="tooltip"
               data-placement="right"
@@ -266,6 +277,13 @@
               />
               {{ localeData.PROP_tabQualityApngOpt }}
             </label>
+            <button
+              (click)="showTooltipOptimizeWebP()"
+              #tooltipOptimizeWebPElement
+              class="ml-2 optimize-tooltip"
+            >
+              <i class="optimize-tooltip_inner fa fa-question-circle"></i>
+            </button>
           </div>
         </div>
 

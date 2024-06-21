@@ -3,10 +3,11 @@
   class="fixed-top tooltipWrapper"
   [ngClass]="{ active: showingTooltip !== null }"
 >
+  <!-- 容量最適化説明用 -->
   <div
     class="tooltip optimize-tip"
     #element
-    [ngClass]="{ active: isShowingOptimizeTooltip }"
+    [ngClass]="{ active: showingTooltip === Tooltip.OPTIMIZE }"
     [ngStyle]="{
       'left.px': getOptimizeTooltipButtonPos.x,
       'top.px': getOptimizeTooltipButtonPos.y
@@ -18,19 +19,34 @@
     <p>
       {{ localeData.PROP_tabQualityApngOptTooltip }}
     </p>
+  </div>
+  <!-- 圧縮方式説明用 -->
+  <div
+    class="tooltip optimize-tip"
+    #element
+    [ngClass]="{ active: showingTooltip === Tooltip.COMPRESSION }"
+    [ngStyle]="{
+      'left.px': getOptimizeTooltipButtonPos.x,
+      'top.px': getOptimizeTooltipButtonPos.y
+    }"
+  >
     <h3 class="h6 font-weight-bold">
       {{ localeData.PROP_tabQualityAboutCompression }}
     </h3>
+    <p>
+      {{ localeData.PROP_tabQualityCompressTooltip }}
+    </p>
     <ul>
-      <li>zopfli：{{ localeData.PROP_tabCompressionWayZopfli }}</li>
-      <li>7zip：{{ localeData.PROP_tabQualityOptWay7zip }}</li>
-      <li>zlib：{{ localeData.PROP_tabQualityOptWayzlib }}</li>
+      <li>zopfli：{{ localeData.PROP_tabQualityCompressWayZopfli }}</li>
+      <li>7zip：{{ localeData.PROP_tabQualityCompressWay7zip }}</li>
+      <li>zlib：{{ localeData.PROP_tabQualityCompressWayzlib }}</li>
     </ul>
   </div>
+  <!-- ラインスタンプのエラーアラート用 -->
   <div
     class="tooltip line-stamp-alert-tip"
     #element
-    [ngClass]="{ active: isShowingLineStampAlertTooltip }"
+    [ngClass]="{ active: showingTooltip === Tooltip.LINE_STAMP_ALERT }"
     [ngStyle]="{
       'left.px': getLineStampAlertButtonPos.x,
       'top.px': getLineStampAlertButtonPos.y
