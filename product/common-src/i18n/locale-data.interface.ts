@@ -24,13 +24,15 @@ export interface ILocaleData {
   PROP_tabAnimLoopTooltip: string;
 
   PROP_tabQualityApngOpt: string;
-  PROP_tabQualityOptWay: string;
+  PROP_tabQualityAboutCompression: string;
+  PROP_tabQualityCompressionWay: string;
 
   PROP_tabQualityAboutOpt: string;
   PROP_tabQualityApngOptTooltip: string;
-  PROP_tabQualityOptWayZopfli: string;
-  PROP_tabQualityOptWay7zip: string;
-  PROP_tabQualityOptWayzlib: string;
+  PROP_tabQualityCompressTooltip: string;
+  PROP_tabQualityCompressWayZopfli: string;
+  PROP_tabQualityCompressWay7zip: string;
+  PROP_tabQualityCompressWayzlib: string;
 
   PROP_tabQualityHApng: string;
   PROP_tabQualityHWebp: string;

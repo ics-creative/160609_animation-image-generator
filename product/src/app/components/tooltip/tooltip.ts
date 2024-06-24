@@ -30,6 +30,7 @@ export class TooltipComponent {
   changeTooltipShowing = new EventEmitter<Tooltip | null>();
 
   localeData = localeData;
+  Tooltip = Tooltip;
 
   hideTooltip(event: MouseEvent) {
     if (!(event.target instanceof HTMLElement)) {
@@ -40,15 +41,10 @@ export class TooltipComponent {
     }
   }
 
-  get isShowingOptimiseTooltip() {
-    return this.showingTooltip === Tooltip.OPTIMISE;
-  }
-
-  get isShowingLineStampAlertTooltip() {
-    return this.showingTooltip === Tooltip.LINE_STAMP_ALERT;
-  }
-
-  get getOptimiseTooltipButtonPos() {
+  /**
+   * 最適化・圧縮のプロパティパネルのツールチップの位置を取得します
+   */
+  get getOptimizeTooltipButtonPos() {
     // ボタン位置とのx座標の差
     const DIFF_X = 36;
     // ボタン位置とのy座標の差
@@ -58,7 +54,9 @@ export class TooltipComponent {
       y: this.showingTooltipButtonPos.y + DIFF_Y
     };
   }
-
+  /**
+   * ラインスタンプアラートのツールチップの位置を取得します
+   */
   get getLineStampAlertButtonPos() {
     // ボタン位置とのx座標の差
     const DIFF_X = -234;

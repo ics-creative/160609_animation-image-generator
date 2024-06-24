@@ -33,8 +33,14 @@ export class PropertiesComponent {
   @Output()
   changeAnimationOptionEvent = new EventEmitter<AnimationImageOptions>();
 
-  @ViewChild('tooltipElement')
-  tooltipElement: ElementRef | undefined;
+  @ViewChild('tooltipOptimizeElement')
+  tooltipOptimizeElement: ElementRef | undefined;
+
+  @ViewChild('tooltipCompressionElement')
+  tooltipCompressionElement: ElementRef | undefined;
+
+  @ViewChild('tooltipOptimizeWebPElement')
+  tooltipOptimizeWebPElement: ElementRef | undefined;
 
   // クラス名を.html内から使用できるようにする
   ImageExportMode = ImageExportMode;
@@ -58,11 +64,30 @@ export class PropertiesComponent {
     }
   }
 
-  showTooltip() {
-    this.showTooltipEvent.emit(Tooltip.OPTIMISE);
+  showTooltipOptimize() {
+    this.showTooltipEvent.emit(Tooltip.OPTIMIZE);
     this.buttonPos.emit({
-      x: this.tooltipElement?.nativeElement.getBoundingClientRect().x,
-      y: this.tooltipElement?.nativeElement.getBoundingClientRect().y
+      x: this.tooltipOptimizeElement?.nativeElement.getBoundingClientRect().x,
+      y: this.tooltipOptimizeElement?.nativeElement.getBoundingClientRect().y
+    });
+  }
+
+  showTooltipCompression() {
+    this.showTooltipEvent.emit(Tooltip.COMPRESSION);
+    this.buttonPos.emit({
+      x: this.tooltipCompressionElement?.nativeElement.getBoundingClientRect()
+        .x,
+      y: this.tooltipCompressionElement?.nativeElement.getBoundingClientRect().y
+    });
+  }
+
+  showTooltipOptimizeWebP() {
+    this.showTooltipEvent.emit(Tooltip.OPTIMIZE);
+    this.buttonPos.emit({
+      x: this.tooltipOptimizeWebPElement?.nativeElement.getBoundingClientRect()
+        .x,
+      y: this.tooltipOptimizeWebPElement?.nativeElement.getBoundingClientRect()
+        .y
     });
   }
 
