@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <data name="AppName" xml:space="preserve">
+    <value>アニメ画像に変換する君</value>
+  </data>
+  <data name="AppDescription" xml:space="preserve">
+    <value>The アニメ画像に変換する君 is an application that converts sequential images into LINE animation stickers or web animation images.</value>
+  </data>
+</root>

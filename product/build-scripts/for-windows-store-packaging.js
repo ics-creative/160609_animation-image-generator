@@ -1,6 +1,5 @@
 const electronPackager = require('@electron/packager');
 const conf = require('./conf.js');
-
 // .envから環境変数設定を取り込み
 require('dotenv').config();
 
@@ -11,22 +10,32 @@ function convertWindowsStore() {
   if (!process.env.WINDOWS_KIT_PATH) {
     console.error(`[convert-windows-store] error : "WINDOWS_KIT_PATH" is not set.
     Please set WINDOWS_KIT_PATH to .env file.`);
-    return ;
+    return;
   }
+
+  const targetReleaseDir = '../windows-store';
+  const del = require('del');
+  del.sync(targetReleaseDir, { force: true });
 
   electronWindowsStore({
     containerVirtualization: false,
     inputDirectory: `../${conf.EN_NAME}-win32-ia32`,
-    outputDirectory: '../windows-store',
+    outputDirectory: targetReleaseDir,
     flatten: false,
     assets: './resources/app-icon/win-icon',
     packageName: `${conf.EN_NAME}`,
     manifest: './AppXmanifest.xml',
     windowsKit: process.env.WINDOWS_KIT_PATH,
     deploy: false,
-    finalSay: function () {
-      console.log('[convert-windows-store] exit');
-      return new Promise((resolve, reject) => resolve());
+    finalSay: async function () {
+      // electronWindowsStoreのプロパティでmakePri:trueを指定できるが、
+      // priconfig自体の調整やリソースのコピーが必要なため、makeappx前のfinalSayで行う
+      const makePri = require('./for-windows-makepri');
+      await makePri({
+        windowsKit: process.env.WINDOWS_KIT_PATH,
+        inputResourcesDirectory: './resources',
+        outputDirectory: targetReleaseDir
+      });
     }
   });
 }
