@@ -9,12 +9,14 @@ const electronPackager = require('@electron/packager');
 const { makeUniversalApp } = require('@electron/universal');
 
 const conf = require('./conf.js');
-// 開発バージョン:development , リリースバージョン:distribution
-const signType = process.argv[3];
+// platform : darwin, mas
+const platformType = process.argv[3];
+// sign: 開発バージョン development , リリースバージョン distribution
+const signType = process.argv[4];
 
-const appDirectoryX64 = `${conf.JP_NAME}-mas-x64`;
-const appDirectoryArm = `${conf.JP_NAME}-mas-arm64`;
-const appDirectoryUniversal = `${conf.JP_NAME}-mas-universal`;
+const appDirectoryX64 = `${conf.JP_NAME}-${platformType}-x64`;
+const appDirectoryArm = `${conf.JP_NAME}-${platformType}-arm64`;
+const appDirectoryUniversal = `${conf.JP_NAME}-${platformType}-universal`;
 const appPathX64 = `${appDirectoryX64}/${conf.JP_NAME}.app`;
 const appPathArm = `${appDirectoryArm}/${conf.JP_NAME}.app`;
 const appPathUniversal = `${appDirectoryUniversal}/${conf.JP_NAME}.app`;
@@ -35,6 +37,10 @@ const execFlat = () => {
     console.error('No cert config. aborted.');
     return;
   }
+  if (!signConfig.flat.enabled) {
+    return;
+  }
+  
   const { flatAsync } = require('@electron/osx-sign');
   const pkg = `AnimationImageConverter_${signType}.pkg`;
 
@@ -42,7 +48,7 @@ const execFlat = () => {
     app: appPathUniversal,
     identity: signConfig.flat.identity,
     pkg: `../${pkg}`,
-    platform: 'mas'
+    platform: platformType,
   }).catch((e) => {
     console.error(e);
     console.error('flat failure!');
@@ -68,10 +74,8 @@ const execSign = () => {
 
   return signAsync({
     app: appPathUniversal,
-    entitlements: 'resources/dev/parent.plist',
-    'entitlements-inherit': 'resources/dev/child.plist',
-    platform: 'mas',
-    'provisioning-profile': provisioningProfilePath,
+    platform: platformType,
+    provisioningProfile: provisioningProfilePath,
     type: signType,
     identity: signConfig.sign.identity
   }).catch((e) => {
@@ -87,7 +91,7 @@ const buildUniversal = async () => {
     dir: conf.packageTmpPath.darwin,
     out: './',
     icon: './resources/app-icon/app.icons',
-    platform: 'mas',
+    platform: platformType,
     electronVersion: conf.ELECTRON_VERSION,
     overwrite: true,
     asar: false,
@@ -146,8 +150,11 @@ const main = async () => {
 
   const app = await buildUniversal();
   console.info('[electron-packager] success : ' + app);
+
+  if (platformType === 'mas') {
   await execSign();
   await execFlat();
+  }
 };
 
 main();
