@@ -66,14 +66,26 @@ const execSign = () => {
   }
   const { signAsync } = require('@electron/osx-sign');
 
+  const getEntitlementsForFile = (filePath) => {
+    if (filePath.includes('(Renderer).app')) {
+      return './resources/dev/renderer.plist';
+    }
+    if (!filePath.includes('.app/')) {
+      return './resources/dev/parent.plist';
+    }
+    return './resources/dev/child.plist';
+  }
+
   return signAsync({
     app: appPathUniversal,
-    entitlements: 'resources/dev/parent.plist',
-    'entitlements-inherit': 'resources/dev/child.plist',
-    platform: 'mas',
-    'provisioning-profile': provisioningProfilePath,
+    platform: "mas",
+    provisioningProfile: provisioningProfilePath,
     type: signType,
-    identity: signConfig.sign.identity
+    identity: signConfig.sign.identity,
+    optionsForFile: (filePath) => ({
+      entitlements: getEntitlementsForFile(filePath),
+      preAutoEntitlements: signType === 'development' ? false : null,
+    }),
   }).catch((e) => {
     console.error(e);
     console.error('sign failure!');
