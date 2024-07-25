@@ -40,7 +40,7 @@ const execFlat = () => {
   if (!signConfig.flat.enabled) {
     return;
   }
-  
+
   const { flatAsync } = require('@electron/osx-sign');
   const pkg = `AnimationImageConverter_${signType}.pkg`;
 
@@ -72,12 +72,26 @@ const execSign = () => {
   }
   const { signAsync } = require('@electron/osx-sign');
 
+  const getEntitlementsForFile = (filePath) => {
+    if (filePath.includes('(Renderer).app')) {
+      return './resources/dev/renderer.plist';
+    }
+    if (!filePath.includes('.app/')) {
+      return './resources/dev/parent.plist';
+    }
+    return './resources/dev/child.plist';
+  }
+
   return signAsync({
     app: appPathUniversal,
     platform: platformType,
     provisioningProfile: provisioningProfilePath,
     type: signType,
-    identity: signConfig.sign.identity
+    identity: signConfig.sign.identity,
+    optionsForFile: (filePath) => ({
+      entitlements: getEntitlementsForFile(filePath),
+      preAutoEntitlements: signType === 'development' ? false : null,
+    }),
   }).catch((e) => {
     console.error(e);
     console.error('sign failure!');
@@ -117,11 +131,10 @@ const buildUniversal = async () => {
   // アプリ本体以外のファイルをコピー
   ['version', 'LICENSE', 'LICENSES.chromium.html'].map((name) =>
     fs.copyFileSync(
-      join(appDirectoryX64, name),
+      join(appDirectoryX64, name), 
       join(appDirectoryUniversal, name)
     )
   );
-
   // ユニバーサル化
   await makeUniversalApp({
     x64AppPath: resolve(appPathX64),
@@ -139,6 +152,28 @@ const buildUniversal = async () => {
   del.sync([`${appDirectoryX64}/**`]);
   del.sync([`${appDirectoryArm}/**`]);
 
+  // 不要なplist設定を削除-----
+  const removePlist = () => {
+    const plist = require('plist');
+
+    const appPath = `${appDirectoryUniversal}/アニメ画像に変換する君.app`;
+    const plistPath = `${appPath}/Contents/Info.plist`;
+
+    // Info.plistを読み込む
+    const plistContent = fs.readFileSync(plistPath, 'utf8');
+    const plistData = plist.parse(plistContent);
+
+    // 不要なキーを削除
+    delete plistData.NSBluetoothAlwaysUsageDescription;
+    delete plistData.NSBluetoothPeripheralUsageDescription;
+    delete plistData.NSCameraUsageDescription;
+    delete plistData.NSMicrophoneUsageDescription;
+
+    // 修正したplistを書き戻す
+    fs.writeFileSync(plistPath, plist.build(plistData));
+  };
+  removePlist();
+
   return appPathUniversal;
 };
 
@@ -152,8 +187,8 @@ const main = async () => {
   console.info('[electron-packager] success : ' + app);
 
   if (platformType === 'mas') {
-  await execSign();
-  await execFlat();
+    await execSign();
+    await execFlat();
   }
 };
 
