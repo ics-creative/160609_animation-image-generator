@@ -16,13 +16,16 @@ describe('test duration validator', () => {
   test('should return error message in ja', () => {
     setLang('ja');
     const result = validateDuration(2, [3, 4, 5]);
-    expect(result?.message).toBe(`再生時間は3、4、5秒のいずれかで設定ください。現在の2秒は設定できません。`);
+    expect(result?.message).toBe(
+      `再生時間は3、4、5秒のいずれかで設定ください。現在の2秒は設定できません。`
+    );
   });
 
   test('should return error message in en', () => {
     setLang('en');
     const result = validateDuration(2, [3, 4, 5]);
-    expect(result?.message).toBe(`Playback time have to be one of 3, 4, 5seconds. Current playback time is 2seconds.`);
+    expect(result?.message).toBe(
+      `Playback time have to be one of 3, 4, 5seconds. Current playback time is 2seconds.`
+    );
   });
-
 });

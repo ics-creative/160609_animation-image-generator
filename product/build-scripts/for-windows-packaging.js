@@ -1,4 +1,4 @@
-﻿const electronPackager = require('electron-packager');
+﻿const electronPackager = require('@electron/packager');
 const conf = require('./conf.js');
 
 electronPackager({

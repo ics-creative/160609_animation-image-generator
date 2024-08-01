@@ -24,13 +24,15 @@ export interface ILocaleData {
   PROP_tabAnimLoopTooltip: string;
 
   PROP_tabQualityApngOpt: string;
-  PROP_tabQualityOptWay: string;
+  PROP_tabQualityAboutCompression: string;
+  PROP_tabQualityCompressionWay: string;
 
   PROP_tabQualityAboutOpt: string;
   PROP_tabQualityApngOptTooltip: string;
-  PROP_tabQualityOptWayZopfli: string;
-  PROP_tabQualityOptWay7zip: string;
-  PROP_tabQualityOptWayzlib: string;
+  PROP_tabQualityCompressTooltip: string;
+  PROP_tabQualityCompressWayZopfli: string;
+  PROP_tabQualityCompressWay7zip: string;
+  PROP_tabQualityCompressWayzlib: string;
 
   PROP_tabQualityHApng: string;
   PROP_tabQualityHWebp: string;
@@ -57,6 +59,7 @@ export interface ILocaleData {
   TOP_version: string;
   TOP_icsTooltip: string;
   TOP_onlineHelpTooltip: string;
+  TOP_settingsTooltip: string;
 
   MENU_about: string;
   MENU_quit: string;
@@ -99,6 +102,10 @@ export interface ILocaleData {
   COMMON_listingConnma: string;
 
   defaultFileName: string;
+
+  SETTINGS_trackingCheckboxLabel: string;
+  SETTINGS_Close: string;
+  SETTINGS_Title: string;
 
   RULE_title: string;
   RULE_animation_stamp: string;

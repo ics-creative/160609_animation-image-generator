@@ -14,6 +14,8 @@ import { localeData } from './locale-manager';
 import { notNull } from './utils/notNull';
 import { LineValidationType } from '../common-src/type/LineValidationType';
 import { ImageInfo } from '../common-src/data/image-info';
+import { InquiryState } from '../common-src/type/InquiryState';
+import { TrackingEnabled } from '../common-src/type/TrackingEnabled';
 export default class File {
   constructor(
     mainWindow: BrowserWindow,
@@ -38,10 +40,13 @@ export default class File {
     imageInfo: ImageInfo,
     itemList: ImageData[],
     animationOptionData: AnimationImageOptions,
-    validationType: LineValidationType
+    validationType: LineValidationType,
+    trackingEnabled: TrackingEnabled
   ): Promise<void> {
     // お問い合わせコード生成
-    const inquiryCode = createInquiryCode();
+    const inquiry: InquiryState = trackingEnabled
+      ? { enabled: true, code: createInquiryCode() }
+      : { enabled: false };
 
     // 出力処理を実行
     const result = await execGenerate(
@@ -72,18 +77,20 @@ export default class File {
       // エラー内容の送信
       console.error(error);
 
-      sendError(
-        version,
-        inquiryCode,
-        'ERROR',
-        error.errCode.toString(),
-        error.errDetail,
-        error.cause.stack || ''
-      );
+      if (inquiry.enabled) {
+        sendError(
+          version,
+          inquiry.code,
+          'ERROR',
+          error.errCode.toString(),
+          error.errDetail,
+          error.cause.stack || ''
+        );
+      }
 
       this.errorMessage.showErrorMessage(
         error.errCode,
-        inquiryCode,
+        inquiry,
         error.errDetail,
         localeData().APP_NAME,
         this.mainWindow

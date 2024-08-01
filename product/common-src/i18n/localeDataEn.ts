@@ -20,20 +20,31 @@ export const localeDataEn: ILocaleData = {
   PROP_tabAnimLoopTooltip: '1 to 4 Loops',
 
   PROP_tabQualityApngOpt: 'Optimization',
-  PROP_tabQualityOptWay: 'Compression Method',
+  PROP_tabQualityAboutCompression: 'Compression',
+  PROP_tabQualityCompressionWay: 'Compression Method',
 
-  PROP_tabQualityAboutOpt:"What's Optimization?",
-  PROP_tabQualityApngOptTooltip: 'Compress image to reduce the file size. File size and required time will be changed by the compression method.',
-  PROP_tabQualityOptWayZopfli: 'File size is smallest but saving takes very long time. In some cases, it can take over a few minutes.',
-  PROP_tabQualityOptWay7zip: 'File size is smaller but saving takes long time.',
-  PROP_tabQualityOptWayzlib: 'File size is not much smaller but saved immediately.',
+  PROP_tabQualityAboutOpt: "What's Optimization?",
+  PROP_tabQualityApngOptTooltip:
+    'Compress the image to reduce the file size. The compression reduces the image quality to an imperceptible degree.',
+
+  PROP_tabQualityCompressTooltip:
+    'File size and required time will be changed by the compression method.',
+
+  PROP_tabQualityCompressWayZopfli:
+    'File size is smallest but saving takes very long time. In some cases, it can take over a few minutes.',
+  PROP_tabQualityCompressWay7zip:
+    'File size is smaller but saving takes long time.',
+  PROP_tabQualityCompressWayzlib:
+    'File size is not much smaller but saved immediately.',
 
   PROP_tabQualityHApng: 'Export as APNG',
   PROP_tabQualityHWebp: 'Export as WebP',
   PROP_tabQualityHHtml: 'Export as HTML',
 
-  PROP_tabQualityHApngTooltip: 'APNG is an animated image format that supported by most of major browsers.',
-  PROP_tabQualityHWebpTooltip: 'WebP is a newer format for animated image. Some old browsers don\'t support to display or play.',
+  PROP_tabQualityHApngTooltip:
+    'APNG is an animated image format that supported by most of major browsers.',
+  PROP_tabQualityHWebpTooltip:
+    "WebP is a newer format for animated image. Some old browsers don't support to display or play.",
   PROP_tabQualityHHtmlTooltip: 'generate html file for preview output images.',
 
   PROP_btnSave: 'Export',
@@ -53,6 +64,7 @@ export const localeDataEn: ILocaleData = {
   TOP_version: 'Version',
   TOP_icsTooltip: 'Go Production Website',
   TOP_onlineHelpTooltip: 'Report Issues',
+  TOP_settingsTooltip: 'Settings',
 
   MENU_about: 'About Animation Image Converter',
   MENU_quit: 'Quit Animation Image Converter',
@@ -61,12 +73,14 @@ export const localeDataEn: ILocaleData = {
   MENU_helpQuestion: 'Report Issues',
 
   HTML_lang: 'en',
-  HTML_availableFirefoxSafariChrome: 'Animation available on Firefox, Safari and Chrome',
+  HTML_availableFirefoxSafariChrome:
+    'Animation available on Firefox, Safari and Chrome',
   HTML_cantAnimateOnIE: 'IE does not support to play the animation',
   HTML_cantViewOnIE: 'IE does not support to display the image',
   HTML_forWebpSupportedBrowsers: 'for WebP supported browsers',
   HTML_forWebpUnsupportedBrowsers: 'for WebP unsupported browsers',
-  HTML_backgroundCssComment: 'Paint checkerboard pattern for preview background using CSS',
+  HTML_backgroundCssComment:
+    'Paint checkerboard pattern for preview background using CSS',
 
   VALIDATE_ImportImageSize: `'s width and height is different from other image.`,
   VALIDATE_title: 'Warning for LINE Stamp',
@@ -104,6 +118,10 @@ export const localeDataEn: ILocaleData = {
   COMMON_listingConnma: ', ',
 
   defaultFileName: 'Untitled',
+
+  SETTINGS_trackingCheckboxLabel: 'Always send usage and crash reports.',
+  SETTINGS_Close: 'Close',
+  SETTINGS_Title: 'Settings',
 
   RULE_title: 'Check Rule',
   RULE_animation_stamp: 'Animated Stickers Images',

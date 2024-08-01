@@ -19,16 +19,20 @@ export const localeDataJa: ILocaleData = {
   PROP_tabAnimLoopTooltip: '1〜4回で設定ください',
 
   PROP_tabQualityApngOpt: '容量最適化',
-  PROP_tabQualityOptWay: '圧縮方式',
+  PROP_tabQualityCompressionWay: '圧縮方式',
 
-  PROP_tabQualityAboutOpt: '容量最適化とは...？',
+  PROP_tabQualityAboutOpt: '容量最適化',
+  PROP_tabQualityAboutCompression: '圧縮方式',
   PROP_tabQualityApngOptTooltip:
-    'ファイルを圧縮し容量を最適化します。圧縮方式により処理時間や容量が変わります。',
-  PROP_tabQualityOptWayZopfli:
+    '容量最適化とは、ファイルを圧縮し容量を最適化します。気付かない程度に画質を落としています。',
+
+  PROP_tabQualityCompressTooltip: `圧縮方式により処理時間や容量が変わります。`,
+
+  PROP_tabQualityCompressWayZopfli:
     '容量が最も小さくなりますが、ファイル作成が非常に長くなります。場合によっては分単位の時間がかかります。',
-  PROP_tabQualityOptWay7zip:
+  PROP_tabQualityCompressWay7zip:
     '容量が小さくなりますが、ファイル作成に時間がかかります。',
-  PROP_tabQualityOptWayzlib:
+  PROP_tabQualityCompressWayzlib:
     '容量はそれほど小さくなりませんが、すぐにファイルが作成されます。',
 
   PROP_tabQualityHApng: 'APNGファイル出力',
@@ -58,6 +62,7 @@ export const localeDataJa: ILocaleData = {
   TOP_version: 'バージョン',
   TOP_icsTooltip: '開発会社のウェブサイト',
   TOP_onlineHelpTooltip: '不具合報告＆機能要望',
+  TOP_settingsTooltip: '設定',
 
   MENU_about: 'アニメ画像を変換する君について',
   MENU_quit: 'アニメ画像を変換する君を終了する',
@@ -111,6 +116,10 @@ export const localeDataJa: ILocaleData = {
   COMMON_listingConnma: '、',
 
   defaultFileName: '名称未設定',
+
+  SETTINGS_trackingCheckboxLabel: '利用状況とクラッシュレポートを送信する',
+  SETTINGS_Close: 'とじる',
+  SETTINGS_Title: '設定',
 
   RULE_title: 'チェックルール',
   RULE_animation_stamp: 'アニメーションスタンプ画像',

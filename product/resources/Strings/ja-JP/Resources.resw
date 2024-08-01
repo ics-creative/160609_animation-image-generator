@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <data name="AppName" xml:space="preserve">
+    <value>アニメ画像に変換する君</value>
+  </data>
+  <data name="AppDescription" xml:space="preserve">
+    <value>「アニメ画像に変換する君」は連番画像をLINEアニメーションスタンプや、Web用アニメーション画像に変換するアプリケーションです。</value>
+  </data>
+</root>

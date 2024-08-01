@@ -9,13 +9,17 @@
       "projectType": "application",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:browser",
+          "builder": "@angular/build:application",
           "options": {
-            "outputPath": "dist/renderer-dist",
+            "outputPath": {
+              "base": "dist/renderer-dist",
+              "browser": ""
+            },
             "index": "src/index.html",
-            "main": "src/main.ts",
             "tsConfig": "src/tsconfig.app.json",
-            "polyfills": "src/polyfills.ts",
+            "polyfills": [
+              "src/polyfills.ts"
+            ],
             "assets": [
               "src/assets",
               "src/favicon.ico"
@@ -29,12 +33,11 @@
               "src/assets/js/createjs-1.0.0.min.js"
             ],
             "aot": false,
-            "vendorChunk": true,
             "extractLicenses": false,
-            "buildOptimizer": false,
             "sourceMap": true,
             "optimization": false,
-            "namedChunks": true
+            "namedChunks": true,
+            "browser": "src/main.ts"
           },
           "configurations": {
             "production": {
@@ -49,7 +52,6 @@
               "sourceMap": false,
               "namedChunks": false,
               "aot": true,
-              "vendorChunk": false,
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
@@ -61,13 +63,13 @@
           "defaultConfiguration": ""
         },
         "serve": {
-          "builder": "@angular-devkit/build-angular:dev-server",
+          "builder": "@angular/build:dev-server",
           "options": {
-            "browserTarget": "product:build"
+            "buildTarget": "product:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "product:build:production"
+              "buildTarget": "product:build:production"
             }
           }
         },

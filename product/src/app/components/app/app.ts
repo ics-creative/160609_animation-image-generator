@@ -10,12 +10,15 @@ import { AppConfig } from '../../../../common-src/config/app-config';
 import { DomSanitizer } from '@angular/platform-browser';
 import IpcService from '../../process/ipc.service';
 import { ImageExportMode } from '../../../../common-src/type/ImageExportMode';
-import { PresetLine } from '../../../../common-src/preset/preset-line';
-import { PresetWeb } from '../../../../common-src/preset/preset-web';
 import { AnimationImageOptions } from '../../../../common-src/data/animation-image-option';
 import { ImageData } from '../../../../common-src/data/image-data';
 import { checkImagePxSizeMatched } from './checkImagePxSizeMatched';
-import { loadUserConfigs, saveUserConfigs, UserConfigs } from './UserConfig';
+import {
+  loadUserConfigs,
+  saveUserConfigs,
+  UserConfigs,
+  UserSettings
+} from './UserConfig';
 import { localeData } from 'app/i18n/locale-manager';
 import { LineValidationType } from '../../../../common-src/type/LineValidationType';
 import { checkRuleList } from '../../../../common-src/checkRule/checkRule';
@@ -26,6 +29,8 @@ import {
   ValidationResult
 } from '../../../../common-src/type/ImageValidator';
 import { ImageInfo } from '../../../../common-src/data/image-info';
+import { loadAnalytics, removeAnalytics } from './loadAnalytics';
+import { UserSettingsModalComponent } from '../user-settings-modal/user-settings-modal';
 
 const getFirstNumber = (text: string): number | undefined => {
   const numStr = text.match(/\d+/g)?.pop();
@@ -58,7 +63,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   localeData = localeData;
   validationErrorsMessage = [''];
   userConfigs: UserConfigs | null = null;
-
+  userSettings: UserSettings = { trackingEnabled: true };
   showingTooltip: Tooltip | null = null;
   showingTooltipButtonPos: { x: number; y: number } = {
     x: 0,
@@ -90,6 +95,9 @@ export class AppComponent implements OnInit, AfterViewInit {
   @ViewChild('optionSelecter', { static: true })
   optionSelecterComponent?: ElementRef;
 
+  @ViewChild('userSettingsModal', { static: true })
+  userSettingsModal?: UserSettingsModalComponent;
+
   constructor(sanitizer: DomSanitizer, private ipcService: IpcService) {}
 
   ngOnInit() {
@@ -98,6 +106,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.isImageSelected = false;
 
     this.userConfigs = loadUserConfigs();
+    this.userSettings = { trackingEnabled: this.userConfigs.trackingEnabled };
 
     // 設定の読み込み
     this.imageExportMode = this.userConfigs.imageExportMode;
@@ -106,6 +115,11 @@ export class AppComponent implements OnInit, AfterViewInit {
     });
 
     this.changeImageExportMode(this.imageExportMode);
+
+    // トラッキング設定が有効な場合のみアナリティクスを読み込む
+    if (this.userSettings.trackingEnabled) {
+      loadAnalytics(AppConfig.analyticsUrl);
+    }
   }
 
   ngAfterViewInit() {
@@ -123,8 +137,6 @@ export class AppComponent implements OnInit, AfterViewInit {
       this._isDragover = false;
       this.handleDrop(event);
     });
-
-    // (<any>window).$('[data-toggle='tooltip']').tooltip()
   }
 
   openExternalBrowser(url: string) {
@@ -206,13 +218,15 @@ export class AppComponent implements OnInit, AfterViewInit {
     }
 
     this.showLockDialog();
+
     try {
       await this.ipcService.exec(
         AppConfig.version,
         this.imageInfo,
         this.items,
         this.animationOptionData,
-        this.checkRule.value
+        this.checkRule.value,
+        this.userSettings.trackingEnabled
       );
     } finally {
       this.hideLockDialog();
@@ -359,6 +373,8 @@ export class AppComponent implements OnInit, AfterViewInit {
       throw new Error('userConfigs is null');
     }
 
+    this.userConfigs.trackingEnabled = this.userSettings.trackingEnabled;
+
     switch (this.animationOptionData.imageExportMode) {
       case ImageExportMode.LINE:
         this.userConfigs.lineConfig = {
@@ -374,5 +390,26 @@ export class AppComponent implements OnInit, AfterViewInit {
     }
 
     saveUserConfigs(this.userConfigs);
+  }
+
+  handleClickUserSettingsModal() {
+    this.userSettingsModal?.show();
+  }
+
+  async handleChangeSettings(result: UserSettings) {
+    this.userSettings.trackingEnabled = result.trackingEnabled;
+    this.saveConfig();
+  }
+
+  handleCloseSettingModal() {
+    switch (this.userSettings.trackingEnabled) {
+      case true:
+        // トラッキングを再開するため、埋め込みアナリティクスを読み込む
+        loadAnalytics(AppConfig.analyticsUrl);
+        break;
+      case false:
+        // トラッキングを停止するため、埋め込みアナリティクスを削除する
+        removeAnalytics();
+    }
   }
 }

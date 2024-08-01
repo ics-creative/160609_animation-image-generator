@@ -21,7 +21,9 @@ const IMAGE_EXPORT_MODE_NUM = {
  * @returns
  */
 export const numberToMode = (num: number) => {
-  if (num === IMAGE_EXPORT_MODE_NUM[ImageExportMode.LINE]) return ImageExportMode.LINE;
-  if (num === IMAGE_EXPORT_MODE_NUM[ImageExportMode.WEB]) return ImageExportMode.WEB;
+  if (num === IMAGE_EXPORT_MODE_NUM[ImageExportMode.LINE])
+    return ImageExportMode.LINE;
+  if (num === IMAGE_EXPORT_MODE_NUM[ImageExportMode.WEB])
+    return ImageExportMode.WEB;
   return undefined;
 };

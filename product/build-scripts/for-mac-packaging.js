@@ -1,20 +1,22 @@
 const process = require('process');
 const fs = require('fs');
-const cpx = require('cpx');
 const del = require('del');
 const path = require('path');
+const { copyRecursiveSync } = require('./copy-recursive-sync.js');
 
 const { join, resolve } = require('path');
-const electronPackager = require('electron-packager');
+const electronPackager = require('@electron/packager');
 const { makeUniversalApp } = require('@electron/universal');
 
 const conf = require('./conf.js');
-// 開発バージョン:development , リリースバージョン:distribution
-const signType = process.argv[3];
+// platform : darwin, mas
+const platformType = process.argv[3];
+// sign: 開発バージョン development , リリースバージョン distribution
+const signType = process.argv[4];
 
-const appDirectoryX64 = `${conf.JP_NAME}-mas-x64`;
-const appDirectoryArm = `${conf.JP_NAME}-mas-arm64`;
-const appDirectoryUniversal = `${conf.JP_NAME}-mas-universal`;
+const appDirectoryX64 = `${conf.JP_NAME}-${platformType}-x64`;
+const appDirectoryArm = `${conf.JP_NAME}-${platformType}-arm64`;
+const appDirectoryUniversal = `${conf.JP_NAME}-${platformType}-universal`;
 const appPathX64 = `${appDirectoryX64}/${conf.JP_NAME}.app`;
 const appPathArm = `${appDirectoryArm}/${conf.JP_NAME}.app`;
 const appPathUniversal = `${appDirectoryUniversal}/${conf.JP_NAME}.app`;
@@ -35,67 +37,64 @@ const execFlat = () => {
     console.error('No cert config. aborted.');
     return;
   }
-  const flat = require('electron-osx-sign').flat;
+  if (!signConfig.flat.enabled) {
+    return;
+  }
+
+  const { flatAsync } = require('@electron/osx-sign');
   const pkg = `AnimationImageConverter_${signType}.pkg`;
 
-  return new Promise((resolve, reject) => {
-    flat(
-      {
-        app: appPathUniversal,
-        identity: signConfig.flat.identity,
-        pkg: `../${pkg}`,
-        platform: 'mas'
-      },
-      (err) => {
-        if (err) {
-          console.error(err);
-          console.error('flat failure!');
-          reject();
-        } else {
-          console.info('flat done!');
-          resolve();
-        }
-      }
-    );
+  return flatAsync({
+    app: appPathUniversal,
+    identity: signConfig.flat.identity,
+    pkg: `../${pkg}`,
+    platform: platformType,
+  }).catch((e) => {
+    console.error(e);
+    console.error('flat failure!');
   });
 };
 
 const execSign = () => {
   console.log('start sign...');
   if (!signConfig) {
-    console.error(`No cert config found. aborted. 
+    console.error(`No cert config found. aborted.
     Please place the config at "${path.join(__dirname, certConfigPath)}"`);
     return;
   }
   if (!fs.existsSync(provisioningProfilePath)) {
-    console.error(`No provisioning profile found. aborted. 
-    Please place the config at "${path.join(__dirname, provisioningProfilePath)}"`);
+    console.error(`No provisioning profile found. aborted.
+    Please place the config at "${path.join(
+      __dirname,
+      provisioningProfilePath
+    )}"`);
     return;
   }
-  const sign = require('electron-osx-sign');
+  const { signAsync } = require('@electron/osx-sign');
 
-  return new Promise((resolve, reject) => {
-    sign(
-      {
-        app: appPathUniversal,
-        entitlements: 'resources/dev/parent.plist',
-        'entitlements-inherit': 'resources/dev/child.plist',
-        platform: 'mas',
-        'provisioning-profile': provisioningProfilePath,
-        type: signType,
-        identity: signConfig.sign.identity
-      },
-      (err) => {
-        if (err) {
-          console.error(err);
-          console.error('sign failure!');
-          reject();
-        } else {
-          console.info('sign done!');
-          resolve();
-        }
-      }
-    );
+  const getEntitlementsForFile = (filePath) => {
+    if (filePath.includes('(Renderer).app')) {
+      return './resources/dev/renderer.plist';
+    }
+    if (!filePath.includes('.app/')) {
+      return './resources/dev/parent.plist';
+    }
+    return './resources/dev/child.plist';
+  }
+
+  return signAsync({
+    app: appPathUniversal,
+    platform: platformType,
+    provisioningProfile: provisioningProfilePath,
+    type: signType,
+    identity: signConfig.sign.identity,
+    optionsForFile: (filePath) => ({
+      entitlements: getEntitlementsForFile(filePath),
+      preAutoEntitlements: signType === 'development' ? false : null,
+    }),
+  }).catch((e) => {
+    console.error(e);
+    console.error('sign failure!');
   });
 };
 
@@ -106,7 +105,7 @@ const buildUniversal = async () => {
     dir: conf.packageTmpPath.darwin,
     out: './',
     icon: './resources/app-icon/app.icons',
-    platform: 'mas',
+    platform: platformType,
     electronVersion: conf.ELECTRON_VERSION,
     overwrite: true,
     asar: false,
@@ -132,11 +131,10 @@ const buildUniversal = async () => {
   // アプリ本体以外のファイルをコピー
   ['version', 'LICENSE', 'LICENSES.chromium.html'].map((name) =>
     fs.copyFileSync(
-      join(appDirectoryX64, name),
+      join(appDirectoryX64, name), 
       join(appDirectoryUniversal, name)
     )
   );
-
   // ユニバーサル化
   await makeUniversalApp({
     x64AppPath: resolve(appPathX64),
@@ -145,14 +143,36 @@ const buildUniversal = async () => {
   });
 
   // 再度binをコピー
-  cpx.copySync(
-    `${conf.packageTmpPath.darwin}/bin/*`,
+  copyRecursiveSync(
+    `${conf.packageTmpPath.darwin}/bin/`,
     `${appPathUniversal}/Contents/Resources/app/bin/`
   );
 
   // x64, armの各ビルドを削除
   del.sync([`${appDirectoryX64}/**`]);
   del.sync([`${appDirectoryArm}/**`]);
+
+  // 不要なplist設定を削除-----
+  const removePlist = () => {
+    const plist = require('plist');
+
+    const appPath = `${appDirectoryUniversal}/アニメ画像に変換する君.app`;
+    const plistPath = `${appPath}/Contents/Info.plist`;
+
+    // Info.plistを読み込む
+    const plistContent = fs.readFileSync(plistPath, 'utf8');
+    const plistData = plist.parse(plistContent);
+
+    // 不要なキーを削除
+    delete plistData.NSBluetoothAlwaysUsageDescription;
+    delete plistData.NSBluetoothPeripheralUsageDescription;
+    delete plistData.NSCameraUsageDescription;
+    delete plistData.NSMicrophoneUsageDescription;
+
+    // 修正したplistを書き戻す
+    fs.writeFileSync(plistPath, plist.build(plistData));
+  };
+  removePlist();
 
   return appPathUniversal;
 };
@@ -165,8 +185,11 @@ const main = async () => {
 
   const app = await buildUniversal();
   console.info('[electron-packager] success : ' + app);
-  await execSign();
-  await execFlat();
+
+  if (platformType === 'mas') {
+    await execSign();
+    await execFlat();
+  }
 };
 
 main();

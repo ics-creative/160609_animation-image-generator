@@ -1,5 +1,7 @@
 import { BrowserWindow, dialog } from 'electron';
 import { ErrorType } from '../../common-src/error/error-type';
+import { MessageBoxOptions } from 'electron/main';
+import { InquiryState } from '../../common-src/type/InquiryState';
 
 declare function require(value: string): any;
 
@@ -17,18 +19,14 @@ export class ErrorMessage {
   constructor() {}
   public showErrorMessage(
     errorCode: ErrorType,
-    inquiryCode: string,
+    inquiry: InquiryState,
     errorDetail: string,
     appName: string,
     window: BrowserWindow
   ): void {
-    const errorMessage = this.getErrorMessage(
-      errorCode,
-      inquiryCode,
-      errorDetail
-    );
+    const errorMessage = this.getErrorMessage(errorCode, inquiry, errorDetail);
 
-    const options = {
+    const options: MessageBoxOptions = {
       type: 'info',
       buttons: ['OK'],
       title: appName,
@@ -39,19 +37,21 @@ export class ErrorMessage {
 
   private getErrorMessage(
     errorCode: ErrorType,
-    inquiryCode: string,
+    inquiry: InquiryState,
     errorDetail: string
   ): string {
     const errorPhaseMessage = this.getErrorPhaseMessage(errorCode);
+
+    const inquiryCodeMessage = inquiry.enabled
+      ? `\n\nお問い合わせコード：${inquiry.code}`
+      : '';
+
     const errorDetailMessage = errorDetail
       ? '\n\nエラー詳細：' + omitText(errorDetail, 200)
       : '';
     return `${errorPhaseMessage}${errorDetailMessage}
 
-何度も同じエラーが発生する場合は、お手数ですがサポートページまでお問い合わせください。
-
-お問い合わせコード:${inquiryCode}
-		`;
+何度も同じエラーが発生する場合は、お手数ですがサポートページまでお問い合わせください。${inquiryCodeMessage}`;
   }
 
   private getErrorPhaseMessage(errorCode: ErrorType): string {
